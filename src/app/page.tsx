@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { getPublicProperties } from "@/lib/properties";
 import { getSiteSettings } from "@/lib/site-settings";
+import { getPublishedFormBySlug } from "@/lib/forms";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { HeroLocationSearch } from "@/components/public/hero-location-search";
@@ -48,16 +49,24 @@ function getStatusClassName(status: string) {
 }
 
 export default async function HomePage() {
-  const [properties, settings] = await Promise.all([
+  const [properties, settings, searchFormResult] = await Promise.all([
     getPublicProperties(),
     getSiteSettings(),
+    getPublishedFormBySlug("search"),
   ]);
 
   const propertyCards = properties.map(mapPropertyToCard);
 
   const heroImage =
     propertyCards.find((property) => property.imageUrl)?.imageUrl ||
-    "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/4great-rock-f8d8d89155f740bb8eeeefc6049e3a18-uncropped_scaled_within_1536_1152.webp";
+    "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/property-media/properties/4great-rock-f8d8d89155f740bb8eeeefc6049e3a18-uncropped_scaled_within_1536_1152.webp";
+
+  const searchForm = searchFormResult.form
+    ? {
+        form: searchFormResult.form,
+        fields: searchFormResult.fields,
+      }
+    : null;
 
   return (
     <main className="min-h-screen bg-white">
@@ -86,7 +95,7 @@ export default async function HomePage() {
             status, price, beds, baths, or square footage.
           </p>
 
-          <HeroLocationSearch />
+          <HeroLocationSearch searchForm={searchForm} />
         </div>
       </section>
 
