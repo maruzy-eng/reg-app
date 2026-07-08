@@ -21,19 +21,20 @@ export type SiteSettingsValue = {
 };
 
 export const DEFAULT_SITE_SETTINGS: Required<SiteSettingsValue> = {
-  site_name: "Property Portal",
-  site_tagline: "Real Estate Investment Projects",
+  site_name: "Checkmate Property",
+  site_tagline:
+    "The real estate intelligence platform built to help investors search, analyze, and act faster.",
   site_description:
-    "Explore curated real estate projects, property details, media, videos, floor plans and investment information.",
+    "Search, analyze, and manage real estate opportunities with data-driven confidence. Checkmate Property helps investors evaluate deals, review projects, explore property details, and make smarter real estate decisions.",
   logo_url: "",
   favicon_url: "",
   primary_phone: "+1 (978) 239-5226",
   primary_email: "contact@property.com",
   whatsapp_number: "+19782395226",
   address_line: "",
-  default_cta_title: "Interested in this project?",
+  default_cta_title: "Interested in this property?",
   default_cta_description:
-    "Connect with our team to learn more about availability, pricing and next steps.",
+    "Connect with the Checkmate Property team to learn more about availability, pricing, project details, and next steps.",
   default_cta_button: "Contact Us",
   facebook_url: "",
   instagram_url: "",
@@ -41,12 +42,16 @@ export const DEFAULT_SITE_SETTINGS: Required<SiteSettingsValue> = {
   youtube_url: "",
 };
 
+function isSiteSettingsObject(value: unknown): value is SiteSettingsValue {
+  return Boolean(value && typeof value === "object" && !Array.isArray(value));
+}
+
 export async function getSiteSettings(): Promise<Required<SiteSettingsValue>> {
   const supabase = createAdminClient();
 
   const { data, error } = await supabase
     .from("site_settings")
-    .select("*")
+    .select("value")
     .eq("key", "global")
     .maybeSingle();
 
@@ -55,13 +60,13 @@ export async function getSiteSettings(): Promise<Required<SiteSettingsValue>> {
     return DEFAULT_SITE_SETTINGS;
   }
 
-  if (!data?.value || typeof data.value !== "object") {
+  if (!isSiteSettingsObject(data?.value)) {
     return DEFAULT_SITE_SETTINGS;
   }
 
   return {
     ...DEFAULT_SITE_SETTINGS,
-    ...(data.value as SiteSettingsValue),
+    ...data.value,
   };
 }
 
@@ -70,15 +75,16 @@ export async function upsertSiteSettings(value: SiteSettingsValue) {
 
   const payload = {
     key: "global",
-    value: value as Json,
+    value: {
+      ...DEFAULT_SITE_SETTINGS,
+      ...value,
+    } as Json,
     updated_at: new Date().toISOString(),
   };
 
-  const { error } = await supabase
-    .from("site_settings")
-    .upsert(payload, {
-      onConflict: "key",
-    });
+  const { error } = await supabase.from("site_settings").upsert(payload, {
+    onConflict: "key",
+  });
 
   if (error) {
     console.error("Error upserting site settings:", error.message);
