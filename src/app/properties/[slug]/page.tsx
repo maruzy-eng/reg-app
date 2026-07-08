@@ -510,7 +510,7 @@ export default async function PropertyDetailPage({
                   </p>
 
                   <Link
-                    href="/properties"
+                    href="/"
                     className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-[linear-gradient(94deg,#53bc76_0%,#39aff2_100%)] px-5 py-3 text-sm font-bold !text-white"
                   >
                     Back to Search
