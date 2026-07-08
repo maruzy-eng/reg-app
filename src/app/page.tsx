@@ -28,6 +28,10 @@ function getStatusClassName(status: string) {
     return "bg-[#101820] text-white";
   }
 
+  if (normalizedStatus === "rented") {
+    return "bg-violet-50 text-violet-700";
+  }
+
   if (normalizedStatus === "available") {
     return "bg-emerald-50 text-[#0e3541]";
   }

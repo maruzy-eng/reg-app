@@ -47,7 +47,7 @@ export default async function AdminPropertiesPage() {
         </Link>
       </div>
 
-      <div className="mt-6 grid gap-4 md:grid-cols-4">
+      <div className="mt-6 grid gap-4 md:grid-cols-5">
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-[#587469]">Total</p>
           <p className="mt-2 text-3xl font-bold text-[#0e3541]">
@@ -79,6 +79,16 @@ export default async function AdminPropertiesPage() {
           <p className="text-sm font-semibold text-[#587469]">Sold</p>
           <p className="mt-2 text-3xl font-bold text-[#0e3541]">
             {properties.filter((property) => property.status === "sold").length}
+          </p>
+        </div>
+
+        <div className="admin-kpi-card p-5">
+          <p className="text-sm font-semibold text-[#587469]">Rented</p>
+          <p className="mt-2 text-3xl font-bold text-[#0e3541]">
+            {
+              properties.filter((property) => property.status === "rented")
+                .length
+            }
           </p>
         </div>
       </div>

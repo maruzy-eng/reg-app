@@ -300,6 +300,7 @@ export type Database = {
             | "available"
             | "under_contract"
             | "sold"
+            | "rented"
             | "in_progress"
             | "archived";
 
@@ -381,6 +382,7 @@ export type Database = {
             | "available"
             | "under_contract"
             | "sold"
+            | "rented"
             | "in_progress"
             | "archived";
 
@@ -462,6 +464,7 @@ export type Database = {
             | "available"
             | "under_contract"
             | "sold"
+            | "rented"
             | "in_progress"
             | "archived";
 
@@ -1062,6 +1065,7 @@ export type Database = {
         | "available"
         | "under_contract"
         | "sold"
+        | "rented"
         | "in_progress"
         | "archived";
 

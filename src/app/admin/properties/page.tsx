@@ -50,6 +50,9 @@ export default async function AdminPropertiesPage({
   const soldProperties = properties.filter(
     (property) => property.status === "sold",
   ).length;
+  const rentedProperties = properties.filter(
+    (property) => property.status === "rented",
+  ).length;
 
   const errorMessage = getErrorMessage(resolvedSearchParams.error);
 
@@ -121,7 +124,7 @@ export default async function AdminPropertiesPage({
         </div>
       ) : null}
 
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-5">
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-[#64748b]">Total</p>
           <p className="mt-2 text-3xl font-bold text-[#0e3541]">
@@ -147,6 +150,13 @@ export default async function AdminPropertiesPage({
           <p className="text-sm font-semibold text-[#64748b]">Sold</p>
           <p className="mt-2 text-3xl font-bold text-[#0e3541]">
             {soldProperties}
+          </p>
+        </div>
+
+        <div className="admin-kpi-card p-5">
+          <p className="text-sm font-semibold text-[#64748b]">Rented</p>
+          <p className="mt-2 text-3xl font-bold text-[#0e3541]">
+            {rentedProperties}
           </p>
         </div>
       </div>

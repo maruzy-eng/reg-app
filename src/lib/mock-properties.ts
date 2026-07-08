@@ -11,7 +11,7 @@ type MockProperty = {
   bedrooms: number;
   bathrooms: number;
   sqft: number;
-  status: "available" | "sold" | "in_progress";
+  status: "available" | "sold" | "rented" | "in_progress";
   imageUrl: string;
   description: string;
   projectedArv: number;

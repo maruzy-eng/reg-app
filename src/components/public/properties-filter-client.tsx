@@ -50,6 +50,7 @@ const statusOptions: {
   { value: "available", label: "Available" },
   { value: "under_contract", label: "Under Contract" },
   { value: "sold", label: "Sold" },
+  { value: "rented", label: "Rented" },
   { value: "in_progress", label: "In Progress" },
 ];
 

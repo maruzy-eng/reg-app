@@ -1059,6 +1059,11 @@ select {
   color: #ffffff;
 }
 
+.status-rented {
+  background: #f5f3ff;
+  color: #6d28d9;
+}
+
 .status-in-progress {
   background: rgba(83, 188, 118, 0.12);
   color: #0e3541;

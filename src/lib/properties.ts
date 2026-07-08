@@ -1,6 +1,29 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
-import type { PropertyRow, PropertyWithMedia } from "@/types/property";
+import type {
+  PropertyRow,
+  PropertyStatus,
+  PropertyWithMedia,
+} from "@/types/property";
+
+const publicPropertyStatuses: PropertyStatus[] = [
+  "available",
+  "under_contract",
+  "sold",
+  "rented",
+  "in_progress",
+];
+
+const legacyPublicPropertyStatuses: PropertyStatus[] =
+  publicPropertyStatuses.filter((status) => status !== "rented");
+
+function isMissingRentedStatusError(error: { message?: string | null } | null) {
+  return Boolean(
+    error?.message?.includes(
+      'invalid input value for enum property_status: "rented"',
+    ),
+  );
+}
 
 export async function getPublicProperties(): Promise<PropertyRow[]> {
   const supabase = createAdminClient();
@@ -9,11 +32,25 @@ export async function getPublicProperties(): Promise<PropertyRow[]> {
     .from("properties")
     .select("*")
     .eq("visibility", "public")
-    .in("status", ["available", "under_contract", "sold", "in_progress"])
+    .in("status", publicPropertyStatuses)
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
 
   if (error) {
+    if (isMissingRentedStatusError(error)) {
+      const { data: legacyData, error: legacyError } = await supabase
+        .from("properties")
+        .select("*")
+        .eq("visibility", "public")
+        .in("status", legacyPublicPropertyStatuses)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false });
+
+      if (!legacyError) {
+        return legacyData || [];
+      }
+    }
+
     console.error("Error fetching public properties:", error.message);
     return [];
   }
@@ -37,10 +74,30 @@ export async function getPropertyBySlug(
     `)
     .eq("slug", slug)
     .eq("visibility", "public")
-    .in("status", ["available", "under_contract", "sold", "in_progress"])
+    .in("status", publicPropertyStatuses)
     .single();
 
   if (error) {
+    if (isMissingRentedStatusError(error)) {
+      const { data: legacyData, error: legacyError } = await supabase
+        .from("properties")
+        .select(`
+          *,
+          property_images (*),
+          property_videos (*),
+          property_documents (*),
+          property_features (*)
+        `)
+        .eq("slug", slug)
+        .eq("visibility", "public")
+        .in("status", legacyPublicPropertyStatuses)
+        .single();
+
+      if (!legacyError) {
+        return legacyData as unknown as PropertyWithMedia;
+      }
+    }
+
     console.error("Error fetching property by slug:", error.message);
     return null;
   }

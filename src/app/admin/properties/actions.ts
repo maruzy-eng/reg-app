@@ -7,6 +7,18 @@ import { requireAdminPermission } from "@/lib/admin-permissions";
 import { slugifyPropertyTitle } from "@/types/property";
 import type { PropertyInsert, PropertyUpdate } from "@/types/property";
 
+const allowedPropertyStatuses = [
+  "draft",
+  "available",
+  "under_contract",
+  "sold",
+  "rented",
+  "in_progress",
+  "archived",
+] as const;
+
+type PropertyStatusValue = (typeof allowedPropertyStatuses)[number];
+
 function getStringValue(formData: FormData, key: string) {
   const value = formData.get(key);
 
@@ -46,6 +58,16 @@ function getNullableNumberValue(formData: FormData, key: string) {
 
 function getBooleanValue(formData: FormData, key: string) {
   return formData.get(key) === "on";
+}
+
+function getPropertyStatusValue(formData: FormData) {
+  const status = getStringValue(formData, "status") || "draft";
+
+  if (!allowedPropertyStatuses.includes(status as PropertyStatusValue)) {
+    throw new Error("Invalid property status.");
+  }
+
+  return status as PropertyStatusValue;
 }
 
 function revalidatePropertyPaths(slug?: string | null) {
@@ -100,7 +122,7 @@ export async function createPropertyAction(formData: FormData) {
       "property_type",
     ) as PropertyInsert["property_type"],
 
-    status: getStringValue(formData, "status") as PropertyInsert["status"],
+    status: getPropertyStatusValue(formData),
     visibility: getStringValue(formData, "visibility") || "public",
 
     address_line_1: addressLine1,
@@ -216,7 +238,7 @@ export async function updatePropertyAction(formData: FormData) {
       "property_type",
     ) as PropertyUpdate["property_type"],
 
-    status: getStringValue(formData, "status") as PropertyUpdate["status"],
+    status: getPropertyStatusValue(formData),
     visibility: getStringValue(formData, "visibility") || "public",
 
     address_line_1: addressLine1,

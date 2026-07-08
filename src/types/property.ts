@@ -94,6 +94,7 @@ export function getPropertyStatusLabel(status: PropertyStatus) {
     available: "Available",
     under_contract: "Under Contract",
     sold: "Sold",
+    rented: "Rented",
     in_progress: "In Progress",
     archived: "Archived",
   };
@@ -122,6 +123,7 @@ export function getPropertyStatusClassName(status: PropertyStatus) {
     available: "bg-emerald-50 text-emerald-700",
     under_contract: "bg-amber-50 text-amber-700",
     sold: "bg-red-50 text-red-700",
+    rented: "bg-violet-50 text-violet-700",
     in_progress: "bg-blue-50 text-[#2680d8]",
     archived: "bg-gray-100 text-gray-500",
   };
