@@ -1,74 +1,173 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { getSiteSettings } from "@/lib/site-settings";
+
+const DEFAULT_SITE_URL = "https://checkmateproperty.com";
+
+const DEFAULT_SITE_NAME = "Checkmate Property";
+
+const DEFAULT_DESCRIPTION =
+  "Checkmate Property is a real estate intelligence platform built to help investors search, analyze, and evaluate property opportunities across the United States.";
+
+const DEFAULT_OG_IMAGE =
+  "https://checkmateproperty.com/checkmate-property-og.jpg";
+
+function getValidSiteUrl(value: string | undefined | null) {
+  const rawUrl = value?.trim() || DEFAULT_SITE_URL;
+
+  try {
+    return new URL(rawUrl).origin;
+  } catch {
+    return DEFAULT_SITE_URL;
+  }
+}
+
+function getAbsoluteUrl(siteUrl: string, pathOrUrl?: string | null) {
+  if (!pathOrUrl) {
+    return null;
+  }
+
+  try {
+    return new URL(pathOrUrl).toString();
+  } catch {
+    try {
+      return new URL(pathOrUrl, siteUrl).toString();
+    } catch {
+      return null;
+    }
+  }
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = getValidSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
 
-  const title = settings.site_name || "Property Portal";
+  const siteName = settings.site_name?.trim() || DEFAULT_SITE_NAME;
 
   const description =
-    settings.site_description ||
-    "Explore curated real estate projects, property details, media, videos, floor plans and investment information.";
+    settings.site_description?.trim() || DEFAULT_DESCRIPTION;
 
-  const logoUrl = settings.logo_url || undefined;
-  const faviconUrl = settings.favicon_url || undefined;
+  const logoUrl =
+    getAbsoluteUrl(siteUrl, settings.logo_url) || DEFAULT_OG_IMAGE;
+
+  const faviconUrl = getAbsoluteUrl(siteUrl, settings.favicon_url);
 
   return {
     metadataBase: new URL(siteUrl),
+
     title: {
-      default: title,
-      template: `%s | ${title}`,
+      default: siteName,
+      template: `%s | ${siteName}`,
     },
+
     description,
-    applicationName: title,
+
+    applicationName: siteName,
+
+    generator: "Next.js",
+
+    referrer: "origin-when-cross-origin",
+
+    creator: "Checkmate Real Estate Group",
+
+    publisher: "Checkmate Real Estate Group",
+
+    category: "Real Estate",
+
+    keywords: [
+      "Checkmate Property",
+      "real estate investment platform",
+      "property search",
+      "real estate opportunities",
+      "investment properties",
+      "real estate analysis",
+      "real estate projects",
+      "property investment USA",
+      "Massachusetts real estate",
+      "New England real estate",
+      "flip houses",
+      "new construction",
+      "ARV",
+      "ROI",
+      "real estate comps",
+    ],
+
+    alternates: {
+      canonical: "/",
+    },
+
     icons: faviconUrl
       ? {
           icon: faviconUrl,
           shortcut: faviconUrl,
           apple: faviconUrl,
         }
-      : undefined,
+      : {
+          icon: "/favicon.ico",
+          shortcut: "/favicon.ico",
+          apple: "/apple-touch-icon.png",
+        },
+
     openGraph: {
-      title,
+      title: siteName,
       description,
       url: siteUrl,
-      siteName: title,
+      siteName,
       type: "website",
       locale: "en_US",
-      images: logoUrl
-        ? [
-            {
-              url: logoUrl,
-              width: 1200,
-              height: 630,
-              alt: title,
-            },
-          ]
-        : undefined,
+      images: [
+        {
+          url: logoUrl,
+          width: 1200,
+          height: 630,
+          alt: `${siteName} — Real Estate Intelligence Platform`,
+        },
+      ],
     },
+
     twitter: {
       card: "summary_large_image",
-      title,
+      title: siteName,
       description,
-      images: logoUrl ? [logoUrl] : undefined,
+      images: [logoUrl],
     },
+
     robots: {
       index: true,
       follow: true,
+      nocache: false,
       googleBot: {
         index: true,
         follow: true,
+        noimageindex: false,
         "max-image-preview": "large",
         "max-snippet": -1,
         "max-video-preview": -1,
       },
     },
+
+    appleWebApp: {
+      capable: true,
+      title: siteName,
+      statusBarStyle: "default",
+    },
+
+    formatDetection: {
+      telephone: false,
+      address: false,
+      email: false,
+    },
   };
 }
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#0E3541",
+  colorScheme: "light",
+};
 
 export default function RootLayout({
   children,

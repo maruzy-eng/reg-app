@@ -30,11 +30,114 @@ import {
 
 export const revalidate = 60;
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://checkmateproperty.com";
+
+const DEFAULT_DESCRIPTION =
+  "Explore real estate investment opportunities, property details, media, videos, floor plans and market information with Checkmate Property.";
+
 type PropertyDetailPageProps = {
   params: Promise<{
     slug: string;
   }>;
 };
+
+function getAbsoluteUrl(pathOrUrl?: string | null) {
+  if (!pathOrUrl) {
+    return SITE_URL;
+  }
+
+  try {
+    return new URL(pathOrUrl).toString();
+  } catch {
+    try {
+      return new URL(pathOrUrl, SITE_URL).toString();
+    } catch {
+      return SITE_URL;
+    }
+  }
+}
+
+function stripHtml(value?: string | null) {
+  if (!value) {
+    return "";
+  }
+
+  return value
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function truncateText(value: string, maxLength = 155) {
+  const cleanValue = stripHtml(value);
+
+  if (cleanValue.length <= maxLength) {
+    return cleanValue;
+  }
+
+  return `${cleanValue.slice(0, maxLength).replace(/\s+\S*$/, "")}...`;
+}
+
+function getPropertySeoDescription({
+  metaDescription,
+  shortDescription,
+  description,
+  fallback,
+}: {
+  metaDescription?: string | null;
+  shortDescription?: string | null;
+  description?: string | null;
+  fallback?: string | null;
+}) {
+  return (
+    truncateText(metaDescription || "") ||
+    truncateText(shortDescription || "") ||
+    truncateText(description || "") ||
+    truncateText(fallback || "") ||
+    DEFAULT_DESCRIPTION
+  );
+}
+
+function getPropertyLocationText(property: {
+  address_line_1?: string | null;
+  city?: string | null;
+  state?: string | null;
+  zip_code?: string | null;
+}) {
+  return [
+    property.address_line_1,
+    property.city,
+    property.state,
+    property.zip_code,
+  ]
+    .filter(Boolean)
+    .join(", ");
+}
+
+function getSeoTitle({
+  metaTitle,
+  title,
+  city,
+  state,
+}: {
+  metaTitle?: string | null;
+  title: string;
+  city?: string | null;
+  state?: string | null;
+}) {
+  if (metaTitle?.trim()) {
+    return metaTitle.trim();
+  }
+
+  const location = [city, state].filter(Boolean).join(", ");
+
+  if (location) {
+    return `${title} | Real Estate Opportunity in ${location}`;
+  }
+
+  return `${title} | Real Estate Opportunity`;
+}
 
 export async function generateMetadata({
   params,
@@ -45,6 +148,7 @@ export async function generateMetadata({
   if (!property) {
     return {
       title: "Property Not Found",
+      description: "The property you are looking for could not be found.",
       robots: {
         index: false,
         follow: false,
@@ -54,22 +158,82 @@ export async function generateMetadata({
 
   const settings = await getSiteSettings();
   const mainImage = getMainPropertyImage(property);
+  const propertyUrl = `/properties/${property.slug}`;
+  const absolutePropertyUrl = getAbsoluteUrl(propertyUrl);
+
+  const title = getSeoTitle({
+    metaTitle: property.meta_title,
+    title: property.title,
+    city: property.city,
+    state: property.state,
+  });
+
+  const description = getPropertySeoDescription({
+    metaDescription: property.meta_description,
+    shortDescription: property.short_description,
+    description: property.description,
+    fallback: settings.site_description,
+  });
+
+  const imageUrl = mainImage ? getAbsoluteUrl(mainImage) : undefined;
 
   return {
-    title: property.meta_title || property.title,
-    description:
-      property.meta_description ||
-      property.short_description ||
-      property.description ||
-      settings.site_description,
+    title,
+    description,
+    keywords: [
+      property.title,
+      property.city,
+      property.state,
+      property.address_line_1,
+      "Checkmate Property",
+      "real estate investment",
+      "investment property",
+      "property opportunity",
+      "real estate project",
+      "property details",
+      "real estate comps",
+      "ARV",
+      "ROI",
+      "flip house",
+      "new construction",
+    ].filter(Boolean) as string[],
+    alternates: {
+      canonical: propertyUrl,
+    },
     openGraph: {
-      title: property.meta_title || property.title,
-      description:
-        property.meta_description ||
-        property.short_description ||
-        property.description ||
-        settings.site_description,
-      images: mainImage ? [mainImage] : [],
+      title,
+      description,
+      url: absolutePropertyUrl,
+      siteName: "Checkmate Property",
+      type: "article",
+      locale: "en_US",
+      images: imageUrl
+        ? [
+            {
+              url: imageUrl,
+              width: 1200,
+              height: 630,
+              alt: `${property.title} — ${getPropertyLocationText(property)}`,
+            },
+          ]
+        : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: imageUrl ? [imageUrl] : [],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
   };
 }
@@ -194,6 +358,131 @@ function PropertyFactCard({
   );
 }
 
+function getPropertyStructuredData({
+  property,
+  mainImage,
+  description,
+}: {
+  property: Awaited<ReturnType<typeof getPropertyBySlug>>;
+  mainImage: string | null;
+  description: string;
+}) {
+  if (!property) {
+    return null;
+  }
+
+  const propertyUrl = getAbsoluteUrl(`/properties/${property.slug}`);
+  const imageUrl = mainImage ? getAbsoluteUrl(mainImage) : undefined;
+  const locationText = getPropertyLocationText(property);
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${propertyUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: SITE_URL,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Properties",
+            item: `${SITE_URL}/#projects`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: property.title,
+            item: propertyUrl,
+          },
+        ],
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${propertyUrl}#webpage`,
+        url: propertyUrl,
+        name: property.title,
+        description,
+        isPartOf: {
+          "@id": `${SITE_URL}/#website`,
+        },
+        breadcrumb: {
+          "@id": `${propertyUrl}#breadcrumb`,
+        },
+        primaryImageOfPage: imageUrl
+          ? {
+              "@type": "ImageObject",
+              url: imageUrl,
+            }
+          : undefined,
+      },
+      {
+        "@type": "Residence",
+        "@id": `${propertyUrl}#property`,
+        name: property.title,
+        description,
+        url: propertyUrl,
+        image: imageUrl,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: property.address_line_1 || undefined,
+          addressLocality: property.city || undefined,
+          addressRegion: property.state || undefined,
+          postalCode: property.zip_code || undefined,
+          addressCountry: "US",
+        },
+        numberOfRooms: property.bedrooms || undefined,
+        floorSize: property.sqft
+          ? {
+              "@type": "QuantitativeValue",
+              value: property.sqft,
+              unitText: "SQFT",
+            }
+          : undefined,
+        additionalProperty: [
+          {
+            "@type": "PropertyValue",
+            name: "Status",
+            value: getPropertyStatusLabel(property.status),
+          },
+          {
+            "@type": "PropertyValue",
+            name: "Property Type",
+            value: getPropertyTypeLabel(property.property_type),
+          },
+          {
+            "@type": "PropertyValue",
+            name: "Bathrooms",
+            value: property.bathrooms || "N/A",
+          },
+          {
+            "@type": "PropertyValue",
+            name: "Location",
+            value: locationText,
+          },
+        ],
+        offers: property.price
+          ? {
+              "@type": "Offer",
+              price: property.price,
+              priceCurrency: "USD",
+              availability:
+                property.status === "available"
+                  ? "https://schema.org/InStock"
+                  : "https://schema.org/LimitedAvailability",
+              url: propertyUrl,
+            }
+          : undefined,
+      },
+    ],
+  };
+}
+
 export default async function PropertyDetailPage({
   params,
 }: PropertyDetailPageProps) {
@@ -212,6 +501,19 @@ export default async function PropertyDetailPage({
   const mainImage = getMainPropertyImage(property);
   const descriptionParagraphs = splitDescription(property.description);
 
+  const seoDescription = getPropertySeoDescription({
+    metaDescription: property.meta_description,
+    shortDescription: property.short_description,
+    description: property.description,
+    fallback: settings.site_description,
+  });
+
+  const structuredData = getPropertyStructuredData({
+    property,
+    mainImage,
+    description: seoDescription,
+  });
+
   const videos = [...(property.property_videos || [])].sort(
     (a, b) => a.position - b.position,
   );
@@ -224,8 +526,19 @@ export default async function PropertyDetailPage({
     (a, b) => a.position - b.position,
   );
 
+  const propertyLocation = getPropertyLocationText(property);
+
   return (
     <main className="min-h-screen bg-white">
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
+      ) : null}
+
       <PublicHeader settings={settings} />
 
       <section
@@ -239,7 +552,7 @@ export default async function PropertyDetailPage({
         <div className="mx-auto max-w-[1220px]">
           <PropertyBackButton />
 
-          <div className="rounded-[28px] border border-black/10 bg-white p-6 shadow-[0_18px_48px_rgba(17,17,17,0.08)] md:p-8">
+          <article className="rounded-[28px] border border-black/10 bg-white p-6 shadow-[0_18px_48px_rgba(17,17,17,0.08)] md:p-8">
             <div className="flex flex-col justify-between gap-5 border-b border-black/10 pb-6 lg:flex-row lg:items-start">
               <div>
                 <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -261,9 +574,8 @@ export default async function PropertyDetailPage({
                 </h1>
 
                 <p className="mt-4 flex items-center gap-2 text-sm font-normal text-[#64748b] md:text-base">
-                  <MapPin size={18} className="text-[#53bc76]" />
-                  {property.address_line_1}, {property.city}, {property.state}{" "}
-                  {property.zip_code}
+                  <MapPin size={18} className="shrink-0 text-[#53bc76]" />
+                  <span>{propertyLocation}</span>
                 </p>
               </div>
 
@@ -281,7 +593,7 @@ export default async function PropertyDetailPage({
               images={galleryImages}
               mainImageUrl={mainImage}
             />
-          </div>
+          </article>
 
           <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_360px]">
             <div className="space-y-8">
@@ -390,48 +702,52 @@ export default async function PropertyDetailPage({
                   </h2>
 
                   <div className="mt-6 grid gap-5">
-                    {videos.map((video) => (
-                      <div
-                        key={video.id}
-                        className="overflow-hidden rounded-[22px] bg-[#0e3541]"
-                      >
-                        {video.provider === "uploaded" ||
-                        isUploadedVideoUrl(video.video_url) ? (
-                          <video
-                            src={video.video_url}
-                            controls
-                            poster={video.thumbnail_url || undefined}
-                            className="h-auto w-full"
-                          />
-                        ) : getVideoEmbedUrl(video.video_url) ? (
-                          <iframe
-                            src={getVideoEmbedUrl(video.video_url) || ""}
-                            title={video.title || property.title}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                            className="aspect-video w-full"
-                          />
-                        ) : (
-                          <a
-                            href={video.video_url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="flex aspect-video w-full items-center justify-center gap-2 bg-[#0e3541] px-6 text-sm font-bold !text-white"
-                          >
-                            <PlayCircle size={20} />
-                            Open Video
-                            <ExternalLink size={16} />
-                          </a>
-                        )}
+                    {videos.map((video) => {
+                      const embedUrl = getVideoEmbedUrl(video.video_url);
 
-                        <div className="flex items-center gap-2 p-4 text-white">
-                          <PlayCircle size={18} />
-                          <span className="text-sm font-semibold">
-                            {video.title}
-                          </span>
+                      return (
+                        <div
+                          key={video.id}
+                          className="overflow-hidden rounded-[22px] bg-[#0e3541]"
+                        >
+                          {video.provider === "uploaded" ||
+                          isUploadedVideoUrl(video.video_url) ? (
+                            <video
+                              src={video.video_url}
+                              controls
+                              poster={video.thumbnail_url || undefined}
+                              className="h-auto w-full"
+                            />
+                          ) : embedUrl ? (
+                            <iframe
+                              src={embedUrl}
+                              title={video.title || property.title}
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                              allowFullScreen
+                              className="aspect-video w-full"
+                            />
+                          ) : (
+                            <a
+                              href={video.video_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="flex aspect-video w-full items-center justify-center gap-2 bg-[#0e3541] px-6 text-sm font-bold !text-white"
+                            >
+                              <PlayCircle size={20} />
+                              Open Video
+                              <ExternalLink size={16} />
+                            </a>
+                          )}
+
+                          <div className="flex items-center gap-2 p-4 text-white">
+                            <PlayCircle size={18} />
+                            <span className="text-sm font-semibold">
+                              {video.title}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </section>
               ) : null}

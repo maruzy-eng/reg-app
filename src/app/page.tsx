@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   Bath,
@@ -21,6 +22,74 @@ import {
 } from "@/types/property";
 
 export const revalidate = 60;
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://checkmateproperty.com";
+
+const HOME_TITLE =
+  "Checkmate Property | Real Estate Investment Search Platform";
+
+const HOME_DESCRIPTION =
+  "Search real estate opportunities, investment properties, development projects, comps, ARV, ROI, and market data with Checkmate Property.";
+
+const DEFAULT_HERO_IMAGE =
+  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/property-media/properties/4great-rock-f8d8d89155f740bb8eeeefc6049e3a18-uncropped_scaled_within_1536_1152.webp";
+
+export const metadata: Metadata = {
+  title: HOME_TITLE,
+  description: HOME_DESCRIPTION,
+  keywords: [
+    "Checkmate Property",
+    "real estate investment platform",
+    "property search",
+    "investment properties",
+    "real estate opportunities",
+    "real estate projects",
+    "Massachusetts real estate",
+    "New England real estate",
+    "ARV",
+    "ROI",
+    "real estate comps",
+    "flip houses",
+    "new construction",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    url: SITE_URL,
+    siteName: "Checkmate Property",
+    type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: DEFAULT_HERO_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "Checkmate Property real estate investment search platform",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: [DEFAULT_HERO_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+};
 
 function getStatusClassName(status: string) {
   const normalizedStatus = status.toLowerCase();
@@ -48,6 +117,55 @@ function getStatusClassName(status: string) {
   return "bg-sky-50 text-[#0e3541]";
 }
 
+function getStructuredData(propertyCount: number) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#organization`,
+        name: "Checkmate Property",
+        url: SITE_URL,
+        logo: `${SITE_URL}/favicon.ico`,
+        sameAs: ["https://checkmateproperty.com"],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: "Checkmate Property",
+        description: HOME_DESCRIPTION,
+        publisher: {
+          "@id": `${SITE_URL}/#organization`,
+        },
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${SITE_URL}/?q={search_term_string}`,
+          "query-input": "required name=search_term_string",
+        },
+      },
+      {
+        "@type": "CollectionPage",
+        "@id": `${SITE_URL}/#homepage`,
+        url: SITE_URL,
+        name: HOME_TITLE,
+        description: HOME_DESCRIPTION,
+        isPartOf: {
+          "@id": `${SITE_URL}/#website`,
+        },
+        about: {
+          "@id": `${SITE_URL}/#organization`,
+        },
+        mainEntity: {
+          "@type": "ItemList",
+          name: "Public real estate opportunities",
+          numberOfItems: propertyCount,
+        },
+      },
+    ],
+  };
+}
+
 export default async function HomePage() {
   const [properties, settings, searchFormResult] = await Promise.all([
     getPublicProperties(),
@@ -59,7 +177,7 @@ export default async function HomePage() {
 
   const heroImage =
     propertyCards.find((property) => property.imageUrl)?.imageUrl ||
-    "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/property-media/properties/4great-rock-f8d8d89155f740bb8eeeefc6049e3a18-uncropped_scaled_within_1536_1152.webp";
+    DEFAULT_HERO_IMAGE;
 
   const searchForm = searchFormResult.form
     ? {
@@ -68,8 +186,17 @@ export default async function HomePage() {
       }
     : null;
 
+  const structuredData = getStructuredData(propertyCards.length);
+
   return (
     <main className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
+
       <PublicHeader settings={settings} />
 
       <section
@@ -109,6 +236,22 @@ export default async function HomePage() {
         }}
       >
         <div className="mx-auto max-w-[1220px]">
+          <div className="mb-8 max-w-3xl">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#53bc76]">
+              Public projects
+            </p>
+
+            <h2 className="mt-3 text-3xl font-black tracking-[-0.055em] text-[#0e3541] sm:text-4xl">
+              Explore real estate investment opportunities.
+            </h2>
+
+            <p className="mt-3 text-sm leading-7 text-[#587469] sm:text-base">
+              Browse published Checkmate Property projects and review key
+              property details, pricing, status, location, bedrooms, bathrooms,
+              square footage, and media.
+            </p>
+          </div>
+
           {propertyCards.length > 0 ? (
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {propertyCards.map((property) => {
@@ -127,7 +270,7 @@ export default async function HomePage() {
                       {property.imageUrl ? (
                         <img
                           src={property.imageUrl}
-                          alt={property.title}
+                          alt={`${property.title} real estate property in ${property.city}, ${property.state}`}
                           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                         />
                       ) : (
@@ -139,9 +282,9 @@ export default async function HomePage() {
 
                     <div className="p-5">
                       <Link href={propertyUrl} className="block">
-                        <p className="text-[27px] font-semibold leading-none tracking-[-0.045em] text-[#101820]">
+                        <h3 className="text-[27px] font-semibold leading-none tracking-[-0.045em] text-[#101820]">
                           {formatCurrency(property.price)}
-                        </p>
+                        </h3>
                       </Link>
 
                       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] font-medium text-[#516675]">

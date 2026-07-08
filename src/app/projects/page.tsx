@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   Bath,
@@ -22,6 +23,75 @@ import {
 } from "@/types/property";
 
 export const revalidate = 60;
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://checkmateproperty.com";
+
+const PAGE_TITLE =
+  "Published Real Estate Projects | Checkmate Property";
+
+const PAGE_DESCRIPTION =
+  "Explore Checkmate Property published real estate projects, residential developments, investment opportunities, property media, floor plans, videos, and project details across the United States.";
+
+const DEFAULT_OG_IMAGE =
+  "https://checkmateproperty.com/checkmate-property-og.jpg";
+
+export const metadata: Metadata = {
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  keywords: [
+    "Checkmate Property projects",
+    "published real estate projects",
+    "real estate development portfolio",
+    "investment properties",
+    "property projects",
+    "real estate opportunities",
+    "residential developments",
+    "Massachusetts real estate",
+    "New England real estate",
+    "flip house projects",
+    "new construction projects",
+    "property transparency",
+    "real estate media",
+    "floor plans",
+  ],
+  alternates: {
+    canonical: "/projects",
+  },
+  openGraph: {
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    url: `${SITE_URL}/projects`,
+    siteName: "Checkmate Property",
+    type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "Checkmate Property published real estate projects",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+};
 
 function getStatusClassName(status: string) {
   const normalizedStatus = status.toLowerCase();
@@ -49,6 +119,58 @@ function getStatusClassName(status: string) {
   return "bg-sky-50 text-[#0e3541]";
 }
 
+function getStructuredData(
+  properties: ReturnType<typeof mapPropertyToCard>[],
+) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#organization`,
+        name: "Checkmate Property",
+        url: SITE_URL,
+        logo: `${SITE_URL}/favicon.ico`,
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: "Checkmate Property",
+        description:
+          "Real estate intelligence platform for searching and evaluating property opportunities.",
+        publisher: {
+          "@id": `${SITE_URL}/#organization`,
+        },
+      },
+      {
+        "@type": "CollectionPage",
+        "@id": `${SITE_URL}/projects#collection`,
+        url: `${SITE_URL}/projects`,
+        name: PAGE_TITLE,
+        description: PAGE_DESCRIPTION,
+        isPartOf: {
+          "@id": `${SITE_URL}/#website`,
+        },
+        about: {
+          "@id": `${SITE_URL}/#organization`,
+        },
+        mainEntity: {
+          "@type": "ItemList",
+          name: "Published real estate projects",
+          numberOfItems: properties.length,
+          itemListElement: properties.map((property, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            url: `${SITE_URL}/properties/${property.slug}`,
+            name: property.title,
+          })),
+        },
+      },
+    ],
+  };
+}
+
 export default async function ProjectsPage() {
   const [properties, settings] = await Promise.all([
     getPublicProperties(),
@@ -56,9 +178,17 @@ export default async function ProjectsPage() {
   ]);
 
   const propertyCards = properties.map(mapPropertyToCard);
+  const structuredData = getStructuredData(propertyCards);
 
   return (
     <main className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
+
       <PublicHeader settings={settings} />
 
       <div
@@ -74,7 +204,7 @@ export default async function ProjectsPage() {
             <div className="mx-auto max-w-[920px] text-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-[#53bc76]/25 bg-white/95 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#0e3541] shadow-[0_12px_30px_rgba(9,24,39,0.06)]">
                 <span className="h-2 w-2 rounded-full bg-[#53bc76] shadow-[0_0_0_7px_rgba(83,188,118,0.14)]" />
-                Checkmate Group Transparency Portal
+                Checkmate Property Portfolio
               </div>
 
               <h1 className="mx-auto mt-7 max-w-[900px] text-[44px] font-semibold leading-[0.92] tracking-[-0.085em] text-[#111111] md:text-[76px]">
@@ -85,9 +215,9 @@ export default async function ProjectsPage() {
               </h1>
 
               <p className="mx-auto mt-6 max-w-[760px] text-base font-normal leading-7 text-[#5f5f5f] md:text-lg">
-                Follow Checkmate Group projects with clear public information,
-                project media, location details, property type, videos, floor
-                plans, and organized transparency pages for each address.
+                Follow Checkmate Property projects with clear public
+                information, project media, location details, property type,
+                videos, floor plans, and organized pages for each address.
               </p>
 
               <div className="mt-8 flex flex-wrap justify-center gap-3">
@@ -120,7 +250,7 @@ export default async function ProjectsPage() {
                 </span>
 
                 <span className="inline-flex min-h-[38px] items-center rounded-full border border-black/10 bg-white/95 px-4 py-2 text-xs font-normal text-[#5f5f5f] shadow-[0_10px_26px_rgba(9,24,39,0.04)]">
-                  Public project visibility
+                  Project visibility
                 </span>
               </div>
             </div>
@@ -139,11 +269,11 @@ export default async function ProjectsPage() {
               </h2>
 
               <p className="mt-4 text-base font-normal leading-7 text-[#111111]/80">
-                Explore Checkmate Group’s curated portfolio of residential
-                developments across the United States. Select any property to
-                access an immersive presentation featuring photos, location
-                details, specifications, videos, image galleries, and floor
-                plans whenever available.
+                Explore Checkmate Property&apos;s curated portfolio of
+                residential developments across the United States. Select any
+                property to access an immersive presentation featuring photos,
+                location details, specifications, videos, image galleries, and
+                floor plans whenever available.
               </p>
             </div>
 
@@ -188,7 +318,7 @@ export default async function ProjectsPage() {
                         {property.imageUrl ? (
                           <img
                             src={property.imageUrl}
-                            alt={property.title}
+                            alt={`${property.title} real estate project in ${property.city}, ${property.state}`}
                             className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                           />
                         ) : (
@@ -200,9 +330,9 @@ export default async function ProjectsPage() {
 
                       <div className="p-5">
                         <Link href={propertyUrl} className="block">
-                          <p className="text-[27px] font-semibold leading-none tracking-[-0.045em] text-[#101820] transition group-hover:text-[#39aff2]">
+                          <h3 className="text-[27px] font-semibold leading-none tracking-[-0.045em] text-[#101820] transition group-hover:text-[#39aff2]">
                             {formatCurrency(property.price)}
-                          </p>
+                          </h3>
                         </Link>
 
                         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] font-medium text-[#516675]">
