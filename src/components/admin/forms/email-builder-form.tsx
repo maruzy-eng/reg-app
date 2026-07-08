@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Plus, Save } from "lucide-react";
 import { normalizeEmailList, type FormEmailType } from "@/lib/form-emails";
+import type { AdminFormEmailActionResult } from "@/lib/admin-form-emails";
 
 type EmailBuilderFormValues = {
   id?: string;
@@ -20,7 +21,7 @@ type EmailBuilderFormValues = {
 
 type EmailBuilderFormProps = {
   formId: string;
-  action: (formData: FormData) => Promise<void>;
+  action: (formData: FormData) => Promise<AdminFormEmailActionResult | void>;
   submitLabel: string;
   initialValues?: Partial<EmailBuilderFormValues>;
 };
@@ -41,21 +42,63 @@ export function EmailBuilderForm({
   initialValues,
 }: EmailBuilderFormProps) {
   const [type, setType] = useState<FormEmailType>(initialValues?.type || "user");
+  const [recipientField, setRecipientField] = useState(
+    initialValues?.recipient_field || "email",
+  );
   const [recipientsText, setRecipientsText] = useState(
     initialValues?.recipients?.join("\n") || "",
   );
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isUserEmail = type === "user";
   const isSaveAction = submitLabel.toLowerCase().includes("save");
   const SubmitIcon = isSaveAction ? Save : Plus;
+  const recipients = normalizeEmailList(recipientsText);
+  const validationError =
+    type === "admin" && recipients.length === 0
+      ? "Add one or more fixed recipients, separated by commas."
+      : type === "user" && !recipientField.trim()
+        ? "Use the form field name that contains the lead email, usually email."
+        : "";
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (validationError) {
+      setErrorMessage(validationError);
+      return;
+    }
+
+    setErrorMessage("");
+    setIsSubmitting(true);
+
+    try {
+      const formData = new FormData(event.currentTarget);
+      formData.set("recipient_field", recipientField.trim());
+      formData.set("recipients", JSON.stringify(recipients));
+
+      const result = await action(formData);
+
+      if (result && "error" in result && result.error) {
+        setErrorMessage(result.error);
+      }
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Unable to save email.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
-    <form action={action} className="grid gap-6">
+    <form onSubmit={handleSubmit} className="grid gap-6">
       <input type="hidden" name="form_id" value={formId} />
       {initialValues?.id ? (
         <input type="hidden" name="email_id" value={initialValues.id} />
       ) : null}
-      <input type="hidden" name="recipients" value={JSON.stringify(normalizeEmailList(recipientsText))} />
+      <input type="hidden" name="recipients" value={JSON.stringify(recipients)} />
 
       <div className="grid gap-5 md:grid-cols-3">
         <div>
@@ -159,13 +202,15 @@ export function EmailBuilderForm({
             name="recipient_field"
             type="text"
             required
-            defaultValue={initialValues?.recipient_field || "email"}
+            value={recipientField}
+            onChange={(event) => setRecipientField(event.target.value)}
             placeholder="email"
             className="admin-input min-h-[48px] px-4"
           />
 
           <p className="admin-form-list-meta mt-2 text-xs">
-            Example: <span className="font-mono">{`{{email}}`}</span>
+            Use the form field name that contains the lead email, usually{" "}
+            <span className="font-mono">email</span>.
           </p>
         </div>
       ) : (
@@ -184,7 +229,7 @@ export function EmailBuilderForm({
           />
 
           <p className="admin-form-list-meta mt-2 text-xs">
-            One e-mail per line. Stored as a JSON array behind the scenes.
+            Add one or more fixed recipients, separated by commas.
           </p>
         </div>
       )}
@@ -210,15 +255,11 @@ export function EmailBuilderForm({
         </p>
       </div>
 
-      <div className="flex flex-col-reverse justify-end gap-3 rounded-2xl border border-[rgba(12,41,51,0.08)] bg-white/70 p-4 sm:flex-row">
-        <button
-          type="submit"
-          className="admin-primary-button min-h-[46px] gap-2 px-5 text-sm"
-        >
-          <SubmitIcon size={17} />
-          {submitLabel}
-        </button>
-      </div>
+      {errorMessage ? (
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+          {errorMessage}
+        </div>
+      ) : null}
 
       <div>
         <label className="admin-form-list-title mb-2 block text-sm font-bold">
@@ -253,10 +294,11 @@ export function EmailBuilderForm({
       <div className="flex flex-col-reverse justify-end gap-3 border-t border-[rgba(12,41,51,0.08)] pt-6 sm:flex-row">
         <button
           type="submit"
-          className="admin-primary-button min-h-[46px] gap-2 px-5 text-sm"
+          disabled={isSubmitting || Boolean(validationError)}
+          className="admin-primary-button min-h-[46px] gap-2 px-5 text-sm disabled:cursor-not-allowed disabled:opacity-60"
         >
           <SubmitIcon size={17} />
-          {submitLabel}
+          {isSubmitting ? "Saving..." : submitLabel}
         </button>
       </div>
     </form>
