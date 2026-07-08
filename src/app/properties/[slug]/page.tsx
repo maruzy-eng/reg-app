@@ -111,6 +111,59 @@ function splitDescription(description: string | null) {
     .filter(Boolean);
 }
 
+function isUploadedVideoUrl(value: string) {
+  return /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(value);
+}
+
+function getYouTubeEmbedUrl(value: string) {
+  try {
+    const url = new URL(value);
+    const hostname = url.hostname.replace(/^www\./, "");
+
+    if (hostname === "youtu.be") {
+      const videoId = url.pathname.split("/").filter(Boolean)[0];
+      return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+    }
+
+    if (hostname === "youtube.com" && url.pathname.startsWith("/embed/")) {
+      return value;
+    }
+
+    if (hostname === "youtube.com" || hostname === "m.youtube.com") {
+      const videoId = url.searchParams.get("v");
+      return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+function getVimeoEmbedUrl(value: string) {
+  try {
+    const url = new URL(value);
+    const hostname = url.hostname.replace(/^www\./, "");
+
+    if (hostname !== "vimeo.com" && hostname !== "player.vimeo.com") {
+      return null;
+    }
+
+    if (hostname === "player.vimeo.com") {
+      return value;
+    }
+
+    const videoId = url.pathname.split("/").filter(Boolean)[0];
+    return videoId ? `https://player.vimeo.com/video/${videoId}` : null;
+  } catch {
+    return null;
+  }
+}
+
+function getVideoEmbedUrl(value: string) {
+  return getYouTubeEmbedUrl(value) || getVimeoEmbedUrl(value);
+}
+
 function PropertyFactCard({
   icon,
   label,
@@ -342,11 +395,34 @@ export default async function PropertyDetailPage({
                         key={video.id}
                         className="overflow-hidden rounded-[22px] bg-[#0e3541]"
                       >
-                        <video
-                          src={video.video_url}
-                          controls
-                          className="h-auto w-full"
-                        />
+                        {video.provider === "uploaded" ||
+                        isUploadedVideoUrl(video.video_url) ? (
+                          <video
+                            src={video.video_url}
+                            controls
+                            poster={video.thumbnail_url || undefined}
+                            className="h-auto w-full"
+                          />
+                        ) : getVideoEmbedUrl(video.video_url) ? (
+                          <iframe
+                            src={getVideoEmbedUrl(video.video_url) || ""}
+                            title={video.title || property.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                            className="aspect-video w-full"
+                          />
+                        ) : (
+                          <a
+                            href={video.video_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex aspect-video w-full items-center justify-center gap-2 bg-[#0e3541] px-6 text-sm font-bold !text-white"
+                          >
+                            <PlayCircle size={20} />
+                            Open Video
+                            <ExternalLink size={16} />
+                          </a>
+                        )}
 
                         <div className="flex items-center gap-2 p-4 text-white">
                           <PlayCircle size={18} />

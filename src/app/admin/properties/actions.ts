@@ -19,6 +19,30 @@ const allowedPropertyStatuses = [
 
 type PropertyStatusValue = (typeof allowedPropertyStatuses)[number];
 
+const PROPERTY_MEDIA_BUCKET =
+  process.env.PROPERTY_MEDIA_BUCKET || "property-media";
+
+const uploadLimits = {
+  image: 10 * 1024 * 1024,
+  video: 200 * 1024 * 1024,
+  document: 50 * 1024 * 1024,
+} as const;
+
+const allowedImageTypes = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/avif",
+]);
+
+const allowedVideoTypes = new Set([
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+  "video/x-m4v",
+]);
+
 function getStringValue(formData: FormData, key: string) {
   const value = formData.get(key);
 
@@ -60,6 +84,16 @@ function getBooleanValue(formData: FormData, key: string) {
   return formData.get(key) === "on";
 }
 
+function getFileValue(formData: FormData, key: string) {
+  const value = formData.get(key);
+
+  if (value instanceof File && value.size > 0) {
+    return value;
+  }
+
+  return null;
+}
+
 function getPropertyStatusValue(formData: FormData) {
   const status = getStringValue(formData, "status") || "draft";
 
@@ -68,6 +102,147 @@ function getPropertyStatusValue(formData: FormData) {
   }
 
   return status as PropertyStatusValue;
+}
+
+function slugifyFileName(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9.]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+}
+
+function getFileExtension(fileName: string, fallback: string) {
+  const parts = fileName.split(".");
+  const extension = parts.length > 1 ? parts.pop() : "";
+
+  return extension ? extension.toLowerCase() : fallback;
+}
+
+function getStorageContentType(file: File, fallback: string) {
+  return file.type || fallback;
+}
+
+function assertAllowedUpload(
+  file: File,
+  mediaType: "image" | "video" | "document",
+) {
+  if (mediaType === "image") {
+    if (file.size > uploadLimits.image) {
+      throw new Error("Image files must be 10MB or smaller.");
+    }
+
+    if (!allowedImageTypes.has(file.type)) {
+      throw new Error("Image upload must be JPG, PNG, WebP, GIF, or AVIF.");
+    }
+
+    return;
+  }
+
+  if (mediaType === "video") {
+    if (file.size > uploadLimits.video) {
+      throw new Error("Video files must be 200MB or smaller.");
+    }
+
+    if (!allowedVideoTypes.has(file.type)) {
+      throw new Error("Video upload must be MP4, WebM, MOV, or M4V.");
+    }
+
+    return;
+  }
+
+  if (file.size > uploadLimits.document) {
+    throw new Error("PDF files must be 50MB or smaller.");
+  }
+
+  const extension = getFileExtension(file.name, "pdf");
+
+  if (file.type !== "application/pdf" && extension !== "pdf") {
+    throw new Error("Document upload must be a PDF file.");
+  }
+}
+
+async function ensurePropertyMediaBucket() {
+  const supabase = createAdminClient();
+  const { data: buckets, error: listError } = await supabase.storage.listBuckets();
+
+  if (listError) {
+    throw new Error(`Could not list storage buckets: ${listError.message}`);
+  }
+
+  const bucketExists = buckets.some(
+    (bucket) => bucket.name === PROPERTY_MEDIA_BUCKET,
+  );
+
+  if (bucketExists) {
+    return;
+  }
+
+  const { error: createError } = await supabase.storage.createBucket(
+    PROPERTY_MEDIA_BUCKET,
+    {
+      public: true,
+    },
+  );
+
+  if (createError) {
+    throw new Error(
+      `Could not create storage bucket ${PROPERTY_MEDIA_BUCKET}: ${createError.message}`,
+    );
+  }
+}
+
+async function uploadPropertyMedia(params: {
+  file: File;
+  propertyId: string;
+  mediaType: "image" | "video" | "document";
+}) {
+  assertAllowedUpload(params.file, params.mediaType);
+  await ensurePropertyMediaBucket();
+
+  const supabase = createAdminClient();
+  const directory =
+    params.mediaType === "image"
+      ? "images"
+      : params.mediaType === "video"
+        ? "videos"
+        : "documents";
+  const fallbackExtension =
+    params.mediaType === "image"
+      ? "jpg"
+      : params.mediaType === "video"
+        ? "mp4"
+        : "pdf";
+  const fallbackContentType =
+    params.mediaType === "image"
+      ? "image/jpeg"
+      : params.mediaType === "video"
+        ? "video/mp4"
+        : "application/pdf";
+  const extension = getFileExtension(params.file.name, fallbackExtension);
+  const safeOriginalName = slugifyFileName(
+    params.file.name || `${params.mediaType}.${extension}`,
+  );
+  const filePath = `properties/${params.propertyId}/${directory}/${Date.now()}-${safeOriginalName}`;
+  const buffer = Buffer.from(await params.file.arrayBuffer());
+
+  const { error: uploadError } = await supabase.storage
+    .from(PROPERTY_MEDIA_BUCKET)
+    .upload(filePath, buffer, {
+      contentType: getStorageContentType(params.file, fallbackContentType),
+      upsert: false,
+    });
+
+  if (uploadError) {
+    throw new Error(`Could not upload file: ${uploadError.message}`);
+  }
+
+  const { data } = supabase.storage
+    .from(PROPERTY_MEDIA_BUCKET)
+    .getPublicUrl(filePath);
+
+  return data.publicUrl;
 }
 
 function revalidatePropertyPaths(slug?: string | null) {
@@ -317,14 +492,23 @@ export async function addPropertyImageAction(formData: FormData) {
 
   const propertyId = getStringValue(formData, "property_id");
   const propertySlug = getStringValue(formData, "property_slug");
-  const imageUrl = getStringValue(formData, "image_url");
+  const imageFile = getFileValue(formData, "image_file");
+  const manualImageUrl = getStringValue(formData, "image_url");
 
   if (!propertyId) {
     throw new Error("Property ID is required.");
   }
 
+  const imageUrl = imageFile
+    ? await uploadPropertyMedia({
+        file: imageFile,
+        propertyId,
+        mediaType: "image",
+      })
+    : manualImageUrl;
+
   if (!imageUrl) {
-    throw new Error("Image URL is required.");
+    throw new Error("Upload an image file or provide an image URL.");
   }
 
   const payload = {
@@ -367,14 +551,23 @@ export async function addPropertyVideoAction(formData: FormData) {
 
   const propertyId = getStringValue(formData, "property_id");
   const propertySlug = getStringValue(formData, "property_slug");
-  const videoUrl = getStringValue(formData, "video_url");
+  const videoFile = getFileValue(formData, "video_file");
+  const manualVideoUrl = getStringValue(formData, "video_url");
 
   if (!propertyId) {
     throw new Error("Property ID is required.");
   }
 
+  const videoUrl = videoFile
+    ? await uploadPropertyMedia({
+        file: videoFile,
+        propertyId,
+        mediaType: "video",
+      })
+    : manualVideoUrl;
+
   if (!videoUrl) {
-    throw new Error("Video URL is required.");
+    throw new Error("Upload a video file or provide a video URL.");
   }
 
   const payload = {
@@ -382,7 +575,9 @@ export async function addPropertyVideoAction(formData: FormData) {
     title: getNullableStringValue(formData, "title"),
     description: getNullableStringValue(formData, "description"),
     video_url: videoUrl,
-    provider: getNullableStringValue(formData, "provider"),
+    provider: videoFile
+      ? "uploaded"
+      : getNullableStringValue(formData, "provider") || "direct",
     thumbnail_url: getNullableStringValue(formData, "thumbnail_url"),
     duration_seconds: getNullableNumberValue(formData, "duration_seconds"),
     video_type: getStringValue(formData, "video_type") || "property_video",
@@ -411,7 +606,8 @@ export async function addPropertyDocumentAction(formData: FormData) {
   const propertyId = getStringValue(formData, "property_id");
   const propertySlug = getStringValue(formData, "property_slug");
   const title = getStringValue(formData, "title");
-  const fileUrl = getStringValue(formData, "file_url");
+  const documentFile = getFileValue(formData, "document_file");
+  const manualFileUrl = getStringValue(formData, "file_url");
 
   if (!propertyId) {
     throw new Error("Property ID is required.");
@@ -421,8 +617,16 @@ export async function addPropertyDocumentAction(formData: FormData) {
     throw new Error("Document title is required.");
   }
 
+  const fileUrl = documentFile
+    ? await uploadPropertyMedia({
+        file: documentFile,
+        propertyId,
+        mediaType: "document",
+      })
+    : manualFileUrl;
+
   if (!fileUrl) {
-    throw new Error("File URL is required.");
+    throw new Error("Upload a PDF file or provide a PDF URL.");
   }
 
   const payload = {
@@ -430,7 +634,9 @@ export async function addPropertyDocumentAction(formData: FormData) {
     title,
     description: getNullableStringValue(formData, "description"),
     file_url: fileUrl,
-    file_type: getNullableStringValue(formData, "file_type"),
+    file_type: documentFile
+      ? documentFile.type || "application/pdf"
+      : getNullableStringValue(formData, "file_type"),
     document_type: getStringValue(formData, "document_type") || "floor_plan",
     button_label: getStringValue(formData, "button_label") || "View PDF",
     position: getNullableNumberValue(formData, "position") || 0,

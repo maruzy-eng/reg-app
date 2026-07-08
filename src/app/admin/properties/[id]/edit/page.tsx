@@ -629,10 +629,25 @@ export default async function EditPropertyPage({
           description="Gallery images displayed on the individual property page."
           icon={<Camera size={22} />}
         >
-          <form action={addPropertyImageAction} className="grid gap-4">
+          <form
+            action={addPropertyImageAction}
+            encType="multipart/form-data"
+            className="grid gap-4"
+          >
             <HiddenPropertyFields propertyId={property.id} slug={property.slug} />
 
-            <InputField label="Image URL *" name="image_url" required />
+            <FileField
+              label="Upload Image"
+              name="image_file"
+              accept="image/*"
+              helpText="Upload an image file. The system will save it and generate the URL automatically."
+            />
+
+            <InputField
+              label="Image URL"
+              name="image_url"
+              helpText="Optional fallback for an existing hosted image URL."
+            />
 
             <div className="grid gap-4 md:grid-cols-2">
               <InputField label="Title" name="title" />
@@ -720,10 +735,25 @@ export default async function EditPropertyPage({
           description="Videos displayed in the video section of the property page."
           icon={<Play size={22} />}
         >
-          <form action={addPropertyVideoAction} className="grid gap-4">
+          <form
+            action={addPropertyVideoAction}
+            encType="multipart/form-data"
+            className="grid gap-4"
+          >
             <HiddenPropertyFields propertyId={property.id} slug={property.slug} />
 
-            <InputField label="Video URL *" name="video_url" required />
+            <FileField
+              label="Upload Video"
+              name="video_file"
+              accept="video/*"
+              helpText="Upload a video file. The system will save it and generate the URL automatically."
+            />
+
+            <InputField
+              label="Video URL"
+              name="video_url"
+              helpText="Optional fallback for YouTube, Vimeo, or an existing hosted video URL."
+            />
 
             <div className="grid gap-4 md:grid-cols-2">
               <InputField label="Title" name="title" />
@@ -732,7 +762,11 @@ export default async function EditPropertyPage({
 
             <TextareaField label="Description" name="description" rows={3} />
 
-            <InputField label="Thumbnail URL" name="thumbnail_url" />
+            <InputField
+              label="Thumbnail URL"
+              name="thumbnail_url"
+              helpText="Optional thumbnail URL for externally hosted videos."
+            />
 
             <div className="grid gap-4 md:grid-cols-3">
               <InputField
@@ -815,11 +849,27 @@ export default async function EditPropertyPage({
           description="Floor plans, architectural documents and PDFs."
           icon={<FileText size={22} />}
         >
-          <form action={addPropertyDocumentAction} className="grid gap-4">
+          <form
+            action={addPropertyDocumentAction}
+            encType="multipart/form-data"
+            className="grid gap-4"
+          >
             <HiddenPropertyFields propertyId={property.id} slug={property.slug} />
 
             <InputField label="Document Title *" name="title" required />
-            <InputField label="File URL *" name="file_url" required />
+
+            <FileField
+              label="Upload PDF"
+              name="document_file"
+              accept="application/pdf,.pdf"
+              helpText="Upload a PDF file. The system will save it and generate the URL automatically."
+            />
+
+            <InputField
+              label="File URL"
+              name="file_url"
+              helpText="Optional fallback for an existing hosted PDF URL."
+            />
 
             <TextareaField label="Description" name="description" rows={3} />
 
@@ -1026,6 +1076,7 @@ function InputField({
   defaultValue = "",
   required = false,
   step,
+  helpText,
   wrapperClassName = "",
 }: {
   label: string;
@@ -1034,6 +1085,7 @@ function InputField({
   defaultValue?: string | number;
   required?: boolean;
   step?: string;
+  helpText?: string;
   wrapperClassName?: string;
 }) {
   return (
@@ -1048,6 +1100,41 @@ function InputField({
         defaultValue={defaultValue}
         className="admin-input mt-2 w-full px-4 py-3 text-sm"
       />
+
+      {helpText ? (
+        <span className="mt-2 block text-xs leading-5 text-[#64748b]">
+          {helpText}
+        </span>
+      ) : null}
+    </label>
+  );
+}
+
+function FileField({
+  label,
+  name,
+  accept,
+  helpText,
+}: {
+  label: string;
+  name: string;
+  accept: string;
+  helpText: string;
+}) {
+  return (
+    <label className="block rounded-2xl border border-dashed border-[#53bc76]/35 bg-[#f8fafc] p-4">
+      <span className="text-sm font-bold text-[#0e3541]">{label}</span>
+
+      <input
+        name={name}
+        type="file"
+        accept={accept}
+        className="mt-3 block w-full text-sm text-[#587469] file:mr-4 file:rounded-full file:border-0 file:bg-[#53bc76] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white hover:file:bg-[#45a866]"
+      />
+
+      <span className="mt-2 block text-xs leading-5 text-[#64748b]">
+        {helpText}
+      </span>
     </label>
   );
 }
