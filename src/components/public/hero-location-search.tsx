@@ -126,7 +126,7 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [errorMessage, setErrorMessage] = useState("");
   const [submitMessage, setSubmitMessage] = useState("");
@@ -190,10 +190,6 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
 
     return [...baseFields, ...hiddenFields];
   }, [query, searchForm, selectedSuggestion]);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -338,6 +334,7 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
     setSubmitMessage("");
     setIsDropdownOpen(false);
     setActiveIndex(-1);
+    setPortalTarget(document.body);
     setIsLeadModalOpen(true);
   }
 
@@ -561,7 +558,7 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
         ) : null}
       </form>
 
-      {isMounted && modal ? createPortal(modal, document.body) : null}
+      {portalTarget && modal ? createPortal(modal, portalTarget) : null}
     </>
   );
 }

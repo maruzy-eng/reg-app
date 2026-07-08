@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 
+export type AdminWebhookMethod = "POST" | "PUT" | "PATCH";
+
 export type AdminWebhookForm = {
   id: string;
   name: string;
@@ -16,7 +18,7 @@ export type AdminWebhookDetails = {
   form_id: string;
   name: string;
   url: string;
-  method: "POST" | "PUT" | "PATCH";
+  method: AdminWebhookMethod;
   enabled: boolean;
   headers: Record<string, unknown>;
   payload_template: Record<string, unknown>;
@@ -28,6 +30,15 @@ export type AdminWebhookDetails = {
 export type AdminWebhookEditDetails = {
   form: AdminWebhookForm;
   webhook: AdminWebhookDetails;
+};
+
+const VALID_WEBHOOK_METHODS: AdminWebhookMethod[] = ["POST", "PUT", "PATCH"];
+
+const DEFAULT_WEBHOOK_PAYLOAD_TEMPLATE = {
+  name: "{{name}}",
+  email: "{{email}}",
+  phone: "{{phone_clean}}",
+  password: "{{password}}",
 };
 
 function getSupabaseAdmin() {
@@ -65,24 +76,68 @@ function getBooleanValue(formData: FormData, key: string) {
 }
 
 function getNumberValue(formData: FormData, key: string, fallback = 0) {
-  const value = Number(getStringValue(formData, key));
+  const rawValue = getStringValue(formData, key);
 
-  if (Number.isNaN(value)) {
+  if (!rawValue) {
+    return fallback;
+  }
+
+  const value = Number(rawValue);
+
+  if (!Number.isFinite(value)) {
     return fallback;
   }
 
   return value;
 }
 
-function parseJsonValue(value: string, fallback: unknown) {
+function getWebhookMethod(value: string): AdminWebhookMethod {
+  const normalizedValue = value.trim().toUpperCase();
+
+  if (VALID_WEBHOOK_METHODS.includes(normalizedValue as AdminWebhookMethod)) {
+    return normalizedValue as AdminWebhookMethod;
+  }
+
+  throw new Error("Invalid webhook method.");
+}
+
+function validateWebhookUrl(value: string) {
+  if (!value) {
+    throw new Error("Webhook URL is required.");
+  }
+
+  try {
+    const url = new URL(value);
+
+    if (url.protocol !== "https:" && url.protocol !== "http:") {
+      throw new Error("Webhook URL must start with http:// or https://.");
+    }
+
+    return url.toString();
+  } catch {
+    throw new Error("Webhook URL must be a valid URL.");
+  }
+}
+
+function parseJsonObject(value: string, fallback: Record<string, unknown>, label: string) {
   if (!value.trim()) {
     return fallback;
   }
 
   try {
-    return JSON.parse(value);
-  } catch {
-    throw new Error("Invalid JSON format.");
+    const parsed = JSON.parse(value);
+
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      throw new Error(`${label} must be a valid JSON object.`);
+    }
+
+    return parsed as Record<string, unknown>;
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("must be")) {
+      throw error;
+    }
+
+    throw new Error(`${label} has invalid JSON format.`);
   }
 }
 
@@ -115,7 +170,19 @@ export async function getAdminWebhookEditDetails(params: {
 
   return {
     form,
-    webhook,
+    webhook: {
+      ...webhook,
+      headers:
+        webhook.headers && typeof webhook.headers === "object"
+          ? webhook.headers
+          : {},
+      payload_template:
+        webhook.payload_template &&
+        typeof webhook.payload_template === "object" &&
+        Object.keys(webhook.payload_template).length > 0
+          ? webhook.payload_template
+          : DEFAULT_WEBHOOK_PAYLOAD_TEMPLATE,
+    },
   } satisfies AdminWebhookEditDetails;
 }
 
@@ -125,8 +192,8 @@ export async function updateAdminFormWebhookAction(formData: FormData) {
   const formId = getStringValue(formData, "form_id");
   const webhookId = getStringValue(formData, "webhook_id");
   const name = getStringValue(formData, "name");
-  const url = getStringValue(formData, "url");
-  const method = getStringValue(formData, "method") || "POST";
+  const rawUrl = getStringValue(formData, "url");
+  const rawMethod = getStringValue(formData, "method") || "POST";
   const enabled = getBooleanValue(formData, "enabled");
   const sortOrder = getNumberValue(formData, "sort_order", 0);
   const headersRaw = getStringValue(formData, "headers");
@@ -144,16 +211,16 @@ export async function updateAdminFormWebhookAction(formData: FormData) {
     throw new Error("Webhook name is required.");
   }
 
-  if (!url) {
-    throw new Error("Webhook URL is required.");
-  }
+  const url = validateWebhookUrl(rawUrl);
+  const method = getWebhookMethod(rawMethod);
 
-  if (!["POST", "PUT", "PATCH"].includes(method)) {
-    throw new Error("Invalid webhook method.");
-  }
+  const headers = parseJsonObject(headersRaw, {}, "Headers");
 
-  const headers = parseJsonValue(headersRaw, {});
-  const payloadTemplate = parseJsonValue(payloadTemplateRaw, {});
+  const payloadTemplate = parseJsonObject(
+    payloadTemplateRaw,
+    DEFAULT_WEBHOOK_PAYLOAD_TEMPLATE,
+    "Payload template",
+  );
 
   const { error } = await supabase
     .from("form_webhooks")
@@ -165,6 +232,7 @@ export async function updateAdminFormWebhookAction(formData: FormData) {
       headers,
       payload_template: payloadTemplate,
       sort_order: sortOrder,
+      updated_at: new Date().toISOString(),
     })
     .eq("id", webhookId)
     .eq("form_id", formId);

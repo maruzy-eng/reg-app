@@ -1,5 +1,6 @@
 "use client";
 
+import type { FormEvent } from "react";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -7,6 +8,7 @@ import {
   ArrowRight,
   CheckCircle2,
   Loader2,
+  Lock,
   Mail,
   MapPin,
   MessageSquare,
@@ -118,7 +120,7 @@ function getFieldIcon(field: DynamicFormField) {
   }
 
   if (field.type === "password") {
-    return User;
+    return Lock;
   }
 
   if (field.type === "phone") {
@@ -175,6 +177,43 @@ function normalizeOptions(options: unknown) {
     .filter(Boolean) as SelectOption[];
 }
 
+function getStringFormValue(formData: FormData, key: string) {
+  const value = formData.get(key);
+
+  if (typeof value !== "string") {
+    return "";
+  }
+
+  return value;
+}
+
+function buildSubmitData(params: {
+  fields: DynamicFormField[];
+  formElement: HTMLFormElement;
+  currentData: Record<string, unknown>;
+}) {
+  const nativeFormData = new FormData(params.formElement);
+  const nextData: Record<string, unknown> = {
+    ...params.currentData,
+  };
+
+  for (const field of params.fields) {
+    if (field.type === "checkbox") {
+      nextData[field.name] = nativeFormData.has(field.name);
+      continue;
+    }
+
+    if (field.type === "radio") {
+      nextData[field.name] = getStringFormValue(nativeFormData, field.name);
+      continue;
+    }
+
+    nextData[field.name] = getStringFormValue(nativeFormData, field.name);
+  }
+
+  return nextData;
+}
+
 export function DynamicFormComponent({ form, fields }: DynamicFormProps) {
   const router = useRouter();
 
@@ -216,12 +255,20 @@ export function DynamicFormComponent({ form, fields }: DynamicFormProps) {
     );
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setSubmitState("submitting");
     setGeneralError(null);
     setFieldErrors({});
+
+    const submitData = buildSubmitData({
+      fields,
+      formElement: event.currentTarget,
+      currentData: formData,
+    });
+
+    setFormData(submitData);
 
     try {
       const response = await fetch(`/api/forms/${form.slug}/submit`, {
@@ -230,7 +277,7 @@ export function DynamicFormComponent({ form, fields }: DynamicFormProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          data: formData,
+          data: submitData,
           source_url: window.location.href,
         }),
       });
@@ -401,10 +448,18 @@ export function DynamicFormComponent({ form, fields }: DynamicFormProps) {
                   ? "email"
                   : field.type === "password"
                     ? "password"
-                  : "text"
+                    : "text"
           }
           inputMode={field.type === "phone" ? "tel" : undefined}
-          autoComplete={field.type === "password" ? "new-password" : undefined}
+          autoComplete={
+            field.type === "password"
+              ? "new-password"
+              : field.type === "email"
+                ? "email"
+                : field.type === "phone"
+                  ? "tel"
+                  : undefined
+          }
           required={field.required}
           placeholder={
             field.type === "phone"

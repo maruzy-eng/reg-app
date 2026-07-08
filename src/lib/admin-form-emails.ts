@@ -42,16 +42,26 @@ function getBooleanValue(formData: FormData, key: string) {
 }
 
 function getNumberValue(formData: FormData, key: string, fallback = 0) {
-  const value = Number(getStringValue(formData, key));
+  const rawValue = getStringValue(formData, key);
 
-  if (Number.isNaN(value)) {
+  if (!rawValue) {
+    return fallback;
+  }
+
+  const value = Number(rawValue);
+
+  if (!Number.isFinite(value)) {
     return fallback;
   }
 
   return value;
 }
 
-function getEmailType(formData: FormData) {
+function normalizeTemplateFieldName(value: string) {
+  return value.replace(/^\{\{\s*/, "").replace(/\s*\}\}$/, "").trim();
+}
+
+function getEmailType(formData: FormData): "user" | "admin" {
   const type = getStringValue(formData, "type");
 
   if (type !== "user" && type !== "admin") {
@@ -79,7 +89,7 @@ function parseRecipients(formData: FormData) {
 
 function validateEmailPayload(params: {
   name: string;
-  type: string;
+  type: "user" | "admin";
   subjectTemplate: string;
   bodyHtmlTemplate: string;
   recipientField: string;
@@ -87,10 +97,6 @@ function validateEmailPayload(params: {
 }) {
   if (!params.name) {
     throw new Error("Email name is required.");
-  }
-
-  if (params.type !== "user" && params.type !== "admin") {
-    throw new Error("Email type must be user or admin.");
   }
 
   if (!params.subjectTemplate) {
@@ -119,7 +125,10 @@ function revalidateFormEmailPaths(formId: string, emailId?: string | null) {
   }
 }
 
-function isMissingTableError(error: { message?: string | null; code?: string | null } | null) {
+function isMissingTableError(error: {
+  message?: string | null;
+  code?: string | null;
+} | null) {
   if (!error) {
     return false;
   }
@@ -178,39 +187,45 @@ export async function getAdminFormEmailEditDetails(params: {
     !formResult.data ||
     !emailResult.data
   ) {
-    if (isMissingTableError(emailResult.error)) {
-      return null;
-    }
-
     return null;
   }
 
   return {
     form: formResult.data,
-    email: emailResult.data,
+    email: {
+      ...emailResult.data,
+      recipients: normalizeRecipientsArray(emailResult.data.recipients),
+    },
   } satisfies AdminFormEmailEditDetails;
 }
 
 export async function createAdminFormEmailAction(formData: FormData) {
+  const supabase = createAdminClient();
+
+  const formId = getStringValue(formData, "form_id");
+  const name = getStringValue(formData, "name");
+  const type = getEmailType(formData);
+  const enabled = getBooleanValue(formData, "enabled");
+
+  const recipientField = normalizeTemplateFieldName(
+    getStringValue(formData, "recipient_field"),
+  );
+
+  const replyToField =
+    normalizeTemplateFieldName(getStringValue(formData, "reply_to_field")) ||
+    null;
+
+  const recipients = parseRecipients(formData);
+  const subjectTemplate = getStringValue(formData, "subject_template");
+  const bodyHtmlTemplate = getStringValue(formData, "body_html_template");
+  const fromName = getStringValue(formData, "from_name") || null;
+  const sortOrder = getNumberValue(formData, "sort_order", 0);
+
+  if (!formId) {
+    return { error: "Missing form id." } satisfies AdminFormEmailActionResult;
+  }
+
   try {
-    const supabase = createAdminClient();
-
-    const formId = getStringValue(formData, "form_id");
-    const name = getStringValue(formData, "name");
-    const type = getEmailType(formData);
-    const enabled = getBooleanValue(formData, "enabled");
-    const recipientField = getStringValue(formData, "recipient_field");
-    const recipients = parseRecipients(formData);
-    const subjectTemplate = getStringValue(formData, "subject_template");
-    const bodyHtmlTemplate = getStringValue(formData, "body_html_template");
-    const fromName = getStringValue(formData, "from_name") || null;
-    const replyToField = getStringValue(formData, "reply_to_field") || null;
-    const sortOrder = getNumberValue(formData, "sort_order", 0);
-
-    if (!formId) {
-      return { error: "Missing form id." } satisfies AdminFormEmailActionResult;
-    }
-
     validateEmailPayload({
       name,
       type,
@@ -226,7 +241,7 @@ export async function createAdminFormEmailAction(formData: FormData) {
       type,
       enabled,
       recipient_field: type === "user" ? recipientField : null,
-      recipients,
+      recipients: type === "admin" ? recipients : [],
       subject_template: subjectTemplate,
       body_html_template: bodyHtmlTemplate,
       from_name: fromName,
@@ -237,37 +252,46 @@ export async function createAdminFormEmailAction(formData: FormData) {
     if (error) {
       return { error: error.message } satisfies AdminFormEmailActionResult;
     }
-
-    revalidateFormEmailPaths(formId);
-    redirect(`/admin/forms/${formId}`);
   } catch (error) {
     return {
       error: error instanceof Error ? error.message : "Unable to save email.",
     } satisfies AdminFormEmailActionResult;
   }
+
+  revalidateFormEmailPaths(formId);
+  redirect(`/admin/forms/${formId}`);
 }
 
 export async function updateAdminFormEmailAction(formData: FormData) {
+  const supabase = createAdminClient();
+
+  const formId = getStringValue(formData, "form_id");
+  const emailId = getStringValue(formData, "email_id");
+  const name = getStringValue(formData, "name");
+  const type = getEmailType(formData);
+  const enabled = getBooleanValue(formData, "enabled");
+
+  const recipientField = normalizeTemplateFieldName(
+    getStringValue(formData, "recipient_field"),
+  );
+
+  const replyToField =
+    normalizeTemplateFieldName(getStringValue(formData, "reply_to_field")) ||
+    null;
+
+  const recipients = parseRecipients(formData);
+  const subjectTemplate = getStringValue(formData, "subject_template");
+  const bodyHtmlTemplate = getStringValue(formData, "body_html_template");
+  const fromName = getStringValue(formData, "from_name") || null;
+  const sortOrder = getNumberValue(formData, "sort_order", 0);
+
+  if (!formId || !emailId) {
+    return {
+      error: "Missing email information.",
+    } satisfies AdminFormEmailActionResult;
+  }
+
   try {
-    const supabase = createAdminClient();
-
-    const formId = getStringValue(formData, "form_id");
-    const emailId = getStringValue(formData, "email_id");
-    const name = getStringValue(formData, "name");
-    const type = getEmailType(formData);
-    const enabled = getBooleanValue(formData, "enabled");
-    const recipientField = getStringValue(formData, "recipient_field");
-    const recipients = parseRecipients(formData);
-    const subjectTemplate = getStringValue(formData, "subject_template");
-    const bodyHtmlTemplate = getStringValue(formData, "body_html_template");
-    const fromName = getStringValue(formData, "from_name") || null;
-    const replyToField = getStringValue(formData, "reply_to_field") || null;
-    const sortOrder = getNumberValue(formData, "sort_order", 0);
-
-    if (!formId || !emailId) {
-      return { error: "Missing email information." } satisfies AdminFormEmailActionResult;
-    }
-
     validateEmailPayload({
       name,
       type,
@@ -284,12 +308,13 @@ export async function updateAdminFormEmailAction(formData: FormData) {
         type,
         enabled,
         recipient_field: type === "user" ? recipientField : null,
-        recipients,
+        recipients: type === "admin" ? recipients : [],
         subject_template: subjectTemplate,
         body_html_template: bodyHtmlTemplate,
         from_name: fromName,
         reply_to_field: replyToField,
         sort_order: sortOrder,
+        updated_at: new Date().toISOString(),
       })
       .eq("id", emailId)
       .eq("form_id", formId);
@@ -297,14 +322,14 @@ export async function updateAdminFormEmailAction(formData: FormData) {
     if (error) {
       return { error: error.message } satisfies AdminFormEmailActionResult;
     }
-
-    revalidateFormEmailPaths(formId, emailId);
-    redirect(`/admin/forms/${formId}`);
   } catch (error) {
     return {
       error: error instanceof Error ? error.message : "Unable to save email.",
     } satisfies AdminFormEmailActionResult;
   }
+
+  revalidateFormEmailPaths(formId, emailId);
+  redirect(`/admin/forms/${formId}`);
 }
 
 export async function toggleAdminFormEmailAction(formData: FormData) {
@@ -322,6 +347,7 @@ export async function toggleAdminFormEmailAction(formData: FormData) {
     .from("form_emails")
     .update({
       enabled,
+      updated_at: new Date().toISOString(),
     })
     .eq("id", emailId)
     .eq("form_id", formId);

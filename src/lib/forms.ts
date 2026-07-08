@@ -137,6 +137,72 @@ function normalizePhoneDigits(value: unknown) {
   return digits;
 }
 
+function cleanPhoneNumber(value: unknown) {
+  return onlyDigits(value);
+}
+
+function getPrimaryPhoneValue(data: Record<string, unknown>) {
+  return (
+    data.phone ??
+    data.telephone ??
+    data.telefone ??
+    data.whatsapp ??
+    data.numero ??
+    data.number ??
+    ""
+  );
+}
+
+function isSensitiveFieldName(name: string) {
+  const normalized = name.trim().toLowerCase();
+
+  return (
+    normalized === "password" ||
+    normalized === "senha" ||
+    normalized === "user_password" ||
+    normalized === "user_senha" ||
+    normalized === "confirm_password" ||
+    normalized === "confirmar_senha"
+  );
+}
+
+function getPrimaryPasswordValue(
+  data: Record<string, unknown>,
+  fields: DynamicFormField[] = [],
+) {
+  const passwordField = fields.find((field) => {
+    return field.type === "password" || isSensitiveFieldName(field.name);
+  });
+
+  if (passwordField) {
+    return data[passwordField.name] ?? "";
+  }
+
+  return (
+    data.password ??
+    data.senha ??
+    data.user_password ??
+    data.user_senha ??
+    data.confirm_password ??
+    data.confirmar_senha ??
+    ""
+  );
+}
+
+function buildWebhookData(params: {
+  data: Record<string, unknown>;
+  fields: DynamicFormField[];
+}) {
+  const phone = getPrimaryPhoneValue(params.data);
+  const password = getPrimaryPasswordValue(params.data, params.fields);
+
+  return {
+    ...params.data,
+    phone_clean: cleanPhoneNumber(phone),
+    password,
+  };
+}
+
 function getFieldOptionsMask(field: DynamicFormField) {
   const options = field.options;
 
@@ -153,17 +219,6 @@ function getFieldOptionsMask(field: DynamicFormField) {
 
 function countMaskDigits(mask: string) {
   return [...mask].filter((char) => char === "9").length;
-}
-
-function isSensitiveFieldName(name: string) {
-  const normalized = name.trim().toLowerCase();
-
-  return (
-    normalized === "password" ||
-    normalized === "senha" ||
-    normalized === "confirm_password" ||
-    normalized === "confirmar_senha"
-  );
 }
 
 export function isSensitiveSubmissionField(
@@ -541,6 +596,26 @@ export async function getActiveFormEmailsByFormId(formId: string) {
   }));
 }
 
+function buildWebhookTemplateContext(params: {
+  form: DynamicForm;
+  submission: FormSubmission;
+  data: Record<string, unknown>;
+}) {
+  const baseContext = buildSubmissionTemplateContext({
+    form: params.form,
+    submission: {
+      ...params.submission,
+      data: params.data,
+    },
+  });
+
+  return {
+    ...baseContext,
+    phone_clean: cleanPhoneNumber(getPrimaryPhoneValue(params.data)),
+    password: getPrimaryPasswordValue(params.data),
+  };
+}
+
 function replaceTemplateValue(
   value: unknown,
   submissionData: Record<string, unknown>,
@@ -585,16 +660,16 @@ export function buildWebhookPayload(params: {
   webhook: DynamicFormWebhook;
   form: DynamicForm;
   submission: FormSubmission;
+  data?: Record<string, unknown>;
 }) {
   const template = params.webhook.payload_template || {};
   const hasTemplate = Object.keys(template).length > 0;
+  const webhookData = params.data || params.submission.data;
 
-  const extraData = buildSubmissionTemplateContext({
+  const extraData = buildWebhookTemplateContext({
     form: params.form,
-    submission: {
-      ...params.submission,
-      data: sanitizeSubmissionDataForTemplates(params.submission.data),
-    },
+    submission: params.submission,
+    data: webhookData,
   });
 
   const defaultPayload = {
@@ -609,7 +684,7 @@ export function buildWebhookPayload(params: {
       created_at: params.submission.created_at,
       source_url: params.submission.source_url,
     },
-    data: params.submission.data,
+    data: webhookData,
     computed: extraData,
   };
 
@@ -617,7 +692,7 @@ export function buildWebhookPayload(params: {
     return defaultPayload;
   }
 
-  return replaceTemplateValue(template, params.submission.data, extraData);
+  return replaceTemplateValue(template, webhookData, extraData);
 }
 
 export async function logWebhookResult(params: {
@@ -650,18 +725,39 @@ export async function logWebhookResult(params: {
   });
 }
 
+function sanitizeWebhookPayloadForLogs(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map((item) => sanitizeWebhookPayloadForLogs(item));
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([key, item]) => [
+        key,
+        isSensitiveFieldName(key)
+          ? "••••••••"
+          : sanitizeWebhookPayloadForLogs(item),
+      ]),
+    );
+  }
+
+  return value;
+}
+
 export async function executeWebhook(params: {
   webhook: DynamicFormWebhook;
   form: DynamicForm;
   submission: FormSubmission;
+  webhookData?: Record<string, unknown>;
 }) {
   const payload = buildWebhookPayload({
-    ...params,
-    submission: {
-      ...params.submission,
-      data: sanitizeSubmissionDataForTemplates(params.submission.data),
-    },
+    webhook: params.webhook,
+    form: params.form,
+    submission: params.submission,
+    data: params.webhookData || params.submission.data,
   });
+
+  const safeLogPayload = sanitizeWebhookPayloadForLogs(payload);
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
@@ -685,7 +781,7 @@ export async function executeWebhook(params: {
       requestUrl: params.webhook.url,
       requestMethod: params.webhook.method,
       requestHeaders: headers,
-      requestPayload: payload,
+      requestPayload: safeLogPayload,
       responseStatus: response.status,
       responseBody,
       errorMessage: response.ok
@@ -713,7 +809,7 @@ export async function executeWebhook(params: {
       requestUrl: params.webhook.url,
       requestMethod: params.webhook.method,
       requestHeaders: headers,
-      requestPayload: payload,
+      requestPayload: safeLogPayload,
       responseStatus: null,
       responseBody: null,
       errorMessage,
@@ -857,7 +953,9 @@ async function executeFormEmail(params: {
       bodyHtml,
       errorMessage:
         params.email.type === "user"
-          ? `Recipient field ${params.email.recipient_field || "email"} is missing or invalid.`
+          ? `Recipient field ${
+              params.email.recipient_field || "email"
+            } is missing or invalid.`
           : "No valid admin recipients configured.",
     });
 
@@ -907,10 +1005,12 @@ export async function submitDynamicForm(params: {
     };
   }
 
-  const requiredErrors = validateRequiredFields(fields, params.data);
-  const emailErrors = validateEmailFields(fields, params.data);
-  const phoneErrors = validatePhoneFields(fields, params.data);
-  const stateErrors = validateStateFields(fields, params.data);
+  const normalizedData = normalizeFormData(params.data);
+
+  const requiredErrors = validateRequiredFields(fields, normalizedData);
+  const emailErrors = validateEmailFields(fields, normalizedData);
+  const phoneErrors = validatePhoneFields(fields, normalizedData);
+  const stateErrors = validateStateFields(fields, normalizedData);
 
   const fieldErrors = {
     ...requiredErrors,
@@ -927,9 +1027,16 @@ export async function submitDynamicForm(params: {
     };
   }
 
+  const displayData = sanitizeSubmissionDataForDisplay(normalizedData, fields);
+
+  const webhookData = buildWebhookData({
+    data: normalizedData,
+    fields,
+  });
+
   const submission = await createFormSubmission({
     form,
-    data: params.data,
+    data: displayData,
     sourceUrl: params.sourceUrl,
     userAgent: params.userAgent,
     ipAddress: params.ipAddress,
@@ -968,6 +1075,7 @@ export async function submitDynamicForm(params: {
       webhook,
       form,
       submission,
+      webhookData,
     });
 
     if (result.success) {
