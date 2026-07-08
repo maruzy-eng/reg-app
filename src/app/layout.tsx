@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { getSiteSettings } from "@/lib/site-settings";
 
@@ -176,7 +177,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+
+        <Script
+          id="rd-station-loader"
+          src="https://d335luupugsy2.cloudfront.net/js/loader-scripts/28965c7a-f3aa-4976-a78f-ea20ad5db0be-loader.js"
+          strategy="afterInteractive"
+        />
+      </body>
     </html>
   );
 }
