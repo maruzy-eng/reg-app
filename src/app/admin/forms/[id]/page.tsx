@@ -3,18 +3,17 @@ import { notFound } from "next/navigation";
 import {
   ArrowLeft,
   ClipboardList,
-  ExternalLink,
   Eye,
   FileText,
   Mail,
   RadioTower,
   Save,
-  Send,
   Trash2,
 } from "lucide-react";
 import { EmailBuilderForm } from "@/components/admin/forms/email-builder-form";
 import { FieldBuilderForm } from "@/components/admin/forms/field-builder-form";
 import { DuplicateFormButton } from "@/components/admin/forms/duplicate-form-button";
+import { SubmissionsList } from "@/components/admin/forms/submissions-list";
 import {
   createAdminFormFieldAction,
   createAdminFormWebhookAction,
@@ -41,43 +40,25 @@ type AdminFormDetailsPageProps = {
   }>;
 };
 
-function formatDate(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(value));
-}
-
 function stringifyJson(value: unknown) {
   return JSON.stringify(value || {}, null, 2);
-}
-
-function getSubmissionStatusClass(status: string) {
-  if (status === "success") {
-    return "admin-status-pill admin-status-pill-success";
-  }
-
-  if (status === "partial_error") {
-    return "admin-status-pill admin-status-pill-warning";
-  }
-
-  if (status === "error") {
-    return "admin-status-pill admin-status-pill-danger";
-  }
-
-  if (status === "not_configured") {
-    return "admin-status-pill admin-status-pill-neutral";
-  }
-
-  return "admin-status-pill admin-status-pill-info";
 }
 
 function getFieldTypeLabel(type: string) {
   if (type === "state") {
     return "States US";
+  }
+
+  if (type === "state_br") {
+    return "State BR";
+  }
+
+  if (type === "whatsapp_us") {
+    return "WhatsApp US";
+  }
+
+  if (type === "whatsapp_br") {
+    return "WhatsApp BR";
   }
 
   if (type === "radio") {
@@ -160,8 +141,8 @@ export default async function AdminFormDetailsPage({
                 </p>
 
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-                  Manage settings, custom fields, multiple webhooks and recent
-                  submissions for this form.
+                  Manage settings, custom fields, multiple webhooks, emails and
+                  recent submissions for this form.
                 </p>
               </div>
             </div>
@@ -170,6 +151,7 @@ export default async function AdminFormDetailsPage({
           <div className="flex flex-wrap gap-2">
             <form action={duplicateAdminFormAction}>
               <input type="hidden" name="id" value={form.id} />
+
               <DuplicateFormButton className="admin-secondary-button min-h-[44px] gap-2 px-4 text-sm" />
             </form>
 
@@ -207,6 +189,7 @@ export default async function AdminFormDetailsPage({
       <section className="grid gap-4 md:grid-cols-4">
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-slate-500">Status</p>
+
           <p className="mt-2 text-2xl font-bold capitalize text-[#0c2933]">
             {form.status}
           </p>
@@ -214,6 +197,7 @@ export default async function AdminFormDetailsPage({
 
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-slate-500">Fields</p>
+
           <p className="mt-2 text-2xl font-bold text-[#0c2933]">
             {fields.length}
           </p>
@@ -221,6 +205,7 @@ export default async function AdminFormDetailsPage({
 
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-slate-500">Webhooks</p>
+
           <p className="mt-2 text-2xl font-bold text-[#0c2933]">
             {webhooks.length}
           </p>
@@ -228,6 +213,7 @@ export default async function AdminFormDetailsPage({
 
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-slate-500">Submissions</p>
+
           <p className="mt-2 text-2xl font-bold text-[#0c2933]">
             {submissions.length}
           </p>
@@ -717,7 +703,9 @@ export default async function AdminFormDetailsPage({
 
                     <form action={toggleAdminFormEmailAction}>
                       <input type="hidden" name="form_id" value={form.id} />
+
                       <input type="hidden" name="email_id" value={email.id} />
+
                       <input
                         type="hidden"
                         name="enabled"
@@ -734,6 +722,7 @@ export default async function AdminFormDetailsPage({
 
                     <form action={deleteAdminFormEmailAction}>
                       <input type="hidden" name="form_id" value={form.id} />
+
                       <input type="hidden" name="email_id" value={email.id} />
 
                       <button
@@ -752,86 +741,10 @@ export default async function AdminFormDetailsPage({
         </div>
       </section>
 
-      <section className="admin-section overflow-hidden">
-        <div className="flex items-center justify-between border-b border-[rgba(12,41,51,0.08)] px-6 py-5">
-          <div className="flex items-center gap-3">
-            <div className="admin-icon-box h-11 w-11">
-              <Send size={20} />
-            </div>
-
-            <div>
-              <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
-                Recent submissions
-              </h3>
-
-              <p className="text-sm text-slate-500">
-                Last 20 submissions received by this form.
-              </p>
-            </div>
-          </div>
-
-          <Link
-            href={`/forms/${form.slug}`}
-            target="_blank"
-            className="admin-secondary-button hidden min-h-[42px] gap-2 px-4 text-sm no-underline md:inline-flex"
-          >
-            Test Form
-            <ExternalLink size={15} />
-          </Link>
-        </div>
-
-        {submissions.length === 0 ? (
-          <div className="p-8 text-center">
-            <p className="text-sm text-slate-500">No submissions yet.</p>
-          </div>
-        ) : (
-          <div className="divide-y divide-[rgba(12,41,51,0.08)]">
-            {submissions.map((submission) => (
-              <div key={submission.id} className="p-6">
-                <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
-                  <div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Link
-                        href={`/admin/forms/${form.id}/submissions/${submission.id}`}
-                        className="font-bold text-[#0c2933] no-underline hover:text-[#53bc76]"
-                      >
-                        Submission {submission.id.slice(0, 8)}
-                      </Link>
-
-                      <span
-                        className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] ${getSubmissionStatusClass(
-                          submission.webhook_status,
-                        )}`}
-                      >
-                        {submission.webhook_status}
-                      </span>
-                    </div>
-
-                    <p className="mt-1 text-xs text-slate-500">
-                      {formatDate(submission.created_at)}
-                    </p>
-
-                    {submission.source_url ? (
-                      <p className="mt-1 max-w-2xl truncate text-xs text-slate-400">
-                        Source: {submission.source_url}
-                      </p>
-                    ) : null}
-                  </div>
-
-                  <div className="text-sm font-bold text-[#0c2933]">
-                    {submission.webhook_success_count} success ·{" "}
-                    {submission.webhook_error_count} errors
-                  </div>
-                </div>
-
-                <pre className="admin-code-block mt-4 overflow-x-auto rounded-2xl p-4 text-xs leading-5">
-                  {stringifyJson(submission.data)}
-                </pre>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+      <SubmissionsList
+        submissions={submissions}
+        testFormHref={`/forms/${form.slug}`}
+      />
     </div>
   );
 }
