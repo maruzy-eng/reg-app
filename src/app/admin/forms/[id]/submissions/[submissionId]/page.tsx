@@ -17,6 +17,7 @@ import {
   getAdminSubmissionDetails,
   getLeadDisplayName,
 } from "@/lib/admin-submissions";
+import { sanitizeSubmissionDataForDisplay } from "@/lib/forms";
 
 type AdminSubmissionDetailsPageProps = {
   params: Promise<{
@@ -132,6 +133,7 @@ export default async function AdminSubmissionDetailsPage({
 
   const { form, submission, webhookLogs: logs, emailLogs } = details;
   const submissionData = toRecord(submission.data);
+  const maskedSubmissionData = sanitizeSubmissionDataForDisplay(submissionData);
   const lead = getLeadDisplayName(submissionData, submission.id);
 
   return (
@@ -255,9 +257,9 @@ export default async function AdminSubmissionDetailsPage({
         <MiniCard title="Name" value={lead.name} />
         <MiniCard title="Email" value={lead.email || "—"} />
         <MiniCard title="Phone" value={lead.phone || "—"} />
-        <MiniCard title="Country" value={getTextValue(submissionData, ["country", "pais"]) } />
-        <MiniCard title="State" value={getTextValue(submissionData, ["state", "estado"]) } />
-        <MiniCard title="City" value={getTextValue(submissionData, ["city", "cidade"]) } />
+        <MiniCard title="Country" value={getTextValue(maskedSubmissionData, ["country", "pais"]) } />
+        <MiniCard title="State" value={getTextValue(maskedSubmissionData, ["state", "estado"]) } />
+        <MiniCard title="City" value={getTextValue(maskedSubmissionData, ["city", "cidade"]) } />
       </section>
 
       <section className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
@@ -274,7 +276,7 @@ export default async function AdminSubmissionDetailsPage({
 
           <div className="p-6">
             <pre className="admin-code-block max-h-[620px] overflow-auto rounded-2xl p-4 text-xs leading-5">
-              {stringifyJson(submission.data)}
+              {stringifyJson(maskedSubmissionData)}
             </pre>
           </div>
         </div>

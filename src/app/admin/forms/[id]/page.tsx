@@ -81,6 +81,10 @@ function getFieldTypeLabel(type: string) {
     return "Hidden";
   }
 
+  if (type === "password") {
+    return "Password";
+  }
+
   if (type === "phone") {
     return "Phone";
   }

@@ -52,6 +52,21 @@ const LABEL_MAP: Record<string, string> = {
   submission_id: "Submission ID",
 };
 
+const SENSITIVE_KEYS = new Set([
+  "password",
+  "senha",
+  "confirm_password",
+  "confirmar_senha",
+]);
+
+function isSensitiveEntry(key: string, value: unknown) {
+  if (SENSITIVE_KEYS.has(key.trim().toLowerCase())) {
+    return true;
+  }
+
+  return value === "••••••••";
+}
+
 function formatDate(value?: string | null) {
   if (!value) {
     return "No date";
@@ -77,6 +92,10 @@ function toLabel(key: string) {
 }
 
 function toDisplayValue(value: unknown) {
+  if (value === "••••••••") {
+    return value;
+  }
+
   if (value === null || value === undefined) {
     return "—";
   }
@@ -109,7 +128,11 @@ function getFlatEntries(data?: SubmissionRecord | null) {
     return [] as Array<[string, unknown]>;
   }
 
-  return Object.entries(data).filter(([, value]) => {
+  return Object.entries(data).filter(([key, value]) => {
+    if (isSensitiveEntry(key, value)) {
+      return true;
+    }
+
     if (value === null || value === undefined) {
       return false;
     }

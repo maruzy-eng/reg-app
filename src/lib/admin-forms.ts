@@ -38,7 +38,8 @@ export type AdminFormField = {
     | "checkbox"
     | "radio"
     | "hidden"
-    | "state";
+    | "state"
+    | "password";
   placeholder: string | null;
   help_text: string | null;
   required: boolean;
@@ -148,6 +149,7 @@ const allowedFormFieldTypes = [
   "radio",
   "hidden",
   "state",
+  "password",
 ] as const;
 
 const brazilStates = [

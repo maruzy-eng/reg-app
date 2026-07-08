@@ -44,7 +44,8 @@ export type DynamicFormField = {
     | "checkbox"
     | "radio"
     | "hidden"
-    | "state";
+    | "state"
+    | "password";
   placeholder: string | null;
   help_text: string | null;
   required: boolean;
@@ -152,6 +153,63 @@ function getFieldOptionsMask(field: DynamicFormField) {
 
 function countMaskDigits(mask: string) {
   return [...mask].filter((char) => char === "9").length;
+}
+
+function isSensitiveFieldName(name: string) {
+  const normalized = name.trim().toLowerCase();
+
+  return (
+    normalized === "password" ||
+    normalized === "senha" ||
+    normalized === "confirm_password" ||
+    normalized === "confirmar_senha"
+  );
+}
+
+export function isSensitiveSubmissionField(
+  key: string,
+  field?: DynamicFormField | null,
+) {
+  return field?.type === "password" || isSensitiveFieldName(key);
+}
+
+export function maskSensitiveSubmissionValue(
+  key: string,
+  value: unknown,
+  field?: DynamicFormField | null,
+) {
+  if (isSensitiveSubmissionField(key, field)) {
+    return "••••••••";
+  }
+
+  return value;
+}
+
+export function sanitizeSubmissionDataForDisplay(
+  data: Record<string, unknown>,
+  fields: DynamicFormField[] = [],
+) {
+  const fieldMap = new Map(fields.map((field) => [field.name, field]));
+
+  return Object.fromEntries(
+    Object.entries(data).map(([key, value]) => [
+      key,
+      maskSensitiveSubmissionValue(key, value, fieldMap.get(key)),
+    ]),
+  );
+}
+
+export function sanitizeSubmissionDataForTemplates(
+  data: Record<string, unknown>,
+  fields: DynamicFormField[] = [],
+) {
+  const fieldMap = new Map(fields.map((field) => [field.name, field]));
+
+  return Object.fromEntries(
+    Object.entries(data).filter(([key]) => {
+      return !isSensitiveSubmissionField(key, fieldMap.get(key));
+    }),
+  );
 }
 
 export function normalizeFormData(data: unknown): Record<string, unknown> {
@@ -533,7 +591,10 @@ export function buildWebhookPayload(params: {
 
   const extraData = buildSubmissionTemplateContext({
     form: params.form,
-    submission: params.submission,
+    submission: {
+      ...params.submission,
+      data: sanitizeSubmissionDataForTemplates(params.submission.data),
+    },
   });
 
   const defaultPayload = {
@@ -594,7 +655,13 @@ export async function executeWebhook(params: {
   form: DynamicForm;
   submission: FormSubmission;
 }) {
-  const payload = buildWebhookPayload(params);
+  const payload = buildWebhookPayload({
+    ...params,
+    submission: {
+      ...params.submission,
+      data: sanitizeSubmissionDataForTemplates(params.submission.data),
+    },
+  });
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
@@ -735,20 +802,25 @@ async function executeFormEmail(params: {
   form: DynamicForm;
   submission: FormSubmission;
 }) {
+  const sanitizedSubmission = {
+    ...params.submission,
+    data: sanitizeSubmissionDataForTemplates(params.submission.data),
+  };
+
   const extraData = buildSubmissionTemplateContext({
     form: params.form,
-    submission: params.submission,
+    submission: sanitizedSubmission,
   });
 
   const subject = renderTemplateString(
     params.email.subject_template,
-    params.submission.data,
+    sanitizedSubmission.data,
     extraData,
   );
 
   const bodyHtml = renderTemplateString(
     params.email.body_html_template,
-    params.submission.data,
+    sanitizedSubmission.data,
     extraData,
   );
 

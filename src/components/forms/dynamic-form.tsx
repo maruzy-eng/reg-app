@@ -117,6 +117,10 @@ function getFieldIcon(field: DynamicFormField) {
     return Mail;
   }
 
+  if (field.type === "password") {
+    return User;
+  }
+
   if (field.type === "phone") {
     return Phone;
   }
@@ -395,9 +399,12 @@ export function DynamicFormComponent({ form, fields }: DynamicFormProps) {
                 ? "number"
                 : field.type === "email"
                   ? "email"
+                  : field.type === "password"
+                    ? "password"
                   : "text"
           }
           inputMode={field.type === "phone" ? "tel" : undefined}
+          autoComplete={field.type === "password" ? "new-password" : undefined}
           required={field.required}
           placeholder={
             field.type === "phone"

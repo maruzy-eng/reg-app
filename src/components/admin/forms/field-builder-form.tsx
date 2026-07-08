@@ -22,7 +22,8 @@ type FieldType =
   | "whatsapp_br"
   | "checkbox"
   | "radio"
-  | "hidden";
+  | "hidden"
+  | "password";
 
 type OptionRow = {
   id: string;
@@ -209,6 +210,7 @@ export function FieldBuilderForm({
           <option value="checkbox">Checkbox</option>
           <option value="radio">Radio</option>
           <option value="hidden">Hidden</option>
+          <option value="password">Password</option>
         </select>
 
         <input
