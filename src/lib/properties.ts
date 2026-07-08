@@ -131,22 +131,71 @@ export async function getAdminPropertyById(
 
   const supabase = createAdminClient();
 
-  const { data, error } = await supabase
+  const { data: property, error } = await supabase
     .from("properties")
-    .select(`
-      *,
-      property_images (*),
-      property_videos (*),
-      property_documents (*),
-      property_features (*)
-    `)
+    .select("*")
     .eq("id", id)
     .single();
 
-  if (error) {
-    console.error("Error fetching admin property by id:", error.message);
+  if (error || !property) {
+    console.error(
+      "Error fetching admin property by id:",
+      error?.message || "Property not found.",
+    );
     return null;
   }
 
-  return data as unknown as PropertyWithMedia;
+  const [imagesResult, videosResult, documentsResult, featuresResult] =
+    await Promise.all([
+      supabase
+        .from("property_images")
+        .select("*")
+        .eq("property_id", id)
+        .order("position", { ascending: true }),
+      supabase
+        .from("property_videos")
+        .select("*")
+        .eq("property_id", id)
+        .order("position", { ascending: true }),
+      supabase
+        .from("property_documents")
+        .select("*")
+        .eq("property_id", id)
+        .order("position", { ascending: true }),
+      supabase
+        .from("property_features")
+        .select("*")
+        .eq("property_id", id)
+        .order("position", { ascending: true }),
+    ]);
+
+  if (imagesResult.error) {
+    console.error("Error fetching property images:", imagesResult.error.message);
+  }
+
+  if (videosResult.error) {
+    console.error("Error fetching property videos:", videosResult.error.message);
+  }
+
+  if (documentsResult.error) {
+    console.error(
+      "Error fetching property documents:",
+      documentsResult.error.message,
+    );
+  }
+
+  if (featuresResult.error) {
+    console.error(
+      "Error fetching property features:",
+      featuresResult.error.message,
+    );
+  }
+
+  return {
+    ...property,
+    property_images: imagesResult.data || [],
+    property_videos: videosResult.data || [],
+    property_documents: documentsResult.data || [],
+    property_features: featuresResult.data || [],
+  } as unknown as PropertyWithMedia;
 }
