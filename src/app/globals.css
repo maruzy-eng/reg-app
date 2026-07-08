@@ -1,0 +1,1355 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #101828;
+
+  --cm-green: #53bc76;
+  --cm-green-dark: #0e3541;
+  --cm-green-deep: #071f28;
+  --cm-green-soft: #f5fbf7;
+  --cm-green-soft-2: #ecf9f0;
+  --cm-green-soft-3: #dff3e6;
+  --cm-green-soft-4: #cfeedd;
+  --cm-green-card: #e8f7ee;
+  --cm-green-card-strong: #d9f1e3;
+  --cm-green-border: rgba(83, 188, 118, 0.24);
+  --cm-green-border-strong: rgba(83, 188, 118, 0.34);
+
+  --cm-blue: #39aff2;
+
+  --admin-light-bg: #ffffff;
+  --admin-light-card: #ffffff;
+  --admin-light-border: rgba(14, 53, 65, 0.1);
+  --admin-light-text: #0c2933;
+  --admin-light-muted: #64748b;
+
+  --admin-dark-bg: #0c2933;
+  --admin-dark-card: #123946;
+  --admin-dark-border: rgba(255, 255, 255, 0.1);
+  --admin-dark-text: #ffffff;
+  --admin-dark-muted: rgba(255, 255, 255, 0.65);
+
+  --primary: #53bc76;
+  --primary-dark: #0e3541;
+  --primary-light: rgba(83, 188, 118, 0.12);
+
+  --muted: #667085;
+  --muted-light: #f2f4f7;
+
+  --border: #e4e7ec;
+  --card: #ffffff;
+
+  --danger: #dc2626;
+  --success: #16a34a;
+  --warning: #f59e0b;
+
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-md: 0 8px 24px rgba(16, 24, 40, 0.08);
+  --shadow-lg: 0 20px 50px rgba(16, 24, 40, 0.12);
+
+  --cm-gradient: linear-gradient(94deg, #53bc76 0%, #1f9f5f 100%);
+  --cm-gradient-soft: linear-gradient(
+    135deg,
+    rgba(83, 188, 118, 0.16),
+    rgba(83, 188, 118, 0.06)
+  );
+
+  --cm-admin-bg: radial-gradient(
+      circle at 18% 0%,
+      rgba(83, 188, 118, 0.34),
+      transparent 34rem
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(14, 53, 65, 0.12),
+      transparent 30rem
+    ),
+    linear-gradient(180deg, #dff3e6 0%, #cfeedd 48%, #dff3e6 100%);
+
+  --cm-admin-card-bg: radial-gradient(
+      circle at 88% 10%,
+      rgba(83, 188, 118, 0.18),
+      transparent 7rem
+    ),
+    linear-gradient(180deg, #f2fbf5 0%, #d9f1e3 100%);
+
+  --cm-admin-section-bg: linear-gradient(180deg, #edf9f1 0%, #d4efdf 100%);
+
+  --cm-admin-sidebar: radial-gradient(
+      circle at 12% 8%,
+      rgba(83, 188, 118, 0.3),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 92% 0%,
+      rgba(83, 188, 118, 0.18),
+      transparent 34%
+    ),
+    linear-gradient(180deg, #0e3541 0%, #071f28 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html.admin-dark-root,
+html.admin-dark-root body {
+  background: var(--admin-dark-bg);
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+textarea:disabled,
+select:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+input,
+textarea,
+select {
+  outline: none;
+}
+
+::selection {
+  background: rgba(83, 188, 118, 0.22);
+  color: var(--foreground);
+}
+
+/* =========================================================
+   BASE HELPERS
+========================================================= */
+
+.property-grid-bg {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(rgba(83, 188, 118, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(83, 188, 118, 0.07) 1px, transparent 1px);
+  background-size: 58px 58px;
+}
+
+.container-page {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+.card-surface {
+  background: linear-gradient(180deg, #f8fff9 0%, #ecf9f0 100%);
+  border: 1px solid rgba(83, 188, 118, 0.18);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 18px 50px rgba(14, 53, 65, 0.07);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* =========================================================
+   ADMIN THEME CLASSES
+========================================================= */
+
+.admin-page-bg,
+.admin-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(12, 41, 51, 0.04), transparent 34rem),
+    radial-gradient(circle at 90% 20%, rgba(83, 188, 118, 0.04), transparent 30rem),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  color: var(--admin-light-text);
+}
+
+.admin-dark.admin-page {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(83, 188, 118, 0.12), transparent 34rem),
+    linear-gradient(180deg, var(--admin-dark-bg) 0%, #071f28 100%);
+  color: var(--admin-dark-text);
+}
+
+.admin-content {
+  min-height: calc(100vh - 76px);
+}
+
+.admin-card {
+  background: var(--admin-light-card);
+  border: 1px solid var(--admin-light-border);
+  border-radius: 2rem;
+  box-shadow: 0 20px 60px rgba(14, 53, 65, 0.08);
+}
+
+.admin-kpi-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.92) 100%);
+  border: 1px solid var(--admin-light-border);
+  border-radius: 1.5rem;
+  box-shadow: 0 16px 40px rgba(14, 53, 65, 0.06);
+}
+
+.admin-section {
+  background: var(--admin-light-card);
+  border: 1px solid var(--admin-light-border);
+  border-radius: 2rem;
+  box-shadow: 0 20px 60px rgba(14, 53, 65, 0.08);
+}
+
+.admin-dark-panel {
+  background:
+    radial-gradient(circle at 18% 4%, rgba(83, 188, 118, 0.18), transparent 28rem),
+    radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.08), transparent 24rem),
+    linear-gradient(135deg, #102f3b 0%, #071f28 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 28px 80px rgba(7, 31, 40, 0.24);
+  color: #ffffff;
+}
+
+.admin-kpi-title {
+  color: #385262;
+}
+
+.admin-kpi-value {
+  color: var(--admin-light-text);
+}
+
+.admin-kpi-description {
+  color: var(--admin-light-muted);
+}
+
+.admin-kpi-icon {
+  background: #f1f5f9;
+  border: 1px solid rgba(14, 53, 65, 0.08);
+  color: var(--admin-light-text);
+}
+
+.admin-primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 1rem;
+  background: var(--cm-gradient);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 18px 44px rgba(83, 188, 118, 0.22);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.admin-primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 22px 52px rgba(83, 188, 118, 0.28);
+}
+
+.admin-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  border: 1px solid rgba(14, 53, 65, 0.1);
+  background: #ffffff;
+  color: var(--admin-light-text);
+  font-weight: 700;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.admin-secondary-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(83, 188, 118, 0.42);
+  box-shadow: 0 14px 32px rgba(14, 53, 65, 0.08);
+}
+
+.admin-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background: #ecf9f0;
+  border: 1px solid rgba(14, 53, 65, 0.1);
+  color: var(--admin-light-text);
+}
+
+.admin-table {
+  overflow: hidden;
+  border: 1px solid var(--admin-light-border);
+  border-radius: 2rem;
+  background: var(--admin-light-card);
+  box-shadow: 0 20px 60px rgba(14, 53, 65, 0.08);
+}
+
+.admin-input {
+  width: 100%;
+  border: 1px solid rgba(14, 53, 65, 0.1);
+  border-radius: 1rem;
+  background: #ffffff;
+  color: var(--admin-light-text);
+  box-shadow: 0 1px 2px rgba(14, 53, 65, 0.04);
+}
+
+.admin-input:focus {
+  border-color: rgba(83, 188, 118, 0.72);
+  box-shadow: 0 0 0 4px rgba(83, 188, 118, 0.14);
+}
+
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(83, 188, 118, 0.16);
+  border: 1px solid rgba(83, 188, 118, 0.18);
+  color: var(--admin-light-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.admin-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  color: var(--admin-light-text);
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-status-pill-success {
+  background: rgba(83, 188, 118, 0.16);
+  border-color: rgba(83, 188, 118, 0.22);
+  color: var(--admin-light-text);
+}
+
+.admin-status-pill-warning {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: rgba(245, 158, 11, 0.22);
+  color: var(--admin-light-text);
+}
+
+.admin-status-pill-danger {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: var(--admin-light-text);
+}
+
+.admin-status-pill-info {
+  background: rgba(56, 189, 248, 0.14);
+  border-color: rgba(56, 189, 248, 0.2);
+  color: var(--admin-light-text);
+}
+
+.admin-status-pill-neutral {
+  background: rgba(248, 250, 252, 0.96);
+  border-color: rgba(12, 41, 51, 0.1);
+  color: var(--admin-light-text);
+}
+
+.admin-user-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.admin-user-pill-admin {
+  background: rgba(14, 53, 65, 0.08);
+  border-color: rgba(14, 53, 65, 0.12);
+  color: #0c2933;
+}
+
+.admin-user-pill-editor,
+.admin-user-pill-active {
+  background: rgba(83, 188, 118, 0.16);
+  border-color: rgba(83, 188, 118, 0.2);
+  color: #176b45;
+}
+
+.admin-user-pill-viewer {
+  background: rgba(100, 116, 139, 0.12);
+  border-color: rgba(100, 116, 139, 0.16);
+  color: #475569;
+}
+
+.admin-user-pill-inactive {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.18);
+  color: #b91c1c;
+}
+
+.admin-sidebar {
+  background: linear-gradient(180deg, #0c2933 0%, #071f28 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.admin-header {
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid rgba(14, 53, 65, 0.1);
+  backdrop-filter: blur(18px);
+}
+
+.admin-header-eyebrow {
+  color: var(--admin-light-muted);
+  font-weight: 500;
+}
+
+.admin-header-title {
+  color: var(--admin-light-text);
+}
+
+.admin-page.admin-dark .admin-card,
+.admin-page.admin-dark .admin-section,
+.admin-page.admin-dark .admin-table,
+.admin-dark .admin-card,
+.admin-dark .admin-section,
+.admin-dark .admin-table {
+  background: var(--admin-dark-card);
+  border-color: var(--admin-dark-border);
+  color: var(--admin-dark-text);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+}
+
+.admin-page.admin-dark .admin-kpi-card,
+.admin-dark .admin-kpi-card {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(83, 188, 118, 0.1), transparent 12rem),
+    linear-gradient(180deg, #164655 0%, #103440 100%);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--admin-dark-text);
+  box-shadow: 0 18px 54px rgba(0, 0, 0, 0.2);
+}
+
+.admin-page.admin-dark .admin-kpi-title,
+.admin-dark .admin-kpi-title {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.admin-page.admin-dark .admin-kpi-value,
+.admin-dark .admin-kpi-value {
+  color: #ffffff;
+}
+
+.admin-page.admin-dark .admin-kpi-description,
+.admin-dark .admin-kpi-description {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.admin-page.admin-dark .admin-kpi-icon,
+.admin-dark .admin-kpi-icon {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #c9f8da;
+}
+
+.admin-page.admin-dark .admin-content,
+.admin-dark .admin-content {
+  background: transparent;
+  color: var(--admin-dark-text);
+}
+
+.admin-page.admin-dark > .min-h-screen,
+.admin-dark > .min-h-screen {
+  background: transparent;
+}
+
+.admin-dark .admin-page {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(83, 188, 118, 0.12), transparent 34rem),
+    linear-gradient(180deg, var(--admin-dark-bg) 0%, #071f28 100%);
+  color: var(--admin-dark-text);
+}
+
+.admin-dark .admin-icon-box {
+  background: rgba(83, 188, 118, 0.16);
+  border-color: rgba(83, 188, 118, 0.18);
+  color: #ffffff;
+}
+
+.admin-dark .admin-badge {
+  background: rgba(83, 188, 118, 0.16);
+  border-color: rgba(83, 188, 118, 0.18);
+  color: #ffffff;
+}
+
+.admin-dark .admin-status-pill {
+  color: var(--admin-light-text);
+}
+
+.admin-dark .admin-status-pill-success {
+  background: rgba(83, 188, 118, 0.18);
+  border-color: rgba(83, 188, 118, 0.24);
+}
+
+.admin-dark .admin-status-pill-warning {
+  background: rgba(245, 158, 11, 0.16);
+  border-color: rgba(245, 158, 11, 0.24);
+}
+
+.admin-dark .admin-status-pill-danger {
+  background: rgba(239, 68, 68, 0.14);
+  border-color: rgba(239, 68, 68, 0.22);
+}
+
+.admin-dark .admin-status-pill-info {
+  background: rgba(56, 189, 248, 0.16);
+  border-color: rgba(56, 189, 248, 0.22);
+}
+
+.admin-dark .admin-status-pill-neutral {
+  background: rgba(248, 250, 252, 0.94);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.admin-page.admin-dark .admin-header,
+.admin-dark .admin-header {
+  background: rgba(12, 41, 51, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-page.admin-dark .admin-header h1,
+.admin-page.admin-dark .admin-header p,
+.admin-dark .admin-header h1,
+.admin-dark .admin-header p {
+  color: var(--admin-dark-text);
+}
+
+.admin-page.admin-dark .admin-header-eyebrow,
+.admin-dark .admin-header-eyebrow {
+  color: var(--admin-dark-muted);
+}
+
+.admin-page.admin-dark .admin-header-title,
+.admin-dark .admin-header-title {
+  color: var(--admin-dark-text);
+}
+
+.admin-page.admin-dark .admin-secondary-button,
+.admin-dark .admin-secondary-button {
+  background: var(--admin-dark-card);
+  border-color: var(--admin-dark-border);
+  color: var(--admin-dark-text);
+}
+
+.admin-page.admin-dark .admin-input,
+.admin-dark .admin-input {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--admin-dark-border);
+  color: var(--admin-dark-text);
+}
+
+.admin-page.admin-dark .admin-table thead,
+.admin-dark .admin-table thead {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--admin-dark-muted);
+}
+
+.admin-page.admin-dark .admin-card :where(h1, h2, h3, h4, label, strong),
+.admin-page.admin-dark .admin-kpi-card :where(h1, h2, h3, h4, label, strong),
+.admin-page.admin-dark .admin-section :where(h1, h2, h3, h4, label, strong),
+.admin-page.admin-dark .admin-table :where(h1, h2, h3, h4, label, strong),
+.admin-dark .admin-card :where(h1, h2, h3, h4, label, strong),
+.admin-dark .admin-kpi-card :where(h1, h2, h3, h4, label, strong),
+.admin-dark .admin-section :where(h1, h2, h3, h4, label, strong),
+.admin-dark .admin-table :where(h1, h2, h3, h4, label, strong) {
+  color: var(--admin-dark-text);
+}
+
+.admin-page.admin-dark .admin-card :where(p, small),
+.admin-page.admin-dark .admin-kpi-card :where(p, small),
+.admin-page.admin-dark .admin-section :where(p, small),
+.admin-page.admin-dark .admin-table :where(p, small),
+.admin-dark .admin-card :where(p, small),
+.admin-dark .admin-kpi-card :where(p, small),
+.admin-dark .admin-section :where(p, small),
+.admin-dark .admin-table :where(p, small) {
+  color: var(--admin-dark-muted);
+}
+
+.admin-page.admin-dark .admin-kpi-card .admin-kpi-title,
+.admin-dark .admin-kpi-card .admin-kpi-title {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.admin-page.admin-dark .admin-kpi-card .admin-kpi-value,
+.admin-dark .admin-kpi-card .admin-kpi-value {
+  color: #ffffff;
+}
+
+.admin-page.admin-dark .admin-kpi-card .admin-kpi-description,
+.admin-dark .admin-kpi-card .admin-kpi-description {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.admin-page.admin-dark .admin-kpi-card .admin-kpi-icon,
+.admin-dark .admin-kpi-card .admin-kpi-icon {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #c9f8da;
+}
+
+.admin-panel-header {
+  background: #f8fafc;
+  border-bottom: 1px solid var(--admin-light-border);
+}
+
+.admin-list-row {
+  color: inherit;
+  text-decoration: none;
+}
+
+.admin-list-row:hover {
+  background: #f8fafc;
+  text-decoration: none;
+}
+
+.admin-list-title {
+  color: var(--admin-light-text);
+}
+
+.admin-list-meta {
+  color: var(--admin-light-muted);
+}
+
+.admin-progress-label {
+  color: var(--admin-light-text);
+}
+
+.admin-progress-track {
+  background: #e8f0ee;
+}
+
+.admin-progress-value {
+  background: var(--cm-gradient);
+}
+
+.admin-check-row {
+  border: 1px solid rgba(12, 41, 51, 0.1);
+  background: #ffffff;
+  color: var(--admin-light-text);
+}
+
+.admin-form-list-item {
+  border: 1px solid rgba(12, 41, 51, 0.08);
+  background: #ffffff;
+  color: var(--admin-light-text);
+}
+
+.admin-form-list-title {
+  color: var(--admin-light-text);
+}
+
+.admin-form-list-meta {
+  color: var(--admin-light-muted);
+}
+
+.admin-empty-state {
+  border: 1px dashed rgba(12, 41, 51, 0.16);
+  color: var(--admin-light-muted);
+}
+
+.admin-code-block {
+  background: #f8fafc;
+  color: #475569;
+}
+
+.admin-page.admin-dark .admin-panel-header,
+.admin-dark .admin-panel-header {
+  background: rgba(255, 255, 255, 0.045);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-page.admin-dark .admin-list-row:hover,
+.admin-dark .admin-list-row:hover {
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.admin-page.admin-dark .admin-list-title,
+.admin-dark .admin-list-title,
+.admin-page.admin-dark .admin-progress-label,
+.admin-dark .admin-progress-label {
+  color: var(--admin-dark-text);
+}
+
+.admin-page.admin-dark .admin-list-meta,
+.admin-dark .admin-list-meta {
+  color: var(--admin-dark-muted);
+}
+
+.admin-page.admin-dark .admin-progress-track,
+.admin-dark .admin-progress-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.admin-page.admin-dark .admin-check-row,
+.admin-dark .admin-check-row {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--admin-dark-text);
+}
+
+.admin-page.admin-dark .admin-form-list-item,
+.admin-dark .admin-form-list-item {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--admin-dark-text);
+}
+
+.admin-page.admin-dark .admin-form-list-title,
+.admin-dark .admin-form-list-title {
+  color: var(--admin-dark-text);
+}
+
+.admin-page.admin-dark .admin-form-list-meta,
+.admin-dark .admin-form-list-meta {
+  color: var(--admin-dark-muted);
+}
+
+.admin-page.admin-dark .admin-empty-state,
+.admin-dark .admin-empty-state {
+  border-color: rgba(255, 255, 255, 0.16);
+  color: var(--admin-dark-muted);
+}
+
+.admin-page.admin-dark .admin-code-block,
+.admin-dark .admin-code-block {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.admin-page.admin-dark .admin-dashboard-page .admin-list-title,
+.admin-page.admin-dark .admin-dashboard-page .admin-kpi-title,
+.admin-page.admin-dark .admin-dashboard-page .admin-kpi-value,
+.admin-page.admin-dark .admin-dashboard-page .admin-progress-label,
+.admin-page.admin-dark .admin-dashboard-page .admin-card :where(h1, h2, h3, h4, strong, label),
+.admin-page.admin-dark .admin-dashboard-page .admin-section :where(h1, h2, h3, h4, strong, label),
+.admin-dark .admin-dashboard-page .admin-list-title,
+.admin-dark .admin-dashboard-page .admin-kpi-title,
+.admin-dark .admin-dashboard-page .admin-kpi-value,
+.admin-dark .admin-dashboard-page .admin-progress-label,
+.admin-dark .admin-dashboard-page .admin-card :where(h1, h2, h3, h4, strong, label),
+.admin-dark .admin-dashboard-page .admin-section :where(h1, h2, h3, h4, strong, label) {
+  color: #ffffff;
+}
+
+.admin-page.admin-dark .admin-dashboard-page .admin-kpi-icon,
+.admin-dark .admin-dashboard-page .admin-kpi-icon {
+  color: #ffffff;
+}
+
+.admin-page.admin-dark .admin-badge,
+.admin-page.admin-dark .admin-badge *,
+.admin-dark .admin-badge,
+.admin-dark .admin-badge * {
+  color: var(--admin-dark-text);
+}
+
+.admin-page.admin-dark .admin-user-pill-admin,
+.admin-dark .admin-user-pill-admin {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.admin-page.admin-dark .admin-user-pill-editor,
+.admin-page.admin-dark .admin-user-pill-active,
+.admin-dark .admin-user-pill-editor,
+.admin-dark .admin-user-pill-active {
+  background: rgba(83, 188, 118, 0.18);
+  border-color: rgba(83, 188, 118, 0.28);
+  color: #bff7cf;
+}
+
+.admin-page.admin-dark .admin-user-pill-viewer,
+.admin-dark .admin-user-pill-viewer {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.admin-page.admin-dark .admin-user-pill-inactive,
+.admin-dark .admin-user-pill-inactive {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: rgba(239, 68, 68, 0.24);
+  color: #fecaca;
+}
+
+.admin-page.admin-dark .admin-primary-button,
+.admin-page.admin-dark .admin-primary-button *,
+.admin-dark .admin-primary-button,
+.admin-dark .admin-primary-button * {
+  color: #ffffff;
+}
+
+.admin-page.admin-dark .admin-dark-panel,
+.admin-page.admin-dark .admin-dark-panel *,
+.admin-dark .admin-dark-panel,
+.admin-dark .admin-dark-panel * {
+  color: #ffffff;
+}
+
+.admin-page.admin-dark .admin-card [class*="bg-[#f8fafc]"],
+.admin-page.admin-dark .admin-kpi-card [class*="bg-[#f8fafc]"],
+.admin-page.admin-dark .admin-section [class*="bg-[#f8fafc]"],
+.admin-page.admin-dark .admin-table [class*="bg-[#f8fafc]"],
+.admin-dark .admin-card [class*="bg-[#f8fafc]"],
+.admin-dark .admin-kpi-card [class*="bg-[#f8fafc]"],
+.admin-dark .admin-section [class*="bg-[#f8fafc]"],
+.admin-dark .admin-table [class*="bg-[#f8fafc]"] {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* =========================================================
+   ADMIN SHELL COMPONENT
+========================================================= */
+
+.admin-mobile-menu-button {
+  background: #0e3541;
+  color: #ffffff;
+  box-shadow: 0 18px 42px rgba(14, 53, 65, 0.24);
+}
+
+.admin-mobile-backdrop {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+}
+
+.admin-sidebar-shell {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(83, 188, 118, 0.16), transparent 18rem),
+    linear-gradient(180deg, #092630 0%, #061921 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  box-shadow: 22px 0 70px rgba(9, 24, 39, 0.2);
+}
+
+.admin-sidebar-brand-icon {
+  background: rgba(83, 188, 118, 0.16);
+  border: 1px solid rgba(83, 188, 118, 0.28);
+  color: #b7f7c8;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.16);
+}
+
+.admin-sidebar-brand-title {
+  color: #ffffff;
+}
+
+.admin-sidebar-brand-subtitle {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.admin-sidebar-close-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.admin-sidebar-nav-link {
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.68);
+  text-decoration: none;
+}
+
+.admin-sidebar-nav-link:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.admin-sidebar-nav-link:focus-visible {
+  outline: 2px solid rgba(83, 188, 118, 0.72);
+  outline-offset: 3px;
+}
+
+.admin-sidebar-nav-link-active,
+.admin-sidebar-nav-link[aria-current="page"] {
+  border-color: rgba(83, 188, 118, 0.34);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  box-shadow:
+    inset 3px 0 0 #53bc76,
+    0 16px 34px rgba(0, 0, 0, 0.12);
+}
+
+.admin-sidebar-nav-link-active:hover,
+.admin-sidebar-nav-link[aria-current="page"]:hover {
+  border-color: rgba(83, 188, 118, 0.44);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.admin-sidebar-nav-icon {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.admin-sidebar-nav-icon-active {
+  background: rgba(83, 188, 118, 0.16);
+  color: #b7f7c8;
+}
+
+.admin-sidebar-nav-label {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.admin-sidebar-nav-label-active {
+  color: #ffffff;
+}
+
+.admin-user-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.075);
+  backdrop-filter: blur(12px);
+}
+
+.admin-user-card-eyebrow {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.admin-user-card-name {
+  color: #ffffff;
+}
+
+.admin-user-card-email {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.admin-user-card-role {
+  background: rgba(83, 188, 118, 0.16);
+  border: 1px solid rgba(83, 188, 118, 0.22);
+  color: #dfffea;
+}
+
+.admin-sidebar-view-site {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.055);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.admin-sidebar-view-site:hover {
+  background: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+}
+
+.admin-sidebar-logout {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fee2e2;
+  text-decoration: none;
+}
+
+.admin-sidebar-logout:hover {
+  background: rgba(239, 68, 68, 0.18);
+  text-decoration: none;
+}
+
+.admin-top-logout {
+  background: #fef2f2;
+  color: #dc2626;
+  text-decoration: none;
+}
+
+.admin-top-logout:hover {
+  background: #fee2e2;
+  text-decoration: none;
+}
+
+/* =========================================================
+   STATUS PILLS
+========================================================= */
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.status-available {
+  background: rgba(83, 188, 118, 0.14);
+  color: #0e3541;
+}
+
+.status-under-contract {
+  background: rgba(83, 188, 118, 0.1);
+  color: #145c43;
+}
+
+.status-sold {
+  background: #0e3541;
+  color: #ffffff;
+}
+
+.status-in-progress {
+  background: rgba(83, 188, 118, 0.12);
+  color: #0e3541;
+}
+
+/* =========================================================
+   PUBLIC FORM / BUTTONS
+========================================================= */
+
+.form-field {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: #ffffff;
+  padding: 0.9rem 1rem;
+  color: var(--foreground);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.form-field:focus {
+  border-color: rgba(83, 188, 118, 0.75);
+  box-shadow: 0 0 0 4px rgba(83, 188, 118, 0.12);
+}
+
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 1rem;
+  background: var(--cm-gradient);
+  padding: 0.9rem 1.25rem;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 800;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(83, 188, 118, 0.25);
+}
+
+.secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(83, 188, 118, 0.22);
+  border-radius: 1rem;
+  background: #ffffff;
+  padding: 0.9rem 1.25rem;
+  color: #0e3541;
+  font-size: 0.875rem;
+  font-weight: 800;
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.secondary-button:hover {
+  border-color: rgba(83, 188, 118, 0.45);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(14, 53, 65, 0.08);
+}
+
+/* Force white text on primary app buttons */
+a[href*="app.checkmateproperty.com"],
+.cm-primary-button,
+.cm-gradient-button,
+button.cm-primary-button,
+a.cm-primary-button,
+button.cm-gradient-button,
+a.cm-gradient-button {
+  color: #ffffff !important;
+}
+
+.bg-\[linear-gradient\(94deg\,\#53bc76_0\%\,\#39aff2_100\%\)\],
+.bg-\[linear-gradient\(94deg\,\#53bc76_0\%\,\#1f9f5f_100\%\)\],
+.bg-\[linear-gradient\(135deg\,\#071f28_0\%\,\#0e3541_100\%\)\] {
+  color: #ffffff !important;
+}
+
+.bg-\[linear-gradient\(94deg\,\#53bc76_0\%\,\#39aff2_100\%\)\] *,
+.bg-\[linear-gradient\(94deg\,\#53bc76_0\%\,\#1f9f5f_100\%\)\] *,
+.bg-\[linear-gradient\(135deg\,\#071f28_0\%\,\#0e3541_100\%\)\] * {
+  color: #ffffff !important;
+}
+
+/* Public buttons */
+#checkmate-property-header a[href*="login"],
+#checkmate-property-footer a[href*="login"],
+#checkmate-property-footer a[href*="app.checkmateproperty.com"] {
+  color: #ffffff !important;
+}
+
+/* =========================================================
+   TABLES
+========================================================= */
+
+.table-shell {
+  overflow: hidden;
+  border: 1px solid rgba(83, 188, 118, 0.16);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, #f8fff9 0%, #ecf9f0 100%);
+  box-shadow: 0 18px 50px rgba(14, 53, 65, 0.07);
+}
+
+.table-base {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.table-base thead {
+  background: #dff5e6;
+  color: #43645a;
+}
+
+.table-base th,
+.table-base td {
+  padding: 1rem 1.25rem;
+}
+
+.table-base tbody tr {
+  border-top: 1px solid rgba(83, 188, 118, 0.14);
+}
+
+.table-base tbody tr:hover {
+  background: rgba(83, 188, 118, 0.08);
+}
+
+/* =========================================================
+   PUBLIC LINKS HOVER
+========================================================= */
+
+#checkmate-property-header a:hover,
+#checkmate-property-footer a:hover,
+main a:hover {
+  text-decoration: underline !important;
+  text-underline-offset: 4px;
+  color: inherit !important;
+}
+
+/* Mantém botões sem sublinhado */
+#checkmate-property-header a[href*="login"]:hover,
+#checkmate-property-footer a[href*="login"]:hover,
+main a[class*="rounded-full"]:hover,
+main a[class*="bg-[linear-gradient"]:hover,
+main button:hover {
+  text-decoration: none !important;
+}
+
+/* Cards de imóveis: remove mudança azul e usa underline nos textos clicáveis */
+main article a:hover,
+main article a:hover span,
+main article a:hover p {
+  color: inherit !important;
+  text-decoration: underline !important;
+  text-underline-offset: 4px;
+}
+
+/* Imagens dos cards não devem sublinhar */
+main article a:has(img):hover {
+  text-decoration: none !important;
+}
+
+/* Keep property card links black on hover */
+main article:hover a,
+main article:hover a span,
+main article:hover a p,
+main article:hover .group-hover\:text-\[\#39aff2\],
+main article:hover .group-hover\:text-\[\#0e3541\],
+main article a:hover,
+main article a:hover span,
+main article a:hover p {
+  color: #101820 !important;
+}
+
+/* Property card clickable texts: underline only */
+main article a:hover p,
+main article a:hover span {
+  text-decoration: underline !important;
+  text-underline-offset: 4px;
+}
+
+/* Do not underline images/cards themselves */
+main article a:has(img):hover,
+main article a:has(img):hover *,
+main article a.relative:hover,
+main article a.relative:hover * {
+  text-decoration: none !important;
+}
+
+/* View details stays black and underlined on hover */
+main article a[href*="/properties/"]:hover {
+  color: #101820 !important;
+}
+
+main article a[href*="/properties/"]:hover:not(:has(img)) {
+  text-decoration: underline !important;
+  text-underline-offset: 4px;
+}
+
+/* =========================================================
+   OLD BLUE CLASS OVERRIDES
+========================================================= */
+
+header a.bg-\[\#2680d8\],
+header a[class*="bg-[#2680d8]"],
+header a[href="/"].bg-\[\#2680d8\],
+header a[href="/"][class*="bg-[#2680d8]"] {
+  background: var(--cm-gradient) !important;
+  background-color: #53bc76 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 0 !important;
+  box-shadow: 0 14px 34px rgba(83, 188, 118, 0.24) !important;
+  text-decoration: none !important;
+}
+
+header a.bg-\[\#2680d8\] *,
+header a[class*="bg-[#2680d8]"] *,
+header a.bg-\[\#2680d8\] svg,
+header a[class*="bg-[#2680d8]"] svg,
+header a.bg-\[\#2680d8\] path,
+header a[class*="bg-[#2680d8]"] path {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+header a.bg-\[\#2680d8\]:hover,
+header a[class*="bg-[#2680d8]"]:hover {
+  background: var(--cm-gradient) !important;
+  background-color: #53bc76 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-decoration: none !important;
+  transform: translateY(-1px);
+}
+
+/* Sidebar app name fix */
+aside a[href="/"] p.font-bold,
+aside a[href="/"] p.text-gray-950,
+aside a[href="/"] .text-gray-950,
+aside a[href="/"] p:first-child {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Sidebar subtitle */
+aside a[href="/"] p.text-xs,
+aside a[href="/"] .text-gray-500 {
+  color: rgba(255, 255, 255, 0.58) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.58) !important;
+}
+
+/* Sidebar icon/logo */
+aside a[href="/"] span.bg-\[\#2680d8\],
+aside a[href="/"] span[class*="bg-[#2680d8]"] {
+  background: var(--cm-gradient) !important;
+  color: #ffffff !important;
+}
+
+aside a[href="/"] span.bg-\[\#2680d8\] svg,
+aside a[href="/"] span[class*="bg-[#2680d8]"] svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+  .container-page {
+    padding-inline: 1rem;
+  }
+
+  .table-shell,
+  .admin-table {
+    overflow-x: auto;
+  }
+
+  .table-base {
+    min-width: 720px;
+  }
+}
