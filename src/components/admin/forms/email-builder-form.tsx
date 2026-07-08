@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Save } from "lucide-react";
 import { normalizeEmailList, type FormEmailType } from "@/lib/form-emails";
 
 type EmailBuilderFormValues = {
@@ -46,6 +46,8 @@ export function EmailBuilderForm({
   );
 
   const isUserEmail = type === "user";
+  const isSaveAction = submitLabel.toLowerCase().includes("save");
+  const SubmitIcon = isSaveAction ? Save : Plus;
 
   return (
     <form action={action} className="grid gap-6">
@@ -208,6 +210,16 @@ export function EmailBuilderForm({
         </p>
       </div>
 
+      <div className="flex flex-col-reverse justify-end gap-3 rounded-2xl border border-[rgba(12,41,51,0.08)] bg-white/70 p-4 sm:flex-row">
+        <button
+          type="submit"
+          className="admin-primary-button min-h-[46px] gap-2 px-5 text-sm"
+        >
+          <SubmitIcon size={17} />
+          {submitLabel}
+        </button>
+      </div>
+
       <div>
         <label className="admin-form-list-title mb-2 block text-sm font-bold">
           Body HTML template
@@ -243,7 +255,7 @@ export function EmailBuilderForm({
           type="submit"
           className="admin-primary-button min-h-[46px] gap-2 px-5 text-sm"
         >
-          <Plus size={17} />
+          <SubmitIcon size={17} />
           {submitLabel}
         </button>
       </div>
