@@ -7,7 +7,6 @@ import { getPublishedFormBySlug } from "@/lib/forms";
 import {
   getFlipHouseImageUrl,
   LP_EXTERNAL_VIDEO_LINKS,
-  LP_LOGO_URL,
   LP_VIDEO_THUMBS,
   type LpFlipHouseImageNumber,
 } from "@/lib/lp-assets";
@@ -27,7 +26,33 @@ export const metadata: Metadata = {
   title: "Aprenda Flip Houses gratuitamente | Checkmate Property",
   description:
     "Acesse gratuitamente conteúdos de Flip Houses, New Construction e tecnologia para encontrar e analisar oportunidades imobiliárias nos EUA.",
+  alternates: {
+    canonical: "/lp",
+  },
+  openGraph: {
+    title: "Aprenda Flip Houses gratuitamente | Checkmate Property",
+    description:
+      "Acesse gratuitamente conteúdos de Flip Houses, New Construction e tecnologia para encontrar e analisar oportunidades imobiliárias nos EUA.",
+    url: "/lp",
+    siteName: "Checkmate Property",
+    type: "website",
+    locale: "pt_BR",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
+
+const LP_COLOR_LOGO_URL =
+  "https://checkmateproperty.com/wp-content/uploads/2023/04/checkmate-logo-color.jpg";
 
 const topCarouselImages = [
   "17",
@@ -105,8 +130,13 @@ export default async function FlipHouseLandingPage() {
               <div className="cmp-logo-wrap">
                 <img
                   className="cmp-logo"
-                  src={LP_LOGO_URL}
+                  src={LP_COLOR_LOGO_URL}
                   alt="Checkmate Property"
+                  style={{
+                    filter: "none",
+                    mixBlendMode: "normal",
+                    opacity: 1,
+                  }}
                 />
               </div>
 
@@ -886,8 +916,13 @@ export default async function FlipHouseLandingPage() {
         <div className="cmp-footer-inner cmp-reveal">
           <img
             className="cmp-footer-logo"
-            src={LP_LOGO_URL}
+            src={LP_COLOR_LOGO_URL}
             alt="Checkmate Property"
+            style={{
+              filter: "none",
+              mixBlendMode: "normal",
+              opacity: 1,
+            }}
           />
 
           <h2>
