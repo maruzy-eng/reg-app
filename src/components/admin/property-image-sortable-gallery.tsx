@@ -1,5 +1,6 @@
 "use client";
 
+import type { DragEvent } from "react";
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import {
@@ -95,18 +96,12 @@ export function PropertyImageSortableGallery({
     setDraggedId(imageId);
   }
 
-  function handleDragOver(
-    event: React.DragEvent<HTMLDivElement>,
-    imageId: string,
-  ) {
+  function handleDragOver(event: DragEvent<HTMLElement>, imageId: string) {
     event.preventDefault();
     setDragOverId(imageId);
   }
 
-  function handleDrop(
-    event: React.DragEvent<HTMLDivElement>,
-    targetId: string,
-  ) {
+  function handleDrop(event: DragEvent<HTMLElement>, targetId: string) {
     event.preventDefault();
 
     if (!draggedId || draggedId === targetId) {
@@ -307,11 +302,13 @@ export function PropertyImageSortableGallery({
 
                   <form action={deletePropertyImageAction} className="shrink-0">
                     <input type="hidden" name="property_id" value={propertyId} />
+
                     <input
                       type="hidden"
                       name="property_slug"
                       value={propertySlug}
                     />
+
                     <input type="hidden" name="image_id" value={image.id} />
 
                     <button
