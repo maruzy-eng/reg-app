@@ -25,6 +25,7 @@ import {
   Trash2,
   Upload,
 } from "lucide-react";
+import { AdminRichTextEditor } from "@/components/admin/admin-rich-text-editor";
 import { getAdminPropertyById } from "@/lib/properties";
 import {
   addPropertyDocumentAction,
@@ -206,18 +207,34 @@ export default async function EditPropertyPage({
           <div className="space-y-5">
             <AccordionSection
               defaultOpen
-              icon={<Building2 size={21} />}
-              title="Basic Information"
-              description="Main title, slug, status, type and descriptions."
+              icon={<FileText size={21} />}
+              title="Public Page Content"
+              description="Edit the public title and rich description displayed on the property page."
             >
               <div className="grid gap-5">
                 <InputField
-                  label="Property Title *"
+                  label="Public Property Title *"
                   name="title"
                   defaultValue={property.title}
                   required
+                  helpText="This title appears on the public property page and in SEO metadata."
                 />
 
+                <AdminRichTextEditor
+                  label="Public Description"
+                  name="description"
+                  defaultValue={property.description || ""}
+                  helpText="Use the toolbar to add bold text, italic text, lists and links."
+                />
+              </div>
+            </AccordionSection>
+
+            <AccordionSection
+              icon={<Building2 size={21} />}
+              title="Basic Information"
+              description="Slug, status, type, visibility and short description."
+            >
+              <div className="grid gap-5">
                 <InputField
                   label="Slug *"
                   name="slug"
@@ -257,13 +274,6 @@ export default async function EditPropertyPage({
                   name="short_description"
                   defaultValue={property.short_description || ""}
                   rows={3}
-                />
-
-                <TextareaField
-                  label="Full Description"
-                  name="description"
-                  defaultValue={property.description || ""}
-                  rows={7}
                 />
               </div>
             </AccordionSection>
@@ -600,7 +610,10 @@ export default async function EditPropertyPage({
               </div>
 
               <div className="mt-6 grid gap-3 rounded-2xl bg-[#f8fafc] p-4 text-sm text-[#0e3541]">
-                <SidebarRow label="Status" value={getPropertyStatusLabel(property.status)} />
+                <SidebarRow
+                  label="Status"
+                  value={getPropertyStatusLabel(property.status)}
+                />
                 <SidebarRow label="Visibility" value={property.visibility} />
                 <SidebarRow label="Images" value={String(images.length)} />
                 <SidebarRow label="Videos" value={String(videos.length)} />
@@ -651,11 +664,7 @@ export default async function EditPropertyPage({
             description="Add a new gallery image."
             icon={<Upload size={22} />}
           >
-            <form
-              action={addPropertyImageAction}
-              encType="multipart/form-data"
-              className="grid gap-4"
-            >
+            <form action={addPropertyImageAction} className="grid gap-4">
               <HiddenPropertyFields propertyId={property.id} slug={property.slug} />
 
               <FileField
@@ -752,11 +761,7 @@ export default async function EditPropertyPage({
             description="Upload or register videos for this property."
             icon={<Play size={22} />}
           >
-            <form
-              action={addPropertyVideoAction}
-              encType="multipart/form-data"
-              className="grid gap-4"
-            >
+            <form action={addPropertyVideoAction} className="grid gap-4">
               <HiddenPropertyFields propertyId={property.id} slug={property.slug} />
 
               <FileField
@@ -857,11 +862,7 @@ export default async function EditPropertyPage({
             description="Upload floor plans and architectural PDFs."
             icon={<FileText size={22} />}
           >
-            <form
-              action={addPropertyDocumentAction}
-              encType="multipart/form-data"
-              className="grid gap-4"
-            >
+            <form action={addPropertyDocumentAction} className="grid gap-4">
               <HiddenPropertyFields propertyId={property.id} slug={property.slug} />
 
               <InputField label="Document Title *" name="title" required />

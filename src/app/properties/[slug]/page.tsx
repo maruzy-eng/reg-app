@@ -65,6 +65,8 @@ function stripHtml(value?: string | null) {
 
   return value
     .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -137,6 +139,20 @@ function getSeoTitle({
   }
 
   return `${title} | Real Estate Opportunity`;
+}
+
+function cleanRichDescription(description?: string | null) {
+  if (!description) {
+    return "";
+  }
+
+  return description
+    .replace(/&nbsp;/g, " ")
+    .replace(/<div><br><\/div>/g, "<br />")
+    .replace(/<div><br\/><\/div>/g, "<br />")
+    .replace(/<div><br \/><\/div>/g, "<br />")
+    .replace(/<div>\s*<\/div>/g, "")
+    .trim();
 }
 
 export async function generateMetadata({
@@ -262,17 +278,6 @@ function getStatusClassName(status: string) {
   }
 
   return "bg-sky-50 text-[#0e3541]";
-}
-
-function splitDescription(description: string | null) {
-  if (!description) {
-    return [];
-  }
-
-  return description
-    .split(/\n{2,}/)
-    .map((item) => item.trim())
-    .filter(Boolean);
 }
 
 function isUploadedVideoUrl(value: string) {
@@ -499,7 +504,7 @@ export default async function PropertyDetailPage({
 
   const galleryImages = getPropertyGalleryImages(property);
   const mainImage = getMainPropertyImage(property);
-  const descriptionParagraphs = splitDescription(property.description);
+  const cleanDescription = cleanRichDescription(property.description);
 
   const seoDescription = getPropertySeoDescription({
     metaDescription: property.meta_description,
@@ -759,16 +764,37 @@ export default async function PropertyDetailPage({
                   Description
                 </h2>
 
-                <div className="mt-5 space-y-5">
-                  {descriptionParagraphs.length > 0 ? (
-                    descriptionParagraphs.map((paragraph) => (
-                      <p
-                        key={paragraph}
-                        className="text-base font-normal leading-8 text-[#334155]"
-                      >
-                        {paragraph}
-                      </p>
-                    ))
+                <div className="mt-5">
+                  {cleanDescription ? (
+                    <div
+                      className="
+                        property-rich-description
+                        text-base
+                        font-normal
+                        leading-8
+                        text-[#334155]
+                        [&_a]:font-bold
+                        [&_a]:text-[#39aff2]
+                        [&_a]:underline
+                        [&_b]:font-bold
+                        [&_b]:text-[#0e3541]
+                        [&_br]:block
+                        [&_div]:mb-3
+                        [&_div]:leading-8
+                        [&_li]:mb-2
+                        [&_ol]:my-4
+                        [&_ol]:list-decimal
+                        [&_ol]:pl-6
+                        [&_p]:mb-3
+                        [&_p]:leading-8
+                        [&_strong]:font-bold
+                        [&_strong]:text-[#0e3541]
+                        [&_ul]:my-4
+                        [&_ul]:list-disc
+                        [&_ul]:pl-6
+                      "
+                      dangerouslySetInnerHTML={{ __html: cleanDescription }}
+                    />
                   ) : (
                     <p className="text-base font-normal leading-8 text-[#334155]">
                       No description available for this property.
