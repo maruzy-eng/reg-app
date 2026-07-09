@@ -26,6 +26,7 @@ import {
   Upload,
 } from "lucide-react";
 import { AdminRichTextEditor } from "@/components/admin/admin-rich-text-editor";
+import { PropertyImageSortableGallery } from "@/components/admin/property-image-sortable-gallery";
 import { getAdminPropertyById } from "@/lib/properties";
 import {
   addPropertyDocumentAction,
@@ -34,7 +35,6 @@ import {
   addPropertyVideoAction,
   deletePropertyDocumentAction,
   deletePropertyFeatureAction,
-  deletePropertyImageAction,
   deletePropertyVideoAction,
   updatePropertyAction,
 } from "@/app/admin/properties/actions";
@@ -162,11 +162,16 @@ export default async function EditPropertyPage({
                 label="Status"
                 value={getPropertyStatusLabel(property.status)}
               />
+
               <SummaryPill
                 label="Type"
                 value={getPropertyTypeLabel(property.property_type)}
               />
-              <SummaryPill label="Price" value={formatCurrency(property.price)} />
+
+              <SummaryPill
+                label="Price"
+                value={formatCurrency(property.price)}
+              />
             </div>
           </div>
         </div>
@@ -177,16 +182,19 @@ export default async function EditPropertyPage({
             label="Beds"
             value={formatNumber(property.bedrooms)}
           />
+
           <MiniStat
             icon={<Bath size={17} />}
             label="Baths"
             value={formatNumber(property.bathrooms)}
           />
+
           <MiniStat
             icon={<Ruler size={17} />}
             label="Sqft"
             value={formatNumber(property.sqft)}
           />
+
           <MiniStat
             icon={<BadgeDollarSign size={17} />}
             label="ARV"
@@ -197,6 +205,7 @@ export default async function EditPropertyPage({
 
       <form action={updatePropertyAction}>
         <input type="hidden" name="property_id" value={property.id} />
+
         <input
           type="hidden"
           name="current_published_at"
@@ -614,6 +623,7 @@ export default async function EditPropertyPage({
                   label="Status"
                   value={getPropertyStatusLabel(property.status)}
                 />
+
                 <SidebarRow label="Visibility" value={property.visibility} />
                 <SidebarRow label="Images" value={String(images.length)} />
                 <SidebarRow label="Videos" value={String(videos.length)} />
@@ -692,7 +702,7 @@ export default async function EditPropertyPage({
                   label="Position"
                   name="position"
                   type="number"
-                  defaultValue={images.length}
+                  defaultValue={images.length + 1}
                 />
 
                 <InputField
@@ -720,38 +730,23 @@ export default async function EditPropertyPage({
 
           <MediaSection
             title="Current Images"
-            description="Gallery images displayed on the public property page."
+            description="Drag and drop gallery images to control the public display order."
             icon={<Camera size={22} />}
           >
-            {images.length > 0 ? (
-              <div className="grid gap-4 md:grid-cols-2">
-                {images.map((image) => (
-                  <PropertyImageCard
-                    key={image.id}
-                    imageUrl={image.image_url}
-                    title={image.title || image.alt_text || "Property Image"}
-                    altText={image.alt_text || property.title}
-                    caption={image.caption}
-                    position={image.position}
-                    isCover={image.is_cover}
-                    deleteForm={
-                      <form action={deletePropertyImageAction}>
-                        <HiddenPropertyFields
-                          propertyId={property.id}
-                          slug={property.slug}
-                        />
-
-                        <input type="hidden" name="image_id" value={image.id} />
-
-                        <DeleteIconButton label="Delete image" />
-                      </form>
-                    }
-                  />
-                ))}
-              </div>
-            ) : (
-              <EmptyMediaState label="No gallery images registered yet." />
-            )}
+            <PropertyImageSortableGallery
+              propertyId={property.id}
+              propertySlug={property.slug}
+              propertyTitle={property.title}
+              images={images.map((image) => ({
+                id: image.id,
+                image_url: image.image_url,
+                title: image.title,
+                alt_text: image.alt_text,
+                caption: image.caption,
+                position: image.position,
+                is_cover: image.is_cover,
+              }))}
+            />
           </MediaSection>
         </div>
 
@@ -807,7 +802,7 @@ export default async function EditPropertyPage({
                   label="Position"
                   name="position"
                   type="number"
-                  defaultValue={videos.length}
+                  defaultValue={videos.length + 1}
                 />
               </div>
 
@@ -884,6 +879,7 @@ export default async function EditPropertyPage({
 
               <div className="grid gap-4 md:grid-cols-2">
                 <InputField label="File Type" name="file_type" defaultValue="pdf" />
+
                 <InputField
                   label="Document Type"
                   name="document_type"
@@ -902,7 +898,7 @@ export default async function EditPropertyPage({
                   label="Position"
                   name="position"
                   type="number"
-                  defaultValue={documents.length}
+                  defaultValue={documents.length + 1}
                 />
               </div>
 
@@ -977,7 +973,7 @@ export default async function EditPropertyPage({
               label="Position"
               name="position"
               type="number"
-              defaultValue={features.length}
+              defaultValue={features.length + 1}
             />
 
             <label className="flex items-center gap-3 rounded-2xl bg-[#f8fafc] p-4 md:col-span-2">
@@ -1055,6 +1051,7 @@ function SummaryPill({ label, value }: { label: string; value: string }) {
       <p className="text-xs font-bold uppercase tracking-[0.14em] text-white/60">
         {label}
       </p>
+
       <p className="mt-1 text-sm font-bold text-white">{value}</p>
     </div>
   );
@@ -1079,6 +1076,7 @@ function MiniStat({
         <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#64748b]">
           {label}
         </p>
+
         <p className="text-sm font-black text-[#0e3541]">{value}</p>
       </div>
     </div>
@@ -1091,6 +1089,7 @@ function SidebarRow({ label, value }: { label: string; value: string }) {
       <span className="text-xs font-bold uppercase tracking-[0.12em] text-[#64748b]">
         {label}
       </span>
+
       <strong className="text-right text-sm text-[#0e3541]">{value}</strong>
     </div>
   );
@@ -1100,6 +1099,7 @@ function MediaCounter({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-2xl border border-[#0e3541]/10 bg-[#f8fafc] px-4 py-3">
       <p className="text-lg font-black leading-none text-[#0e3541]">{value}</p>
+
       <p className="mt-1 text-[10px] uppercase tracking-[0.14em] text-[#64748b]">
         {label}
       </p>
@@ -1135,6 +1135,7 @@ function AccordionSection({
             <h3 className="text-xl font-black tracking-[-0.04em] text-[#0e3541]">
               {title}
             </h3>
+
             <p className="mt-1 text-sm leading-6 text-[#587469]">
               {description}
             </p>
@@ -1148,99 +1149,6 @@ function AccordionSection({
 
       <div className="border-t border-[#0e3541]/10 p-5 md:p-6">{children}</div>
     </details>
-  );
-}
-
-function PropertyImageCard({
-  imageUrl,
-  title,
-  altText,
-  caption,
-  position,
-  isCover,
-  deleteForm,
-}: {
-  imageUrl: string;
-  title: string;
-  altText: string;
-  caption?: string | null;
-  position: number;
-  isCover: boolean;
-  deleteForm: ReactNode;
-}) {
-  return (
-    <article className="group overflow-hidden rounded-[1.6rem] border border-[#0e3541]/10 bg-white shadow-[0_14px_34px_rgba(12,41,51,0.06)] transition hover:-translate-y-0.5 hover:shadow-[0_22px_50px_rgba(12,41,51,0.10)]">
-      <div className="relative h-[180px] w-full overflow-hidden bg-[#f3f8f5]">
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={altText}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-[#53bc76]">
-            <ImageIcon size={42} />
-          </div>
-        )}
-
-        <div className="absolute left-3 top-3 flex flex-wrap gap-2">
-          {isCover ? (
-            <span className="rounded-full bg-[linear-gradient(94deg,#53bc76_0%,#39aff2_100%)] px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-white shadow-lg">
-              Cover
-            </span>
-          ) : null}
-
-          <span className="rounded-full bg-white/90 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#0e3541] shadow-sm backdrop-blur">
-            #{position}
-          </span>
-        </div>
-      </div>
-
-      <div className="space-y-4 p-4">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <h4 className="line-clamp-2 text-base font-black leading-tight tracking-[-0.04em] text-[#0e3541]">
-              {title}
-            </h4>
-
-            {caption ? (
-              <p className="mt-2 line-clamp-2 text-xs leading-5 text-[#587469]">
-                {caption}
-              </p>
-            ) : (
-              <p className="mt-2 text-xs leading-5 text-[#587469]">
-                Gallery image.
-              </p>
-            )}
-          </div>
-
-          <div className="shrink-0">{deleteForm}</div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            href={imageUrl}
-            target="_blank"
-            className="inline-flex min-h-[36px] items-center justify-center gap-2 rounded-full border border-[#0e3541]/10 bg-[#f8fbfc] px-3 text-xs font-bold text-[#0e3541] no-underline transition hover:bg-white hover:shadow-sm"
-          >
-            <ExternalLink size={13} />
-            Open
-          </Link>
-
-          <details>
-            <summary className="inline-flex min-h-[36px] cursor-pointer list-none items-center justify-center rounded-full border border-[#0e3541]/10 bg-[#f8fbfc] px-3 text-xs font-bold text-[#0e3541] transition hover:bg-white hover:shadow-sm">
-              URL
-            </summary>
-
-            <div className="mt-3 max-w-full rounded-2xl border border-[#0e3541]/10 bg-[#f8fbfc] p-3">
-              <p className="break-all text-xs leading-5 text-[#587469]">
-                {imageUrl}
-              </p>
-            </div>
-          </details>
-        </div>
-      </div>
-    </article>
   );
 }
 
@@ -1262,6 +1170,7 @@ function CompactMediaItem({
       <div className="flex justify-between gap-4">
         <div className="min-w-0">
           <p className="font-bold text-[#0e3541]">{title}</p>
+
           <p className="mt-1 text-xs font-semibold text-[#94a3b8]">
             {subtitle}
           </p>
@@ -1315,6 +1224,7 @@ function SectionHeader({
         <h3 className="text-xl font-black tracking-[-0.04em] text-[#0e3541]">
           {title}
         </h3>
+
         <p className="mt-1 text-sm leading-6 text-[#587469]">{description}</p>
       </div>
     </div>
@@ -1463,6 +1373,7 @@ function MediaSection({
   return (
     <section className="admin-section p-6">
       <SectionHeader icon={icon} title={title} description={description} />
+
       <div className="mt-6">{children}</div>
     </section>
   );
@@ -1512,6 +1423,7 @@ function EmptyMediaState({ label }: { label: string }) {
   return (
     <div className="rounded-2xl border border-dashed border-[#0e3541]/10 bg-[#f8fafc] p-8 text-center">
       <Pencil className="mx-auto text-[#53bc76]" size={28} />
+
       <p className="mt-3 text-sm font-bold text-[#64748b]">{label}</p>
     </div>
   );

@@ -186,6 +186,7 @@ function assertAllowedUpload(
 
 async function ensurePropertyMediaBucket() {
   const supabase = createAdminClient();
+
   const { data: buckets, error: listError } =
     await supabase.storage.listBuckets();
 
@@ -276,6 +277,7 @@ async function uploadPropertyMedia(params: {
 
 function revalidatePropertyPaths(slug?: string | null) {
   revalidatePath("/");
+  revalidatePath("/projects");
   revalidatePath("/admin/dashboard");
   revalidatePath("/admin/properties");
 
@@ -845,6 +847,77 @@ export async function deletePropertyFeatureAction(formData: FormData) {
   if (error) {
     console.error("Error deleting property feature:", error.message);
     throw new Error(error.message);
+  }
+
+  revalidatePropertyPaths(propertySlug);
+  revalidatePath(getPropertyEditPath(propertyId));
+
+  redirect(getPropertyEditPath(propertyId));
+}
+
+export async function updatePropertyImagesOrderAction(formData: FormData) {
+  await requireAdminPermission("properties.update");
+
+  const supabase = createAdminClient();
+
+  const propertyId = getStringValue(formData, "property_id");
+  const propertySlug = getStringValue(formData, "property_slug");
+  const rawImagesOrder = getStringValue(formData, "images_order");
+
+  if (!propertyId) {
+    throw new Error("Property ID is required.");
+  }
+
+  if (!rawImagesOrder) {
+    throw new Error("Images order payload is required.");
+  }
+
+  let imagesOrder: {
+    id: string;
+    position: number;
+  }[] = [];
+
+  try {
+    imagesOrder = JSON.parse(rawImagesOrder);
+  } catch {
+    throw new Error("Invalid images order payload.");
+  }
+
+  if (!Array.isArray(imagesOrder)) {
+    throw new Error("Images order must be an array.");
+  }
+
+  const validImagesOrder = imagesOrder
+    .filter((item) => {
+      return (
+        item &&
+        typeof item.id === "string" &&
+        item.id.length > 0 &&
+        Number.isFinite(Number(item.position))
+      );
+    })
+    .map((item, index) => ({
+      id: item.id,
+      position: index + 1,
+    }));
+
+  if (validImagesOrder.length === 0) {
+    throw new Error("No valid images were provided to reorder.");
+  }
+
+  for (const image of validImagesOrder) {
+    const { error } = await supabase
+      .from("property_images")
+      .update({
+        position: image.position,
+      })
+      .eq("id", image.id)
+      .eq("property_id", propertyId);
+
+    if (error) {
+      console.error("Error updating property image order:", error.message);
+      throw new Error(error.message);
+    }
   }
 
   revalidatePropertyPaths(propertySlug);

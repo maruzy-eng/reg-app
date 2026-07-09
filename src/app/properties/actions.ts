@@ -152,5 +152,74 @@ export async function createPropertyLeadAction(formData: FormData) {
     }
   }
 
+  export async function updatePropertyImagesOrderAction(formData: FormData) {
+  "use server";
+
+  const propertyId = String(formData.get("property_id") || "");
+  const propertySlug = String(formData.get("property_slug") || "");
+  const rawImagesOrder = String(formData.get("images_order") || "[]");
+
+  if (!propertyId) {
+    throw new Error("Property ID is required.");
+  }
+
+  let imagesOrder: {
+    id: string;
+    position: number;
+  }[] = [];
+
+  try {
+    imagesOrder = JSON.parse(rawImagesOrder);
+  } catch {
+    throw new Error("Invalid images order payload.");
+  }
+
+  if (!Array.isArray(imagesOrder)) {
+    throw new Error("Images order must be an array.");
+  }
+
+  const validImagesOrder = imagesOrder
+    .filter((item) => {
+      return (
+        item &&
+        typeof item.id === "string" &&
+        item.id.length > 0 &&
+        Number.isFinite(Number(item.position))
+      );
+    })
+    .map((item, index) => ({
+      id: item.id,
+      position: index + 1,
+    }));
+
+  if (validImagesOrder.length === 0) {
+    return;
+  }
+
+  const supabase = await createAdminSupabaseClient();
+
+  for (const image of validImagesOrder) {
+    const { error } = await supabase
+      .from("property_images")
+      .update({
+        position: image.position,
+      })
+      .eq("id", image.id)
+      .eq("property_id", propertyId);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  revalidatePath(`/admin/properties/${propertyId}/edit`);
+
+  if (propertySlug) {
+    revalidatePath(`/properties/${propertySlug}`);
+  }
+
+  revalidatePath("/projects");
+}
+
   redirect(`/properties/${propertySlug}?lead=success#contact`);
 }
