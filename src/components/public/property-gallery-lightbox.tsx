@@ -126,7 +126,7 @@ export function PropertyGalleryLightbox({
           type="button"
           onClick={() => openLightbox(0)}
           className="group relative h-[300px] overflow-hidden rounded-[22px] bg-gray-100 text-left sm:h-[360px] md:h-[520px]"
-          aria-label="Veja as fotos"
+          aria-label="Click to view"
         >
           {galleryImages[0]?.image_url ? (
             <img
@@ -144,7 +144,7 @@ export function PropertyGalleryLightbox({
 
           <div className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-[#101820] shadow-lg backdrop-blur md:bottom-5 md:left-5">
             <Images size={17} />
-            <span>Veja as fotos</span>
+            <span>Click to view</span>
 
             {galleryImages.length > 0 ? (
               <span className="hidden rounded-full bg-[#0e3541]/10 px-2 py-0.5 text-xs font-bold text-[#0e3541] md:inline-flex">
