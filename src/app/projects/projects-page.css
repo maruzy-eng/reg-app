@@ -4,6 +4,13 @@
   color: #101820;
 }
 
+body:has(.projects-page) #checkmate-property-header,
+body:has(.projects-page) #checkmate-property-footer,
+body:has(.projects-page) .cm-property-header,
+body:has(.projects-page) .cm-footer {
+  display: none !important;
+}
+
 .projects-page a {
   text-decoration: none;
 }

@@ -186,7 +186,7 @@ export default async function ProjectsPage() {
         }}
       />
 
-      <ProjectsTopNavigation />
+      <ProjectsHeader />
 
       <div className="projects-grid-bg">
         <section className="projects-hero">
@@ -395,12 +395,12 @@ export default async function ProjectsPage() {
         </section>
       </div>
 
-      <ProjectsClosingSection />
+      <ProjectsFooter />
     </main>
   );
 }
 
-function ProjectsTopNavigation() {
+function ProjectsHeader() {
   return (
     <header className="projects-header">
       <div className="projects-container projects-header-inner">
@@ -431,7 +431,7 @@ function ProjectsTopNavigation() {
   );
 }
 
-function ProjectsClosingSection() {
+function ProjectsFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
