@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Image from "next/image";
 import Link from "next/link";
 import { AprendaInteractions } from "@/components/aprenda/aprenda-interactions";
 import { LP_LOGO_URL } from "@/lib/lp-assets";
@@ -29,10 +30,13 @@ export default function AprendaPage() {
       <header className="aprenda-system-header">
         <div className="aprenda-system-header-inner">
           <Link href="/aprenda" aria-label="Checkmate Property">
-            <img
+            <Image
               className="aprenda-system-logo"
               src={LP_LOGO_URL}
               alt="Checkmate Property"
+              width={162}
+              height={70}
+              sizes="162px"
             />
           </Link>
 

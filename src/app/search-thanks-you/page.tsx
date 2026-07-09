@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Image from "next/image";
 import { LpThanksReveal } from "@/components/lp/lp-thanks-reveal";
 import { LP_LOGO_URL } from "@/lib/lp-assets";
 import "./lp-obrigado.css";
@@ -41,10 +42,13 @@ export default function LpObrigadoPage() {
         <div className="cm-thanks-container">
           <div className="cm-hero-card cm-reveal">
             <div className="cm-logo-wrap">
-              <img
+              <Image
                 className="cm-logo"
                 src={LP_LOGO_URL}
                 alt="Checkmate Property"
+                width={162}
+                height={70}
+                sizes="162px"
               />
             </div>
 

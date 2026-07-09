@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Building2 } from "lucide-react";
 import type { SiteSettingsValue } from "@/lib/site-settings";
@@ -118,9 +119,12 @@ export function PublicFooter({ settings }: PublicFooterProps) {
               <Link href="/" className="inline-flex no-underline">
                 {logoUrl ? (
                   <span className="mb-5 inline-flex min-h-[58px] max-w-[230px] items-center justify-center rounded-2xl border border-white/10 bg-white px-4 py-3 shadow-[0_18px_44px_rgba(0,0,0,0.18)]">
-                    <img
+                    <Image
                       src={logoUrl}
                       alt={settings.site_name || "Checkmate Property"}
+                      width={190}
+                      height={40}
+                      sizes="190px"
                       className="block h-auto w-auto object-contain"
                       style={{
                         maxWidth: "190px",

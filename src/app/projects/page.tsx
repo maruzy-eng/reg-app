@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import {
   Bath,
@@ -316,10 +317,12 @@ export default async function ProjectsPage() {
                         className="relative block h-[235px] overflow-hidden bg-gray-100"
                       >
                         {property.imageUrl ? (
-                          <img
+                          <Image
                             src={property.imageUrl}
                             alt={`${property.title} real estate project in ${property.city}, ${property.state}`}
-                            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                            className="object-cover transition duration-500 group-hover:scale-105"
                           />
                         ) : (
                           <div className="flex h-full w-full items-center justify-center text-[#39aff2]">

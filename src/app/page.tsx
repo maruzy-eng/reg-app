@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import {
   Bath,
@@ -201,12 +202,17 @@ export default async function HomePage() {
 
       <section
         className="relative z-30 flex min-h-[560px] items-center justify-center overflow-visible bg-[#0e3541] px-4 py-16 text-white sm:px-5 md:min-h-[590px] md:py-20"
-        style={{
-          backgroundImage: `linear-gradient(180deg, rgba(14, 53, 65, 0.54), rgba(14, 53, 65, 0.58)), url("${heroImage}")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
       >
+        <Image
+          src={heroImage}
+          alt="Checkmate Property real estate search"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 z-0 object-cover"
+        />
+        <div className="absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(14,53,65,0.54),rgba(14,53,65,0.58))]" />
+
         <div className="relative z-40 mx-auto w-full max-w-5xl text-center">
           <div className="mx-auto inline-flex max-w-full items-center gap-2 rounded-full border border-white/25 bg-white/18 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-lg backdrop-blur sm:text-xs">
             <span className="h-2 w-2 shrink-0 rounded-full bg-[#53bc76] shadow-[0_0_0_6px_rgba(83,188,118,0.18)]" />
@@ -268,10 +274,12 @@ export default async function HomePage() {
                       className="relative block h-[220px] overflow-hidden bg-gray-100 sm:h-[235px]"
                     >
                       {property.imageUrl ? (
-                        <img
+                        <Image
                           src={property.imageUrl}
                           alt={`${property.title} real estate property in ${property.city}, ${property.state}`}
-                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                          className="object-cover transition duration-500 group-hover:scale-105"
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center text-[#39aff2]">

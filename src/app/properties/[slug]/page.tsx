@@ -715,6 +715,7 @@ export default async function PropertyDetailPage({
                             <video
                               src={video.video_url}
                               controls
+                              preload="metadata"
                               poster={video.thumbnail_url || undefined}
                               className="h-auto w-full"
                             />
@@ -722,6 +723,7 @@ export default async function PropertyDetailPage({
                             <iframe
                               src={embedUrl}
                               title={video.title || property.title}
+                              loading="lazy"
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                               allowFullScreen
                               className="aspect-video w-full"

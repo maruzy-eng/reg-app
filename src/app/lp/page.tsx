@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { DynamicFormComponent } from "@/components/forms/dynamic-form";
 import { LpReveal } from "@/components/lp/lp-reveal";
@@ -128,10 +129,13 @@ export default async function FlipHouseLandingPage() {
           <div className="cmp-hero-inner">
             <div className="cmp-hero-card cmp-reveal">
               <div className="cmp-logo-wrap">
-                <img
+                <Image
                   className="cmp-logo"
                   src={LP_COLOR_LOGO_URL}
                   alt="Checkmate Property"
+                  width={162}
+                  height={70}
+                  sizes="162px"
                   style={{
                     filter: "none",
                     mixBlendMode: "normal",
@@ -239,9 +243,12 @@ export default async function FlipHouseLandingPage() {
                   className="cmp-img-carousel-item"
                   aria-hidden={index >= 4 ? true : undefined}
                 >
-                  <img
+                  <Image
                     src={getFlipHouseImageUrl(item)}
                     alt={index >= 4 ? "" : `Checkmate Property tela ${item}`}
+                    width={420}
+                    height={525}
+                    sizes="(max-width: 768px) 300px, 420px"
                   />
                 </div>
               ))}
@@ -259,9 +266,12 @@ export default async function FlipHouseLandingPage() {
                   className="cmp-img-carousel-item"
                   aria-hidden={index >= 12 ? true : undefined}
                 >
-                  <img
+                  <Image
                     src={getFlipHouseImageUrl(item)}
                     alt={index >= 12 ? "" : `Checkmate Property tela ${item}`}
+                    width={420}
+                    height={525}
+                    sizes="(max-width: 768px) 300px, 420px"
                   />
                 </div>
               ))}
@@ -527,10 +537,12 @@ export default async function FlipHouseLandingPage() {
               target="_blank"
               rel="noopener"
             >
-              <img
+              <Image
                 className="cmp-video-thumb"
                 src={LP_VIDEO_THUMBS.rvdnzjzm7qa}
                 alt="Depoimento Checkmate Property"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
               <span className="cmp-video-play">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -551,10 +563,12 @@ export default async function FlipHouseLandingPage() {
               target="_blank"
               rel="noopener"
             >
-              <img
+              <Image
                 className="cmp-video-thumb"
                 src={LP_VIDEO_THUMBS.oneB3rs5mr7e}
                 alt="Depoimento Checkmate Property"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
               <span className="cmp-video-play">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -575,10 +589,12 @@ export default async function FlipHouseLandingPage() {
               target="_blank"
               rel="noopener"
             >
-              <img
+              <Image
                 className="cmp-video-thumb"
                 src={LP_VIDEO_THUMBS.onyo9rseov8}
                 alt="Depoimento Checkmate Property"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
               <span className="cmp-video-play">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -914,10 +930,13 @@ export default async function FlipHouseLandingPage() {
 
       <footer className="cmp-footer">
         <div className="cmp-footer-inner cmp-reveal">
-          <img
+          <Image
             className="cmp-footer-logo"
             src={LP_COLOR_LOGO_URL}
             alt="Checkmate Property"
+            width={150}
+            height={65}
+            sizes="150px"
             style={{
               filter: "none",
               mixBlendMode: "normal",

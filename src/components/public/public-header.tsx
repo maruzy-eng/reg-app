@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Building2, ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -80,9 +81,12 @@ export function PublicHeader({ settings }: PublicHeaderProps) {
           >
             {logoUrl ? (
               <span className="inline-flex min-h-[52px] max-w-[235px] items-center justify-center rounded-2xl bg-white px-2 py-1">
-                <img
+                <Image
                   src={logoUrl}
                   alt={siteName}
+                  width={220}
+                  height={46}
+                  sizes="(max-width: 760px) 180px, 220px"
                   className="block h-auto w-auto object-contain"
                   style={{
                     maxWidth: "220px",

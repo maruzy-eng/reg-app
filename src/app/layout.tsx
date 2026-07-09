@@ -183,7 +183,7 @@ export default function RootLayout({
         <Script
           id="rd-station-loader"
           src="https://d335luupugsy2.cloudfront.net/js/loader-scripts/28965c7a-f3aa-4976-a78f-ea20ad5db0be-loader.js"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
       </body>
     </html>

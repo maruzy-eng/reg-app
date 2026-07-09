@@ -23,6 +23,18 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "www.checkmateproperty.com",
       },
+      {
+        protocol: "http",
+        hostname: "checkmateproperty.com",
+      },
+      {
+        protocol: "http",
+        hostname: "www.checkmateproperty.com",
+      },
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+      },
     ],
     formats: ["image/avif", "image/webp"],
   },
