@@ -764,34 +764,45 @@ export default async function PropertyDetailPage({
                   Description
                 </h2>
 
-                <div className="mt-5">
+                <div className="mt-4 md:mt-5">
                   {cleanDescription ? (
                     <div
                       className="
                         property-rich-description
-                        text-base
+                        text-[15px]
                         font-normal
-                        leading-8
+                        leading-7
                         text-[#334155]
+                        md:text-base
+                        md:leading-8
                         [&_a]:font-bold
                         [&_a]:text-[#39aff2]
                         [&_a]:underline
                         [&_b]:font-bold
                         [&_b]:text-[#0e3541]
                         [&_br]:block
-                        [&_div]:mb-3
-                        [&_div]:leading-8
-                        [&_li]:mb-2
-                        [&_ol]:my-4
+                        [&_div]:mb-2
+                        [&_div]:leading-7
+                        md:[&_div]:mb-3
+                        md:[&_div]:leading-8
+                        [&_li]:mb-1.5
+                        md:[&_li]:mb-2
+                        [&_ol]:my-3
                         [&_ol]:list-decimal
-                        [&_ol]:pl-6
-                        [&_p]:mb-3
-                        [&_p]:leading-8
+                        [&_ol]:pl-5
+                        md:[&_ol]:my-4
+                        md:[&_ol]:pl-6
+                        [&_p]:mb-2
+                        [&_p]:leading-7
+                        md:[&_p]:mb-3
+                        md:[&_p]:leading-8
                         [&_strong]:font-bold
                         [&_strong]:text-[#0e3541]
-                        [&_ul]:my-4
+                        [&_ul]:my-3
                         [&_ul]:list-disc
-                        [&_ul]:pl-6
+                        [&_ul]:pl-5
+                        md:[&_ul]:my-4
+                        md:[&_ul]:pl-6
                       "
                       dangerouslySetInnerHTML={{ __html: cleanDescription }}
                     />

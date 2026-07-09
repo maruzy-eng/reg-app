@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Building2, ChevronLeft, ChevronRight, Images, X } from "lucide-react";
+import {
+  Building2,
+  ChevronLeft,
+  ChevronRight,
+  Images,
+  X,
+} from "lucide-react";
 
 type LightboxImage = {
   id: string;
@@ -53,6 +59,10 @@ export function PropertyGalleryLightbox({
   const sideImages = galleryImages.slice(1, 3);
 
   function openLightbox(index: number) {
+    if (galleryImages.length === 0) {
+      return;
+    }
+
     setActiveIndex(index);
     setIsOpen(true);
   }
@@ -115,7 +125,8 @@ export function PropertyGalleryLightbox({
         <button
           type="button"
           onClick={() => openLightbox(0)}
-          className="group relative h-[330px] overflow-hidden rounded-[22px] bg-gray-100 text-left md:h-[520px]"
+          className="group relative h-[300px] overflow-hidden rounded-[22px] bg-gray-100 text-left sm:h-[360px] md:h-[520px]"
+          aria-label="Veja as fotos"
         >
           {galleryImages[0]?.image_url ? (
             <img
@@ -131,20 +142,27 @@ export function PropertyGalleryLightbox({
 
           <div className="absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
 
-          <div className="absolute bottom-5 left-5 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-[#101820] shadow-lg">
+          <div className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-[#101820] shadow-lg backdrop-blur md:bottom-5 md:left-5">
             <Images size={17} />
-            {galleryImages.length} photos
+            <span>Veja as fotos</span>
+
+            {galleryImages.length > 0 ? (
+              <span className="hidden rounded-full bg-[#0e3541]/10 px-2 py-0.5 text-xs font-bold text-[#0e3541] md:inline-flex">
+                {galleryImages.length}
+              </span>
+            ) : null}
           </div>
         </button>
 
-        <div className="grid gap-4">
+        <div className="hidden gap-4 lg:grid">
           {sideImages.length > 0 ? (
             sideImages.map((image, index) => (
               <button
                 key={image.id}
                 type="button"
                 onClick={() => openLightbox(index + 1)}
-                className="group h-[160px] overflow-hidden rounded-[22px] bg-gray-100 text-left md:h-[252px]"
+                className="group h-[252px] overflow-hidden rounded-[22px] bg-gray-100 text-left"
+                aria-label={`Abrir foto ${index + 2}`}
               >
                 <img
                   src={image.image_url}
@@ -158,6 +176,7 @@ export function PropertyGalleryLightbox({
               type="button"
               onClick={() => openLightbox(0)}
               className="flex h-full min-h-[250px] items-center justify-center rounded-[22px] bg-gray-50 text-[#39aff2]"
+              aria-label="Veja as fotos"
             >
               <Building2 size={48} />
             </button>
@@ -240,6 +259,7 @@ export function PropertyGalleryLightbox({
                       ? "border-white opacity-100"
                       : "border-transparent opacity-60 hover:opacity-100"
                   }`}
+                  aria-label={`Abrir foto ${index + 1}`}
                 >
                   <img
                     src={image.image_url}
