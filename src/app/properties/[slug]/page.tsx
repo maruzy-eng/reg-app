@@ -15,8 +15,6 @@ import {
 } from "lucide-react";
 import { getPropertyBySlug } from "@/lib/properties";
 import { getSiteSettings } from "@/lib/site-settings";
-import { PublicHeader } from "@/components/public/public-header";
-import { PublicFooter } from "@/components/public/public-footer";
 import { PropertyGalleryLightbox } from "@/components/public/property-gallery-lightbox";
 import { PropertyBackButton } from "@/components/public/property-back-button";
 import {
@@ -544,8 +542,6 @@ export default async function PropertyDetailPage({
         />
       ) : null}
 
-      <PublicHeader settings={settings} />
-
       <section
         className="bg-white px-5 py-10 md:py-14"
         style={{
@@ -877,7 +873,6 @@ export default async function PropertyDetailPage({
         </div>
       </section>
 
-      <PublicFooter settings={settings} />
     </main>
   );
 }
