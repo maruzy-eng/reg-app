@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Images,
+  Maximize2,
   X,
 } from "lucide-react";
 
@@ -57,9 +58,10 @@ export function PropertyGalleryLightbox({
 
   const activeImage = galleryImages[activeIndex];
   const sideImages = galleryImages.slice(1, 3);
+  const hasImages = galleryImages.length > 0;
 
   function openLightbox(index: number) {
-    if (galleryImages.length === 0) {
+    if (!hasImages) {
       return;
     }
 
@@ -125,14 +127,14 @@ export function PropertyGalleryLightbox({
         <button
           type="button"
           onClick={() => openLightbox(0)}
-          className="group relative h-[300px] overflow-hidden rounded-[22px] bg-gray-100 text-left sm:h-[360px] md:h-[520px]"
-          aria-label="Click to view"
+          className="group relative h-[300px] overflow-hidden rounded-[22px] bg-gray-100 text-left shadow-[0_18px_42px_rgba(15,23,42,0.10)] sm:h-[360px] md:h-[520px]"
+          aria-label="Click to view photo gallery"
         >
           {galleryImages[0]?.image_url ? (
             <img
               src={galleryImages[0].image_url}
               alt={galleryImages[0].alt_text || title}
-              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-[#39aff2]">
@@ -140,9 +142,14 @@ export function PropertyGalleryLightbox({
             </div>
           )}
 
-          <div className="absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.08)_45%,rgba(0,0,0,0.42)_100%)] transition group-hover:bg-black/10" />
 
-          <div className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-[#101820] shadow-lg backdrop-blur md:bottom-5 md:left-5">
+          <div className="absolute left-4 top-4 hidden items-center gap-2 rounded-full bg-black/35 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white shadow-lg backdrop-blur md:inline-flex">
+            <Maximize2 size={15} />
+            Gallery
+          </div>
+
+          <div className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-[#101820] shadow-lg ring-1 ring-black/5 backdrop-blur transition group-hover:-translate-y-0.5 group-hover:bg-white md:bottom-5 md:left-5">
             <Images size={17} />
             <span>Click to view</span>
 
@@ -161,14 +168,28 @@ export function PropertyGalleryLightbox({
                 key={image.id}
                 type="button"
                 onClick={() => openLightbox(index + 1)}
-                className="group h-[252px] overflow-hidden rounded-[22px] bg-gray-100 text-left"
-                aria-label={`Abrir foto ${index + 2}`}
+                className="group relative h-[252px] overflow-hidden rounded-[22px] bg-gray-100 text-left shadow-[0_14px_34px_rgba(15,23,42,0.08)]"
+                aria-label={`Open photo ${index + 2}`}
               >
                 <img
                   src={image.image_url}
                   alt={image.alt_text || title}
-                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                 />
+
+                <div className="absolute inset-0 bg-black/0 transition group-hover:bg-black/20" />
+
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 transition duration-300 group-hover:opacity-100">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/95 text-[#0e3541] shadow-lg backdrop-blur">
+                    <Maximize2 size={20} />
+                  </span>
+                </div>
+
+                {index === sideImages.length - 1 && galleryImages.length > 3 ? (
+                  <div className="absolute bottom-3 right-3 rounded-full bg-black/45 px-3 py-1.5 text-xs font-bold text-white backdrop-blur">
+                    +{galleryImages.length - 3} more
+                  </div>
+                ) : null}
               </button>
             ))
           ) : (
@@ -176,7 +197,7 @@ export function PropertyGalleryLightbox({
               type="button"
               onClick={() => openLightbox(0)}
               className="flex h-full min-h-[250px] items-center justify-center rounded-[22px] bg-gray-50 text-[#39aff2]"
-              aria-label="Veja as fotos"
+              aria-label="Click to view photo gallery"
             >
               <Building2 size={48} />
             </button>
@@ -259,7 +280,7 @@ export function PropertyGalleryLightbox({
                       ? "border-white opacity-100"
                       : "border-transparent opacity-60 hover:opacity-100"
                   }`}
-                  aria-label={`Abrir foto ${index + 1}`}
+                  aria-label={`Open photo ${index + 1}`}
                 >
                   <img
                     src={image.image_url}
