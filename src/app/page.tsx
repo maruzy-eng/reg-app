@@ -245,17 +245,16 @@ export default async function HomePage() {
         <div className="mx-auto max-w-[1220px]">
           <div className="mb-8 max-w-3xl">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-[#53bc76]">
-              Public projects
+              Checkmate Property Projects
             </p>
 
             <h2 className="mt-3 text-3xl font-black tracking-[-0.055em] text-[#0e3541] sm:text-4xl">
-              Explore real estate investment opportunities.
+              Explore real estate opportunities designed for buying, selling, and investing with greater clarity and confidence.
             </h2>
 
             <p className="mt-3 text-sm leading-7 text-[#587469] sm:text-base">
-              Browse published Checkmate Property projects and review key
-              property details, pricing, status, location, bedrooms, bathrooms,
-              square footage, and media.
+              Discover Checkmate Property’s 2026 project portfolio and access key property information, including pricing, status, location, bedrooms, bathrooms, square footage, and visual assets.<br>
+          </br>Together, these projects represent more than $22 million in projected sellout value, offering a transparent view into Checkmate Property’s real estate development pipeline.
             </p>
           </div>
 
