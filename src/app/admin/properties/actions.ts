@@ -124,6 +124,27 @@ function getStorageContentType(file: File, fallback: string) {
   return file.type || fallback;
 }
 
+function getPropertyEditPath(propertyId: string, query?: string) {
+  const basePath = `/admin/properties/${propertyId}/edit`;
+
+  if (!query) {
+    return basePath;
+  }
+
+  return `${basePath}?${query}`;
+}
+
+function redirectToPropertyEditWithError(
+  propertyId: string,
+  errorCode:
+    | "image_required"
+    | "video_required"
+    | "document_required"
+    | "document_title_required",
+) {
+  redirect(getPropertyEditPath(propertyId, `media_error=${errorCode}`));
+}
+
 function assertAllowedUpload(
   file: File,
   mediaType: "image" | "video" | "document",
@@ -165,7 +186,8 @@ function assertAllowedUpload(
 
 async function ensurePropertyMediaBucket() {
   const supabase = createAdminClient();
-  const { data: buckets, error: listError } = await supabase.storage.listBuckets();
+  const { data: buckets, error: listError } =
+    await supabase.storage.listBuckets();
 
   if (listError) {
     throw new Error(`Could not list storage buckets: ${listError.message}`);
@@ -202,29 +224,36 @@ async function uploadPropertyMedia(params: {
   await ensurePropertyMediaBucket();
 
   const supabase = createAdminClient();
+
   const directory =
     params.mediaType === "image"
       ? "images"
       : params.mediaType === "video"
         ? "videos"
         : "documents";
+
   const fallbackExtension =
     params.mediaType === "image"
       ? "jpg"
       : params.mediaType === "video"
         ? "mp4"
         : "pdf";
+
   const fallbackContentType =
     params.mediaType === "image"
       ? "image/jpeg"
       : params.mediaType === "video"
         ? "video/mp4"
         : "application/pdf";
+
   const extension = getFileExtension(params.file.name, fallbackExtension);
+
   const safeOriginalName = slugifyFileName(
     params.file.name || `${params.mediaType}.${extension}`,
   );
+
   const filePath = `properties/${params.propertyId}/${directory}/${Date.now()}-${safeOriginalName}`;
+
   const buffer = Buffer.from(await params.file.arrayBuffer());
 
   const { error: uploadError } = await supabase.storage
@@ -480,9 +509,9 @@ export async function updatePropertyAction(formData: FormData) {
   }
 
   revalidatePropertyPaths(customSlug);
-  revalidatePath(`/admin/properties/${propertyId}/edit`);
+  revalidatePath(getPropertyEditPath(propertyId));
 
-  redirect(`/admin/properties/${propertyId}/edit`);
+  redirect(getPropertyEditPath(propertyId));
 }
 
 export async function addPropertyImageAction(formData: FormData) {
@@ -499,6 +528,12 @@ export async function addPropertyImageAction(formData: FormData) {
     throw new Error("Property ID is required.");
   }
 
+  if (!imageFile && !manualImageUrl) {
+    revalidatePropertyPaths(propertySlug);
+    revalidatePath(getPropertyEditPath(propertyId));
+    redirectToPropertyEditWithError(propertyId, "image_required");
+  }
+
   const imageUrl = imageFile
     ? await uploadPropertyMedia({
         file: imageFile,
@@ -506,10 +541,6 @@ export async function addPropertyImageAction(formData: FormData) {
         mediaType: "image",
       })
     : manualImageUrl;
-
-  if (!imageUrl) {
-    throw new Error("Upload an image file or provide an image URL.");
-  }
 
   const payload = {
     property_id: propertyId,
@@ -530,18 +561,23 @@ export async function addPropertyImageAction(formData: FormData) {
   }
 
   if (payload.is_cover) {
-    await supabase
+    const { error: coverError } = await supabase
       .from("properties")
       .update({
         cover_image_url: imageUrl,
       })
       .eq("id", propertyId);
+
+    if (coverError) {
+      console.error("Error updating property cover:", coverError.message);
+      throw new Error(coverError.message);
+    }
   }
 
   revalidatePropertyPaths(propertySlug);
-  revalidatePath(`/admin/properties/${propertyId}/edit`);
+  revalidatePath(getPropertyEditPath(propertyId));
 
-  redirect(`/admin/properties/${propertyId}/edit`);
+  redirect(getPropertyEditPath(propertyId));
 }
 
 export async function addPropertyVideoAction(formData: FormData) {
@@ -558,6 +594,12 @@ export async function addPropertyVideoAction(formData: FormData) {
     throw new Error("Property ID is required.");
   }
 
+  if (!videoFile && !manualVideoUrl) {
+    revalidatePropertyPaths(propertySlug);
+    revalidatePath(getPropertyEditPath(propertyId));
+    redirectToPropertyEditWithError(propertyId, "video_required");
+  }
+
   const videoUrl = videoFile
     ? await uploadPropertyMedia({
         file: videoFile,
@@ -565,10 +607,6 @@ export async function addPropertyVideoAction(formData: FormData) {
         mediaType: "video",
       })
     : manualVideoUrl;
-
-  if (!videoUrl) {
-    throw new Error("Upload a video file or provide a video URL.");
-  }
 
   const payload = {
     property_id: propertyId,
@@ -593,9 +631,9 @@ export async function addPropertyVideoAction(formData: FormData) {
   }
 
   revalidatePropertyPaths(propertySlug);
-  revalidatePath(`/admin/properties/${propertyId}/edit`);
+  revalidatePath(getPropertyEditPath(propertyId));
 
-  redirect(`/admin/properties/${propertyId}/edit`);
+  redirect(getPropertyEditPath(propertyId));
 }
 
 export async function addPropertyDocumentAction(formData: FormData) {
@@ -614,7 +652,15 @@ export async function addPropertyDocumentAction(formData: FormData) {
   }
 
   if (!title) {
-    throw new Error("Document title is required.");
+    revalidatePropertyPaths(propertySlug);
+    revalidatePath(getPropertyEditPath(propertyId));
+    redirectToPropertyEditWithError(propertyId, "document_title_required");
+  }
+
+  if (!documentFile && !manualFileUrl) {
+    revalidatePropertyPaths(propertySlug);
+    revalidatePath(getPropertyEditPath(propertyId));
+    redirectToPropertyEditWithError(propertyId, "document_required");
   }
 
   const fileUrl = documentFile
@@ -624,10 +670,6 @@ export async function addPropertyDocumentAction(formData: FormData) {
         mediaType: "document",
       })
     : manualFileUrl;
-
-  if (!fileUrl) {
-    throw new Error("Upload a PDF file or provide a PDF URL.");
-  }
 
   const payload = {
     property_id: propertyId,
@@ -651,9 +693,9 @@ export async function addPropertyDocumentAction(formData: FormData) {
   }
 
   revalidatePropertyPaths(propertySlug);
-  revalidatePath(`/admin/properties/${propertyId}/edit`);
+  revalidatePath(getPropertyEditPath(propertyId));
 
-  redirect(`/admin/properties/${propertyId}/edit`);
+  redirect(getPropertyEditPath(propertyId));
 }
 
 export async function addPropertyFeatureAction(formData: FormData) {
@@ -690,9 +732,9 @@ export async function addPropertyFeatureAction(formData: FormData) {
   }
 
   revalidatePropertyPaths(propertySlug);
-  revalidatePath(`/admin/properties/${propertyId}/edit`);
+  revalidatePath(getPropertyEditPath(propertyId));
 
-  redirect(`/admin/properties/${propertyId}/edit`);
+  redirect(getPropertyEditPath(propertyId));
 }
 
 export async function deletePropertyImageAction(formData: FormData) {
@@ -719,9 +761,9 @@ export async function deletePropertyImageAction(formData: FormData) {
   }
 
   revalidatePropertyPaths(propertySlug);
-  revalidatePath(`/admin/properties/${propertyId}/edit`);
+  revalidatePath(getPropertyEditPath(propertyId));
 
-  redirect(`/admin/properties/${propertyId}/edit`);
+  redirect(getPropertyEditPath(propertyId));
 }
 
 export async function deletePropertyVideoAction(formData: FormData) {
@@ -748,9 +790,9 @@ export async function deletePropertyVideoAction(formData: FormData) {
   }
 
   revalidatePropertyPaths(propertySlug);
-  revalidatePath(`/admin/properties/${propertyId}/edit`);
+  revalidatePath(getPropertyEditPath(propertyId));
 
-  redirect(`/admin/properties/${propertyId}/edit`);
+  redirect(getPropertyEditPath(propertyId));
 }
 
 export async function deletePropertyDocumentAction(formData: FormData) {
@@ -777,9 +819,9 @@ export async function deletePropertyDocumentAction(formData: FormData) {
   }
 
   revalidatePropertyPaths(propertySlug);
-  revalidatePath(`/admin/properties/${propertyId}/edit`);
+  revalidatePath(getPropertyEditPath(propertyId));
 
-  redirect(`/admin/properties/${propertyId}/edit`);
+  redirect(getPropertyEditPath(propertyId));
 }
 
 export async function deletePropertyFeatureAction(formData: FormData) {
@@ -806,7 +848,7 @@ export async function deletePropertyFeatureAction(formData: FormData) {
   }
 
   revalidatePropertyPaths(propertySlug);
-  revalidatePath(`/admin/properties/${propertyId}/edit`);
+  revalidatePath(getPropertyEditPath(propertyId));
 
-  redirect(`/admin/properties/${propertyId}/edit`);
+  redirect(getPropertyEditPath(propertyId));
 }
