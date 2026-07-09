@@ -186,8 +186,6 @@ export default async function ProjectsPage() {
         }}
       />
 
-      <ProjectsHeader />
-
       <div className="projects-grid-bg">
         <section className="projects-hero">
           <div className="projects-container">
@@ -394,108 +392,7 @@ export default async function ProjectsPage() {
           </div>
         </section>
       </div>
-
-      <ProjectsFooter />
     </main>
-  );
-}
-
-function ProjectsHeader() {
-  return (
-    <header className="projects-header">
-      <div className="projects-container projects-header-inner">
-        <Link
-          href="/"
-          aria-label="Go to Checkmate Property home"
-          className="projects-logo-card"
-        >
-          <Image
-            src={CHECKMATE_LOGO_URL}
-            alt="Checkmate Property"
-            width={155}
-            height={40}
-            sizes="155px"
-            className="projects-logo"
-          />
-        </Link>
-
-        <nav className="projects-nav">
-          <Link href="/">Search</Link>
-
-          <Link href="/login" className="projects-login-button">
-            Login ↗
-          </Link>
-        </nav>
-      </div>
-    </header>
-  );
-}
-
-function ProjectsFooter() {
-  const currentYear = new Date().getFullYear();
-
-  return (
-    <footer className="projects-footer">
-      <div className="projects-dark-grid" />
-
-      <div className="projects-container projects-footer-content">
-        <div className="projects-footer-grid">
-          <div>
-            <Link
-              href="/"
-              aria-label="Go to Checkmate Property home"
-              className="projects-footer-logo-card"
-            >
-              <Image
-                src={CHECKMATE_LOGO_URL}
-                alt="Checkmate Property"
-                width={150}
-                height={40}
-                sizes="150px"
-                className="projects-footer-logo"
-              />
-            </Link>
-
-            <p>
-              Explore curated real estate projects, property details, media,
-              videos, floor plans and investment information.
-            </p>
-          </div>
-
-          <div>
-            <h3>Platform</h3>
-
-            <nav>
-              <Link href="/login">Login</Link>
-            </nav>
-          </div>
-
-          <div>
-            <h3>Company</h3>
-
-            <nav>
-              <Link href="/">Search</Link>
-            </nav>
-          </div>
-
-          <div>
-            <h3>Legal</h3>
-
-            <nav>
-              <Link href="/privacy-policy">Privacy Policy</Link>
-              <Link href="/terms-of-use">Terms of Use</Link>
-              <Link href="/data-policy">Data Policy</Link>
-            </nav>
-          </div>
-        </div>
-
-        <div className="projects-footer-bottom">
-          <p>{currentYear} © Checkmate Property Inc. All rights reserved.</p>
-
-          <p>Real estate intelligence for smarter decisions.</p>
-        </div>
-      </div>
-    </footer>
   );
 }
 
