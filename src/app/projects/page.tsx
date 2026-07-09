@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -12,30 +13,30 @@ import {
   PlayCircle,
   Ruler,
 } from "lucide-react";
-import { PublicFooter } from "@/components/public/public-footer";
-import { PublicHeader } from "@/components/public/public-header";
 import { getPublicProperties } from "@/lib/properties";
-import { getSiteSettings } from "@/lib/site-settings";
 import {
   formatCurrency,
   formatNumber,
   getPropertyStatusLabel,
   mapPropertyToCard,
 } from "@/types/property";
+import "./projects-page.css";
 
 export const revalidate = 60;
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://checkmateproperty.com";
 
-const PAGE_TITLE =
-  "Published Real Estate Projects | Checkmate Property";
+const PAGE_TITLE = "Published Real Estate Projects | Checkmate Property";
 
 const PAGE_DESCRIPTION =
   "Explore Checkmate Property published real estate projects, residential developments, investment opportunities, property media, floor plans, videos, and project details across the United States.";
 
 const DEFAULT_OG_IMAGE =
   "https://checkmateproperty.com/checkmate-property-og.jpg";
+
+const CHECKMATE_LOGO_URL =
+  "https://checkmateproperty.com/wp-content/uploads/2023/04/checkmate-logo-color.jpg";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -98,31 +99,29 @@ function getStatusClassName(status: string) {
   const normalizedStatus = status.toLowerCase();
 
   if (normalizedStatus === "sold") {
-    return "bg-[#101820] text-white";
+    return "projects-status projects-status-sold";
   }
 
   if (normalizedStatus === "rented") {
-    return "bg-violet-50 text-violet-700";
+    return "projects-status projects-status-rented";
   }
 
   if (normalizedStatus === "available") {
-    return "bg-emerald-50 text-[#0e3541]";
+    return "projects-status projects-status-available";
   }
 
   if (normalizedStatus === "under_contract") {
-    return "bg-amber-50 text-amber-700";
+    return "projects-status projects-status-under-contract";
   }
 
   if (normalizedStatus === "in_progress") {
-    return "bg-sky-50 text-[#0e3541]";
+    return "projects-status projects-status-in-progress";
   }
 
-  return "bg-sky-50 text-[#0e3541]";
+  return "projects-status projects-status-default";
 }
 
-function getStructuredData(
-  properties: ReturnType<typeof mapPropertyToCard>[],
-) {
+function getStructuredData(properties: ReturnType<typeof mapPropertyToCard>[]) {
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -131,7 +130,7 @@ function getStructuredData(
         "@id": `${SITE_URL}/#organization`,
         name: "Checkmate Property",
         url: SITE_URL,
-        logo: `${SITE_URL}/favicon.ico`,
+        logo: CHECKMATE_LOGO_URL,
       },
       {
         "@type": "WebSite",
@@ -173,16 +172,13 @@ function getStructuredData(
 }
 
 export default async function ProjectsPage() {
-  const [properties, settings] = await Promise.all([
-    getPublicProperties(),
-    getSiteSettings(),
-  ]);
+  const properties = await getPublicProperties();
 
   const propertyCards = properties.map(mapPropertyToCard);
   const structuredData = getStructuredData(propertyCards);
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="projects-page">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -190,131 +186,91 @@ export default async function ProjectsPage() {
         }}
       />
 
-      <PublicHeader settings={settings} />
+      <ProjectsHeader />
 
-      <div
-        className="bg-white"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(83,188,118,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(57,175,242,0.07) 1px, transparent 1px)",
-          backgroundSize: "58px 58px",
-        }}
-      >
-        <section className="px-5 pb-14 pt-20 md:pb-20 md:pt-24">
-          <div className="mx-auto max-w-[1220px]">
-            <div className="mx-auto max-w-[920px] text-center">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#53bc76]/25 bg-white/95 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#0e3541] shadow-[0_12px_30px_rgba(9,24,39,0.06)]">
-                <span className="h-2 w-2 rounded-full bg-[#53bc76] shadow-[0_0_0_7px_rgba(83,188,118,0.14)]" />
+      <div className="projects-grid-bg">
+        <section className="projects-hero">
+          <div className="projects-container">
+            <div className="projects-hero-content">
+              <div className="projects-eyebrow">
+                <span />
                 Checkmate Property Portfolio
               </div>
 
-              <h1 className="mx-auto mt-7 max-w-[900px] text-[44px] font-semibold leading-[0.92] tracking-[-0.085em] text-[#111111] md:text-[76px]">
+              <h1>
                 Real-Time Visibility Into Every{" "}
-                <span className="text-[#53bc76]">
-                  Published Property Project
-                </span>
+                <strong>Published Property Project</strong>
               </h1>
 
-              <p className="mx-auto mt-6 max-w-[760px] text-base font-normal leading-7 text-[#5f5f5f] md:text-lg">
+              <p>
                 Follow Checkmate Property projects with clear public
                 information, project media, location details, property type,
                 videos, floor plans, and organized pages for each address.
               </p>
 
-              <div className="mt-8 flex flex-wrap justify-center gap-3">
-                <Link
-                  href="#projects"
-                  className="inline-flex min-h-[50px] items-center justify-center rounded-full bg-[linear-gradient(94deg,#53bc76_0%,#39aff2_100%)] px-6 py-3 text-sm font-bold !text-white shadow-[0_16px_34px_rgba(83,188,118,0.24)] transition hover:-translate-y-0.5 hover:shadow-[0_22px_44px_rgba(83,188,118,0.32)]"
-                >
+              <div className="projects-hero-actions">
+                <Link href="#projects" className="projects-primary-button">
                   View Projects
                 </Link>
 
-                <Link
-                  href="#how-it-works"
-                  className="inline-flex min-h-[50px] items-center justify-center rounded-full border border-black/10 bg-white px-6 py-3 text-sm font-bold text-[#111111] shadow-[0_14px_34px_rgba(9,24,39,0.06)] transition hover:-translate-y-0.5 hover:border-[#53bc76]/45"
-                >
+                <Link href="#how-it-works" className="projects-secondary-button">
                   How It Works
                 </Link>
               </div>
 
-              <div className="mt-8 flex flex-wrap justify-center gap-3">
-                <span className="inline-flex min-h-[38px] items-center rounded-full border border-black/10 bg-white/95 px-4 py-2 text-xs font-normal text-[#5f5f5f] shadow-[0_10px_26px_rgba(9,24,39,0.04)]">
-                  Published properties
-                </span>
-
-                <span className="inline-flex min-h-[38px] items-center rounded-full border border-black/10 bg-white/95 px-4 py-2 text-xs font-normal text-[#5f5f5f] shadow-[0_10px_26px_rgba(9,24,39,0.04)]">
-                  Photos and videos
-                </span>
-
-                <span className="inline-flex min-h-[38px] items-center rounded-full border border-black/10 bg-white/95 px-4 py-2 text-xs font-normal text-[#5f5f5f] shadow-[0_10px_26px_rgba(9,24,39,0.04)]">
-                  Floor plans when available
-                </span>
-
-                <span className="inline-flex min-h-[38px] items-center rounded-full border border-black/10 bg-white/95 px-4 py-2 text-xs font-normal text-[#5f5f5f] shadow-[0_10px_26px_rgba(9,24,39,0.04)]">
-                  Project visibility
-                </span>
+              <div className="projects-tags">
+                <span>Published properties</span>
+                <span>Photos and videos</span>
+                <span>Floor plans when available</span>
+                <span>Project visibility</span>
               </div>
             </div>
           </div>
         </section>
 
-        <section id="projects" className="px-5 pb-20 md:pb-24">
-          <div className="mx-auto max-w-[1220px]">
-            <div className="max-w-[720px]">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0e3541]">
-                Published Projects
-              </p>
+        <section id="projects" className="projects-list-section">
+          <div className="projects-container">
+            <div className="projects-section-header">
+              <p>Published Projects</p>
 
-              <h2 className="mt-4 text-[34px] font-semibold leading-[0.96] tracking-[-0.07em] text-[#111111] md:text-[52px]">
-                Explore our latest projects with complete transparency.
-              </h2>
+              <h2>Explore our latest projects with complete transparency.</h2>
 
-              <p className="mt-4 text-base font-normal leading-7 text-[#111111]/80">
+              <span>
                 Explore Checkmate Property&apos;s curated portfolio of
                 residential developments across the United States. Select any
                 property to access an immersive presentation featuring photos,
                 location details, specifications, videos, image galleries, and
                 floor plans whenever available.
-              </p>
+              </span>
             </div>
 
-            <div className="mt-8 grid max-w-[700px] gap-5 rounded-[28px] border border-[#53bc76]/25 bg-white/95 p-5 shadow-[0_24px_70px_rgba(9,24,39,0.08)] md:grid-cols-[1fr_auto] md:items-center">
+            <div className="projects-portfolio-card">
               <div>
-                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#0e3541]">
-                  <span className="h-2 w-2 rounded-full bg-[#53bc76] shadow-[0_0_0_7px_rgba(83,188,118,0.14)]" />
+                <p>
+                  <span />
                   2026 Portfolio
-                </div>
-
-                <h3 className="mt-2 text-[28px] font-semibold leading-none tracking-[-0.06em] text-[#111111] md:text-[36px]">
-                  2026 Development Portfolio
-                </h3>
-              </div>
-
-              <div className="rounded-[22px] bg-[#0e3541] px-7 py-5 text-left text-white md:min-w-[230px] md:text-right">
-                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/65">
-                  Projected Sellout
                 </p>
 
-                <strong className="mt-2 block text-[36px] font-semibold leading-none tracking-[-0.06em] text-white">
-                  $22.0M
-                </strong>
+                <h3>2026 Development Portfolio</h3>
+              </div>
+
+              <div className="projects-sellout-box">
+                <span>Projected Sellout</span>
+                <strong>$22.0M</strong>
               </div>
             </div>
 
             {propertyCards.length > 0 ? (
-              <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              <div className="projects-property-grid">
                 {propertyCards.map((property) => {
                   const propertyUrl = `/properties/${property.slug}?from=projects`;
 
                   return (
-                    <article
-                      key={property.id}
-                      className="group overflow-hidden rounded-[22px] border border-black/10 bg-white shadow-[0_18px_48px_rgba(17,17,17,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.12)]"
-                    >
+                    <article key={property.id} className="projects-property-card">
                       <Link
                         href={propertyUrl}
                         aria-label={`Open property ${property.title}`}
-                        className="relative block h-[235px] overflow-hidden bg-gray-100"
+                        className="projects-property-image"
                       >
                         {property.imageUrl ? (
                           <Image
@@ -322,69 +278,51 @@ export default async function ProjectsPage() {
                             alt={`${property.title} real estate project in ${property.city}, ${property.state}`}
                             fill
                             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                            className="object-cover transition duration-500 group-hover:scale-105"
                           />
                         ) : (
-                          <div className="flex h-full w-full items-center justify-center text-[#39aff2]">
+                          <div className="projects-property-placeholder">
                             <Building2 size={54} />
                           </div>
                         )}
                       </Link>
 
-                      <div className="p-5">
-                        <Link href={propertyUrl} className="block">
-                          <h3 className="text-[27px] font-semibold leading-none tracking-[-0.045em] text-[#101820] transition group-hover:text-[#39aff2]">
-                            {formatCurrency(property.price)}
-                          </h3>
+                      <div className="projects-property-body">
+                        <Link href={propertyUrl} className="projects-price-link">
+                          <h3>{formatCurrency(property.price)}</h3>
                         </Link>
 
-                        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] font-medium text-[#516675]">
-                          <span className="inline-flex items-center gap-1.5">
+                        <div className="projects-property-specs">
+                          <span>
                             <BedDouble size={14} />
                             {formatNumber(property.bedrooms)} beds
                           </span>
 
-                          <span className="inline-flex items-center gap-1.5">
+                          <span>
                             <Bath size={14} />
                             {formatNumber(property.bathrooms)} baths
                           </span>
 
-                          <span className="inline-flex items-center gap-1.5">
+                          <span>
                             <Ruler size={14} />
                             {formatNumber(property.sqft)} sqft
                           </span>
                         </div>
 
-                        <Link
-                          href={propertyUrl}
-                          className="mt-3 flex items-start gap-2"
-                        >
-                          <MapPin
-                            size={14}
-                            className="mt-0.5 shrink-0 text-[#64748b]"
-                          />
+                        <Link href={propertyUrl} className="projects-address">
+                          <MapPin size={14} />
 
-                          <span className="text-[13px] font-normal leading-5 text-[#64748b] transition group-hover:text-[#0e3541]">
+                          <span>
                             {property.address}, {property.city},{" "}
                             {property.state}
                           </span>
                         </Link>
 
-                        <div className="mt-6 flex items-center justify-between border-t border-black/10 pt-5">
-                          <span
-                            className={`inline-flex min-h-[30px] items-center rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] ${getStatusClassName(
-                              property.status,
-                            )}`}
-                          >
+                        <div className="projects-property-footer">
+                          <span className={getStatusClassName(property.status)}>
                             {getPropertyStatusLabel(property.status)}
                           </span>
 
-                          <Link
-                            href={propertyUrl}
-                            className="text-[13px] font-semibold text-[#101820] transition hover:text-[#39aff2]"
-                          >
-                            View details →
-                          </Link>
+                          <Link href={propertyUrl}>View details →</Link>
                         </div>
                       </div>
                     </article>
@@ -392,14 +330,12 @@ export default async function ProjectsPage() {
                 })}
               </div>
             ) : (
-              <div className="mt-12 rounded-[28px] border border-dashed border-black/15 bg-white p-10 text-center shadow-sm">
-                <Building2 className="mx-auto text-[#39aff2]" size={54} />
+              <div className="projects-empty-state">
+                <Building2 size={54} />
 
-                <h3 className="mt-5 text-2xl font-semibold tracking-[-0.04em] text-[#101820]">
-                  No published projects yet
-                </h3>
+                <h3>No published projects yet</h3>
 
-                <p className="mx-auto mt-2 max-w-xl text-sm font-normal leading-6 text-gray-500">
+                <p>
                   Publish properties in the admin panel to display them on this
                   public projects page.
                 </p>
@@ -408,105 +344,181 @@ export default async function ProjectsPage() {
           </div>
         </section>
 
-        <section id="how-it-works" className="px-5 pb-20 md:pb-24">
-          <div className="mx-auto max-w-[1220px]">
-            <div className="max-w-[680px]">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0e3541]">
-                How It Works
-              </p>
+        <section id="how-it-works" className="projects-how-section">
+          <div className="projects-dark-grid" />
 
-              <h2 className="mt-4 text-[34px] font-semibold leading-[0.96] tracking-[-0.07em] text-[#111111] md:text-[52px]">
-                A Simple Public View of Each Project.
-              </h2>
+          <div className="projects-glow projects-glow-left" />
+          <div className="projects-glow projects-glow-right" />
 
-              <p className="mt-4 text-base font-normal leading-7 text-[#111111]/80">
+          <div className="projects-container projects-how-content">
+            <div className="projects-how-header">
+              <p>How It Works</p>
+
+              <h2>A Simple Public View of Each Project.</h2>
+
+              <span>
                 Each property page organizes the available project information
                 in one place for easier public access.
-              </p>
+              </span>
             </div>
 
-            <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-              <div className="rounded-[22px] border border-black/10 bg-white/95 p-6 shadow-[0_16px_40px_rgba(9,24,39,0.05)]">
-                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#53bc76]/10 text-[#0e3541]">
-                  <CheckCircle2 size={22} />
-                </div>
+            <div className="projects-process-grid">
+              <ProcessCard
+                icon={<CheckCircle2 size={22} />}
+                number="01"
+                title="Property Listed"
+                description="The project is published with address, city, state, type, and main image."
+              />
 
-                <span className="inline-flex rounded-full bg-[#53bc76]/10 px-3 py-1 text-xs font-bold text-[#0e3541]">
-                  01
-                </span>
+              <ProcessCard
+                icon={<ImageIcon size={22} />}
+                number="02"
+                title="Media Added"
+                description="Photos, videos, and visual updates are attached when they are available."
+              />
 
-                <h3 className="mt-5 text-lg font-bold tracking-[-0.04em] text-[#111111]">
-                  Property Listed
-                </h3>
+              <ProcessCard
+                icon={<FileText size={22} />}
+                number="03"
+                title="Documents"
+                description="Floor plans or project files can be added to the public project page."
+              />
 
-                <p className="mt-2 text-sm font-normal leading-6 text-[#5f5f5f]">
-                  The project is published with address, city, state, type, and
-                  main image.
-                </p>
-              </div>
-
-              <div className="rounded-[22px] border border-black/10 bg-white/95 p-6 shadow-[0_16px_40px_rgba(9,24,39,0.05)]">
-                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#53bc76]/10 text-[#0e3541]">
-                  <ImageIcon size={22} />
-                </div>
-
-                <span className="inline-flex rounded-full bg-[#53bc76]/10 px-3 py-1 text-xs font-bold text-[#0e3541]">
-                  02
-                </span>
-
-                <h3 className="mt-5 text-lg font-bold tracking-[-0.04em] text-[#111111]">
-                  Media Added
-                </h3>
-
-                <p className="mt-2 text-sm font-normal leading-6 text-[#5f5f5f]">
-                  Photos, videos, and visual updates are attached when they are
-                  available.
-                </p>
-              </div>
-
-              <div className="rounded-[22px] border border-black/10 bg-white/95 p-6 shadow-[0_16px_40px_rgba(9,24,39,0.05)]">
-                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#53bc76]/10 text-[#0e3541]">
-                  <FileText size={22} />
-                </div>
-
-                <span className="inline-flex rounded-full bg-[#53bc76]/10 px-3 py-1 text-xs font-bold text-[#0e3541]">
-                  03
-                </span>
-
-                <h3 className="mt-5 text-lg font-bold tracking-[-0.04em] text-[#111111]">
-                  Documents
-                </h3>
-
-                <p className="mt-2 text-sm font-normal leading-6 text-[#5f5f5f]">
-                  Floor plans or project files can be added to the public
-                  project page.
-                </p>
-              </div>
-
-              <div className="rounded-[22px] border border-black/10 bg-white/95 p-6 shadow-[0_16px_40px_rgba(9,24,39,0.05)]">
-                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#53bc76]/10 text-[#0e3541]">
-                  <PlayCircle size={22} />
-                </div>
-
-                <span className="inline-flex rounded-full bg-[#53bc76]/10 px-3 py-1 text-xs font-bold text-[#0e3541]">
-                  04
-                </span>
-
-                <h3 className="mt-5 text-lg font-bold tracking-[-0.04em] text-[#111111]">
-                  Transparency
-                </h3>
-
-                <p className="mt-2 text-sm font-normal leading-6 text-[#5f5f5f]">
-                  Each address gets its own page with organized information and
-                  project visibility.
-                </p>
-              </div>
+              <ProcessCard
+                icon={<PlayCircle size={22} />}
+                number="04"
+                title="Transparency"
+                description="Each address gets its own page with organized information and project visibility."
+              />
             </div>
           </div>
         </section>
       </div>
 
-      <PublicFooter settings={settings} />
+      <ProjectsFooter />
     </main>
+  );
+}
+
+function ProjectsHeader() {
+  return (
+    <header className="projects-header">
+      <div className="projects-container projects-header-inner">
+        <Link
+          href="/"
+          aria-label="Go to Checkmate Property home"
+          className="projects-logo-card"
+        >
+          <Image
+            src={CHECKMATE_LOGO_URL}
+            alt="Checkmate Property"
+            width={155}
+            height={40}
+            sizes="155px"
+            className="projects-logo"
+          />
+        </Link>
+
+        <nav className="projects-nav">
+          <Link href="/">Search</Link>
+
+          <Link href="/login" className="projects-login-button">
+            Login ↗
+          </Link>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+function ProjectsFooter() {
+  const currentYear = new Date().getFullYear();
+
+  return (
+    <footer className="projects-footer">
+      <div className="projects-dark-grid" />
+
+      <div className="projects-container projects-footer-content">
+        <div className="projects-footer-grid">
+          <div>
+            <Link
+              href="/"
+              aria-label="Go to Checkmate Property home"
+              className="projects-footer-logo-card"
+            >
+              <Image
+                src={CHECKMATE_LOGO_URL}
+                alt="Checkmate Property"
+                width={150}
+                height={40}
+                sizes="150px"
+                className="projects-footer-logo"
+              />
+            </Link>
+
+            <p>
+              Explore curated real estate projects, property details, media,
+              videos, floor plans and investment information.
+            </p>
+          </div>
+
+          <div>
+            <h3>Platform</h3>
+
+            <nav>
+              <Link href="/login">Login</Link>
+            </nav>
+          </div>
+
+          <div>
+            <h3>Company</h3>
+
+            <nav>
+              <Link href="/">Search</Link>
+            </nav>
+          </div>
+
+          <div>
+            <h3>Legal</h3>
+
+            <nav>
+              <Link href="/privacy-policy">Privacy Policy</Link>
+              <Link href="/terms-of-use">Terms of Use</Link>
+              <Link href="/data-policy">Data Policy</Link>
+            </nav>
+          </div>
+        </div>
+
+        <div className="projects-footer-bottom">
+          <p>{currentYear} © Checkmate Property Inc. All rights reserved.</p>
+
+          <p>Real estate intelligence for smarter decisions.</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function ProcessCard({
+  icon,
+  number,
+  title,
+  description,
+}: {
+  icon: ReactNode;
+  number: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="projects-process-card">
+      <div className="projects-process-icon">{icon}</div>
+
+      <span>{number}</span>
+
+      <h3>{title}</h3>
+
+      <p>{description}</p>
+    </div>
   );
 }
