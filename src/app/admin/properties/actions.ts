@@ -319,49 +319,40 @@ export async function createPropertyAction(formData: FormData) {
   const payload: PropertyInsert = {
     title,
     slug,
-
     short_description: getNullableStringValue(formData, "short_description"),
     description: getNullableStringValue(formData, "description"),
-
     property_type: getStringValue(
       formData,
       "property_type",
     ) as PropertyInsert["property_type"],
-
     status: getPropertyStatusValue(formData),
     visibility: getStringValue(formData, "visibility") || "public",
-
     address_line_1: addressLine1,
     address_line_2: getNullableStringValue(formData, "address_line_2"),
     city,
     state,
     zip_code: getNullableStringValue(formData, "zip_code"),
     country: getStringValue(formData, "country") || "USA",
-
     price: getNullableNumberValue(formData, "price"),
     purchase_price: getNullableNumberValue(formData, "purchase_price"),
     rehab_estimate: getNullableNumberValue(formData, "rehab_estimate"),
     projected_arv: getNullableNumberValue(formData, "projected_arv"),
     projected_rent: getNullableNumberValue(formData, "projected_rent"),
     projected_roi: getNullableNumberValue(formData, "projected_roi"),
-
     bedrooms: getNullableNumberValue(formData, "bedrooms"),
     bathrooms: getNullableNumberValue(formData, "bathrooms"),
     sqft: getNullableNumberValue(formData, "sqft"),
     lot_size_sqft: getNullableNumberValue(formData, "lot_size_sqft"),
     year_built: getNullableNumberValue(formData, "year_built"),
-
     garage_spaces: getNullableNumberValue(formData, "garage_spaces"),
     parking_spaces: getNullableNumberValue(formData, "parking_spaces"),
     stories: getNullableNumberValue(formData, "stories"),
     neighborhood: getNullableStringValue(formData, "neighborhood"),
     county: getNullableStringValue(formData, "county"),
     mls_number: getNullableStringValue(formData, "mls_number"),
-
     cover_image_url: getNullableStringValue(formData, "cover_image_url"),
     video_url: getNullableStringValue(formData, "video_url"),
     virtual_tour_url: getNullableStringValue(formData, "virtual_tour_url"),
-
     contact_cta_title: getNullableStringValue(formData, "contact_cta_title"),
     contact_cta_description: getNullableStringValue(
       formData,
@@ -373,13 +364,10 @@ export async function createPropertyAction(formData: FormData) {
     ),
     contact_phone: getNullableStringValue(formData, "contact_phone"),
     contact_email: getNullableStringValue(formData, "contact_email"),
-
     is_featured: getBooleanValue(formData, "is_featured"),
-
     published_at: getBooleanValue(formData, "publish_now")
       ? new Date().toISOString()
       : null,
-
     meta_title: getNullableStringValue(formData, "meta_title"),
     meta_description: getNullableStringValue(formData, "meta_description"),
   };
@@ -435,49 +423,40 @@ export async function updatePropertyAction(formData: FormData) {
   const payload: PropertyUpdate = {
     title,
     slug: customSlug,
-
     short_description: getNullableStringValue(formData, "short_description"),
     description: getNullableStringValue(formData, "description"),
-
     property_type: getStringValue(
       formData,
       "property_type",
     ) as PropertyUpdate["property_type"],
-
     status: getPropertyStatusValue(formData),
     visibility: getStringValue(formData, "visibility") || "public",
-
     address_line_1: addressLine1,
     address_line_2: getNullableStringValue(formData, "address_line_2"),
     city,
     state,
     zip_code: getNullableStringValue(formData, "zip_code"),
     country: getStringValue(formData, "country") || "USA",
-
     price: getNullableNumberValue(formData, "price"),
     purchase_price: getNullableNumberValue(formData, "purchase_price"),
     rehab_estimate: getNullableNumberValue(formData, "rehab_estimate"),
     projected_arv: getNullableNumberValue(formData, "projected_arv"),
     projected_rent: getNullableNumberValue(formData, "projected_rent"),
     projected_roi: getNullableNumberValue(formData, "projected_roi"),
-
     bedrooms: getNullableNumberValue(formData, "bedrooms"),
     bathrooms: getNullableNumberValue(formData, "bathrooms"),
     sqft: getNullableNumberValue(formData, "sqft"),
     lot_size_sqft: getNullableNumberValue(formData, "lot_size_sqft"),
     year_built: getNullableNumberValue(formData, "year_built"),
-
     garage_spaces: getNullableNumberValue(formData, "garage_spaces"),
     parking_spaces: getNullableNumberValue(formData, "parking_spaces"),
     stories: getNullableNumberValue(formData, "stories"),
     neighborhood: getNullableStringValue(formData, "neighborhood"),
     county: getNullableStringValue(formData, "county"),
     mls_number: getNullableStringValue(formData, "mls_number"),
-
     cover_image_url: getNullableStringValue(formData, "cover_image_url"),
     video_url: getNullableStringValue(formData, "video_url"),
     virtual_tour_url: getNullableStringValue(formData, "virtual_tour_url"),
-
     contact_cta_title: getNullableStringValue(formData, "contact_cta_title"),
     contact_cta_description: getNullableStringValue(
       formData,
@@ -489,13 +468,10 @@ export async function updatePropertyAction(formData: FormData) {
     ),
     contact_phone: getNullableStringValue(formData, "contact_phone"),
     contact_email: getNullableStringValue(formData, "contact_email"),
-
     is_featured: getBooleanValue(formData, "is_featured"),
-
     published_at: getBooleanValue(formData, "publish_now")
       ? new Date().toISOString()
       : getNullableStringValue(formData, "current_published_at"),
-
     meta_title: getNullableStringValue(formData, "meta_title"),
     meta_description: getNullableStringValue(formData, "meta_description"),
   };
