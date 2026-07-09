@@ -36,7 +36,7 @@ const DEFAULT_OG_IMAGE =
   "https://checkmateproperty.com/checkmate-property-og.jpg";
 
 const CHECKMATE_LOGO_URL =
-  "https://checkmateproperty.com/wp-content/uploads/2023/04/checkmate-logo-color.jpg";
+  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/site-assets/branding/logo-1783036134455-checkmate-logo-color.jpg";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -185,6 +185,8 @@ export default async function ProjectsPage() {
           __html: JSON.stringify(structuredData),
         }}
       />
+
+      <ProjectsTopLogo />
 
       <div className="projects-grid-bg">
         <section className="projects-hero">
@@ -391,8 +393,48 @@ export default async function ProjectsPage() {
             </div>
           </div>
         </section>
+
+        <ProjectsCopyright />
       </div>
     </main>
+  );
+}
+
+function ProjectsTopLogo() {
+  return (
+    <div className="projects-top-logo-section">
+      <div className="projects-container projects-top-logo-inner">
+        <Link
+          href="/"
+          aria-label="Go to Checkmate Property home"
+          className="projects-top-logo-card"
+        >
+          <Image
+            src={CHECKMATE_LOGO_URL}
+            alt="Checkmate Property"
+            width={170}
+            height={48}
+            sizes="170px"
+            className="projects-top-logo"
+            priority
+          />
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function ProjectsCopyright() {
+  const currentYear = new Date().getFullYear();
+
+  return (
+    <section className="projects-copyright-section">
+      <div className="projects-container projects-copyright-inner">
+        <p>{currentYear} © Checkmate Property Inc. All rights reserved.</p>
+
+        <span>Real estate intelligence for smarter decisions.</span>
+      </div>
+    </section>
   );
 }
 
