@@ -7,17 +7,6 @@ type PublicFooterProps = {
   settings: Required<SiteSettingsValue>;
 };
 
-const platformLinks = [
-  {
-    label: "Projects",
-    href: "/projects",
-  },
-  {
-    label: "How It Works",
-    href: "/projects#how-it-works",
-  },
-];
-
 const companyLinks = [
   {
     label: "Search",
@@ -152,12 +141,6 @@ export function PublicFooter({ settings }: PublicFooterProps) {
             </div>
 
             <FooterColumn title="Platform">
-              {platformLinks.map((item) => (
-                <FooterLink key={item.href} href={item.href}>
-                  {item.label}
-                </FooterLink>
-              ))}
-
               <FooterLink
                 href="https://app.checkmateproperty.com/#/login"
                 external
