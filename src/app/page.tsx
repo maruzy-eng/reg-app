@@ -208,6 +208,7 @@ export default async function HomePage() {
           alt="Checkmate Property real estate search"
           fill
           priority
+          fetchPriority="high"
           sizes="100vw"
           className="absolute inset-0 z-0 object-cover"
         />

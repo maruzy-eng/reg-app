@@ -1,10 +1,25 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import type { FormEvent, KeyboardEvent } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Loader2, MapPin, Search, ShieldCheck, X } from "lucide-react";
-import { DynamicFormComponent } from "@/components/forms/dynamic-form";
+
+const DynamicFormComponent = dynamic(
+  () =>
+    import("@/components/forms/dynamic-form").then(
+      (module) => module.DynamicFormComponent,
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="rounded-2xl border border-[#0e3541]/10 bg-white px-4 py-5 text-sm font-semibold text-[#587469]">
+        Loading form...
+      </div>
+    ),
+  },
+);
 
 type LocationSuggestion = {
   id: string;
