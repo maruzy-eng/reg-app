@@ -28,6 +28,15 @@ function getNullableStringValue(formData: FormData, key: string) {
   return value;
 }
 
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
 export async function createPropertyLeadAction(formData: FormData) {
   const supabase = createAdminClient();
 
@@ -107,23 +116,30 @@ export async function createPropertyLeadAction(formData: FormData) {
   if (resend && adminEmail) {
     const subject = `New property lead: ${propertyTitle}`;
 
+    const safePropertyTitle = escapeHtml(propertyTitle || "Property");
+    const safePropertySlug = escapeHtml(propertySlug);
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email || "Not provided");
+    const safePhone = escapeHtml(phone || "Not provided");
+    const safeMessage = escapeHtml(message || "No message provided.");
+
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto; color: #111827;">
         <h1 style="font-size: 24px; margin-bottom: 8px;">New Property Lead</h1>
         <p style="color: #4b5563; margin-top: 0;">A new inquiry was submitted from the property detail page.</p>
 
         <div style="background: #f3f4f6; border-radius: 16px; padding: 20px; margin: 24px 0;">
-          <p><strong>Property:</strong> ${propertyTitle}</p>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email || "Not provided"}</p>
-          <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
+          <p><strong>Property:</strong> ${safePropertyTitle}</p>
+          <p><strong>Name:</strong> ${safeName}</p>
+          <p><strong>Email:</strong> ${safeEmail}</p>
+          <p><strong>Phone:</strong> ${safePhone}</p>
           <p><strong>Message:</strong></p>
-          <p style="white-space: pre-line;">${message || "No message provided."}</p>
+          <p style="white-space: pre-line;">${safeMessage}</p>
         </div>
 
         <p style="font-size: 13px; color: #6b7280;">
           Source: Property detail page<br />
-          Slug: ${propertySlug}
+          Slug: ${safePropertySlug}
         </p>
       </div>
     `;
@@ -151,75 +167,6 @@ export async function createPropertyLeadAction(formData: FormData) {
       console.error("Error sending lead email:", emailError.message);
     }
   }
-
-  export async function updatePropertyImagesOrderAction(formData: FormData) {
-  "use server";
-
-  const propertyId = String(formData.get("property_id") || "");
-  const propertySlug = String(formData.get("property_slug") || "");
-  const rawImagesOrder = String(formData.get("images_order") || "[]");
-
-  if (!propertyId) {
-    throw new Error("Property ID is required.");
-  }
-
-  let imagesOrder: {
-    id: string;
-    position: number;
-  }[] = [];
-
-  try {
-    imagesOrder = JSON.parse(rawImagesOrder);
-  } catch {
-    throw new Error("Invalid images order payload.");
-  }
-
-  if (!Array.isArray(imagesOrder)) {
-    throw new Error("Images order must be an array.");
-  }
-
-  const validImagesOrder = imagesOrder
-    .filter((item) => {
-      return (
-        item &&
-        typeof item.id === "string" &&
-        item.id.length > 0 &&
-        Number.isFinite(Number(item.position))
-      );
-    })
-    .map((item, index) => ({
-      id: item.id,
-      position: index + 1,
-    }));
-
-  if (validImagesOrder.length === 0) {
-    return;
-  }
-
-  const supabase = await createAdminSupabaseClient();
-
-  for (const image of validImagesOrder) {
-    const { error } = await supabase
-      .from("property_images")
-      .update({
-        position: image.position,
-      })
-      .eq("id", image.id)
-      .eq("property_id", propertyId);
-
-    if (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  revalidatePath(`/admin/properties/${propertyId}/edit`);
-
-  if (propertySlug) {
-    revalidatePath(`/properties/${propertySlug}`);
-  }
-
-  revalidatePath("/projects");
-}
 
   redirect(`/properties/${propertySlug}?lead=success#contact`);
 }
