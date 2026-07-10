@@ -4,10 +4,18 @@ import Link from "next/link";
 import {
   Bath,
   BedDouble,
+  BrainCircuit,
   Building2,
+  ChartNoAxesColumnIncreasing,
+  Check,
+  Ellipsis,
+  Gift,
   Home,
+  HousePlus,
+  Mail,
   MapPin,
   Ruler,
+  Search,
 } from "lucide-react";
 import { getPublicProperties } from "@/lib/properties";
 import { getSiteSettings } from "@/lib/site-settings";
@@ -21,6 +29,7 @@ import {
   getPropertyStatusLabel,
   mapPropertyToCard,
 } from "@/types/property";
+import "./home-page.css";
 
 export const revalidate = 60;
 
@@ -35,6 +44,45 @@ const HOME_DESCRIPTION =
 
 const DEFAULT_HERO_IMAGE =
   "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/property-media/properties/4great-rock-f8d8d89155f740bb8eeeefc6049e3a18-uncropped_scaled_within_1536_1152.webp";
+
+const heroFeatures = [
+  {
+    id: "skip-trace",
+    label: "Skip Trace",
+    icon: Search,
+    tone: "green",
+  },
+  {
+    id: "direct-mail",
+    label: "Direct Mail Postcards",
+    icon: Mail,
+    tone: "blue",
+  },
+  {
+    id: "flip-new-construction",
+    label: "Flip & New Construction Analysis",
+    icon: HousePlus,
+    tone: "green",
+  },
+  {
+    id: "comps-market-data",
+    label: "Comps & Market Data",
+    icon: ChartNoAxesColumnIncreasing,
+    tone: "blue",
+  },
+  {
+    id: "artificial-intelligence",
+    label: "Artificial Intelligence",
+    icon: BrainCircuit,
+    tone: "green",
+  },
+  {
+    id: "many-more",
+    label: "And Many More",
+    icon: Ellipsis,
+    tone: "blue",
+  },
+];
 
 export const metadata: Metadata = {
   title: HOME_TITLE,
@@ -96,26 +144,26 @@ function getStatusClassName(status: string) {
   const normalizedStatus = status.toLowerCase();
 
   if (normalizedStatus === "sold") {
-    return "bg-[#101820] text-white";
+    return "home-status home-status-sold";
   }
 
   if (normalizedStatus === "rented") {
-    return "bg-violet-50 text-violet-700";
+    return "home-status home-status-rented";
   }
 
   if (normalizedStatus === "available") {
-    return "bg-emerald-50 text-[#0e3541]";
+    return "home-status home-status-available";
   }
 
   if (normalizedStatus === "under_contract") {
-    return "bg-amber-50 text-amber-700";
+    return "home-status home-status-under-contract";
   }
 
   if (normalizedStatus === "in_progress") {
-    return "bg-sky-50 text-[#0e3541]";
+    return "home-status home-status-in-progress";
   }
 
-  return "bg-sky-50 text-[#0e3541]";
+  return "home-status home-status-default";
 }
 
 function getStructuredData(propertyCount: number) {
@@ -190,7 +238,7 @@ export default async function HomePage() {
   const structuredData = getStructuredData(propertyCards.length);
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="home-page">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -200,9 +248,7 @@ export default async function HomePage() {
 
       <PublicHeader settings={settings} />
 
-      <section
-        className="relative z-30 flex min-h-[560px] items-center justify-center overflow-visible bg-[#0e3541] px-4 py-16 text-white sm:px-5 md:min-h-[590px] md:py-20"
-      >
+      <section className="home-hero">
         <Image
           src={heroImage}
           alt="Checkmate Property real estate search"
@@ -210,67 +256,131 @@ export default async function HomePage() {
           priority
           fetchPriority="high"
           sizes="100vw"
-          className="absolute inset-0 z-0 object-cover"
+          className="home-hero-image"
         />
-        <div className="absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(14,53,65,0.54),rgba(14,53,65,0.58))]" />
 
-        <div className="relative z-40 mx-auto w-full max-w-5xl text-center">
-          <div className="mx-auto inline-flex max-w-full items-center gap-2 rounded-full border border-white/25 bg-white/18 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-lg backdrop-blur sm:text-xs">
-            <span className="h-2 w-2 shrink-0 rounded-full bg-[#53bc76] shadow-[0_0_0_6px_rgba(83,188,118,0.18)]" />
+        <div className="home-hero-overlay" />
+        <div className="home-hero-glow" />
+
+        <div className="home-hero-inner">
+          <div className="home-hero-badge">
+            <span />
             Real Estate Intelligence Search
           </div>
 
-          <h1 className="mx-auto mt-7 max-w-4xl text-[42px] font-semibold leading-[0.98] tracking-[-0.065em] text-white sm:text-[52px] md:text-[72px]">
-            Find your next real estate opportunity.
-          </h1>
+          <h1>Find your next real estate opportunity.</h1>
 
-          <p className="mx-auto mt-5 max-w-3xl text-sm font-normal leading-7 text-white/86 sm:text-base md:text-lg">
+          <p>
             Search Checkmate Property projects by address, city, property type,
             status, price, beds, baths, or square footage.
           </p>
 
-          <HeroLocationSearch searchForm={searchForm} />
+          <div className="home-hero-features">
+            {heroFeatures.map((feature, index) => {
+              const Icon = feature.icon;
+
+              return (
+                <div
+                  key={feature.id}
+                  className={
+                    index < heroFeatures.length - 1
+                      ? "home-hero-feature home-hero-feature-bordered"
+                      : "home-hero-feature"
+                  }
+                >
+                  <div className="home-hero-feature-icon">
+                    <Icon
+                      className={
+                        feature.tone === "green"
+                          ? "home-icon-green"
+                          : "home-icon-blue"
+                      }
+                      size={36}
+                      strokeWidth={1.9}
+                    />
+                  </div>
+
+                  <p>{feature.label}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="home-search-shell">
+            <HeroLocationSearch searchForm={searchForm} />
+          </div>
+
+          <div className="home-signup-card">
+            <div className="home-signup-main">
+              <div className="home-signup-icon">
+                <Gift size={42} strokeWidth={1.8} />
+              </div>
+
+              <div>
+                <p className="home-signup-title">Free Sign Up</p>
+
+                <p className="home-signup-text">
+                  Create your free account and start accessing powerful real
+                  estate tools.
+                </p>
+              </div>
+            </div>
+
+            <div className="home-signup-list">
+              <div>
+                <Check size={18} />
+                No credit card required
+              </div>
+
+              <div>
+                <Check size={18} />
+                Access core features
+              </div>
+
+              <div>
+                <Check size={18} />
+                Upgrade anytime
+              </div>
+            </div>
+
+            <Link
+              href="https://app.checkmateproperty.com"
+              className="home-signup-button"
+            >
+              Sign Up Free
+            </Link>
+          </div>
         </div>
       </section>
 
-      <section
-        id="projects"
-        className="relative z-0 bg-white px-4 py-12 sm:px-5 md:py-16"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(83,188,118,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(57,175,242,0.07) 1px, transparent 1px)",
-          backgroundSize: "58px 58px",
-        }}
-      >
-        <div className="mx-auto max-w-[1220px]">
-          <div className="mb-8 max-w-3xl">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#53bc76]">
-              Checkmate Property Projects
-            </p>
+      <section id="projects" className="home-projects-section">
+        <div className="home-projects-container">
+          <div className="home-projects-header">
+            <p>Checkmate Property Projects</p>
 
-            <h2 className="mt-3 text-3xl font-black tracking-[-0.055em] text-[#0e3541] sm:text-4xl">
-              Real fix-and-flip and new construction projects developed and executed by Checkmate Property in 2026 — some already completed and others currently underway.
+            <h2>
+              Technology Built by Those Who Live the Real Estate Market
             </h2>
 
-            <p className="mt-3 text-sm leading-7 text-[#587469] sm:text-base">
-              We understand the challenges of the market because we live them every day. The projects below are just some of the fix-and-flip and new construction projects developed and executed by Checkmate Property in 2026, using our own technology and data at every stage of the process. Now, that same technology is available to you—the people who live and work in the real-world market, just like we do.
-            </p>
+            <span>
+              At Checkmate Property, we understand your challenges because we
+              work directly in fix-and-flips and new construction, using our own
+              technology and data in real-world projects. Now, we are making
+              that same technology available to others in the industry.
+            </span>
           </div>
 
           {propertyCards.length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="home-property-grid">
               {propertyCards.map((property) => {
                 const propertyUrl = `/properties/${property.slug}?from=home`;
 
                 return (
-                  <article
-                    key={property.id}
-                    className="group overflow-hidden rounded-[22px] border border-black/10 bg-white shadow-[0_18px_48px_rgba(17,17,17,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.12)]"
-                  >
+                  <article key={property.id} className="home-property-card">
                     <Link
                       href={propertyUrl}
                       aria-label={`Open property ${property.title}`}
-                      className="relative block h-[220px] overflow-hidden bg-gray-100 sm:h-[235px]"
+                      className="home-property-image"
                     >
                       {property.imageUrl ? (
                         <Image
@@ -278,68 +388,49 @@ export default async function HomePage() {
                           alt={`${property.title} real estate property in ${property.city}, ${property.state}`}
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                          className="object-cover transition duration-500 group-hover:scale-105"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-[#39aff2]">
+                        <div className="home-property-placeholder">
                           <Building2 size={54} />
                         </div>
                       )}
                     </Link>
 
-                    <div className="p-5">
-                      <Link href={propertyUrl} className="block">
-                        <h3 className="text-[27px] font-semibold leading-none tracking-[-0.045em] text-[#101820]">
-                          {formatCurrency(property.price)}
-                        </h3>
+                    <div className="home-property-body">
+                      <Link href={propertyUrl} className="home-price-link">
+                        <h3>{formatCurrency(property.price)}</h3>
                       </Link>
 
-                      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] font-medium text-[#516675]">
-                        <span className="inline-flex items-center gap-1.5">
+                      <div className="home-property-specs">
+                        <span>
                           <BedDouble size={14} />
                           {formatNumber(property.bedrooms)} beds
                         </span>
 
-                        <span className="inline-flex items-center gap-1.5">
+                        <span>
                           <Bath size={14} />
                           {formatNumber(property.bathrooms)} baths
                         </span>
 
-                        <span className="inline-flex items-center gap-1.5">
+                        <span>
                           <Ruler size={14} />
                           {formatNumber(property.sqft)} sqft
                         </span>
                       </div>
 
-                      <Link
-                        href={propertyUrl}
-                        className="mt-3 flex items-start gap-2"
-                      >
-                        <MapPin
-                          size={14}
-                          className="mt-0.5 shrink-0 text-[#64748b]"
-                        />
-
-                        <span className="text-[13px] font-normal leading-5 text-[#64748b]">
+                      <Link href={propertyUrl} className="home-property-address">
+                        <MapPin size={14} />
+                        <span>
                           {property.address}, {property.city}, {property.state}
                         </span>
                       </Link>
 
-                      <div className="mt-6 flex items-center justify-between gap-4 border-t border-black/10 pt-5">
-                        <span
-                          className={`inline-flex min-h-[30px] items-center rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] ${getStatusClassName(
-                            property.status,
-                          )}`}
-                        >
+                      <div className="home-property-footer">
+                        <span className={getStatusClassName(property.status)}>
                           {getPropertyStatusLabel(property.status)}
                         </span>
 
-                        <Link
-                          href={propertyUrl}
-                          className="shrink-0 text-[13px] font-semibold text-[#101820]"
-                        >
-                          View details →
-                        </Link>
+                        <Link href={propertyUrl}>View details →</Link>
                       </div>
                     </div>
                   </article>
@@ -347,26 +438,19 @@ export default async function HomePage() {
               })}
             </div>
           ) : (
-            <div className="mx-auto max-w-2xl rounded-[28px] border border-dashed border-black/15 bg-white p-8 text-center shadow-sm sm:p-10">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-sky-50 text-[#39aff2]">
+            <div className="home-empty-state">
+              <div>
                 <Home size={32} />
               </div>
 
-              <h2 className="mt-5 text-2xl font-semibold tracking-[-0.04em] text-[#101820]">
-                No properties available yet
-              </h2>
+              <h2>No properties available yet</h2>
 
-              <p className="mt-2 text-sm font-normal leading-6 text-gray-500">
+              <p>
                 Publish properties from the admin panel to display them on the
                 homepage.
               </p>
 
-              <Link
-                href="/admin/properties"
-                className="mt-6 inline-flex rounded-full bg-[linear-gradient(94deg,#53bc76_0%,#39aff2_100%)] px-5 py-3 text-sm font-bold !text-white"
-              >
-                Open Admin
-              </Link>
+              <Link href="/admin/properties">Open Admin</Link>
             </div>
           )}
         </div>
