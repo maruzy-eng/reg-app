@@ -249,12 +249,13 @@ export default async function HomePage() {
             </p>
 
             <h2 className="mt-3 text-3xl font-black tracking-[-0.055em] text-[#0e3541] sm:text-4xl">
-              Explore real estate opportunities designed for buying, selling, and investing with greater clarity and confidence.
+              Technology Built by Those Who Live the Real Estate Market
             </h2>
 
             <p className="mt-3 text-sm leading-7 text-[#587469] sm:text-base">
-              Discover Checkmate Property’s 2026 project portfolio and access key property information, including pricing, status, location, bedrooms, bathrooms, square footage, and visual assets.<br>
-          </br>Together, these projects represent more than $22 million in projected sellout value, offering a transparent view into Checkmate Property’s real estate development pipeline.
+              At Checkmate Property, we understand your challenges because we work directly in fix-and-flips and new construction, using our own technology and data in real-world projects. Now, we’re making that same technology available to others in the industry.<br></br>
+
+Explore our 2026 projects, some already sold and others currently underway.
             </p>
           </div>
 
