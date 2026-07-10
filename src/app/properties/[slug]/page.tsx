@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
   Bath,
@@ -469,46 +468,46 @@ function ApplianceCard({
   const altText = appliance.alt_text || appliance.alt || title || propertyTitle;
 
   return (
-    <article className="overflow-hidden rounded-[28px] border border-[#53bc76]/25 bg-white shadow-[0_18px_48px_rgba(14,53,65,0.07)] transition duration-300 hover:-translate-y-1 hover:border-[#53bc76]/40 hover:shadow-[0_28px_70px_rgba(14,53,65,0.12)]">
-      <div className="grid grid-cols-1 lg:grid-cols-[500px_minmax(0,1fr)]">
-        <div className="relative flex h-[500px] w-full items-center justify-center overflow-hidden bg-[#f8fafc] p-4 lg:h-[500px] lg:max-h-[500px] lg:w-[500px] lg:max-w-[500px]">
+    <article className="overflow-hidden rounded-[28px] border border-[#53bc76]/20 bg-white shadow-[0_18px_48px_rgba(14,53,65,0.07)] transition duration-300 hover:-translate-y-1 hover:border-[#53bc76]/35 hover:shadow-[0_28px_70px_rgba(14,53,65,0.12)]">
+      <div className="relative overflow-hidden border-b border-[#53bc76]/12 bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_100%)] px-5 pb-5 pt-5 md:px-8 md:pb-6 md:pt-6">
+        <div className="absolute left-5 top-5 z-10 rounded-full bg-white/95 px-4 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#0e3541] shadow-sm backdrop-blur md:left-8 md:top-6">
+          Appliance
+        </div>
+
+        <div className="flex min-h-[260px] items-center justify-center md:min-h-[320px]">
           {imageUrl ? (
             <img
               src={imageUrl}
               alt={altText}
               loading="lazy"
-              className="h-full w-full rounded-[22px] object-contain"
+              className="h-auto max-h-[320px] w-full max-w-[760px] object-contain"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center rounded-[22px] border border-dashed border-[#0e3541]/15 bg-white px-5 text-center text-sm font-bold text-[#94a3b8]">
+            <div className="flex h-[240px] w-full items-center justify-center rounded-[22px] border border-dashed border-[#0e3541]/15 bg-white px-5 text-center text-sm font-bold text-[#94a3b8]">
               No appliance image available
             </div>
           )}
-
-          <div className="absolute left-5 top-5 rounded-full bg-white/95 px-4 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#0e3541] shadow-sm backdrop-blur">
-            Appliance
-          </div>
         </div>
+      </div>
 
-        <div className="flex min-w-0 flex-col justify-center p-6 md:p-8 lg:p-10">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#53bc76]">
-            Included Item
+      <div className="px-5 py-6 md:px-8 md:py-8">
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#53bc76]">
+          Included Item
+        </p>
+
+        <h3 className="mt-3 max-w-4xl text-[30px] font-semibold leading-[1.14] tracking-[-0.05em] text-[#0e3541] md:text-[34px]">
+          {title}
+        </h3>
+
+        {description ? (
+          <p className="mt-5 max-w-5xl text-sm font-normal leading-8 text-[#64748b] md:text-base">
+            {description}
           </p>
-
-          <h3 className="mt-3 text-[28px] font-semibold leading-[1.08] tracking-[-0.055em] text-[#0e3541] md:text-[34px]">
-            {title}
-          </h3>
-
-          {description ? (
-            <p className="mt-4 text-sm font-normal leading-7 text-[#64748b] md:text-base md:leading-8">
-              {description}
-            </p>
-          ) : (
-            <p className="mt-4 text-sm font-normal leading-7 text-[#64748b] md:text-base md:leading-8">
-              No description available for this appliance.
-            </p>
-          )}
-        </div>
+        ) : (
+          <p className="mt-5 max-w-5xl text-sm font-normal leading-8 text-[#64748b] md:text-base">
+            No description available for this appliance.
+          </p>
+        )}
       </div>
     </article>
   );
@@ -654,7 +653,7 @@ export default async function PropertyDetailPage({
   }
 
   const allPropertyImages = [...(property.property_images || [])]
-    .sort((a, b) => a.position - b.position)
+    .sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
     .map((image) => image as PropertyImageWithMediaGroup);
 
   const galleryImages = allPropertyImages.filter(
@@ -688,15 +687,15 @@ export default async function PropertyDetailPage({
   });
 
   const videos = [...(property.property_videos || [])].sort(
-    (a, b) => a.position - b.position,
+    (a, b) => (a.position ?? 0) - (b.position ?? 0),
   );
 
   const documents = [...(property.property_documents || [])]
     .filter((document) => document.is_public)
-    .sort((a, b) => a.position - b.position);
+    .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
 
   const features = [...(property.property_features || [])].sort(
-    (a, b) => a.position - b.position,
+    (a, b) => (a.position ?? 0) - (b.position ?? 0),
   );
 
   const propertyLocation = getPropertyLocationText(property);
