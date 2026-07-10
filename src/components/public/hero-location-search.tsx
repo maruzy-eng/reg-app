@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import type { FormEvent, KeyboardEvent } from "react";
+import type { FormEvent, KeyboardEvent, ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Loader2, MapPin, Search, ShieldCheck, X } from "lucide-react";
@@ -14,9 +14,7 @@ const DynamicFormComponent = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="rounded-2xl border border-[#0e3541]/10 bg-white px-4 py-5 text-sm font-semibold text-[#587469]">
-        Loading form...
-      </div>
+      <div className="hero-search-modal-loading">Loading form...</div>
     ),
   },
 );
@@ -46,6 +44,24 @@ type SearchFormData = {
 type HeroLocationSearchProps = {
   searchForm?: SearchFormData | null;
 };
+
+function ModalPortal({ children }: { children: ReactNode }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+
+    return () => {
+      setMounted(false);
+    };
+  }, []);
+
+  if (!mounted || typeof document === "undefined") {
+    return null;
+  }
+
+  return createPortal(children, document.body);
+}
 
 function getNodeText(parent: Element, tagName: string) {
   return parent.getElementsByTagName(tagName)[0]?.textContent?.trim() || "";
@@ -141,7 +157,6 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
-  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [errorMessage, setErrorMessage] = useState("");
   const [submitMessage, setSubmitMessage] = useState("");
@@ -235,18 +250,24 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
     }
 
     if (isLeadModalOpen) {
+      const previousOverflow = document.body.style.overflow;
+
       document.body.style.overflow = "hidden";
+      document.documentElement.classList.add("hero-search-modal-open");
       document.addEventListener("keydown", handleEscape);
 
       window.setTimeout(() => {
         modalRef.current?.focus();
       }, 0);
+
+      return () => {
+        document.body.style.overflow = previousOverflow;
+        document.documentElement.classList.remove("hero-search-modal-open");
+        document.removeEventListener("keydown", handleEscape);
+      };
     }
 
-    return () => {
-      document.body.style.overflow = "";
-      document.removeEventListener("keydown", handleEscape);
-    };
+    return undefined;
   }, [isLeadModalOpen]);
 
   useEffect(() => {
@@ -349,7 +370,6 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
     setSubmitMessage("");
     setIsDropdownOpen(false);
     setActiveIndex(-1);
-    setPortalTarget(document.body);
     setIsLeadModalOpen(true);
   }
 
@@ -391,81 +411,66 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
   }
 
   const modal = isLeadModalOpen ? (
-    <div
-      className="fixed inset-0 z-[2147483647] flex items-center justify-center bg-[#071f28]/82 px-4 py-6 backdrop-blur-sm"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="search-lead-modal-title"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) {
-          setIsLeadModalOpen(false);
-        }
-      }}
-    >
+    <ModalPortal>
       <div
-        ref={modalRef}
-        tabIndex={-1}
-        className="relative max-h-[92vh] w-full max-w-[760px] overflow-y-auto rounded-[28px] bg-white p-5 text-left shadow-[0_34px_100px_rgba(0,0,0,0.35)] outline-none sm:p-7 md:p-8"
+        className="hero-search-modal-backdrop"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="search-lead-modal-title"
+        onMouseDown={(event) => {
+          if (event.target === event.currentTarget) {
+            setIsLeadModalOpen(false);
+          }
+        }}
       >
-        <button
-          type="button"
-          onClick={() => setIsLeadModalOpen(false)}
-          className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#f8fafc] text-[#0e3541] transition hover:bg-red-50 hover:text-red-600"
-          aria-label="Close modal"
-        >
-          <X size={18} />
-        </button>
-
-        <div className="mb-6 pr-12">
-          <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,rgba(83,188,118,0.16),rgba(57,175,242,0.12))] text-[#0e3541] ring-1 ring-[#53bc76]/20">
-            <ShieldCheck size={24} />
-          </div>
-
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#53bc76]">
-            Search Access
-          </p>
-
-          <h2
-            id="search-lead-modal-title"
-            className="mt-2 text-3xl font-black leading-tight tracking-[-0.055em] text-[#0e3541] md:text-4xl"
+        <div ref={modalRef} tabIndex={-1} className="hero-search-modal-card">
+          <button
+            type="button"
+            onClick={() => setIsLeadModalOpen(false)}
+            className="hero-search-modal-close"
+            aria-label="Close modal"
           >
-            Unlock your property search
-          </h2>
+            <X size={18} />
+          </button>
 
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-[#587469]">
-            Complete the form below to continue and access Checkmate Property
-            search results.
-          </p>
+          <div className="hero-search-modal-header">
+            <div className="hero-search-modal-icon">
+              <ShieldCheck size={24} />
+            </div>
 
-          <div className="mt-4 rounded-2xl border border-[#0e3541]/10 bg-[#f8fafc] px-4 py-3">
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#64748b]">
-              Search query
-            </p>
+            <p>Search Access</p>
 
-            <p className="mt-1 break-words text-sm font-bold text-[#0e3541]">
-              {query.trim()}
-            </p>
+            <h2 id="search-lead-modal-title">Unlock your property search</h2>
+
+            <span>
+              Complete the form below to continue and access Checkmate Property
+              search results.
+            </span>
+
+            <div className="hero-search-modal-query">
+              <p>Search query</p>
+              <strong>{query.trim()}</strong>
+            </div>
           </div>
+
+          {searchForm?.form ? (
+            <div className="hero-search-modal-form-shell">
+              <DynamicFormComponent
+                form={searchForm.form as never}
+                fields={modalFields as never}
+              />
+            </div>
+          ) : (
+            <div className="hero-search-modal-warning">
+              <strong>Search form is not configured yet.</strong>
+              <br />
+              Create and publish a dynamic form with slug <code>search</code> in
+              the admin panel.
+            </div>
+          )}
         </div>
-
-        {searchForm?.form ? (
-          <div className="rounded-[24px] border border-[#0e3541]/10 bg-[#f8fafc] p-4 sm:p-5">
-            <DynamicFormComponent
-              form={searchForm.form as never}
-              fields={modalFields as never}
-            />
-          </div>
-        ) : (
-          <div className="rounded-[24px] border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-800">
-            <strong>Search form is not configured yet.</strong>
-            <br />
-            Create and publish a dynamic form with slug{" "}
-            <code className="rounded bg-white/70 px-1.5 py-0.5">search</code>{" "}
-            in the admin panel.
-          </div>
-        )}
       </div>
-    </div>
+    </ModalPortal>
   ) : null;
 
   return (
@@ -473,10 +478,10 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
       <form
         ref={wrapperRef}
         onSubmit={handleSubmit}
-        className="relative z-[200] mx-auto mt-8 grid w-full max-w-3xl gap-3 rounded-[24px] bg-white p-3 shadow-[0_26px_80px_rgba(0,0,0,0.20)] md:flex md:items-center md:gap-3 md:rounded-[26px] md:p-2.5"
+        className="hero-location-search-form"
       >
-        <div className="relative flex min-h-[58px] w-full items-center gap-3 rounded-[18px] bg-gray-50 px-4 md:flex-1 md:bg-transparent md:px-0">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white text-[#0e3541] shadow-sm md:h-12 md:w-12 md:bg-gray-50 md:shadow-none">
+        <div className="hero-location-search-field">
+          <div className="hero-location-search-icon">
             <Search size={21} />
           </div>
 
@@ -497,21 +502,18 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
               }
             }}
             onKeyDown={handleKeyDown}
-            className="h-12 min-w-0 flex-1 border-0 bg-transparent text-sm font-medium text-[#0e3541] outline-none placeholder:text-gray-500"
+            className="hero-location-search-input"
           />
 
           {isLoading ? (
-            <Loader2
-              size={18}
-              className="shrink-0 animate-spin text-[#39aff2]"
-            />
+            <Loader2 size={18} className="hero-location-search-loader" />
           ) : null}
 
           {!isLoading && query ? (
             <button
               type="button"
               onClick={clearSearch}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-[#64748b] shadow-sm transition hover:text-[#0e3541]"
+              className="hero-location-search-clear"
               aria-label="Clear search"
             >
               <X size={16} />
@@ -519,40 +521,32 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
           ) : null}
         </div>
 
-        <button
-          type="submit"
-          className="inline-flex h-14 w-full items-center justify-center rounded-[18px] bg-[linear-gradient(94deg,#53bc76_0%,#39aff2_100%)] px-8 text-sm font-bold !text-white shadow-[0_14px_34px_rgba(57,175,242,0.28)] transition hover:-translate-y-0.5 md:w-auto md:min-w-[132px]"
-        >
+        <button type="submit" className="hero-location-search-submit">
           Search
         </button>
 
         {isDropdownOpen && suggestions.length > 0 ? (
-          <div className="absolute left-3 right-3 top-[calc(100%+10px)] z-[999999] overflow-hidden rounded-[22px] border border-black/10 bg-white text-left shadow-[0_24px_70px_rgba(9,24,39,0.24)] md:left-2.5 md:right-[150px]">
-            <div className="max-h-[360px] overflow-y-auto py-2">
+          <div className="hero-location-search-dropdown">
+            <div className="hero-location-search-list">
               {suggestions.map((suggestion, index) => (
                 <button
                   key={suggestion.id}
                   type="button"
                   onClick={() => selectSuggestion(suggestion)}
                   onMouseEnter={() => setActiveIndex(index)}
-                  className={`flex w-full items-start gap-3 px-4 py-3 text-left transition ${
+                  className={
                     activeIndex === index
-                      ? "bg-[#53bc76]/10"
-                      : "bg-white hover:bg-[#53bc76]/10"
-                  }`}
+                      ? "hero-location-search-suggestion hero-location-search-suggestion-active"
+                      : "hero-location-search-suggestion"
+                  }
                 >
-                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-[#53bc76]/10 text-[#0e3541]">
+                  <span className="hero-location-search-suggestion-icon">
                     <MapPin size={17} />
                   </span>
 
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-semibold leading-5 text-[#0e3541]">
-                      {suggestion.text}
-                    </span>
-
-                    <span className="mt-0.5 block text-xs font-normal uppercase tracking-[0.12em] text-[#64748b]">
-                      {suggestion.group.trim() || "Location"}
-                    </span>
+                  <span className="hero-location-search-suggestion-content">
+                    <strong>{suggestion.text}</strong>
+                    <span>{suggestion.group.trim() || "Location"}</span>
                   </span>
                 </button>
               ))}
@@ -561,19 +555,17 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
         ) : null}
 
         {!isLoading && errorMessage && query.trim().length >= 2 ? (
-          <div className="absolute left-3 right-3 top-[calc(100%+10px)] z-[999999] rounded-[18px] border border-black/10 bg-white px-4 py-3 text-left text-sm font-normal text-[#64748b] shadow-[0_18px_48px_rgba(9,24,39,0.18)] md:left-2.5 md:right-[150px]">
-            {errorMessage}
-          </div>
+          <div className="hero-location-search-error">{errorMessage}</div>
         ) : null}
 
         {submitMessage ? (
-          <div className="absolute left-3 right-3 top-[calc(100%+10px)] z-[999999] rounded-[18px] border border-amber-200 bg-white px-4 py-3 text-left text-sm font-semibold text-amber-700 shadow-[0_18px_48px_rgba(9,24,39,0.18)] md:left-2.5 md:right-[150px]">
+          <div className="hero-location-search-error hero-location-search-warning">
             {submitMessage}
           </div>
         ) : null}
       </form>
 
-      {portalTarget && modal ? createPortal(modal, portalTarget) : null}
+      {modal}
     </>
   );
 }

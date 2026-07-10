@@ -275,6 +275,10 @@ export default async function HomePage() {
             status, price, beds, baths, or square footage.
           </p>
 
+          <div className="home-search-shell">
+            <HeroLocationSearch searchForm={searchForm} />
+          </div>
+
           <div className="home-hero-features">
             {heroFeatures.map((feature, index) => {
               const Icon = feature.icon;
@@ -295,7 +299,7 @@ export default async function HomePage() {
                           ? "home-icon-green"
                           : "home-icon-blue"
                       }
-                      size={36}
+                      size={26}
                       strokeWidth={1.9}
                     />
                   </div>
@@ -304,10 +308,6 @@ export default async function HomePage() {
                 </div>
               );
             })}
-          </div>
-
-          <div className="home-search-shell">
-            <HeroLocationSearch searchForm={searchForm} />
           </div>
 
           <div className="home-signup-card">
@@ -358,15 +358,10 @@ export default async function HomePage() {
           <div className="home-projects-header">
             <p>Checkmate Property Projects</p>
 
-            <h2>
-              Technology Built by Those Who Live the Real Estate Market
-            </h2>
+            <h2>Real fix-and-flip and new construction projects developed and executed by Checkmate Property in 2026 — some already completed and others currently underway.</h2>
 
             <span>
-              At Checkmate Property, we understand your challenges because we
-              work directly in fix-and-flips and new construction, using our own
-              technology and data in real-world projects. Now, we are making
-              that same technology available to others in the industry.
+              We understand the challenges of the market because we live them every day. The projects below are just some of the fix-and-flip and new construction projects developed and executed by Checkmate Property in 2026, using our own technology and data at every stage of the process. Now, that same technology is available to you—the people who live and work in the real-world market, just like we do.
             </span>
           </div>
 
