@@ -9,6 +9,11 @@ type PropertyLeadFormProps = {
   propertyTitle: string;
 };
 
+type RadioQuestionProps = {
+  label: string;
+  name: string;
+};
+
 function formatUSPhone(value: string) {
   let digits = value.replace(/\D/g, "");
 
@@ -27,6 +32,60 @@ function formatUSPhone(value: string) {
   }
 
   return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
+function RadioQuestion({ label, name }: RadioQuestionProps) {
+  const [selectedValue, setSelectedValue] = useState("");
+
+  return (
+    <fieldset className="rounded-2xl border border-black/10 bg-gray-50 p-4">
+      <legend className="mb-3 text-sm font-bold text-[#0e3541]">
+        {label}
+      </legend>
+
+      <div className="grid grid-cols-2 gap-3">
+        <label
+          className={
+            selectedValue === "Yes"
+              ? "flex min-h-[46px] cursor-pointer items-center justify-center gap-2 rounded-2xl border border-[#53bc76] bg-[#53bc76]/10 px-4 text-sm font-bold text-[#0e3541] ring-2 ring-[#53bc76]/30 transition"
+              : "flex min-h-[46px] cursor-pointer items-center justify-center gap-2 rounded-2xl border border-black/10 bg-white px-4 text-sm font-bold text-[#0e3541] transition hover:border-[#53bc76]/50 hover:bg-[#f0fdf4]"
+          }
+        >
+          <input
+            type="radio"
+            name={name}
+            value="Yes"
+            required
+            checked={selectedValue === "Yes"}
+            onChange={(event) => setSelectedValue(event.target.value)}
+            className="h-4 w-4 cursor-pointer accent-[#53bc76]"
+          />
+
+          <span>Yes</span>
+        </label>
+
+        <label
+          className={
+            selectedValue === "No"
+              ? "flex min-h-[46px] cursor-pointer items-center justify-center gap-2 rounded-2xl border border-[#39aff2] bg-[#39aff2]/10 px-4 text-sm font-bold text-[#0e3541] ring-2 ring-[#39aff2]/30 transition"
+              : "flex min-h-[46px] cursor-pointer items-center justify-center gap-2 rounded-2xl border border-black/10 bg-white px-4 text-sm font-bold text-[#0e3541] transition hover:border-[#39aff2]/50 hover:bg-[#f0f9ff]"
+          }
+        >
+          <input
+            type="radio"
+            name={name}
+            value="No"
+            required
+            checked={selectedValue === "No"}
+            onChange={(event) => setSelectedValue(event.target.value)}
+            className="h-4 w-4 cursor-pointer accent-[#39aff2]"
+          />
+
+          <span>No</span>
+        </label>
+      </div>
+    </fieldset>
+  );
 }
 
 export function PropertyLeadForm({
@@ -104,6 +163,16 @@ export function PropertyLeadForm({
           className="mt-2 min-h-[46px] w-full rounded-2xl border border-black/10 bg-gray-50 px-4 text-sm font-normal text-[#0e3541] outline-none transition placeholder:text-[#94a3b8] focus:border-[#53bc76] focus:bg-white focus:ring-4 focus:ring-[#53bc76]/10"
         />
       </label>
+
+      <RadioQuestion
+        label="Do you already have financing approved?"
+        name="financing_approved"
+      />
+
+      <RadioQuestion
+        label="Do you already have a real estate agent?"
+        name="has_real_estate_agent"
+      />
 
       <label className="block">
         <span className="text-sm font-bold text-[#0e3541]">Message</span>
