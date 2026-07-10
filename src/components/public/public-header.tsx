@@ -15,6 +15,10 @@ const navLinks = [
     label: "Search",
     href: "/",
   },
+  {
+    label: "Contact",
+    href: "/contact",
+  },
 ];
 
 const loginUrl = "https://app.checkmateproperty.com/#/login";

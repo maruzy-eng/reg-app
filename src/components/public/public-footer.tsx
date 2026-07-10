@@ -12,6 +12,10 @@ const companyLinks = [
     label: "Search",
     href: "/",
   },
+  {
+    label: "Contact",
+    href: "/contact",
+  },
 ];
 
 const legalLinks = [
@@ -43,12 +47,7 @@ function FooterLink({
 
   if (external) {
     return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noreferrer"
-        className={className}
-      >
+      <a href={href} target="_blank" rel="noreferrer" className={className}>
         {children}
       </a>
     );
