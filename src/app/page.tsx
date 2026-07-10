@@ -355,14 +355,55 @@ export default async function HomePage() {
 
       <section id="projects" className="home-projects-section">
         <div className="home-projects-container">
-          <div className="home-projects-header">
-            <p>Checkmate Property Projects</p>
+          <div className="home-projects-intro">
+            <div className="home-projects-copy">
+              <p className="home-projects-kicker">
+                Checkmate Property Projects
+              </p>
 
-            <h2>Real fix-and-flip and new construction projects developed and executed by Checkmate Property in 2026 — some already completed and others currently underway.</h2>
+              <h2>
+                Real fix-and-flip and new construction projects developed and
+                executed by Checkmate Property in <strong>2026</strong>.
+              </h2>
 
-            <span>
-              We understand the challenges of the market because we live them every day. The projects below are just some of the fix-and-flip and new construction projects developed and executed by Checkmate Property in 2026, using our own technology and data at every stage of the process. Now, that same technology is available to you—the people who live and work in the real-world market, just like we do.
-            </span>
+              <span>
+                We understand the challenges of the real estate market because
+                we face them every day. We use our own technology and data
+                throughout every stage of these projects. Now, that same
+                technology is available to real estate professionals like you—
+                people who live and work in the real estate industry, just as we
+                do.
+              </span>
+            </div>
+
+            <aside className="home-projects-summary-card">
+              <div className="home-summary-card-header">
+                <span>Portfolio View</span>
+                <strong>2026</strong>
+              </div>
+
+              <div className="home-summary-grid">
+                <div>
+                  <span>Project Type</span>
+                  <strong>Fix-and-Flip</strong>
+                </div>
+
+                <div>
+                  <span>Development</span>
+                  <strong>New Construction</strong>
+                </div>
+
+                <div>
+                  <span>Status</span>
+                  <strong>Active + Completed</strong>
+                </div>
+
+                <div>
+                  <span>Built With</span>
+                  <strong>Data + Technology</strong>
+                </div>
+              </div>
+            </aside>
           </div>
 
           {propertyCards.length > 0 ? (
@@ -415,6 +456,7 @@ export default async function HomePage() {
 
                       <Link href={propertyUrl} className="home-property-address">
                         <MapPin size={14} />
+
                         <span>
                           {property.address}, {property.city}, {property.state}
                         </span>
