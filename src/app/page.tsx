@@ -249,13 +249,11 @@ export default async function HomePage() {
             </p>
 
             <h2 className="mt-3 text-3xl font-black tracking-[-0.055em] text-[#0e3541] sm:text-4xl">
-              Technology Built by Those Who Live the Real Estate Market
+              Real fix-and-flip and new construction projects developed and executed by Checkmate Property in 2026 — some already completed and others currently underway.
             </h2>
 
             <p className="mt-3 text-sm leading-7 text-[#587469] sm:text-base">
-              At Checkmate Property, we understand your challenges because we work directly in fix-and-flips and new construction, using our own technology and data in real-world projects. Now, we’re making that same technology available to others in the industry.<br></br>
-
-Explore our 2026 projects, some already sold and others currently underway.
+              We understand the challenges of the market because we live them every day. The projects below are just some of the fix-and-flip and new construction projects developed and executed by Checkmate Property in 2026, using our own technology and data at every stage of the process. Now, that same technology is available to you—the people who live and work in the real-world market, just like we do.
             </p>
           </div>
 

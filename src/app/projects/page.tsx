@@ -38,6 +38,21 @@ const DEFAULT_OG_IMAGE =
 const CHECKMATE_LOGO_URL =
   "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/site-assets/branding/logo-1783036134455-checkmate-logo-color.jpg";
 
+const portfolioStats = [
+  {
+    id: "published-portfolio",
+    label: "Published Portfolio",
+    value: "2026",
+    highlighted: false,
+  },
+  {
+    id: "projected-sellout",
+    label: "Projected Sellout",
+    value: "$22.0M",
+    highlighted: true,
+  },
+];
+
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
@@ -186,11 +201,13 @@ export default async function ProjectsPage() {
         }}
       />
 
-      <ProjectsTopLogo />
+      <ProjectsHeader />
 
       <div className="projects-grid-bg">
         <section className="projects-hero">
-          <div className="projects-container">
+          <div className="projects-hero-glow" />
+
+          <div className="projects-container projects-hero-container">
             <div className="projects-hero-content">
               <div className="projects-eyebrow">
                 <span />
@@ -198,8 +215,8 @@ export default async function ProjectsPage() {
               </div>
 
               <h1>
-                Real-Time Visibility Into Every{" "}
-                <strong>Published Property Project</strong>
+                Real-Time Visibility Into Every
+                <strong> Published Property Project</strong>
               </h1>
 
               <p>
@@ -210,32 +227,36 @@ export default async function ProjectsPage() {
 
               <div className="projects-hero-actions">
                 <Link href="#projects" className="projects-primary-button">
-                  View Projects
+                  Explore Projects
                 </Link>
 
                 <Link href="#how-it-works" className="projects-secondary-button">
-                  How It Works
+                  See How It Works
                 </Link>
               </div>
-
             </div>
           </div>
         </section>
 
         <section id="projects" className="projects-list-section">
           <div className="projects-container">
-            <div className="projects-section-header">
+            <div className="projects-section-header projects-section-header-centered">
               <p>Checkmate Property Projects</p>
 
-              <h2>Explore real estate opportunities designed for buying, selling, and investing with greater clarity and confidence.</h2>
+              <h2>Technology Built by Those Who Live the Real Estate Market</h2>
 
               <span>
-                 Discover Checkmate Property’s 2026 project portfolio and access key property information, including pricing, status, location, bedrooms, bathrooms, square footage, and visual assets.
-Together, these projects represent more than $22 million in projected sellout value, offering a transparent view into Checkmate Property’s real estate development pipeline.
+                At Checkmate Property, we understand your challenges because we
+                work directly in fix-and-flips and new construction, using our
+                own technology and data in real-world projects. Now, we are
+                making that same technology available to others in the industry.
+                <br />
+                Explore our 2026 projects, including active developments,
+                available opportunities, rented assets, and sold properties.
               </span>
             </div>
 
-            <div className="projects-portfolio-card">
+            <div className="projects-portfolio-card projects-portfolio-card-centered">
               <div>
                 <p>
                   <span />
@@ -245,9 +266,20 @@ Together, these projects represent more than $22 million in projected sellout va
                 <h3>2026 Development Portfolio</h3>
               </div>
 
-              <div className="projects-sellout-box">
-                <span>Projected Sellout</span>
-                <strong>$22.0M</strong>
+              <div className="projects-portfolio-stats-grid">
+                {portfolioStats.map((stat) => (
+                  <div
+                    key={stat.id}
+                    className={
+                      stat.highlighted
+                        ? "projects-portfolio-stat projects-portfolio-stat-highlighted"
+                        : "projects-portfolio-stat"
+                    }
+                  >
+                    <span>{stat.label}</span>
+                    <strong>{stat.value}</strong>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -348,8 +380,9 @@ Together, these projects represent more than $22 million in projected sellout va
               <h2>A Simple Public View of Each Project.</h2>
 
               <span>
-                Each property page organizes the available project information
-                in one place for easier public access.
+                Each property page organizes available project information in
+                one place for easier public access, stronger transparency, and a
+                better presentation of each address.
               </span>
             </div>
 
@@ -358,7 +391,7 @@ Together, these projects represent more than $22 million in projected sellout va
                 icon={<CheckCircle2 size={22} />}
                 number="01"
                 title="Property Listed"
-                description="The project is published with address, city, state, type, and main image."
+                description="The project is published with address, city, state, type, pricing, specifications, and main image."
               />
 
               <ProcessCard
@@ -384,48 +417,49 @@ Together, these projects represent more than $22 million in projected sellout va
             </div>
           </div>
         </section>
-
-        <ProjectsCopyright />
       </div>
+
+      <ProjectsFooter />
     </main>
   );
 }
 
-function ProjectsTopLogo() {
+function ProjectsHeader() {
   return (
-    <div className="projects-top-logo-section">
-      <div className="projects-container projects-top-logo-inner">
-        <Link
-          href="/"
-          aria-label="Go to Checkmate Property home"
-          className="projects-top-logo-card"
-        >
+    <header className="projects-header">
+      <div className="projects-header-inner">
+        <Link href="/projects" className="projects-header-logo-link">
           <Image
             src={CHECKMATE_LOGO_URL}
             alt="Checkmate Property"
-            width={170}
-            height={48}
-            sizes="170px"
-            className="projects-top-logo"
+            width={155}
+            height={38}
+            sizes="155px"
+            className="projects-header-logo"
             priority
           />
         </Link>
+
+        <nav aria-label="Projects navigation" className="projects-header-nav">
+          <Link href="/projects" className="projects-header-link">
+            Projects
+          </Link>
+        </nav>
       </div>
-    </div>
+    </header>
   );
 }
 
-function ProjectsCopyright() {
+function ProjectsFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <section className="projects-copyright-section">
-      <div className="projects-container projects-copyright-inner">
-        <p>{currentYear} © Checkmate Property Inc. All rights reserved.</p>
-
-        <span>Real estate intelligence for smarter decisions.</span>
+    <footer className="projects-copyright-section">
+      <div className="projects-copyright-inner">
+        <p>{currentYear} © Checkmate Property Inc.</p>
+        <span>Smarter real estate decisions.</span>
       </div>
-    </section>
+    </footer>
   );
 }
 
