@@ -21,6 +21,7 @@ import { US_STATES } from "@/lib/us-states";
 type DynamicFormProps = {
   form: DynamicForm;
   fields: DynamicFormField[];
+  defaultValues?: Record<string, string>;
 };
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
@@ -56,7 +57,16 @@ function isUSStateField(field: DynamicFormField) {
   );
 }
 
-function getInitialValue(field: DynamicFormField) {
+function getInitialValue(
+  field: DynamicFormField,
+  defaultValues?: Record<string, string>,
+) {
+  const defaultValue = defaultValues?.[field.name];
+
+  if (typeof defaultValue === "string") {
+    return defaultValue;
+  }
+
   if (field.type === "checkbox") {
     return false;
   }
@@ -191,9 +201,12 @@ function buildSubmitData(params: {
   fields: DynamicFormField[];
   formElement: HTMLFormElement;
   currentData: Record<string, unknown>;
+  defaultValues?: Record<string, string>;
 }) {
   const nativeFormData = new FormData(params.formElement);
+
   const nextData: Record<string, unknown> = {
+    ...(params.defaultValues || {}),
     ...params.currentData,
   };
 
@@ -211,17 +224,45 @@ function buildSubmitData(params: {
     nextData[field.name] = getStringFormValue(nativeFormData, field.name);
   }
 
+  Object.entries(params.defaultValues || {}).forEach(([key, value]) => {
+    if (!(key in nextData) || nextData[key] === "") {
+      nextData[key] = value;
+    }
+  });
+
   return nextData;
 }
 
-export function DynamicFormComponent({ form, fields }: DynamicFormProps) {
+function getExtraDefaultFields(params: {
+  fields: DynamicFormField[];
+  defaultValues?: Record<string, string>;
+}) {
+  const fieldNames = new Set(params.fields.map((field) => field.name));
+
+  return Object.entries(params.defaultValues || {}).filter(([key, value]) => {
+    return !fieldNames.has(key) && value !== "";
+  });
+}
+
+export function DynamicFormComponent({
+  form,
+  fields,
+  defaultValues = {},
+}: DynamicFormProps) {
   const router = useRouter();
 
   const initialData = useMemo(() => {
     return Object.fromEntries(
-      fields.map((field) => [field.name, getInitialValue(field)]),
+      fields.map((field) => [field.name, getInitialValue(field, defaultValues)]),
     );
-  }, [fields]);
+  }, [fields, defaultValues]);
+
+  const extraDefaultFields = useMemo(() => {
+    return getExtraDefaultFields({
+      fields,
+      defaultValues,
+    });
+  }, [fields, defaultValues]);
 
   const [formData, setFormData] = useState<Record<string, unknown>>(initialData);
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
@@ -266,6 +307,7 @@ export function DynamicFormComponent({ form, fields }: DynamicFormProps) {
       fields,
       formElement: event.currentTarget,
       currentData: formData,
+      defaultValues,
     });
 
     setFormData(submitData);
@@ -278,7 +320,8 @@ export function DynamicFormComponent({ form, fields }: DynamicFormProps) {
         },
         body: JSON.stringify({
           data: submitData,
-          source_url: window.location.href,
+          source_url:
+            typeof window !== "undefined" ? window.location.href : undefined,
         }),
       });
 
@@ -556,6 +599,10 @@ export function DynamicFormComponent({ form, fields }: DynamicFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {extraDefaultFields.map(([name, value]) => (
+        <input key={name} type="hidden" name={name} value={value} readOnly />
+      ))}
+
       {fields.map((field) => renderField(field))}
 
       {generalError ? (

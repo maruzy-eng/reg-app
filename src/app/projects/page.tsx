@@ -218,12 +218,6 @@ export default async function ProjectsPage() {
                 </Link>
               </div>
 
-              <div className="projects-tags">
-                <span>Published properties</span>
-                <span>Photos and videos</span>
-                <span>Floor plans when available</span>
-                <span>Project visibility</span>
-              </div>
             </div>
           </div>
         </section>
@@ -231,16 +225,13 @@ export default async function ProjectsPage() {
         <section id="projects" className="projects-list-section">
           <div className="projects-container">
             <div className="projects-section-header">
-              <p>Published Projects</p>
+              <p>Checkmate Property Projects</p>
 
-              <h2>Explore our latest projects with complete transparency.</h2>
+              <h2>Explore real estate opportunities designed for buying, selling, and investing with greater clarity and confidence.</h2>
 
               <span>
-                Explore Checkmate Property&apos;s curated portfolio of
-                residential developments across the United States. Select any
-                property to access an immersive presentation featuring photos,
-                location details, specifications, videos, image galleries, and
-                floor plans whenever available.
+                 Discover Checkmate Property’s 2026 project portfolio and access key property information, including pricing, status, location, bedrooms, bathrooms, square footage, and visual assets.
+Together, these projects represent more than $22 million in projected sellout value, offering a transparent view into Checkmate Property’s real estate development pipeline.
               </span>
             </div>
 

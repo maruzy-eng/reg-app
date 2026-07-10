@@ -53,7 +53,7 @@ export const metadata: Metadata = {
 };
 
 const LP_COLOR_LOGO_URL =
-  "https://checkmateproperty.com/wp-content/uploads/2023/04/checkmate-logo-color.jpg";
+  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/site-assets/branding/logo-1783036134455-checkmate-logo-color.jpg";
 
 const topCarouselImages = [
   "17",
@@ -160,11 +160,10 @@ export default async function FlipHouseLandingPage() {
 
               <p className="cmp-subtitle">
                 <strong>
-                  Acesso a bancos parceiros que financiam até 85% da casa e
-                  100% da construção.
+                  Existem bancos que podem financiar até 85% da aquisição do imóvel e até 100% do valor da reforma, permitindo que o investidor preserve capital e execute o projeto com maior alavancagem.
                 </strong>
-                <br />
-                Sem inglês, sem entender de reforma.
+            
+              
                 <br />
                 <br />
                 Analise deals, encontre oportunidades off-market, valide números

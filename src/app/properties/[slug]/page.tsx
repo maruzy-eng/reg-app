@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   Bath,
@@ -15,8 +14,12 @@ import {
 } from "lucide-react";
 import { getPropertyBySlug } from "@/lib/properties";
 import { getSiteSettings } from "@/lib/site-settings";
-import { PropertyGalleryLightbox } from "@/components/public/property-gallery-lightbox";
+import {
+  PropertyImageCarousel,
+  type PropertyCarouselImage,
+} from "@/components/public/property-image-carousel";
 import { PropertyBackButton } from "@/components/public/property-back-button";
+import { PropertyLeadForm } from "@/components/public/property-lead-form";
 import {
   formatCurrency,
   formatNumber,
@@ -151,6 +154,87 @@ function cleanRichDescription(description?: string | null) {
     .replace(/<div><br \/><\/div>/g, "<br />")
     .replace(/<div>\s*<\/div>/g, "")
     .trim();
+}
+
+function normalizeCarouselImages({
+  propertyTitle,
+  mainImage,
+  galleryImages,
+}: {
+  propertyTitle: string;
+  mainImage: string | null;
+  galleryImages: unknown[];
+}): PropertyCarouselImage[] {
+  const images: PropertyCarouselImage[] = [];
+  const usedUrls = new Set<string>();
+
+  function addImage(params: {
+    id: string;
+    src?: string | null;
+    alt?: string | null;
+    title?: string | null;
+    caption?: string | null;
+  }) {
+    if (!params.src) {
+      return;
+    }
+
+    if (usedUrls.has(params.src)) {
+      return;
+    }
+
+    usedUrls.add(params.src);
+
+    images.push({
+      id: params.id,
+      src: params.src,
+      alt: params.alt || propertyTitle,
+      title: params.title || null,
+      caption: params.caption || null,
+    });
+  }
+
+  addImage({
+    id: "main-image",
+    src: mainImage,
+    alt: propertyTitle,
+    title: propertyTitle,
+  });
+
+  galleryImages.forEach((image, index) => {
+    if (typeof image === "string") {
+      addImage({
+        id: `gallery-image-${index}`,
+        src: image,
+        alt: propertyTitle,
+      });
+
+      return;
+    }
+
+    if (image && typeof image === "object") {
+      const item = image as {
+        id?: string | null;
+        image_url?: string | null;
+        url?: string | null;
+        src?: string | null;
+        alt_text?: string | null;
+        alt?: string | null;
+        title?: string | null;
+        caption?: string | null;
+      };
+
+      addImage({
+        id: item.id || `gallery-image-${index}`,
+        src: item.image_url || item.url || item.src,
+        alt: item.alt_text || item.alt || propertyTitle,
+        title: item.title || null,
+        caption: item.caption || null,
+      });
+    }
+  });
+
+  return images;
 }
 
 export async function generateMetadata({
@@ -289,6 +373,7 @@ function getYouTubeEmbedUrl(value: string) {
 
     if (hostname === "youtu.be") {
       const videoId = url.pathname.split("/").filter(Boolean)[0];
+
       return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
     }
 
@@ -298,6 +383,7 @@ function getYouTubeEmbedUrl(value: string) {
 
     if (hostname === "youtube.com" || hostname === "m.youtube.com") {
       const videoId = url.searchParams.get("v");
+
       return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
     }
   } catch {
@@ -321,6 +407,7 @@ function getVimeoEmbedUrl(value: string) {
     }
 
     const videoId = url.pathname.split("/").filter(Boolean)[0];
+
     return videoId ? `https://player.vimeo.com/video/${videoId}` : null;
   } catch {
     return null;
@@ -504,6 +591,12 @@ export default async function PropertyDetailPage({
   const mainImage = getMainPropertyImage(property);
   const cleanDescription = cleanRichDescription(property.description);
 
+  const carouselImages = normalizeCarouselImages({
+    propertyTitle: property.title,
+    mainImage,
+    galleryImages,
+  });
+
   const seoDescription = getPropertySeoDescription({
     metaDescription: property.meta_description,
     shortDescription: property.short_description,
@@ -589,10 +682,9 @@ export default async function PropertyDetailPage({
               </div>
             </div>
 
-            <PropertyGalleryLightbox
+            <PropertyImageCarousel
               title={property.title}
-              images={galleryImages}
-              mainImageUrl={mainImage}
+              images={carouselImages}
             />
           </article>
 
@@ -744,6 +836,7 @@ export default async function PropertyDetailPage({
 
                           <div className="flex items-center gap-2 p-4 text-white">
                             <PlayCircle size={18} />
+
                             <span className="text-sm font-semibold">
                               {video.title}
                             </span>
@@ -812,67 +905,78 @@ export default async function PropertyDetailPage({
             </div>
 
             <aside className="space-y-6">
-              <div className="sticky top-28 rounded-[28px] border border-black/10 bg-white p-6 shadow-[0_18px_48px_rgba(17,17,17,0.08)]">
-                <h2 className="text-xl font-semibold tracking-[-0.04em] text-[#0e3541]">
-                  Property Details
-                </h2>
+              <div className="sticky top-28 space-y-6">
+                <section className="rounded-[28px] border border-black/10 bg-white p-6 shadow-[0_18px_48px_rgba(17,17,17,0.08)]">
+                  <h2 className="text-xl font-semibold tracking-[-0.04em] text-[#0e3541]">
+                    Property Details
+                  </h2>
 
-                <div className="mt-5 space-y-3">
-                  <DetailRow
-                    label="Status"
-                    value={getPropertyStatusLabel(property.status)}
-                  />
-                  <DetailRow
-                    label="Type"
-                    value={getPropertyTypeLabel(property.property_type)}
-                  />
-                  <DetailRow label="City" value={property.city} />
-                  <DetailRow label="State" value={property.state} />
-                  <DetailRow
-                    label="Lot Size"
-                    value={
-                      property.lot_size_sqft
-                        ? `${formatNumber(property.lot_size_sqft)} sqft`
-                        : "N/A"
-                    }
-                  />
-                  <DetailRow
-                    label="Price"
-                    value={formatCurrency(property.price)}
-                  />
-
-                  {features.map((feature) => (
+                  <div className="mt-5 space-y-3">
                     <DetailRow
-                      key={feature.id}
-                      label={feature.label}
-                      value={feature.value || "N/A"}
+                      label="Status"
+                      value={getPropertyStatusLabel(property.status)}
                     />
-                  ))}
-                </div>
 
-                <div className="mt-6 rounded-[22px] bg-[linear-gradient(135deg,#071f28_0%,#0e3541_100%)] p-5 text-white">
-                  <h3 className="text-lg font-semibold">
-                    Interested in this property?
-                  </h3>
+                    <DetailRow
+                      label="Type"
+                      value={getPropertyTypeLabel(property.property_type)}
+                    />
 
-                  <p className="mt-2 text-sm font-normal leading-6 text-white/70">
-                    Connect with Checkmate Property to learn more about this
-                    project.
+                    <DetailRow label="City" value={property.city} />
+                    <DetailRow label="State" value={property.state} />
+
+                    <DetailRow
+                      label="Lot Size"
+                      value={
+                        property.lot_size_sqft
+                          ? `${formatNumber(property.lot_size_sqft)} sqft`
+                          : "N/A"
+                      }
+                    />
+
+                    <DetailRow
+                      label="Price"
+                      value={formatCurrency(property.price)}
+                    />
+
+                    {features.map((feature) => (
+                      <DetailRow
+                        key={feature.id}
+                        label={feature.label}
+                        value={feature.value || "N/A"}
+                      />
+                    ))}
+                  </div>
+                </section>
+
+                <section
+                  id="contact"
+                  className="rounded-[28px] border border-[#53bc76]/20 bg-white p-6 shadow-[0_18px_48px_rgba(17,17,17,0.08)]"
+                >
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#53bc76]">
+                    Contact
                   </p>
 
-                  <Link
-                    href="/"
-                    className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-[linear-gradient(94deg,#53bc76_0%,#39aff2_100%)] px-5 py-3 text-sm font-bold !text-white"
-                  >
-                    Back to Search
-                  </Link>
-                </div>
+                  <h2 className="mt-2 text-2xl font-semibold tracking-[-0.05em] text-[#0e3541]">
+                    Interested in this property?
+                  </h2>
+
+                  <p className="mt-3 text-sm font-normal leading-6 text-[#64748b]">
+                    Fill out the form below and our team will contact you with
+                    more information about this project.
+                  </p>
+
+                  <PropertyLeadForm
+                    propertyId={property.id}
+                    propertySlug={property.slug}
+                    propertyTitle={property.title}
+                  />
+                </section>
               </div>
             </aside>
           </div>
         </div>
       </section>
-
     </main>
   );
 }
