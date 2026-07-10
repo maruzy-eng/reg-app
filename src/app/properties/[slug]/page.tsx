@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
   Bath,
@@ -24,7 +25,6 @@ import {
   formatCurrency,
   formatNumber,
   getMainPropertyImage,
-  getPropertyGalleryImages,
   getPropertyStatusLabel,
   getPropertyTypeLabel,
 } from "@/types/property";
@@ -41,6 +41,20 @@ type PropertyDetailPageProps = {
   params: Promise<{
     slug: string;
   }>;
+};
+
+type PropertyImageWithMediaGroup = {
+  id?: string | null;
+  image_url?: string | null;
+  url?: string | null;
+  src?: string | null;
+  alt_text?: string | null;
+  alt?: string | null;
+  title?: string | null;
+  caption?: string | null;
+  position?: number | null;
+  is_cover?: boolean | null;
+  media_group?: string | null;
 };
 
 function getAbsoluteUrl(pathOrUrl?: string | null) {
@@ -213,16 +227,7 @@ function normalizeCarouselImages({
     }
 
     if (image && typeof image === "object") {
-      const item = image as {
-        id?: string | null;
-        image_url?: string | null;
-        url?: string | null;
-        src?: string | null;
-        alt_text?: string | null;
-        alt?: string | null;
-        title?: string | null;
-        caption?: string | null;
-      };
+      const item = image as PropertyImageWithMediaGroup;
 
       addImage({
         id: item.id || `gallery-image-${index}`,
@@ -448,6 +453,69 @@ function PropertyFactCard({
   );
 }
 
+function ApplianceCard({
+  appliance,
+  propertyTitle,
+}: {
+  appliance: PropertyImageWithMediaGroup;
+  propertyTitle: string;
+}) {
+  const imageUrl = appliance.image_url || appliance.url || appliance.src || "";
+  const title = appliance.title || "Appliance";
+  const description = appliance.caption || "";
+  const altText = appliance.alt_text || appliance.alt || title || propertyTitle;
+
+  if (!imageUrl) {
+    return null;
+  }
+
+  return (
+    <article className="group overflow-hidden rounded-[28px] border border-[#0e3541]/10 bg-white shadow-[0_18px_48px_rgba(14,53,65,0.07)] transition duration-300 hover:-translate-y-1 hover:border-[#53bc76]/30 hover:shadow-[0_28px_70px_rgba(14,53,65,0.12)]">
+      <div className="grid grid-cols-1 md:grid-cols-[250px_minmax(0,1fr)] lg:grid-cols-[280px_minmax(0,1fr)]">
+        <div className="relative min-h-[240px] overflow-hidden bg-[#f8fafc] md:min-h-[260px]">
+          <Image
+            src={imageUrl}
+            alt={altText}
+            fill
+            sizes="(max-width: 768px) 100vw, 280px"
+            className="object-cover transition duration-500 group-hover:scale-105"
+          />
+
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,53,65,0.02)_0%,rgba(14,53,65,0.18)_100%)]" />
+
+          <div className="absolute left-4 top-4 rounded-full bg-white/92 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-[#0e3541] shadow-sm backdrop-blur">
+            Appliance
+          </div>
+        </div>
+
+        <div className="flex min-w-0 flex-col justify-center p-6 md:p-7 lg:p-8">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#53bc76]">
+              Included Item
+            </p>
+
+            <h3 className="mt-3 text-[22px] font-semibold leading-[1.15] tracking-[-0.045em] text-[#0e3541] md:text-[26px]">
+              {title}
+            </h3>
+
+            <div className="mt-5 h-px w-full bg-[#0e3541]/10" />
+
+            {description ? (
+              <p className="mt-5 text-sm font-normal leading-7 text-[#64748b] md:text-[15px] md:leading-8">
+                {description}
+              </p>
+            ) : (
+              <p className="mt-5 text-sm font-normal leading-7 text-[#64748b] md:text-[15px] md:leading-8">
+                No description available for this appliance.
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 function getPropertyStructuredData({
   property,
   mainImage,
@@ -587,7 +655,18 @@ export default async function PropertyDetailPage({
     notFound();
   }
 
-  const galleryImages = getPropertyGalleryImages(property);
+  const allPropertyImages = [...(property.property_images || [])]
+    .sort((a, b) => a.position - b.position)
+    .map((image) => image as PropertyImageWithMediaGroup);
+
+  const galleryImages = allPropertyImages.filter(
+    (image) => image.media_group !== "appliances",
+  );
+
+  const appliances = allPropertyImages.filter(
+    (image) => image.media_group === "appliances",
+  );
+
   const mainImage = getMainPropertyImage(property);
   const cleanDescription = cleanRichDescription(property.description);
 
@@ -902,6 +981,37 @@ export default async function PropertyDetailPage({
                   )}
                 </div>
               </section>
+
+              {appliances.length > 0 ? (
+                <section className="rounded-[28px] border border-[#53bc76]/20 bg-white p-6 shadow-[0_18px_48px_rgba(17,17,17,0.06)] md:p-8">
+                  <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#53bc76]">
+                        Appliances
+                      </p>
+
+                      <h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em] text-[#0e3541]">
+                        Included Appliances
+                      </h2>
+
+                      <p className="mt-3 max-w-2xl text-sm font-normal leading-6 text-[#64748b]">
+                        Review the appliances and equipment included in this
+                        property.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-7 space-y-5">
+                    {appliances.map((appliance, index) => (
+                      <ApplianceCard
+                        key={appliance.id || `appliance-${index}`}
+                        appliance={appliance}
+                        propertyTitle={property.title}
+                      />
+                    ))}
+                  </div>
+                </section>
+              ) : null}
             </div>
 
             <aside className="space-y-6">

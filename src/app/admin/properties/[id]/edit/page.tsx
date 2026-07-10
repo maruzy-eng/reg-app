@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { AdminFileField } from "@/components/admin/admin-file-field";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -52,6 +53,17 @@ type EditPropertyPageProps = {
   }>;
 };
 
+type PropertyImageWithMediaGroup = {
+  id: string;
+  image_url: string;
+  title: string | null;
+  alt_text: string | null;
+  caption: string | null;
+  position: number;
+  is_cover: boolean;
+  media_group?: string | null;
+};
+
 const propertyTypes = [
   { value: "single_family", label: "Single Family" },
   { value: "multi_family", label: "Multi Family" },
@@ -85,8 +97,16 @@ export default async function EditPropertyPage({
     notFound();
   }
 
-  const images = [...(property.property_images || [])].sort(
-    (a, b) => a.position - b.position,
+  const allImages = [...(property.property_images || [])]
+    .sort((a, b) => a.position - b.position)
+    .map((image) => image as PropertyImageWithMediaGroup);
+
+  const images = allImages.filter(
+    (image) => image.media_group !== "appliances",
+  );
+
+  const appliances = allImages.filter(
+    (image) => image.media_group === "appliances",
   );
 
   const videos = [...(property.property_videos || [])].sort(
@@ -626,6 +646,10 @@ export default async function EditPropertyPage({
 
                 <SidebarRow label="Visibility" value={property.visibility} />
                 <SidebarRow label="Images" value={String(images.length)} />
+                <SidebarRow
+                  label="Appliances"
+                  value={String(appliances.length)}
+                />
                 <SidebarRow label="Videos" value={String(videos.length)} />
                 <SidebarRow label="PDFs" value={String(documents.length)} />
               </div>
@@ -651,7 +675,7 @@ export default async function EditPropertyPage({
               </p>
 
               <h2 className="mt-2 text-3xl font-black tracking-[-0.05em] text-[#0e3541]">
-                Images, videos and PDFs
+                Images, appliances, videos and PDFs
               </h2>
 
               <p className="mt-2 max-w-2xl text-sm leading-6 text-[#587469]">
@@ -660,8 +684,9 @@ export default async function EditPropertyPage({
               </p>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 text-center text-xs font-bold text-[#0e3541]">
+            <div className="grid grid-cols-4 gap-2 text-center text-xs font-bold text-[#0e3541]">
               <MediaCounter label="Images" value={images.length} />
+              <MediaCounter label="Appliances" value={appliances.length} />
               <MediaCounter label="Videos" value={videos.length} />
               <MediaCounter label="PDFs" value={documents.length} />
             </div>
@@ -675,7 +700,10 @@ export default async function EditPropertyPage({
             icon={<Upload size={22} />}
           >
             <form action={addPropertyImageAction} className="grid gap-4">
-              <HiddenPropertyFields propertyId={property.id} slug={property.slug} />
+              <HiddenPropertyFields
+                propertyId={property.id}
+                slug={property.slug}
+              />
 
               <FileField
                 label="Upload Image"
@@ -750,6 +778,89 @@ export default async function EditPropertyPage({
           </MediaSection>
         </div>
 
+        <div className="grid gap-6 xl:grid-cols-[0.95fr_1.25fr]">
+          <MediaSection
+            title="Upload Appliance"
+            description="Add appliances with image, title and description."
+            icon={<ImageIcon size={22} />}
+          >
+            <form action={addPropertyImageAction} className="grid gap-4">
+              <HiddenPropertyFields
+                propertyId={property.id}
+                slug={property.slug}
+              />
+
+              <input type="hidden" name="media_group" value="appliances" />
+
+              <FileField
+                label="Upload Appliance Image"
+                name="image_file"
+                accept="image/*"
+                helpText="Upload an appliance image. The system will save it and generate the URL automatically."
+              />
+
+              <InputField
+                label="Image URL"
+                name="image_url"
+                helpText="Optional fallback for an existing hosted image URL."
+              />
+
+              <InputField
+                label="Appliance Title *"
+                name="title"
+                required
+                helpText="Example: Stainless Steel Refrigerator, Washer and Dryer, Smart Oven."
+              />
+
+              <TextareaField
+                label="Appliance Description"
+                name="caption"
+                rows={3}
+              />
+
+              <InputField
+                label="Alt Text"
+                name="alt_text"
+                helpText="Short description for accessibility and SEO."
+              />
+
+              <InputField
+                label="Position"
+                name="position"
+                type="number"
+                defaultValue={appliances.length + 1}
+              />
+
+              <SubmitButton label="Add Appliance" />
+            </form>
+          </MediaSection>
+
+          <MediaSection
+            title="Current Appliances"
+            description="Manage appliances displayed for this property."
+            icon={<Sparkles size={22} />}
+          >
+            {appliances.length > 0 ? (
+              <PropertyImageSortableGallery
+                propertyId={property.id}
+                propertySlug={property.slug}
+                propertyTitle={property.title}
+                images={appliances.map((appliance) => ({
+                  id: appliance.id,
+                  image_url: appliance.image_url,
+                  title: appliance.title,
+                  alt_text: appliance.alt_text,
+                  caption: appliance.caption,
+                  position: appliance.position,
+                  is_cover: appliance.is_cover,
+                }))}
+              />
+            ) : (
+              <EmptyMediaState label="No appliances registered yet." />
+            )}
+          </MediaSection>
+        </div>
+
         <div className="grid gap-6 xl:grid-cols-2">
           <MediaSection
             title="Videos"
@@ -757,7 +868,10 @@ export default async function EditPropertyPage({
             icon={<Play size={22} />}
           >
             <form action={addPropertyVideoAction} className="grid gap-4">
-              <HiddenPropertyFields propertyId={property.id} slug={property.slug} />
+              <HiddenPropertyFields
+                propertyId={property.id}
+                slug={property.slug}
+              />
 
               <FileField
                 label="Upload Video"
@@ -858,7 +972,10 @@ export default async function EditPropertyPage({
             icon={<FileText size={22} />}
           >
             <form action={addPropertyDocumentAction} className="grid gap-4">
-              <HiddenPropertyFields propertyId={property.id} slug={property.slug} />
+              <HiddenPropertyFields
+                propertyId={property.id}
+                slug={property.slug}
+              />
 
               <InputField label="Document Title *" name="title" required />
 
@@ -878,7 +995,11 @@ export default async function EditPropertyPage({
               <TextareaField label="Description" name="description" rows={3} />
 
               <div className="grid gap-4 md:grid-cols-2">
-                <InputField label="File Type" name="file_type" defaultValue="pdf" />
+                <InputField
+                  label="File Type"
+                  name="file_type"
+                  defaultValue="pdf"
+                />
 
                 <InputField
                   label="Document Type"

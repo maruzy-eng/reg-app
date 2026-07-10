@@ -320,8 +320,7 @@ export default async function HomePage() {
                 <p className="home-signup-title">Free Sign Up</p>
 
                 <p className="home-signup-text">
-                  Create your free account and start accessing powerful real
-                  estate tools.
+                 Search properties  free. Upgrade anytime to unlock AI, Skip Trace, Direct Mail, Comps, Flip Analysis and more.
                 </p>
               </div>
             </div>
