@@ -32,15 +32,15 @@ const contactCards = [
   {
     title: "WhatsApp",
     description: "Talk directly with our team.",
-    value: "+1 (978) 239-5226",
-    href: "https://wa.me/19782395226",
+    value: "+1 (954) 955-4018",
+    href: "https://wa.me/19549554018",
     icon: MessageCircle,
   },
   {
     title: "Phone",
     description: "Speak with a Checkmate representative.",
-    value: "+1 (978) 239-5226",
-    href: "tel:+19782395226",
+    value: "+1 (954) 955-4018",
+    href: "tel:+19549554018",
     icon: Phone,
   },
   {

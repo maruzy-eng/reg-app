@@ -70,7 +70,7 @@ export function PublicHeader({ settings }: PublicHeaderProps) {
   return (
     <div
       id="checkmate-property-header"
-      className="sticky top-0 z-[99999] w-full border-b border-[#0e3541]/10 bg-white/90 shadow-[0_10px_35px_rgba(14,53,65,0.04)] backdrop-blur-2xl"
+      className="sticky top-0 z-[99999] w-full border-b border-[#0e3541]/10 bg-white shadow-[0_10px_35px_rgba(14,53,65,0.04)]"
     >
       <header className="cm-property-header">
         <nav
