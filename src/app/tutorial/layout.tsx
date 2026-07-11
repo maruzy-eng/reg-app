@@ -1,20 +1,22 @@
 import type { ReactNode } from "react";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
-import { DEFAULT_SITE_SETTINGS } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site-settings";
 
 type TutorialLayoutProps = {
   children: ReactNode;
 };
 
-export default function TutorialLayout({ children }: TutorialLayoutProps) {
+export default async function TutorialLayout({ children }: TutorialLayoutProps) {
+  const settings = await getSiteSettings();
+
   return (
     <>
-      <PublicHeader settings={DEFAULT_SITE_SETTINGS} />
+      <PublicHeader settings={settings} />
 
-      <main className="min-h-screen bg-white">{children}</main>
+      {children}
 
-      <PublicFooter settings={DEFAULT_SITE_SETTINGS} />
+      <PublicFooter settings={settings} />
     </>
   );
 }

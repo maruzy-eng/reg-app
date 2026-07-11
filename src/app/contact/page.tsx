@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
-import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import {
+  BarChart3,
+  Building2,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Send,
+} from "lucide-react";
 import { PublicFooter } from "@/components/public/public-footer";
 import { PublicHeader } from "@/components/public/public-header";
 import { DynamicFormComponent } from "@/components/forms/dynamic-form";
 import { getPublishedFormBySlug } from "@/lib/forms";
 import { getSiteSettings } from "@/lib/site-settings";
+import "./contact-page.css";
 
 export const metadata: Metadata = {
   title: "Contact | Checkmate Property",
@@ -17,25 +26,50 @@ const contactCards = [
     title: "Email",
     description: "Send us a message and our team will get back to you.",
     value: "contact@checkmateproperty.com",
+    href: "mailto:contact@checkmateproperty.com",
     icon: Mail,
   },
   {
     title: "WhatsApp",
     description: "Talk directly with our team.",
     value: "+1 (978) 239-5226",
+    href: "https://wa.me/19782395226",
     icon: MessageCircle,
   },
   {
     title: "Phone",
     description: "Speak with a Checkmate representative.",
     value: "+1 (978) 239-5226",
+    href: "tel:+19782395226",
     icon: Phone,
   },
   {
     title: "Location",
     description: "Real estate projects and operations across the U.S.",
     value: "United States",
+    href: null,
     icon: MapPin,
+  },
+];
+
+const helpCards = [
+  {
+    title: "Property Analysis",
+    description:
+      "Learn how Checkmate Property helps analyze deals, comps, ARV, rehab estimates, ROI and investment opportunities.",
+    icon: BarChart3,
+  },
+  {
+    title: "Real Estate Opportunities",
+    description:
+      "Talk to our team about active projects, property opportunities and investment strategies across the U.S.",
+    icon: Building2,
+  },
+  {
+    title: "Platform Access",
+    description:
+      "Get more information about using the Checkmate Property platform to search properties, run reports and evaluate deals.",
+    icon: Send,
   },
 ];
 
@@ -49,145 +83,203 @@ export default async function ContactPage() {
   const contactFields = contactFormResult?.fields || [];
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="contact-page">
       <PublicHeader settings={settings} />
 
-      <section
-        className="relative overflow-hidden bg-white px-5 py-14 md:py-20"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(83,188,118,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(57,175,242,0.07) 1px, transparent 1px)",
-          backgroundSize: "58px 58px",
-        }}
-      >
-        <div className="pointer-events-none absolute left-[-140px] top-[-120px] h-[360px] w-[360px] rounded-full bg-[radial-gradient(circle,rgba(83,188,118,0.20),transparent_68%)]" />
-        <div className="pointer-events-none absolute bottom-[-180px] right-[-140px] h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgba(57,175,242,0.18),transparent_68%)]" />
+      <section className="contact-hero">
+        <div className="contact-wrap">
+          <div className="contact-hero-grid">
+            <div className="contact-hero-copy">
+              <div className="contact-kicker">
+                <span className="contact-kicker-dot" />
+                Contact Checkmate Property
+              </div>
 
-        <div className="relative z-10 mx-auto max-w-[1220px]">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#53bc76]">
-              Contact
-            </p>
+              <h1>
+                Let&apos;s talk about your next{" "}
+                <span>real estate opportunity.</span>
+              </h1>
 
-            <h1 className="mt-4 text-[42px] font-semibold leading-[1.02] tracking-[-0.06em] text-[#0e3541] md:text-[68px]">
-              Let&apos;s talk about your next real estate opportunity.
-            </h1>
+              <p>
+                Fill out the form and our team will contact you with more
+                information about Checkmate Property, investment projects,
+                analysis tools and real estate opportunities.
+              </p>
 
-            <p className="mx-auto mt-5 max-w-2xl text-base font-normal leading-8 text-[#64748b] md:text-lg">
-              Fill out the form below and our team will contact you with more
-              information about Checkmate Property, investment projects,
-              analysis tools and real estate opportunities.
+              <div className="contact-hero-actions">
+                <a href="#contact-form" className="contact-btn contact-btn-primary">
+                  Send a Message <span>→</span>
+                </a>
+
+                <a href="/tutorial" className="contact-btn contact-btn-ghost">
+                  View Tutorials <span>↗</span>
+                </a>
+              </div>
+            </div>
+
+            <aside className="contact-hero-panel" aria-label="Contact summary">
+              <div className="contact-panel-top">
+                <span>Team Response</span>
+                <div className="contact-panel-dots">
+                  <span />
+                  <span />
+                  <span />
+                </div>
+              </div>
+
+              <div className="contact-panel-highlight">
+                <strong>24h</strong>
+                <span>Typical response window for new inquiries.</span>
+              </div>
+
+              <div className="contact-panel-list">
+                <div>
+                  <span>01</span>
+                  <p>Share your real estate question or platform need.</p>
+                </div>
+
+                <div>
+                  <span>02</span>
+                  <p>Our team reviews the right project, tool, or next step.</p>
+                </div>
+
+                <div>
+                  <span>03</span>
+                  <p>We follow up with clear guidance and practical options.</p>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section className="contact-section">
+        <div className="contact-wrap">
+          <div className="contact-section-head">
+            <div>
+              <div className="contact-kicker">
+                <span className="contact-kicker-dot" />
+                Reach Us
+              </div>
+
+              <h2>Choose the best way to connect with our team.</h2>
+            </div>
+
+            <p>
+              Use the form for detailed requests, or contact us directly for
+              faster questions about projects, platform access, and analysis.
             </p>
           </div>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="contact-card-grid">
             {contactCards.map((card) => {
               const Icon = card.icon;
-
-              return (
-                <div
-                  key={card.title}
-                  className="rounded-[26px] border border-black/10 bg-white p-6 shadow-[0_18px_48px_rgba(17,17,17,0.06)]"
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,rgba(83,188,118,0.16),rgba(57,175,242,0.10))] text-[#53bc76] ring-1 ring-[#53bc76]/20">
+              const content = (
+                <>
+                  <div className="contact-card-icon">
                     <Icon size={24} strokeWidth={2.2} />
                   </div>
 
-                  <h2 className="mt-5 text-lg font-semibold tracking-[-0.04em] text-[#0e3541]">
-                    {card.title}
-                  </h2>
+                  <h3>{card.title}</h3>
 
-                  <p className="mt-2 text-sm leading-6 text-[#64748b]">
-                    {card.description}
-                  </p>
+                  <p>{card.description}</p>
 
-                  <p className="mt-4 text-sm font-bold leading-6 text-[#0e3541]">
-                    {card.value}
-                  </p>
+                  <strong>{card.value}</strong>
+                </>
+              );
+
+              if (card.href) {
+                return (
+                  <a key={card.title} href={card.href} className="contact-card">
+                    {content}
+                  </a>
+                );
+              }
+
+              return (
+                <div key={card.title} className="contact-card">
+                  {content}
                 </div>
               );
             })}
           </div>
+        </div>
+      </section>
 
-          <section className="mt-12 rounded-[32px] border border-black/10 bg-white p-6 shadow-[0_22px_70px_rgba(17,17,17,0.08)] md:p-8">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#53bc76]">
-              Why contact us
-            </p>
-
-            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-[#0e3541] md:text-4xl">
-              How our team can help you
-            </h2>
-
-            <div className="mt-8 grid gap-4 lg:grid-cols-3">
-              <div className="rounded-[24px] border border-[#53bc76]/20 bg-[#f0fdf4] p-5">
-                <h3 className="text-lg font-semibold tracking-[-0.04em] text-[#0e3541]">
-                  Property Analysis
-                </h3>
-
-                <p className="mt-2 text-sm leading-6 text-[#64748b]">
-                  Learn how Checkmate Property helps analyze deals, comps, ARV,
-                  rehab estimates, ROI and investment opportunities.
-                </p>
+      <section className="contact-section contact-section-soft">
+        <div className="contact-wrap">
+          <div className="contact-help-grid">
+            <div className="contact-process-card">
+              <div className="contact-kicker">
+                <span className="contact-kicker-dot" />
+                Why Contact Us
               </div>
 
-              <div className="rounded-[24px] border border-black/10 bg-gray-50 p-5">
-                <h3 className="text-lg font-semibold tracking-[-0.04em] text-[#0e3541]">
-                  Real Estate Opportunities
-                </h3>
+              <h2>How our team can help you.</h2>
 
-                <p className="mt-2 text-sm leading-6 text-[#64748b]">
-                  Talk to our team about active projects, property opportunities
-                  and investment strategies across the U.S.
-                </p>
-              </div>
-
-              <div className="rounded-[24px] border border-black/10 bg-gray-50 p-5">
-                <h3 className="text-lg font-semibold tracking-[-0.04em] text-[#0e3541]">
-                  Platform Access
-                </h3>
-
-                <p className="mt-2 text-sm leading-6 text-[#64748b]">
-                  Get more information about using the Checkmate Property
-                  platform to search properties, run reports and evaluate deals.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section
-            id="contact-form"
-            className="mt-12 rounded-[32px] border border-[#53bc76]/20 bg-white shadow-[0_22px_70px_rgba(17,17,17,0.08)]"
-          >
-            <div className="border-b border-black/10 p-6 md:p-8">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#53bc76]">
-                Send a message
-              </p>
-
-              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-[#0e3541] md:text-4xl">
-                Contact our team
-              </h2>
-
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-[#64748b]">
-                Complete the form and we will reach out as soon as possible.
+              <p>
+                Whether you are reviewing a deal, exploring platform access, or
+                looking for practical real estate guidance, we keep the next step
+                clear and actionable.
               </p>
             </div>
 
-            <div className="p-6 md:p-8">
-              <div className="mx-auto max-w-3xl">
+            <div className="contact-help-list">
+              {helpCards.map((card, index) => {
+                const Icon = card.icon;
+
+                return (
+                  <article key={card.title} className="contact-help-card">
+                    <div className="contact-help-number">
+                      {String(index + 1).padStart(2, "0")}
+                    </div>
+
+                    <div>
+                      <div className="contact-help-title">
+                        <Icon size={18} />
+                        <h3>{card.title}</h3>
+                      </div>
+
+                      <p>{card.description}</p>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="contact-form-section" id="contact-form">
+        <div className="contact-wrap">
+          <div className="contact-form-shell">
+            <div className="contact-form-head">
+              <div className="contact-kicker">
+                <span className="contact-kicker-dot" />
+                Send a Message
+              </div>
+
+              <h2>Contact our team</h2>
+
+              <p>Complete the form and we will reach out as soon as possible.</p>
+            </div>
+
+            <div className="contact-form-body">
+              <div className="contact-form-inner">
                 {contactForm ? (
                   <DynamicFormComponent
                     form={contactForm}
                     fields={contactFields}
                   />
                 ) : (
-                  <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm font-semibold leading-6 text-amber-800">
+                  <div className="contact-form-empty">
                     Contact form is not published yet. Please check the form
                     with slug <strong>contact</strong> in the admin panel.
                   </div>
                 )}
               </div>
             </div>
-          </section>
+          </div>
         </div>
       </section>
 

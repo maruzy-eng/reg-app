@@ -468,6 +468,69 @@
   overflow: hidden;
   aspect-ratio: 1 / 0.72;
   background: #e8f3f6;
+  color: #ffffff !important;
+}
+
+/*
+ * Mantém títulos, legendas, badges e demais textos sobre as imagens brancos.
+ * A regra cobre hover, focus, active e visited e impede que estilos globais
+ * do tema, Elementor ou WordPress alterem o texto para preto.
+ */
+.cmp-tutorial-page .cmp-card-media,
+.cmp-tutorial-page .cmp-card-media:link,
+.cmp-tutorial-page .cmp-card-media:visited,
+.cmp-tutorial-page .cmp-card-media:hover,
+.cmp-tutorial-page .cmp-card-media:focus,
+.cmp-tutorial-page .cmp-card-media:focus-visible,
+.cmp-tutorial-page .cmp-card-media:active,
+.cmp-tutorial-page .cmp-card:hover .cmp-card-media,
+.cmp-tutorial-page .cmp-card-media a,
+.cmp-tutorial-page .cmp-card-media a:link,
+.cmp-tutorial-page .cmp-card-media a:visited,
+.cmp-tutorial-page .cmp-card-media a:hover,
+.cmp-tutorial-page .cmp-card-media a:focus,
+.cmp-tutorial-page .cmp-card-media a:focus-visible,
+.cmp-tutorial-page .cmp-card-media a:active {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.cmp-tutorial-page .cmp-card-media h1,
+.cmp-tutorial-page .cmp-card-media h2,
+.cmp-tutorial-page .cmp-card-media h3,
+.cmp-tutorial-page .cmp-card-media h4,
+.cmp-tutorial-page .cmp-card-media h5,
+.cmp-tutorial-page .cmp-card-media h6,
+.cmp-tutorial-page .cmp-card-media p,
+.cmp-tutorial-page .cmp-card-media span,
+.cmp-tutorial-page .cmp-card-media strong,
+.cmp-tutorial-page .cmp-card-media small,
+.cmp-tutorial-page .cmp-card-media .cmp-card-title,
+.cmp-tutorial-page .cmp-card-media .cmp-card-media-title,
+.cmp-tutorial-page .cmp-card-media .cmp-card-overlay-title,
+.cmp-tutorial-page .cmp-card-media .elementor-heading-title,
+.cmp-tutorial-page .cmp-card-media:hover h1,
+.cmp-tutorial-page .cmp-card-media:hover h2,
+.cmp-tutorial-page .cmp-card-media:hover h3,
+.cmp-tutorial-page .cmp-card-media:hover h4,
+.cmp-tutorial-page .cmp-card-media:hover h5,
+.cmp-tutorial-page .cmp-card-media:hover h6,
+.cmp-tutorial-page .cmp-card-media:hover p,
+.cmp-tutorial-page .cmp-card-media:hover span,
+.cmp-tutorial-page .cmp-card-media:hover strong,
+.cmp-tutorial-page .cmp-card-media:hover small,
+.cmp-tutorial-page .cmp-card:hover .cmp-card-media h1,
+.cmp-tutorial-page .cmp-card:hover .cmp-card-media h2,
+.cmp-tutorial-page .cmp-card:hover .cmp-card-media h3,
+.cmp-tutorial-page .cmp-card:hover .cmp-card-media h4,
+.cmp-tutorial-page .cmp-card:hover .cmp-card-media h5,
+.cmp-tutorial-page .cmp-card:hover .cmp-card-media h6,
+.cmp-tutorial-page .cmp-card:hover .cmp-card-media p,
+.cmp-tutorial-page .cmp-card:hover .cmp-card-media span,
+.cmp-tutorial-page .cmp-card:hover .cmp-card-media strong,
+.cmp-tutorial-page .cmp-card:hover .cmp-card-media small {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 .cmp-card-media img {

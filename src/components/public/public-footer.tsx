@@ -13,6 +13,10 @@ const companyLinks = [
     href: "/",
   },
   {
+    label: "Tutorial",
+    href: "/tutorial",
+  },
+  {
     label: "Contact",
     href: "/contact",
   },
