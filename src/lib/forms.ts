@@ -24,6 +24,7 @@ export type DynamicForm = {
   description: string | null;
   status: "draft" | "published" | "archived";
   submit_button_label: string;
+  acceptance_message: string | null;
   thank_you_page_url: string | null;
   created_at: string;
   updated_at: string;

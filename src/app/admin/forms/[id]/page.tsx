@@ -345,6 +345,25 @@ export default async function AdminFormDetailsPage({
             </div>
           </div>
 
+          <div>
+            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+              Acceptance message
+            </label>
+
+            <textarea
+              name="acceptance_message"
+              rows={3}
+              defaultValue={form.acceptance_message || ""}
+              placeholder="Example: I agree to receive contact from Checkmate Property and accept the privacy terms."
+              className="admin-input resize-none px-4 py-3"
+            />
+
+            <p className="mt-2 text-xs leading-5 text-slate-500">
+              This message appears below the submit button with a checked
+              acceptance checkbox.
+            </p>
+          </div>
+
           <div className="flex justify-end border-t border-[rgba(12,41,51,0.08)] pt-6">
             <button
               type="submit"

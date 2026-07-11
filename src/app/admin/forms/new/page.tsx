@@ -169,6 +169,28 @@ export default function NewAdminFormPage() {
               />
             </div>
           </div>
+
+          <div>
+            <label
+              htmlFor="acceptance_message"
+              className="admin-list-title mb-2 block text-sm font-bold"
+            >
+              Acceptance message
+            </label>
+
+            <textarea
+              id="acceptance_message"
+              name="acceptance_message"
+              rows={3}
+              placeholder="Example: I agree to receive contact from Checkmate Property and accept the privacy terms."
+              className="admin-input resize-none px-4 py-3"
+            />
+
+            <p className="admin-list-meta mt-2 text-xs leading-5">
+              This message appears below the submit button with a checked
+              acceptance checkbox.
+            </p>
+          </div>
         </div>
 
         <div className="mt-8 flex flex-col-reverse justify-end gap-3 border-t border-[rgba(12,41,51,0.08)] pt-6 sm:flex-row">

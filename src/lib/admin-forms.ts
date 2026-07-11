@@ -18,6 +18,7 @@ export type AdminForm = {
   description: string | null;
   status: "draft" | "published" | "archived";
   submit_button_label: string;
+  acceptance_message: string | null;
   thank_you_page_url: string | null;
   created_at: string;
   updated_at: string;
@@ -307,6 +308,20 @@ function isMissingTableError(
   );
 }
 
+function isMissingAcceptanceMessageColumnError(
+  error: { message?: string | null; code?: string | null } | null,
+) {
+  if (!error) {
+    return false;
+  }
+
+  return (
+    error.code === "PGRST204" ||
+    Boolean(error.message?.includes("'acceptance_message' column")) ||
+    Boolean(error.message?.includes("acceptance_message"))
+  );
+}
+
 function revalidateFormPaths(formId: string, slug?: string | null) {
   revalidatePath("/admin/forms");
   revalidatePath(`/admin/forms/${formId}`);
@@ -560,6 +575,7 @@ export async function createAdminFormAction(formData: FormData) {
   const status = getStringValue(formData, "status") || "draft";
   const submitButtonLabel =
     getStringValue(formData, "submit_button_label") || "Submit";
+  const acceptanceMessage = getStringValue(formData, "acceptance_message");
   const thankYouPageUrl =
     getStringValue(formData, "thank_you_page_url") || "/thank-you/default";
 
@@ -581,19 +597,40 @@ export async function createAdminFormAction(formData: FormData) {
     throw new Error("Invalid form status.");
   }
 
+  const basePayload = {
+    name,
+    slug,
+    title,
+    description: description || null,
+    status,
+    submit_button_label: submitButtonLabel,
+    thank_you_page_url: thankYouPageUrl || null,
+  };
+
   const { data, error } = await supabase
     .from("forms")
     .insert({
-      name,
-      slug,
-      title,
-      description: description || null,
-      status,
-      submit_button_label: submitButtonLabel,
-      thank_you_page_url: thankYouPageUrl || null,
+      ...basePayload,
+      acceptance_message: acceptanceMessage || null,
     })
     .select("id")
     .single<{ id: string }>();
+
+  if (isMissingAcceptanceMessageColumnError(error)) {
+    const { data: fallbackData, error: fallbackError } = await supabase
+      .from("forms")
+      .insert(basePayload)
+      .select("id")
+      .single<{ id: string }>();
+
+    if (fallbackError || !fallbackData) {
+      throw new Error(fallbackError?.message || "Unable to create form.");
+    }
+
+    revalidatePath("/admin/forms");
+    revalidatePath(`/admin/forms/${fallbackData.id}`);
+    redirect(`/admin/forms/${fallbackData.id}`);
+  }
 
   if (error || !data) {
     throw new Error(error?.message || "Unable to create form.");
@@ -615,6 +652,7 @@ export async function updateAdminFormAction(formData: FormData) {
   const status = getStringValue(formData, "status") || "draft";
   const submitButtonLabel =
     getStringValue(formData, "submit_button_label") || "Submit";
+  const acceptanceMessage = getStringValue(formData, "acceptance_message");
   const thankYouPageUrl =
     getStringValue(formData, "thank_you_page_url") || "/thank-you/default";
 
@@ -640,18 +678,37 @@ export async function updateAdminFormAction(formData: FormData) {
     throw new Error("Invalid form status.");
   }
 
+  const basePayload = {
+    name,
+    slug,
+    title,
+    description: description || null,
+    status,
+    submit_button_label: submitButtonLabel,
+    thank_you_page_url: thankYouPageUrl || null,
+  };
+
   const { error } = await supabase
     .from("forms")
     .update({
-      name,
-      slug,
-      title,
-      description: description || null,
-      status,
-      submit_button_label: submitButtonLabel,
-      thank_you_page_url: thankYouPageUrl || null,
+      ...basePayload,
+      acceptance_message: acceptanceMessage || null,
     })
     .eq("id", id);
+
+  if (isMissingAcceptanceMessageColumnError(error)) {
+    const { error: fallbackError } = await supabase
+      .from("forms")
+      .update(basePayload)
+      .eq("id", id);
+
+    if (fallbackError) {
+      throw new Error(fallbackError.message);
+    }
+
+    revalidateFormPaths(id, slug);
+    return;
+  }
 
   if (error) {
     throw new Error(error.message);
@@ -741,28 +798,50 @@ export async function duplicateAdminFormAction(formData: FormData) {
   let redirectFormId = "";
 
   try {
+    const duplicateBasePayload = {
+      name: copiedName,
+      slug,
+      title: form.title,
+      description: form.description,
+      status: "draft",
+      submit_button_label: form.submit_button_label,
+      thank_you_page_url: form.thank_you_page_url,
+    };
+
     const { data: duplicatedForm, error: createError } = await supabase
       .from("forms")
       .insert({
-        name: copiedName,
-        slug,
-        title: form.title,
-        description: form.description,
-        status: "draft",
-        submit_button_label: form.submit_button_label,
-        thank_you_page_url: form.thank_you_page_url,
+        ...duplicateBasePayload,
+        acceptance_message: form.acceptance_message,
       })
       .select("id")
       .single<{ id: string }>();
 
-    if (createError || !duplicatedForm) {
+    if (isMissingAcceptanceMessageColumnError(createError)) {
+      const { data: fallbackDuplicatedForm, error: fallbackCreateError } =
+        await supabase
+          .from("forms")
+          .insert(duplicateBasePayload)
+          .select("id")
+          .single<{ id: string }>();
+
+      if (fallbackCreateError || !fallbackDuplicatedForm) {
+        throw new Error(
+          fallbackCreateError?.message || "Unable to create form copy.",
+        );
+      }
+
+      duplicatedFormId = fallbackDuplicatedForm.id;
+      redirectFormId = fallbackDuplicatedForm.id;
+    } else if (createError || !duplicatedForm) {
       throw new Error(createError?.message || "Unable to create form copy.");
+    } else {
+      duplicatedFormId = duplicatedForm.id;
+      redirectFormId = duplicatedForm.id;
     }
 
-    duplicatedFormId = duplicatedForm.id;
-
     const fieldRows = (fieldsResult.data || []).map((field) => ({
-      form_id: duplicatedForm.id,
+      form_id: redirectFormId,
       label: field.label,
       name: field.name,
       type: field.type,
@@ -783,7 +862,7 @@ export async function duplicateAdminFormAction(formData: FormData) {
     }
 
     const webhookRows = (webhooksResult.data || []).map((webhook) => ({
-      form_id: duplicatedForm.id,
+      form_id: redirectFormId,
       name: webhook.name,
       url: webhook.url,
       method: webhook.method,
@@ -802,7 +881,7 @@ export async function duplicateAdminFormAction(formData: FormData) {
     }
 
     const emailRows = (emailsResult.data || []).map((email) => ({
-      form_id: duplicatedForm.id,
+      form_id: redirectFormId,
       name: email.name,
       type: email.type,
       enabled: email.enabled,
@@ -824,8 +903,7 @@ export async function duplicateAdminFormAction(formData: FormData) {
     }
 
     revalidatePath("/admin/forms");
-    revalidatePath(`/admin/forms/${duplicatedForm.id}`);
-    redirectFormId = duplicatedForm.id;
+    revalidatePath(`/admin/forms/${redirectFormId}`);
   } catch (error) {
     await cleanupDuplicatedForm(supabase, duplicatedFormId);
 

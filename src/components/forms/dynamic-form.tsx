@@ -636,6 +636,21 @@ export function DynamicFormComponent({
           </>
         )}
       </button>
+
+      {form.acceptance_message ? (
+        <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-[rgba(12,41,51,0.10)] bg-white px-4 py-3 text-sm font-semibold leading-6 text-[#0c2933] transition hover:border-[#53bc76]/40">
+          <input
+            name="acceptance_message_accepted"
+            type="checkbox"
+            value="accepted"
+            required
+            defaultChecked
+            className="mt-1 h-4 w-4 shrink-0 accent-[#53bc76]"
+          />
+
+          <span>{form.acceptance_message}</span>
+        </label>
+      ) : null}
     </form>
   );
 }
