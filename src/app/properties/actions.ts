@@ -48,6 +48,7 @@ export async function createPropertyLeadAction(formData: FormData) {
   const email = getNullableStringValue(formData, "email");
   const phone = getNullableStringValue(formData, "phone");
   const message = getNullableStringValue(formData, "message");
+  const phoneSmsConsent = getStringValue(formData, "phone_sms_consent");
 
   if (!propertyId) {
     throw new Error("Property ID is required.");
@@ -99,6 +100,7 @@ export async function createPropertyLeadAction(formData: FormData) {
         property_id: propertyId,
         property_slug: propertySlug,
         property_title: propertyTitle,
+        phone_sms_consent: phoneSmsConsent === "accepted",
         source: "property_detail_page",
       },
     })
@@ -122,6 +124,9 @@ export async function createPropertyLeadAction(formData: FormData) {
     const safeEmail = escapeHtml(email || "Not provided");
     const safePhone = escapeHtml(phone || "Not provided");
     const safeMessage = escapeHtml(message || "No message provided.");
+    const safeConsent = escapeHtml(
+      phoneSmsConsent === "accepted" ? "Accepted" : "Not accepted",
+    );
 
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto; color: #111827;">
@@ -133,6 +138,7 @@ export async function createPropertyLeadAction(formData: FormData) {
           <p><strong>Name:</strong> ${safeName}</p>
           <p><strong>Email:</strong> ${safeEmail}</p>
           <p><strong>Phone:</strong> ${safePhone}</p>
+          <p><strong>Phone/SMS Consent:</strong> ${safeConsent}</p>
           <p><strong>Message:</strong></p>
           <p style="white-space: pre-line;">${safeMessage}</p>
         </div>

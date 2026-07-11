@@ -14,6 +14,9 @@ type RadioQuestionProps = {
   name: string;
 };
 
+const CONSENT_MESSAGE =
+  "By submitting this form, you agree to receive phone calls and SMS messages from Checkmate. Your consent is not a condition of purchasing any product or service.";
+
 function formatUSPhone(value: string) {
   let digits = value.replace(/\D/g, "");
 
@@ -196,6 +199,19 @@ export function PropertyLeadForm({
       >
         Request Property Information
       </button>
+
+      <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-[rgba(12,41,51,0.10)] bg-white px-4 py-3 text-xs font-semibold leading-5 text-[#0e3541] transition hover:border-[#53bc76]/40">
+        <input
+          name="phone_sms_consent"
+          type="checkbox"
+          value="accepted"
+          required
+          defaultChecked
+          className="mt-0.5 h-4 w-4 shrink-0 accent-[#53bc76]"
+        />
+
+        <span>{CONSENT_MESSAGE}</span>
+      </label>
     </form>
   );
 }
