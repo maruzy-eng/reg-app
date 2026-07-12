@@ -9,13 +9,13 @@ import {
   ChartNoAxesColumnIncreasing,
   Check,
   Ellipsis,
-  Gift,
   Home,
   HousePlus,
   Mail,
   MapPin,
   Ruler,
   Search,
+  UserRoundPlus,
 } from "lucide-react";
 import { getPublicProperties } from "@/lib/properties";
 import { getSiteSettings } from "@/lib/site-settings";
@@ -44,6 +44,9 @@ const HOME_DESCRIPTION =
 
 const DEFAULT_HERO_IMAGE =
   "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/property-media/properties/4great-rock-f8d8d89155f740bb8eeeefc6049e3a18-uncropped_scaled_within_1536_1152.webp";
+
+const SIGN_UP_URL =
+  "https://app.checkmateproperty.com/#/register";
 
 const heroFeatures = [
   {
@@ -82,7 +85,7 @@ const heroFeatures = [
     icon: Ellipsis,
     tone: "blue",
   },
-];
+] as const;
 
 export const metadata: Metadata = {
   title: HOME_TITLE,
@@ -279,6 +282,19 @@ export default async function HomePage() {
             <HeroLocationSearch searchForm={searchForm} />
           </div>
 
+          <Link
+            href={SIGN_UP_URL}
+            className="home-signup-cta group"
+          >
+            <span className="home-signup-cta-icon" aria-hidden="true">
+              <UserRoundPlus size={24} strokeWidth={2.1} />
+            </span>
+
+            <span className="home-signup-cta-label">Sign Up Free</span>
+
+            <span className="home-signup-cta-glow" aria-hidden="true" />
+          </Link>
+
           <div className="home-hero-features">
             {heroFeatures.map((feature, index) => {
               const Icon = feature.icon;
@@ -313,14 +329,15 @@ export default async function HomePage() {
           <div className="home-signup-card">
             <div className="home-signup-main">
               <div className="home-signup-icon">
-                <Gift size={42} strokeWidth={1.8} />
+                <UserRoundPlus size={28} strokeWidth={2} />
               </div>
 
               <div>
                 <p className="home-signup-title">Free Sign Up</p>
 
                 <p className="home-signup-text">
-                 Search properties  free. Upgrade anytime to unlock AI, Skip Trace, Direct Mail, Comps, Flip Analysis and more.
+                  Search properties for free. Upgrade anytime to unlock AI,
+                  Skip Trace, Direct Mail, Comps, Flip Analysis and more.
                 </p>
               </div>
             </div>
@@ -342,13 +359,11 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <Link
-              href="https://app.checkmateproperty.com"
-              className="home-signup-button"
-            >
+            <Link href={SIGN_UP_URL} className="home-signup-button">
               Sign Up Free
             </Link>
           </div>
+
         </div>
       </section>
 
