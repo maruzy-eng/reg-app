@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { AdminFileField } from "@/components/admin/admin-file-field";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -778,88 +777,31 @@ export default async function EditPropertyPage({
           </MediaSection>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[0.95fr_1.25fr]">
-          <MediaSection
-            title="Upload Appliance"
-            description="Add appliances with image, title and description."
-            icon={<ImageIcon size={22} />}
-          >
-            <form action={addPropertyImageAction} className="grid gap-4">
-              <HiddenPropertyFields
-                propertyId={property.id}
-                slug={property.slug}
-              />
+        <MediaSection
+          title="Complementos"
+          description="Appliances and custom add-on blocks are now managed in one dedicated page."
+          icon={<Sparkles size={22} />}
+        >
+          <div className="flex flex-col justify-between gap-4 rounded-2xl border border-[#53bc76]/20 bg-[#f8fffb] p-5 md:flex-row md:items-center">
+            <div>
+              <p className="text-sm font-black text-[#0e3541]">
+                {appliances.length} appliance item
+                {appliances.length === 1 ? "" : "s"} currently registered.
+              </p>
+              <p className="mt-1 text-xs leading-5 text-[#64748b]">
+                Use Complementos to choose which property pages show appliances
+                and to create new reusable blocks.
+              </p>
+            </div>
 
-              <input type="hidden" name="media_group" value="appliances" />
-
-              <FileField
-                label="Upload Appliance Image"
-                name="image_file"
-                accept="image/*"
-                helpText="Upload an appliance image. The system will save it and generate the URL automatically."
-              />
-
-              <InputField
-                label="Image URL"
-                name="image_url"
-                helpText="Optional fallback for an existing hosted image URL."
-              />
-
-              <InputField
-                label="Appliance Title *"
-                name="title"
-                required
-                helpText="Example: Stainless Steel Refrigerator, Washer and Dryer, Smart Oven."
-              />
-
-              <TextareaField
-                label="Appliance Description"
-                name="caption"
-                rows={3}
-              />
-
-              <InputField
-                label="Alt Text"
-                name="alt_text"
-                helpText="Short description for accessibility and SEO."
-              />
-
-              <InputField
-                label="Position"
-                name="position"
-                type="number"
-                defaultValue={appliances.length + 1}
-              />
-
-              <SubmitButton label="Add Appliance" />
-            </form>
-          </MediaSection>
-
-          <MediaSection
-            title="Current Appliances"
-            description="Manage appliances displayed for this property."
-            icon={<Sparkles size={22} />}
-          >
-            {appliances.length > 0 ? (
-              <PropertyImageSortableGallery
-                propertyId={property.id}
-                propertySlug={property.slug}
-                propertyTitle={property.title}
-                images={appliances.map((appliance) => ({
-                  id: appliance.id,
-                  image_url: appliance.image_url,
-                  title: appliance.title,
-                  alt_text: appliance.alt_text,
-                  caption: appliance.caption,
-                  position: appliance.position,
-                  is_cover: appliance.is_cover,
-                }))}
-              />
-            ) : (
-              <EmptyMediaState label="No appliances registered yet." />
-            )}
-          </MediaSection>
-        </div>
+            <Link
+              href="/admin/complementos"
+              className="admin-primary-button min-h-[44px] gap-2 px-5 text-sm no-underline"
+            >
+              Open Complementos
+            </Link>
+          </div>
+        </MediaSection>
 
         <div className="grid gap-6 xl:grid-cols-2">
           <MediaSection

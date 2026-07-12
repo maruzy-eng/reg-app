@@ -574,6 +574,58 @@ export type Database = {
           updated_at?: string;
         };
       };
+      property_complement_blocks: {
+        Row: {
+          id: string;
+          slug: string;
+          title: string;
+          eyebrow: string | null;
+          description: string | null;
+          sort_order: number;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          title: string;
+          eyebrow?: string | null;
+          description?: string | null;
+          sort_order?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          title?: string;
+          eyebrow?: string | null;
+          description?: string | null;
+          sort_order?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      property_complement_block_properties: {
+        Row: {
+          block_id: string;
+          property_id: string;
+          created_at: string;
+        };
+        Insert: {
+          block_id: string;
+          property_id: string;
+          created_at?: string;
+        };
+        Update: {
+          block_id?: string;
+          property_id?: string;
+          created_at?: string;
+        };
+      };
 
       property_videos: {
         Row: {

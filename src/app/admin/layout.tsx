@@ -25,6 +25,12 @@ const adminNavItems = [
     permission: "properties.read",
   },
   {
+    label: "Complementos",
+    href: "/admin/complementos",
+    icon: "complementos",
+    permission: "properties.read",
+  },
+  {
     label: "Users",
     href: "/admin/users",
     icon: "users",

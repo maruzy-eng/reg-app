@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Building2,
+  Boxes,
   Inbox,
   FileText,
   LayoutDashboard,
@@ -17,6 +18,7 @@ type AdminSidebarNavItem = {
   icon:
     | "dashboard"
     | "properties"
+    | "complementos"
     | "users"
     | "forms"
     | "submissions"
@@ -30,6 +32,7 @@ type AdminSidebarNavProps = {
 const adminSidebarIcons = {
   dashboard: LayoutDashboard,
   properties: Building2,
+  complementos: Boxes,
   users: Users,
   forms: FileText,
   submissions: Inbox,

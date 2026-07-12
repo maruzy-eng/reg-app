@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
   Bath,
@@ -13,6 +14,7 @@ import {
   Ruler,
 } from "lucide-react";
 import { getPropertyBySlug } from "@/lib/properties";
+import { getPublicPropertyComplementBlocks } from "@/lib/property-complements";
 import { getSiteSettings } from "@/lib/site-settings";
 import {
   PropertyImageCarousel,
@@ -452,39 +454,44 @@ function PropertyFactCard({
   );
 }
 
-function ApplianceCard({
-  appliance,
+function ComplementItemCard({
+  item,
+  blockEyebrow,
   propertyTitle,
 }: {
-  appliance: PropertyImageWithMediaGroup;
+  item: PropertyImageWithMediaGroup;
+  blockEyebrow: string;
   propertyTitle: string;
 }) {
   const rawImageUrl =
-    appliance.image_url || appliance.url || appliance.src || "";
+    item.image_url || item.url || item.src || "";
 
   const imageUrl = rawImageUrl ? getAbsoluteUrl(rawImageUrl) : "";
-  const title = appliance.title || "Appliance";
-  const description = appliance.caption || "";
-  const altText = appliance.alt_text || appliance.alt || title || propertyTitle;
+  const title = item.title || "Complement";
+  const description = item.caption || "";
+  const altText = item.alt_text || item.alt || title || propertyTitle;
 
   return (
     <article className="overflow-hidden rounded-[28px] border border-[#53bc76]/20 bg-white shadow-[0_18px_48px_rgba(14,53,65,0.07)] transition duration-300 hover:-translate-y-1 hover:border-[#53bc76]/35 hover:shadow-[0_28px_70px_rgba(14,53,65,0.12)]">
       <div className="relative overflow-hidden border-b border-[#53bc76]/12 bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_100%)] px-5 pb-5 pt-5 md:px-8 md:pb-6 md:pt-6">
         <div className="absolute left-5 top-5 z-10 rounded-full bg-white/95 px-4 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#0e3541] shadow-sm backdrop-blur md:left-8 md:top-6">
-          Appliance
+          {blockEyebrow}
         </div>
 
         <div className="flex min-h-[260px] items-center justify-center md:min-h-[320px]">
           {imageUrl ? (
-            <img
+            <Image
               src={imageUrl}
               alt={altText}
+              width={900}
+              height={520}
+              sizes="(max-width: 768px) 100vw, 760px"
               loading="lazy"
               className="h-auto max-h-[320px] w-full max-w-[760px] object-contain"
             />
           ) : (
             <div className="flex h-[240px] w-full items-center justify-center rounded-[22px] border border-dashed border-[#0e3541]/15 bg-white px-5 text-center text-sm font-bold text-[#94a3b8]">
-              No appliance image available
+              No image available
             </div>
           )}
         </div>
@@ -505,7 +512,7 @@ function ApplianceCard({
           </p>
         ) : (
           <p className="mt-5 max-w-5xl text-sm font-normal leading-8 text-[#64748b] md:text-base">
-            No description available for this appliance.
+            No description available for this item.
           </p>
         )}
       </div>
@@ -656,12 +663,13 @@ export default async function PropertyDetailPage({
     .sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
     .map((image) => image as PropertyImageWithMediaGroup);
 
-  const galleryImages = allPropertyImages.filter(
-    (image) => image.media_group !== "appliances",
+  const complementBlocks = await getPublicPropertyComplementBlocks(property.id);
+  const complementSlugs = new Set(
+    complementBlocks.map((block) => block.slug),
   );
 
-  const appliances = allPropertyImages.filter(
-    (image) => image.media_group === "appliances",
+  const galleryImages = allPropertyImages.filter(
+    (image) => !complementSlugs.has(image.media_group || ""),
   );
 
   const mainImage = getMainPropertyImage(property);
@@ -979,36 +987,40 @@ export default async function PropertyDetailPage({
                 </div>
               </section>
 
-              {appliances.length > 0 ? (
-                <section className="rounded-[28px] border border-[#53bc76]/20 bg-white p-6 shadow-[0_18px_48px_rgba(17,17,17,0.06)] md:p-8">
+              {complementBlocks.map((block) => (
+                <section
+                  key={block.id}
+                  className="rounded-[28px] border border-[#53bc76]/20 bg-white p-6 shadow-[0_18px_48px_rgba(17,17,17,0.06)] md:p-8"
+                >
                   <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#53bc76]">
-                        Appliances
+                        {block.eyebrow || block.title}
                       </p>
 
                       <h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em] text-[#0e3541]">
-                        Included Appliances
+                        {block.title}
                       </h2>
 
                       <p className="mt-3 max-w-2xl text-sm font-normal leading-6 text-[#64748b]">
-                        Review the appliances and equipment included in this
-                        property.
+                        {block.description ||
+                          "Review the included items for this property."}
                       </p>
                     </div>
                   </div>
 
                   <div className="mt-7 space-y-5">
-                    {appliances.map((appliance, index) => (
-                      <ApplianceCard
-                        key={appliance.id || `appliance-${index}`}
-                        appliance={appliance}
+                    {block.items.map((item, index) => (
+                      <ComplementItemCard
+                        key={item.id || `${block.slug}-${index}`}
+                        item={item}
+                        blockEyebrow={block.eyebrow || block.title}
                         propertyTitle={property.title}
                       />
                     ))}
                   </div>
                 </section>
-              ) : null}
+              ))}
             </div>
 
             <aside className="space-y-6">
