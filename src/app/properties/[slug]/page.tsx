@@ -664,8 +664,43 @@ export default async function PropertyDetailPage({
     .map((image) => image as PropertyImageWithMediaGroup);
 
   const complementBlocks = await getPublicPropertyComplementBlocks(property.id);
+  const applianceImages = allPropertyImages.filter(
+    (image) => image.media_group === "appliances",
+  );
+  const complementBlocksWithFallback = complementBlocks.map((block) =>
+    block.slug === "appliances" &&
+    block.items.length === 0 &&
+    applianceImages.length > 0
+      ? {
+          ...block,
+          items: applianceImages,
+        }
+      : block,
+  );
+  const visibleComplementBlocks = complementBlocksWithFallback.some(
+    (block) => block.slug === "appliances",
+  )
+    ? complementBlocksWithFallback
+    : applianceImages.length > 0
+      ? [
+          ...complementBlocksWithFallback,
+          {
+            id: "legacy-appliances",
+            slug: "appliances",
+            title: "Included Appliances",
+            eyebrow: "Appliances",
+            description:
+              "Review the appliances and equipment included in this property.",
+            sort_order: 1,
+            is_active: true,
+            created_at: "",
+            updated_at: "",
+            items: applianceImages,
+          },
+        ]
+      : complementBlocksWithFallback;
   const complementSlugs = new Set(
-    complementBlocks.map((block) => block.slug),
+    visibleComplementBlocks.map((block) => block.slug),
   );
 
   const galleryImages = allPropertyImages.filter(
@@ -987,7 +1022,7 @@ export default async function PropertyDetailPage({
                 </div>
               </section>
 
-              {complementBlocks.map((block) => (
+              {visibleComplementBlocks.map((block) => (
                 <section
                   key={block.id}
                   className="rounded-[28px] border border-[#53bc76]/20 bg-white p-6 shadow-[0_18px_48px_rgba(17,17,17,0.06)] md:p-8"

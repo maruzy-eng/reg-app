@@ -175,7 +175,6 @@ export async function getPublicPropertyComplementBlocks(
     .select(
       "id, property_id, image_url, title, alt_text, caption, media_group, position, is_cover",
     )
-    .eq("property_id", propertyId)
     .in("media_group", slugs)
     .order("position", { ascending: true });
 

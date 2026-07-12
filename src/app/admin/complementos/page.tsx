@@ -160,8 +160,8 @@ export default async function AdminComplementosPage() {
               </h3>
 
               <p className="text-sm text-slate-500">
-                Add an image, title and description to a block for a specific
-                property.
+                Add an image, title and description to a reusable block. The
+                selected property is used as the media source.
               </p>
             </div>
           </div>
@@ -183,7 +183,7 @@ export default async function AdminComplementosPage() {
 
               <label className="grid gap-2">
                 <span className="text-sm font-bold text-[#0c2933]">
-                  Property
+                  Source property
                 </span>
                 <select name="property_id" required className="admin-input min-h-[46px] px-4">
                   {properties.map((property) => (

@@ -129,11 +129,39 @@ async function uploadComplementImage(params: {
   return data.publicUrl;
 }
 
-function revalidateComplementPaths() {
+async function getPropertySlugsByIds(propertyIds: string[]) {
+  const uniquePropertyIds = Array.from(new Set(propertyIds.filter(Boolean)));
+
+  if (uniquePropertyIds.length === 0) {
+    return [];
+  }
+
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from("properties")
+    .select("slug")
+    .in("id", uniquePropertyIds);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data || [])
+    .map((property) => property.slug)
+    .filter((slug): slug is string => typeof slug === "string" && slug !== "");
+}
+
+async function revalidateComplementPaths(propertyIds: string[] = []) {
   revalidatePath("/admin/complementos");
   revalidatePath("/admin/properties");
   revalidatePath("/properties");
   revalidatePath("/");
+
+  const propertySlugs = await getPropertySlugsByIds(propertyIds);
+
+  for (const slug of propertySlugs) {
+    revalidatePath(`/properties/${slug}`);
+  }
 }
 
 export async function createComplementBlockAction(formData: FormData) {
@@ -162,7 +190,7 @@ export async function createComplementBlockAction(formData: FormData) {
     throw new Error(error.message);
   }
 
-  revalidateComplementPaths();
+  await revalidateComplementPaths();
   redirect("/admin/complementos");
 }
 
@@ -178,6 +206,20 @@ export async function updateComplementBlockPropertiesAction(formData: FormData) 
   if (!blockId) {
     throw new Error("Complement block is required.");
   }
+
+  const { data: currentAssignments, error: currentAssignmentsError } =
+    await supabase
+      .from("property_complement_block_properties")
+      .select("property_id")
+      .eq("block_id", blockId);
+
+  if (currentAssignmentsError) {
+    throw new Error(currentAssignmentsError.message);
+  }
+
+  const previousPropertyIds = (currentAssignments || []).map(
+    (assignment) => assignment.property_id,
+  );
 
   const { error: deleteError } = await supabase
     .from("property_complement_block_properties")
@@ -203,7 +245,7 @@ export async function updateComplementBlockPropertiesAction(formData: FormData) 
     }
   }
 
-  revalidateComplementPaths();
+  await revalidateComplementPaths([...previousPropertyIds, ...propertyIds]);
   redirect("/admin/complementos");
 }
 
@@ -246,7 +288,7 @@ export async function addComplementItemAction(formData: FormData) {
     throw new Error(error.message);
   }
 
-  revalidateComplementPaths();
+  await revalidateComplementPaths([propertyId]);
   redirect("/admin/complementos");
 }
 
@@ -260,6 +302,16 @@ export async function deleteComplementItemAction(formData: FormData) {
     throw new Error("Complement item is required.");
   }
 
+  const { data: image, error: imageError } = await supabase
+    .from("property_images")
+    .select("property_id")
+    .eq("id", imageId)
+    .maybeSingle();
+
+  if (imageError) {
+    throw new Error(imageError.message);
+  }
+
   const { error } = await supabase
     .from("property_images")
     .delete()
@@ -269,6 +321,6 @@ export async function deleteComplementItemAction(formData: FormData) {
     throw new Error(error.message);
   }
 
-  revalidateComplementPaths();
+  await revalidateComplementPaths(image?.property_id ? [image.property_id] : []);
   redirect("/admin/complementos");
 }
