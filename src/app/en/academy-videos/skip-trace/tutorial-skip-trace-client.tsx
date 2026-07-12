@@ -152,7 +152,7 @@ export function TutorialSkipTraceClient() {
                   <span>→</span>
                 </button>
 
-                <a href="/tutorial" className="cmst-btn cmst-btn-ghost">
+                <a href="/en/academy-videos" className="cmst-btn cmst-btn-ghost">
                   Back to Academy
                   <span>↗</span>
                 </a>
@@ -369,7 +369,7 @@ export function TutorialSkipTraceClient() {
                   <span>↗</span>
                 </a>
 
-                <a href="/tutorial" className="cmst-btn cmst-btn-ghost">
+                <a href="/en/academy-videos" className="cmst-btn cmst-btn-ghost">
                   See All Tutorials
                   <span>→</span>
                 </a>

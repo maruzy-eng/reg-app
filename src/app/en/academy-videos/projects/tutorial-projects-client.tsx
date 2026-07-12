@@ -132,7 +132,7 @@ export function TutorialProjectsClient() {
                   <span>→</span>
                 </button>
 
-                <a href="/tutorial" className="cmpj-btn cmpj-btn-ghost">
+                <a href="/en/academy-videos" className="cmpj-btn cmpj-btn-ghost">
                   Back to Academy
                   <span>↗</span>
                 </a>
@@ -349,7 +349,7 @@ export function TutorialProjectsClient() {
                   <span>↗</span>
                 </a>
 
-                <a href="/tutorial" className="cmpj-btn cmpj-btn-ghost">
+                <a href="/en/academy-videos" className="cmpj-btn cmpj-btn-ghost">
                   See All Tutorials
                   <span>→</span>
                 </a>

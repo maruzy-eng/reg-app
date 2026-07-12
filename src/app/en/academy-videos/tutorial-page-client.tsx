@@ -20,8 +20,8 @@ const tutorialCards: TutorialCard[] = [
     description:
       "Learn how to use the deal analyzer to calculate numbers, margins, ROI, costs, and project feasibility.",
     imageUrl:
-      "https://tutorial.checkmateproperty.com/wp-content/uploads/2023/09/01-CALCULATOR.png",
-    href: "/tutorial/calculator",
+      "https://en/academy-videos.checkmateproperty.com/wp-content/uploads/2023/09/01-CALCULATOR.png",
+    href: "/en/academy-videos/calculator",
     badge: "Analysis",
     category: "analysis",
     alt: "Calculator tutorial",
@@ -31,8 +31,8 @@ const tutorialCards: TutorialCard[] = [
     description:
       "Understand how hard money can support your real estate investment strategy and project execution.",
     imageUrl:
-      "https://tutorial.checkmateproperty.com/wp-content/uploads/2023/09/02-HARD-MONEY.png",
-    href: "/tutorial/hard-money",
+      "https://en/academy-videos.checkmateproperty.com/wp-content/uploads/2023/09/02-HARD-MONEY.png",
+    href: "/en/academy-videos/hard-money",
     badge: "Funding",
     category: "funding",
     alt: "Tutorial Hard Money",
@@ -42,8 +42,8 @@ const tutorialCards: TutorialCard[] = [
     description:
       "Organize projects in one place and keep deal information structured throughout the operation.",
     imageUrl:
-      "https://tutorial.checkmateproperty.com/wp-content/uploads/2023/09/03-PROJECTS.png",
-    href: "/tutorial/projects",
+      "https://en/academy-videos.checkmateproperty.com/wp-content/uploads/2023/09/03-PROJECTS.png",
+    href: "/en/academy-videos/projects",
     badge: "Management",
     category: "management",
     alt: "Projects tutorial",
@@ -53,8 +53,8 @@ const tutorialCards: TutorialCard[] = [
     description:
       "Learn how to search, review, and organize on-market and off-market properties inside the platform.",
     imageUrl:
-      "https://tutorial.checkmateproperty.com/wp-content/uploads/2023/09/04-PROPERTIES.png",
-    href: "/tutorial/properties",
+      "https://en/academy-videos.checkmateproperty.com/wp-content/uploads/2023/09/04-PROPERTIES.png",
+    href: "/en/academy-videos/properties",
     badge: "Properties",
     category: "analysis",
     alt: "Properties tutorial",
@@ -64,8 +64,8 @@ const tutorialCards: TutorialCard[] = [
     description:
       "Learn how to use Skip Trace to support property research and find owner contacts during acquisition.",
     imageUrl:
-      "https://tutorial.checkmateproperty.com/wp-content/uploads/2023/09/05-SKIP-TRACE.png",
-    href: "/tutorial/skip-trace",
+      "https://en/academy-videos.checkmateproperty.com/wp-content/uploads/2023/09/05-SKIP-TRACE.png",
+    href: "/en/academy-videos/skip-trace",
     badge: "Data",
     category: "analysis",
     alt: "Skip Trace tutorial",
@@ -75,8 +75,8 @@ const tutorialCards: TutorialCard[] = [
     description:
       "See how automated campaigns help organize contacts, outreach, and a more consistent acquisition workflow.",
     imageUrl:
-      "https://tutorial.checkmateproperty.com/wp-content/uploads/2023/12/MARKETING-CAMPAIGN.png",
-    href: "/tutorial/marketing-campaigns",
+      "https://en/academy-videos.checkmateproperty.com/wp-content/uploads/2023/12/MARKETING-CAMPAIGN.png",
+    href: "/en/academy-videos/marketing-campaigns",
     badge: "Marketing",
     category: "marketing",
     alt: "Marketing Campaigns tutorial",
@@ -182,7 +182,7 @@ export function TutorialPageClient() {
                 </button>
 
                 <a
-                  href="https://app.tutorial.checkmateproperty.com/#/login"
+                  href="https://app.checkmateproperty.com"
                   target="_blank"
                   rel="noreferrer"
                   className="cmp-btn cmp-btn-ghost"

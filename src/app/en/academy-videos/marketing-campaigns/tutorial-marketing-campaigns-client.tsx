@@ -202,7 +202,7 @@ export function TutorialMarketingCampaignsClient() {
                   <span>→</span>
                 </button>
 
-                <a href="/tutorial" className="cmmc-btn cmmc-btn-ghost">
+                <a href="/en/academy-videos" className="cmmc-btn cmmc-btn-ghost">
                   Back to Academy
                   <span>↗</span>
                 </a>
@@ -421,7 +421,7 @@ export function TutorialMarketingCampaignsClient() {
                   <span>↗</span>
                 </a>
 
-                <a href="/tutorial" className="cmmc-btn cmmc-btn-ghost">
+                <a href="/en/academy-videos" className="cmmc-btn cmmc-btn-ghost">
                   See All Tutorials
                   <span>→</span>
                 </a>

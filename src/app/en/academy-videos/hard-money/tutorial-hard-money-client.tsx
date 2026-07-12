@@ -132,7 +132,7 @@ export function TutorialHardMoneyClient() {
                   <span>→</span>
                 </button>
 
-                <a href="/tutorial" className="cmh-btn cmh-btn-ghost">
+                <a href="/en/academy-videos" className="cmh-btn cmh-btn-ghost">
                   Back to Academy
                   <span>↗</span>
                 </a>
@@ -350,7 +350,7 @@ export function TutorialHardMoneyClient() {
                   <span>↗</span>
                 </a>
 
-                <a href="/tutorial" className="cmh-btn cmh-btn-ghost">
+                <a href="/en/academy-videos" className="cmh-btn cmh-btn-ghost">
                   See All Tutorials
                   <span>→</span>
                 </a>

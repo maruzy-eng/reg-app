@@ -161,7 +161,7 @@ export function TutorialCalculatorClient() {
                   <span>→</span>
                 </button>
 
-                <a href="/tutorial" className="cmc-btn cmc-btn-ghost">
+                <a href="/en/academy-videos" className="cmc-btn cmc-btn-ghost">
                   Back to Academy
                   <span>↗</span>
                 </a>
@@ -373,7 +373,7 @@ export function TutorialCalculatorClient() {
                   <span>↗</span>
                 </a>
 
-                <a href="/tutorial" className="cmc-btn cmc-btn-ghost">
+                <a href="/en/academy-videos" className="cmc-btn cmc-btn-ghost">
                   See All Tutorials
                   <span>→</span>
                 </a>

@@ -17,11 +17,11 @@ const navLinks = [
   },
   {
     label: "Tutorial",
-    href: "/tutorial",
+    href: "/en/academy-videos",
   },
   {
     label: "Contact",
-    href: "/contact",
+    href: "/en/contact-us",
   },
 ];
 

@@ -14,11 +14,11 @@ const companyLinks = [
   },
   {
     label: "Tutorial",
-    href: "/tutorial",
+    href: "/en/academy-videos",
   },
   {
     label: "Contact",
-    href: "/contact",
+    href: "/en/contact-us",
   },
 ];
 

@@ -172,7 +172,7 @@ export function TutorialPropertiesClient() {
                   <span>→</span>
                 </button>
 
-                <a href="/tutorial" className="cmpp-btn cmpp-btn-ghost">
+                <a href="/en/academy-videos" className="cmpp-btn cmpp-btn-ghost">
                   Back to Academy
                   <span>↗</span>
                 </a>
@@ -393,7 +393,7 @@ export function TutorialPropertiesClient() {
                   <span>↗</span>
                 </a>
 
-                <a href="/tutorial" className="cmpp-btn cmpp-btn-ghost">
+                <a href="/en/academy-videos" className="cmpp-btn cmpp-btn-ghost">
                   See All Tutorials
                   <span>→</span>
                 </a>
