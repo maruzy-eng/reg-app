@@ -43,6 +43,7 @@ type SubmissionRecord = {
 
 export type AdminSubmissionListItem = {
   id: string;
+  submission_status: "success";
   form_id: string | null;
   form_slug: string | null;
   form_name: string | null;
@@ -213,7 +214,7 @@ function matchesStatusFilter(
   }
 
   if (statusFilter === "success") {
-    return item.webhook_status === "success";
+    return item.submission_status === "success";
   }
 
   if (statusFilter === "error") {
@@ -316,13 +317,7 @@ function calculateStats(items: AdminSubmissionListItem[]): AdminSubmissionsStats
       acc.webhook_errors += item.webhook_error_count;
       acc.emails_sent += item.email_success_count;
       acc.email_errors += item.email_error_count;
-
-      if (
-        item.webhook_status === "success" ||
-        (item.webhook_status === "not_configured" && item.email_error_count === 0)
-      ) {
-        acc.successful_submissions += 1;
-      }
+      acc.successful_submissions += 1;
 
       if (
         item.webhook_status === "error" ||
@@ -434,6 +429,7 @@ export async function getAdminSubmissions(
   const filtered = rows
     .map((row) => ({
       ...row,
+      submission_status: "success" as const,
       data: toRecord(row.data),
     }))
     .filter((item) =>

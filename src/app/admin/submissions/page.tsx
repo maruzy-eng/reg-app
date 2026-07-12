@@ -144,8 +144,8 @@ export default async function AdminSubmissionsPage({
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
         <StatCard title="Total submissions" value={result.stats.total_submissions} icon={<FileText size={20} />} />
-        <StatCard title="Successful submissions" value={result.stats.successful_submissions} icon={<Send size={20} />} />
-        <StatCard title="Submissions with errors" value={result.stats.error_submissions} icon={<Inbox size={20} />} />
+        <StatCard title="Received submissions" value={result.stats.successful_submissions} icon={<Send size={20} />} />
+        <StatCard title="Integration errors" value={result.stats.error_submissions} icon={<Inbox size={20} />} />
         <StatCard title="Webhook errors" value={result.stats.webhook_errors} icon={<Inbox size={20} />} />
         <StatCard title="Emails sent" value={result.stats.emails_sent} icon={<Send size={20} />} />
         <StatCard title="Email errors" value={result.stats.email_errors} icon={<Inbox size={20} />} />
@@ -163,7 +163,8 @@ export default async function AdminSubmissionsPage({
             </h3>
 
             <p className="text-sm text-slate-500">
-              Narrow submissions by status, form, date and free text search.
+              Narrow submissions by received status, integrations, form, date
+              and free text search.
             </p>
           </div>
         </div>
@@ -177,7 +178,7 @@ export default async function AdminSubmissionsPage({
 
           <div>
             <label className="mb-2 block text-sm font-bold text-[#0c2933]">
-              Status
+              Submission status
             </label>
 
             <select
@@ -186,8 +187,8 @@ export default async function AdminSubmissionsPage({
               className="admin-input min-h-[46px] px-4"
             >
               <option value="all">All</option>
-              <option value="success">Success</option>
-              <option value="error">Error</option>
+              <option value="success">Received</option>
+              <option value="error">Integration error</option>
               <option value="partial_error">Partial error</option>
               <option value="not_configured">Not configured</option>
             </select>
@@ -321,7 +322,7 @@ export default async function AdminSubmissionsPage({
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1320px] border-collapse text-left">
+            <table className="w-full min-w-[1440px] border-collapse text-left">
               <thead className="bg-slate-50">
                 <tr>
                   <th className="px-6 py-4 text-xs font-extrabold uppercase tracking-[0.12em] text-slate-500">
@@ -332,6 +333,9 @@ export default async function AdminSubmissionsPage({
                   </th>
                   <th className="px-6 py-4 text-xs font-extrabold uppercase tracking-[0.12em] text-slate-500">
                     Lead
+                  </th>
+                  <th className="px-6 py-4 text-xs font-extrabold uppercase tracking-[0.12em] text-slate-500">
+                    Submission Status
                   </th>
                   <th className="px-6 py-4 text-xs font-extrabold uppercase tracking-[0.12em] text-slate-500">
                     Webhook Status
@@ -399,6 +403,14 @@ export default async function AdminSubmissionsPage({
                             </p>
                           ) : null}
                         </div>
+                      </td>
+
+                      <td className="px-6 py-5 align-top">
+                        <span
+                          className={getStatusBadgeClass(item.submission_status)}
+                        >
+                          received
+                        </span>
                       </td>
 
                       <td className="px-6 py-5 align-top">

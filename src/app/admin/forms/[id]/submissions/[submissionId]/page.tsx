@@ -178,10 +178,14 @@ export default async function AdminSubmissionDetailsPage({
                 </p>
 
                 <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <span className={getStatusBadgeClass("success")}>
+                    received
+                  </span>
+
                   <span
                     className={getStatusBadgeClass(submission.webhook_status)}
                   >
-                    {submission.webhook_status}
+                    webhook: {submission.webhook_status}
                   </span>
 
                   <span className="admin-badge px-3 py-1">
