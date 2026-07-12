@@ -164,13 +164,27 @@
   border: 1px solid var(--cmp-line);
   background: #ffffff;
   color: var(--cmp-dark) !important;
+  -webkit-text-fill-color: var(--cmp-dark) !important;
   box-shadow: 0 14px 34px rgba(14, 53, 65, 0.07);
 }
 
 .cmp-btn-ghost:hover {
   transform: translateY(-3px);
   border-color: rgba(57, 175, 242, 0.3);
+  color: var(--cmp-dark) !important;
+  -webkit-text-fill-color: var(--cmp-dark) !important;
   box-shadow: 0 18px 44px rgba(14, 53, 65, 0.1);
+}
+
+.cmp-tutorial-page .cmp-hero-actions .cmp-btn-ghost,
+.cmp-tutorial-page .cmp-hero-actions .cmp-btn-ghost:link,
+.cmp-tutorial-page .cmp-hero-actions .cmp-btn-ghost:visited,
+.cmp-tutorial-page .cmp-hero-actions .cmp-btn-ghost:hover,
+.cmp-tutorial-page .cmp-hero-actions .cmp-btn-ghost:focus,
+.cmp-tutorial-page .cmp-hero-actions .cmp-btn-ghost:active,
+.cmp-tutorial-page .cmp-hero-actions .cmp-btn-ghost span {
+  color: var(--cmp-dark) !important;
+  -webkit-text-fill-color: var(--cmp-dark) !important;
 }
 
 .cmp-stats {
