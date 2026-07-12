@@ -252,7 +252,7 @@ function buildCampaignRedirectUrl(params: {
     rt: params.tokens.refreshToken || "",
     it: params.tokens.idToken || "",
     exp: String(params.tokens.expiresIn || ""),
-    lang: "pt-br",
+    lang: "en",
   });
 
   return `${CAMPAIGN_ENTRY_URL}?${query.toString()}&search=${search}`;
