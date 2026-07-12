@@ -22,6 +22,23 @@ type DynamicFormProps = {
   form: DynamicForm;
   fields: DynamicFormField[];
   defaultValues?: Record<string, string>;
+  onSubmitOverride?: (
+    context: DynamicFormSubmitOverrideContext,
+  ) => Promise<DynamicFormSubmitOverrideResult | void>;
+};
+
+export type DynamicFormSubmitOverrideContext = {
+  form: DynamicForm;
+  fields: DynamicFormField[];
+  data: Record<string, unknown>;
+  sourceUrl?: string;
+};
+
+export type DynamicFormSubmitOverrideResult = {
+  success?: boolean;
+  redirecting?: boolean;
+  error?: string;
+  fieldErrors?: Record<string, string>;
 };
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
@@ -248,6 +265,7 @@ export function DynamicFormComponent({
   form,
   fields,
   defaultValues = {},
+  onSubmitOverride,
 }: DynamicFormProps) {
   const router = useRouter();
 
@@ -313,6 +331,32 @@ export function DynamicFormComponent({
     setFormData(submitData);
 
     try {
+      const sourceUrl =
+        typeof window !== "undefined" ? window.location.href : undefined;
+
+      if (onSubmitOverride) {
+        const result = await onSubmitOverride({
+          form,
+          fields,
+          data: submitData,
+          sourceUrl,
+        });
+
+        if (result?.error || result?.fieldErrors) {
+          setSubmitState("error");
+          setGeneralError(result.error || "Unable to submit this form.");
+          setFieldErrors(result.fieldErrors || {});
+          return;
+        }
+
+        if (result?.redirecting) {
+          return;
+        }
+
+        setSubmitState(result?.success === false ? "error" : "success");
+        return;
+      }
+
       const response = await fetch(`/api/forms/${form.slug}/submit`, {
         method: "POST",
         headers: {
@@ -320,8 +364,7 @@ export function DynamicFormComponent({
         },
         body: JSON.stringify({
           data: submitData,
-          source_url:
-            typeof window !== "undefined" ? window.location.href : undefined,
+          source_url: sourceUrl,
         }),
       });
 

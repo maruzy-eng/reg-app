@@ -5,6 +5,10 @@ import type { FormEvent, KeyboardEvent, ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Loader2, MapPin, Search, ShieldCheck, X } from "lucide-react";
+import type {
+  DynamicFormSubmitOverrideContext,
+  DynamicFormSubmitOverrideResult,
+} from "@/components/forms/dynamic-form";
 
 const DynamicFormComponent = dynamic(
   () =>
@@ -45,14 +49,39 @@ type HeroLocationSearchProps = {
   searchForm?: SearchFormData | null;
 };
 
+type CampaignRegisterResponse = {
+  success?: boolean;
+  error?: string;
+  message?: string;
+  data?: {
+    accessToken?: string;
+    refreshToken?: string;
+    idToken?: string;
+    expiresIn?: number | string;
+  };
+};
+
+const CAMPAIGN_REGISTER_ENDPOINT = "/api/campaign/register";
+const CAMPAIGN_ENTRY_URL =
+  "https://app.checkmateproperty.com/#/campaign-entry";
+
+const campaignFieldAliases = {
+  name: ["name", "full_name", "fullname", "nome", "your_name"],
+  email: ["email", "email_address", "e_mail"],
+  phone: ["phone", "phone_number", "telefone", "mobile", "cellphone"],
+  password: ["password", "senha"],
+} as const;
+
 function ModalPortal({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const frame = window.requestAnimationFrame(() => {
+      setMounted(true);
+    });
 
     return () => {
-      setMounted(false);
+      window.cancelAnimationFrame(frame);
     };
   }, []);
 
@@ -147,6 +176,86 @@ function createHiddenField(params: {
     created_at: new Date(0).toISOString(),
     updated_at: new Date(0).toISOString(),
   };
+}
+
+function normalizeFieldKey(value: unknown) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g, "_");
+}
+
+function getStringValue(data: Record<string, unknown>, key: string) {
+  const value = data[key];
+
+  return typeof value === "string" ? value : "";
+}
+
+function getCampaignFieldValue(
+  target: keyof typeof campaignFieldAliases,
+  context: DynamicFormSubmitOverrideContext,
+) {
+  const aliases = campaignFieldAliases[target];
+  const directMatch = aliases.find((alias) => alias in context.data);
+
+  if (directMatch) {
+    return getStringValue(context.data, directMatch);
+  }
+
+  const field = context.fields.find((item) => {
+    const normalizedName = normalizeFieldKey(item.name);
+    const normalizedLabel = normalizeFieldKey(item.label);
+    const normalizedType = normalizeFieldKey(item.type);
+
+    return (
+      aliases.includes(normalizedName as never) ||
+      aliases.includes(normalizedLabel as never) ||
+      normalizedType === target
+    );
+  });
+
+  return field ? getStringValue(context.data, field.name) : "";
+}
+
+async function readJsonResponse(response: Response) {
+  const text = await response.text();
+
+  if (!text) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(text) as CampaignRegisterResponse;
+  } catch {
+    return {
+      success: false,
+      error: text,
+    } satisfies CampaignRegisterResponse;
+  }
+}
+
+function getCampaignErrorMessage(result: CampaignRegisterResponse | null) {
+  return (
+    result?.error ||
+    result?.message ||
+    "Unable to create your campaign access. Please try again."
+  );
+}
+
+function buildCampaignRedirectUrl(params: {
+  tokens: NonNullable<CampaignRegisterResponse["data"]>;
+  selectedSearchItem: LocationSuggestion;
+}) {
+  const search = encodeURIComponent(JSON.stringify(params.selectedSearchItem));
+  const query = new URLSearchParams({
+    at: params.tokens.accessToken || "",
+    rt: params.tokens.refreshToken || "",
+    it: params.tokens.idToken || "",
+    exp: String(params.tokens.expiresIn || ""),
+    lang: "pt-br",
+  });
+
+  return `${CAMPAIGN_ENTRY_URL}?${query.toString()}&search=${search}`;
 }
 
 export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
@@ -367,10 +476,118 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
       return;
     }
 
+    if (!selectedSuggestion) {
+      setSubmitMessage("Select a valid location from the list to continue.");
+      return;
+    }
+
     setSubmitMessage("");
     setIsDropdownOpen(false);
     setActiveIndex(-1);
     setIsLeadModalOpen(true);
+  }
+
+  async function handleCampaignSubmit(
+    context: DynamicFormSubmitOverrideContext,
+  ): Promise<DynamicFormSubmitOverrideResult> {
+    if (!selectedSuggestion) {
+      return {
+        error: "Select a valid location from the list to continue.",
+      };
+    }
+
+    const name = getCampaignFieldValue("name", context).trim();
+    const email = getCampaignFieldValue("email", context).trim();
+    const phone = getCampaignFieldValue("phone", context).trim();
+    const password = getCampaignFieldValue("password", context);
+
+    const fieldErrors: Record<string, string> = {};
+
+    if (!name) {
+      fieldErrors.name = "Name is required.";
+    }
+
+    if (!email) {
+      fieldErrors.email = "Email is required.";
+    }
+
+    if (!phone) {
+      fieldErrors.phone = "Phone is required.";
+    }
+
+    if (!password) {
+      fieldErrors.password = "Password is required.";
+    }
+
+    if (Object.keys(fieldErrors).length > 0) {
+      return {
+        error: "Complete the required fields to continue.",
+        fieldErrors,
+      };
+    }
+
+    const campaignResponse = await fetch(CAMPAIGN_REGISTER_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        password,
+      }),
+    });
+
+    const campaignResult = await readJsonResponse(campaignResponse);
+    const tokens = campaignResult?.data;
+
+    if (
+      !campaignResponse.ok ||
+      !tokens?.accessToken ||
+      !tokens.refreshToken ||
+      !tokens.idToken ||
+      !tokens.expiresIn
+    ) {
+      return {
+        error: getCampaignErrorMessage(campaignResult),
+      };
+    }
+
+    const formResponse = await fetch(`/api/forms/${context.form.slug}/submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          ...context.data,
+          password: "[redacted]",
+          selected_search_item: selectedSuggestion,
+        },
+        source_url: context.sourceUrl,
+      }),
+    });
+
+    const formResult = await formResponse.json();
+
+    if (!formResponse.ok || !formResult.success) {
+      return {
+        error: formResult.error || "Unable to submit this form.",
+        fieldErrors: formResult.fieldErrors || {},
+      };
+    }
+
+    const redirectUrl = buildCampaignRedirectUrl({
+      tokens,
+      selectedSearchItem: selectedSuggestion,
+    });
+
+    window.location.assign(redirectUrl);
+
+    return {
+      redirecting: true,
+    };
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -458,6 +675,7 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
               <DynamicFormComponent
                 form={searchForm.form as never}
                 fields={modalFields as never}
+                onSubmitOverride={handleCampaignSubmit}
               />
             </div>
           ) : (

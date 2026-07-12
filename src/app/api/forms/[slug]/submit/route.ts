@@ -43,12 +43,8 @@ export async function GET(request: NextRequest, context: RouteContext) {
 }
 
 export async function POST(request: NextRequest, context: RouteContext) {
-  console.log("FORM_SUBMIT_ROUTE_HIT");
-
   try {
     const slug = await resolveSlug(request, context);
-
-    console.log("FORM_SUBMIT_SLUG", slug);
 
     if (!slug) {
       return NextResponse.json(
@@ -60,12 +56,9 @@ export async function POST(request: NextRequest, context: RouteContext) {
       );
     }
 
-    const body = await request.json().catch((error) => {
-      console.error("FORM_SUBMIT_INVALID_JSON", error);
+    const body = await request.json().catch(() => {
       return null;
     });
-
-    console.log("FORM_SUBMIT_BODY", body);
 
     if (!body || typeof body !== "object" || Array.isArray(body)) {
       return NextResponse.json(
@@ -88,8 +81,6 @@ export async function POST(request: NextRequest, context: RouteContext) {
 
     const data = normalizeFormData(rawData);
 
-    console.log("FORM_SUBMIT_NORMALIZED_DATA", data);
-
     const sourceUrl =
       typeof bodyRecord.source_url === "string"
         ? bodyRecord.source_url
@@ -105,8 +96,6 @@ export async function POST(request: NextRequest, context: RouteContext) {
       userAgent,
       ipAddress,
     });
-
-    console.log("FORM_SUBMIT_RESULT", result);
 
     if (!result.success) {
       return NextResponse.json(result, { status: 400 });
