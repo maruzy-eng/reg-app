@@ -1,19 +1,8 @@
 import type { MetadataRoute } from "next";
-
-const DEFAULT_SITE_URL = "https://checkmateproperty.com";
-
-function getSiteUrl() {
-  const rawUrl = process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL;
-
-  try {
-    return new URL(rawUrl).origin;
-  } catch {
-    return DEFAULT_SITE_URL;
-  }
-}
+import { getCanonicalSiteUrl } from "@/lib/site-url";
 
 export default function robots(): MetadataRoute.Robots {
-  const siteUrl = getSiteUrl();
+  const siteUrl = getCanonicalSiteUrl();
 
   return {
     rules: [
@@ -23,7 +12,15 @@ export default function robots(): MetadataRoute.Robots {
           "/",
           "/projects",
           "/properties",
+          "/properties/",
+          "/en/contact-us",
           "/lp",
+          "/lp-br",
+          "/aprenda",
+          "/tutorial",
+          "/privacy-policy",
+          "/terms-of-use",
+          "/data-policy",
         ],
         disallow: [
           "/admin",

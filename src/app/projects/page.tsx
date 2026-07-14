@@ -14,6 +14,7 @@ import {
   Ruler,
 } from "lucide-react";
 import { getPublicProperties } from "@/lib/properties";
+import { getCanonicalSiteUrl } from "@/lib/site-url";
 import {
   formatCurrency,
   formatNumber,
@@ -24,8 +25,7 @@ import "./projects-page.css";
 
 export const revalidate = 60;
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://checkmateproperty.com";
+const SITE_URL = getCanonicalSiteUrl();
 
 const PAGE_TITLE = "Published Real Estate Projects | Checkmate Property";
 

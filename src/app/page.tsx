@@ -20,6 +20,7 @@ import {
 import { getPublicProperties } from "@/lib/properties";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getPublishedFormBySlug } from "@/lib/forms";
+import { getCanonicalSiteUrl } from "@/lib/site-url";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { HeroLocationSearch } from "@/components/public/hero-location-search";
@@ -33,8 +34,7 @@ import "./home-page.css";
 
 export const revalidate = 60;
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://checkmateproperty.com";
+const SITE_URL = getCanonicalSiteUrl();
 
 const HOME_TITLE =
   "Checkmate Property | Real Estate Investment Search Platform";

@@ -16,6 +16,7 @@ import {
 import { getPropertyBySlug } from "@/lib/properties";
 import { getPublicPropertyComplementBlocks } from "@/lib/property-complements";
 import { getSiteSettings } from "@/lib/site-settings";
+import { getAbsoluteSiteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 import {
   PropertyImageCarousel,
   type PropertyCarouselImage,
@@ -32,8 +33,7 @@ import {
 
 export const revalidate = 60;
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://checkmateproperty.com";
+const SITE_URL = getCanonicalSiteUrl();
 
 const DEFAULT_DESCRIPTION =
   "Explore real estate investment opportunities, property details, media, videos, floor plans and market information with Checkmate Property.";
@@ -59,19 +59,7 @@ type PropertyImageWithMediaGroup = {
 };
 
 function getAbsoluteUrl(pathOrUrl?: string | null) {
-  if (!pathOrUrl) {
-    return SITE_URL;
-  }
-
-  try {
-    return new URL(pathOrUrl).toString();
-  } catch {
-    try {
-      return new URL(pathOrUrl, SITE_URL).toString();
-    } catch {
-      return SITE_URL;
-    }
-  }
+  return getAbsoluteSiteUrl(pathOrUrl);
 }
 
 function stripHtml(value?: string | null) {

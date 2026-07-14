@@ -41,7 +41,7 @@ const sections = [
   {
     title: "Article 1 – Definitions",
     paragraphs: [
-      "For purposes of this Privacy Policy, the applicable website is www.checkmateproperty.com, including any corresponding mobile application currently in use or developed in the future.",
+      "For purposes of this Privacy Policy, the applicable website is checkmateproperty.com, including any corresponding mobile application currently in use or developed in the future.",
       "The Effective Date is the date this Privacy Policy comes into force and effect.",
       "The parties to this Privacy Policy are Checkmate Property LLC, as the Data Controller, and you, as the user of this Website.",
       "Checkmate Property LLC is the publisher, owner, and operator of the Website and is responsible for the collection and processing of information described in this Privacy Policy.",
@@ -276,7 +276,7 @@ export default async function PrivacyPolicyPage() {
                     <strong className="block text-[#101820]">
                       Applicable Website
                     </strong>
-                    <span>www.checkmateproperty.com</span>
+                    <span>checkmateproperty.com</span>
                   </div>
 
                   <div>

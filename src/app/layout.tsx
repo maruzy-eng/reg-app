@@ -2,8 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
 import { getSiteSettings } from "@/lib/site-settings";
-
-const DEFAULT_SITE_URL = "https://checkmateproperty.com";
+import { getAbsoluteSiteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 
 const DEFAULT_SITE_NAME = "Checkmate Property";
 
@@ -13,46 +12,23 @@ const DEFAULT_DESCRIPTION =
 const DEFAULT_OG_IMAGE =
   "https://checkmateproperty.com/checkmate-property-og.jpg";
 
-function getValidSiteUrl(value: string | undefined | null) {
-  const rawUrl = value?.trim() || DEFAULT_SITE_URL;
-
-  try {
-    return new URL(rawUrl).origin;
-  } catch {
-    return DEFAULT_SITE_URL;
-  }
-}
-
-function getAbsoluteUrl(siteUrl: string, pathOrUrl?: string | null) {
-  if (!pathOrUrl) {
-    return null;
-  }
-
-  try {
-    return new URL(pathOrUrl).toString();
-  } catch {
-    try {
-      return new URL(pathOrUrl, siteUrl).toString();
-    } catch {
-      return null;
-    }
-  }
-}
-
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
 
-  const siteUrl = getValidSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
+  const siteUrl = getCanonicalSiteUrl();
 
   const siteName = settings.site_name?.trim() || DEFAULT_SITE_NAME;
 
   const description =
     settings.site_description?.trim() || DEFAULT_DESCRIPTION;
 
-  const logoUrl =
-    getAbsoluteUrl(siteUrl, settings.logo_url) || DEFAULT_OG_IMAGE;
+  const logoUrl = settings.logo_url
+    ? getAbsoluteSiteUrl(settings.logo_url)
+    : DEFAULT_OG_IMAGE;
 
-  const faviconUrl = getAbsoluteUrl(siteUrl, settings.favicon_url);
+  const faviconUrl = settings.favicon_url
+    ? getAbsoluteSiteUrl(settings.favicon_url)
+    : null;
 
   return {
     metadataBase: new URL(siteUrl),

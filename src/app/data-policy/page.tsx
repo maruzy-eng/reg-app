@@ -55,7 +55,7 @@ const sections = [
   {
     title: "Article 2 – Applicable Website and Platform",
     paragraphs: [
-      "This Data Policy applies to www.checkmateproperty.com and any related digital platform, landing page, public project page, admin area, report, form, mobile experience, or connected service operated by Checkmate Property LLC.",
+      "This Data Policy applies to checkmateproperty.com and any related digital platform, landing page, public project page, admin area, report, form, mobile experience, or connected service operated by Checkmate Property LLC.",
       "References to “Website,” “Platform,” “we,” “us,” or “our” refer to Checkmate Property LLC and its related digital services.",
       "References to “you” or “user” refer to any visitor, account holder, form submitter, client, investor, partner, or administrator who interacts with the Platform.",
     ],
@@ -286,7 +286,7 @@ export default async function DataPolicyPage() {
                     <strong className="block text-[#101820]">
                       Applicable Website
                     </strong>
-                    <span>www.checkmateproperty.com</span>
+                    <span>checkmateproperty.com</span>
                   </div>
 
                   <div>

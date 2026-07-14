@@ -9,6 +9,22 @@ const nextConfig: NextConfig = {
 
   compress: true,
 
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.checkmateproperty.com",
+          },
+        ],
+        destination: "https://checkmateproperty.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
   images: {
     remotePatterns: [
       {

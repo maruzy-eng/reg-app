@@ -41,7 +41,7 @@ const sections = [
   {
     title: "Article 1 – Acceptance of Terms",
     paragraphs: [
-      "These Terms of Use govern your access to and use of www.checkmateproperty.com, including any related pages, forms, tools, digital services, mobile experiences, or applications operated by Checkmate Property LLC.",
+      "These Terms of Use govern your access to and use of checkmateproperty.com, including any related pages, forms, tools, digital services, mobile experiences, or applications operated by Checkmate Property LLC.",
       "By accessing or using the Website, you acknowledge that you have read, understood, and agreed to be bound by these Terms of Use.",
       "If you do not agree with these Terms, you should immediately stop using the Website and any services made available through it.",
     ],
@@ -49,7 +49,7 @@ const sections = [
   {
     title: "Article 2 – Applicable Website",
     paragraphs: [
-      "These Terms apply to the Website located at www.checkmateproperty.com and any corresponding digital platform, mobile application, landing page, or service that links to these Terms.",
+      "These Terms apply to the Website located at checkmateproperty.com and any corresponding digital platform, mobile application, landing page, or service that links to these Terms.",
       "The Website is operated by Checkmate Property LLC, referred to in these Terms as “Checkmate Property,” “we,” “us,” or “our.”",
       "Users of the Website may be referred to as “you,” “your,” or “user.”",
     ],
@@ -251,7 +251,7 @@ export default async function TermsOfUsePage() {
                     <strong className="block text-[#101820]">
                       Applicable Website
                     </strong>
-                    <span>www.checkmateproperty.com</span>
+                    <span>checkmateproperty.com</span>
                   </div>
 
                   <div>
