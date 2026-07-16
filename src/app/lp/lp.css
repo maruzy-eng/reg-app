@@ -229,7 +229,7 @@
 
 .cmp-hero-title {
   width: 100%;
-  max-width: 1180px;
+  max-width: 1040px;
   margin: 20px auto 0;
   color: var(--cmp-dark);
   font-size: 64px;
@@ -352,7 +352,7 @@
 .cmp-hero-inner {
   text-align: center;
   width: 100%;
-  max-width: 1120px;
+  max-width: 920px;
   margin: 0 auto;
   position: relative;
   z-index: 3;
@@ -1698,19 +1698,19 @@
 
 .cmp-free .cmp-hero-inner {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1040px;
   margin: 0 auto;
 }
 
 .cmp-free .cmp-hero-card {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1040px;
   margin: 0 auto;
 }
 
 .cmp-free .cmp-hero-title {
   width: 100%;
-  max-width: 1100px;
+  max-width: 980px;
   margin: 20px auto 0;
   color: var(--cmp-dark) !important;
   font-family: var(--font-inter), "Inter", Arial, sans-serif !important;
@@ -2151,20 +2151,16 @@
 
 .cmp-hero-copy,
 .cmp-section-copy {
-  max-width: 820px;
+  max-width: 680px;
   margin: 16px auto 0;
   text-align: center;
 }
 
 .cmp-hero-copy {
-  max-width: 760px;
+  max-width: 560px;
   font-size: clamp(14px, 1.2vw, 16px);
   line-height: 1.65;
   color: #708090;
-}
-
-.cmp-free .cmp-hero .cmp-subtitle {
-  max-width: 880px;
 }
 
 .cmp-copy-lead {
@@ -2506,5 +2502,802 @@
   .cmp-institutional-visual:hover .cmp-institutional-visual-image {
     transform: none;
     transition: none;
+  }
+}
+
+/* =========================================================
+   UI/UX SENIOR REFINEMENT — FINAL OVERRIDE LAYER
+   Mantém toda a copy e aprimora hierarquia, ritmo e clareza.
+========================================================= */
+
+.cmp-free {
+  --cmp-dark: #0a3440;
+  --cmp-dark-deep: #06252e;
+  --cmp-text: #18313a;
+  --cmp-muted: #607486;
+  --cmp-surface: #ffffff;
+  --cmp-surface-soft: #f6fafb;
+  --cmp-line: rgba(10, 52, 64, 0.1);
+  --cmp-line-strong: rgba(10, 52, 64, 0.16);
+  --cmp-green: #53bc76;
+  --cmp-blue: #39aff2;
+  --cmp-gradient: linear-gradient(100deg, var(--cmp-green) 0%, var(--cmp-blue) 100%);
+  --cmp-shadow: 0 28px 80px rgba(8, 42, 52, 0.11);
+  --cmp-shadow-soft: 0 16px 48px rgba(8, 42, 52, 0.075);
+  --cmp-radius-xl: 32px;
+  --cmp-radius-lg: 24px;
+  --cmp-radius-md: 18px;
+  background: #ffffff;
+}
+
+.cmp-section {
+  padding-top: clamp(76px, 7vw, 112px);
+  padding-bottom: clamp(76px, 7vw, 112px);
+}
+
+.cmp-section.compact {
+  padding-top: clamp(68px, 6vw, 92px);
+  padding-bottom: clamp(68px, 6vw, 92px);
+}
+
+.cmp-container {
+  max-width: 1200px;
+}
+
+.cmp-bg-grid {
+  background-size: 64px 64px;
+  opacity: 0.58;
+  mask-image: radial-gradient(circle at center, black 0%, rgba(0, 0, 0, 0.66) 42%, transparent 84%);
+  -webkit-mask-image: radial-gradient(circle at center, black 0%, rgba(0, 0, 0, 0.66) 42%, transparent 84%);
+}
+
+.cmp-kicker {
+  min-height: 34px;
+  padding: 8px 14px;
+  border-color: rgba(10, 52, 64, 0.11);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px rgba(8, 42, 52, 0.06);
+  font-size: 11px;
+  letter-spacing: 0.015em;
+}
+
+.cmp-kicker::before {
+  width: 8px;
+  height: 8px;
+  box-shadow: 0 0 0 5px rgba(83, 188, 118, 0.11);
+}
+
+.cmp-title,
+.cmp-title.medium,
+.cmp-hero-title {
+  letter-spacing: -0.045em;
+}
+
+.cmp-title.medium {
+  max-width: 840px;
+  font-size: clamp(32px, 3.25vw, 46px);
+  line-height: 1.1;
+}
+
+.cmp-section-head {
+  max-width: 860px;
+  margin-bottom: 50px;
+}
+
+.cmp-section-head .cmp-title {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cmp-subtitle {
+  max-width: 760px;
+  color: #64798b;
+  font-size: clamp(16px, 1.25vw, 18px);
+  line-height: 1.68;
+}
+
+.cmp-copy {
+  color: #607486;
+  line-height: 1.72;
+}
+
+/* HERO — mais autoridade, menos espaço morto e melhor escaneabilidade */
+.cmp-hero {
+  min-height: min(90vh, 860px);
+  padding-top: clamp(56px, 6vw, 94px);
+  padding-bottom: clamp(62px, 6vw, 88px);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(83, 188, 118, 0.08), transparent 28%),
+    radial-gradient(circle at 78% 26%, rgba(57, 175, 242, 0.08), transparent 30%),
+    #ffffff;
+}
+
+.cmp-hero .cmp-bg-grid {
+  display: block;
+  opacity: 0.34;
+}
+
+.cmp-hero-inner {
+  max-width: 1060px;
+}
+
+.cmp-logo-wrap {
+  margin-bottom: 24px;
+}
+
+.cmp-logo {
+  width: 176px;
+}
+
+.cmp-hero-title,
+.cmp-free .cmp-hero-title {
+  max-width: 1010px;
+  margin-top: 24px;
+  font-size: clamp(43px, 5.15vw, 70px);
+  line-height: 1.015;
+}
+
+.cmp-hero .cmp-subtitle {
+  max-width: 780px;
+  margin-top: 24px;
+  font-size: clamp(16px, 1.35vw, 19px);
+}
+
+.cmp-hero-copy {
+  max-width: 650px;
+  margin-top: 15px;
+  color: #728393;
+}
+
+.cmp-hero-actions {
+  margin-top: 32px;
+}
+
+.cmp-btn {
+  min-height: 58px;
+  padding: 16px 28px;
+  box-shadow: 0 16px 40px rgba(57, 175, 242, 0.2), 0 12px 28px rgba(83, 188, 118, 0.15);
+}
+
+.cmp-btn:hover {
+  transform: translateY(-2px);
+}
+
+.cmp-microcopy {
+  margin-top: 13px;
+}
+
+/* TICKER mais elegante e menos dominante */
+.cmp-ticker-wrap {
+  box-shadow: 0 12px 32px rgba(57, 175, 242, 0.13);
+}
+
+.cmp-ticker span {
+  padding: 16px 24px;
+  font-size: 12px;
+  letter-spacing: 0.11em;
+}
+
+/* PORTFÓLIO */
+.cmp-image-carousel-section {
+  padding-top: clamp(84px, 7vw, 108px);
+  padding-bottom: clamp(84px, 7vw, 108px);
+  background:
+    radial-gradient(circle at 10% 8%, rgba(83, 188, 118, 0.075), transparent 29%),
+    radial-gradient(circle at 91% 2%, rgba(57, 175, 242, 0.085), transparent 31%),
+    linear-gradient(180deg, #ffffff 0%, #f6fafb 100%);
+}
+
+.cmp-portfolio-section .cmp-section-head {
+  margin-bottom: 48px;
+}
+
+.cmp-img-carousel-wrap {
+  gap: 22px;
+}
+
+.cmp-img-carousel-track {
+  gap: 18px;
+}
+
+.cmp-img-carousel-item {
+  width: clamp(280px, 27vw, 370px);
+  height: clamp(350px, 33.75vw, 462px);
+  flex-basis: clamp(280px, 27vw, 370px);
+  border-radius: 22px;
+  border-color: rgba(10, 52, 64, 0.08);
+  background: #ffffff;
+  box-shadow: 0 16px 44px rgba(8, 42, 52, 0.09);
+}
+
+.cmp-img-carousel-item img {
+  padding: 10px;
+}
+
+.cmp-img-carousel-row::before,
+.cmp-img-carousel-row::after {
+  width: min(11vw, 150px);
+}
+
+/* SPLITS */
+.cmp-split {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(44px, 5vw, 72px);
+}
+
+.cmp-panel {
+  padding: clamp(26px, 3vw, 38px);
+  border-radius: var(--cmp-radius-xl);
+}
+
+.cmp-panel::before {
+  left: 34px;
+  right: 34px;
+}
+
+.cmp-lines {
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.cmp-line-item {
+  min-height: 58px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border-color: rgba(10, 52, 64, 0.075);
+  font-size: 15px;
+  box-shadow: 0 7px 22px rgba(8, 42, 52, 0.04);
+}
+
+.cmp-check {
+  width: 25px;
+  height: 25px;
+  border-radius: 9px;
+}
+
+.cmp-highlight {
+  max-width: 610px;
+  font-size: clamp(21px, 2vw, 27px);
+}
+
+/* CARDS — menos pesados, mais consistentes */
+.cmp-grid {
+  gap: 18px;
+}
+
+.cmp-card {
+  border-radius: var(--cmp-radius-lg);
+  padding: 26px;
+  border-color: rgba(10, 52, 64, 0.085);
+  box-shadow: 0 12px 34px rgba(8, 42, 52, 0.055);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.cmp-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(57, 175, 242, 0.23);
+  box-shadow: 0 20px 52px rgba(8, 42, 52, 0.09);
+}
+
+.cmp-card::after {
+  display: none;
+}
+
+.cmp-icon {
+  width: 46px;
+  height: 46px;
+  margin-bottom: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 24px rgba(57, 175, 242, 0.18);
+}
+
+.cmp-card h3 {
+  font-size: 19px;
+  line-height: 1.28;
+}
+
+.cmp-card p {
+  margin-top: 11px;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.cmp-audience-section {
+  background: #ffffff;
+}
+
+.cmp-audience-section .cmp-grid.cols-3 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.cmp-audience-section .cmp-card {
+  min-height: 248px;
+}
+
+.cmp-resources-section {
+  background: linear-gradient(180deg, #f8fbfc 0%, #ffffff 100%);
+}
+
+/* DARK SECTIONS — mais premium, menos “bloco sólido” */
+.cmp-dark-band {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(83, 188, 118, 0.16), transparent 31%),
+    radial-gradient(circle at 91% 5%, rgba(57, 175, 242, 0.17), transparent 34%),
+    linear-gradient(145deg, #082f39 0%, #0b3b47 54%, #082b35 100%);
+}
+
+.cmp-dark-band .cmp-bg-grid {
+  opacity: 0.2;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+}
+
+.cmp-dark-band .cmp-panel,
+.cmp-dark-band .cmp-card {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.11);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.14);
+}
+
+.cmp-dark-band .cmp-line-item {
+  background: rgba(255, 255, 255, 0.065);
+  border-color: rgba(255, 255, 255, 0.095);
+}
+
+.cmp-dark-band .cmp-kicker {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* DEPOIMENTOS */
+.cmp-testimonials-section .cmp-section-head {
+  margin-bottom: 40px;
+}
+
+.cmp-media-card {
+  padding: 0;
+  border-radius: 22px;
+}
+
+.cmp-media-body {
+  padding: 18px 20px 22px;
+}
+
+.cmp-media-body .cmp-kicker {
+  min-height: 28px;
+  padding: 6px 10px;
+  font-size: 9px;
+}
+
+.cmp-media-body h3 {
+  margin-top: 11px;
+  font-size: 17px;
+}
+
+/* INSTITUCIONAL CENTRALIZADO */
+.cmp-institutional-section {
+  background:
+    radial-gradient(circle at 50% 15%, rgba(57, 175, 242, 0.055), transparent 35%),
+    #ffffff;
+}
+
+.cmp-institutional {
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cmp-institutional .cmp-title {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cmp-institutional-copy {
+  max-width: 790px;
+  margin: 0 auto;
+}
+
+.cmp-institutional .cmp-copy {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.cmp-institutional-lines {
+  max-width: 820px;
+  margin: 34px auto 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  text-align: left;
+}
+
+/* VIDEO PRINCIPAL */
+.cmp-presentation-section .cmp-split {
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+}
+
+.cmp-visual-box {
+  border-radius: 24px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.2);
+}
+
+/* NOTAS */
+.cmp-note {
+  max-width: 780px;
+  margin-top: 34px;
+  padding: 15px 18px;
+  border-radius: 16px;
+}
+
+/* CTA FINAL */
+.cmp-journey-card {
+  max-width: 940px;
+  padding: clamp(52px, 5vw, 72px) clamp(28px, 5vw, 58px);
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at 85% 15%, rgba(57, 175, 242, 0.18), transparent 34%),
+    radial-gradient(circle at 12% 90%, rgba(83, 188, 118, 0.18), transparent 32%),
+    linear-gradient(145deg, #082f39, #0b3a46);
+  box-shadow: 0 28px 80px rgba(8, 42, 52, 0.18);
+}
+
+.cmp-journey-card h2 {
+  max-width: 800px;
+  font-size: clamp(34px, 3.7vw, 46px);
+}
+
+.cmp-journey-card p {
+  max-width: 690px;
+  font-size: 17px;
+}
+
+/* FORMULÁRIO */
+.cmp-form-section {
+  padding-top: clamp(78px, 7vw, 104px);
+  padding-bottom: clamp(86px, 7vw, 112px);
+  background:
+    radial-gradient(ellipse 68% 46% at 50% 0%, rgba(83, 188, 118, 0.07), transparent 58%),
+    linear-gradient(180deg, #ffffff, #f7fafb);
+}
+
+.cmp-form-heading {
+  margin-bottom: 38px;
+}
+
+.cmp-form-shell {
+  max-width: 920px;
+  padding: clamp(26px, 3vw, 40px);
+  border-radius: 28px;
+  border-color: rgba(10, 52, 64, 0.1);
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 24px 70px rgba(8, 42, 52, 0.1);
+}
+
+.cmp-form-shell input,
+.cmp-form-shell select,
+.cmp-form-shell textarea {
+  border-radius: 14px !important;
+}
+
+.cmp-form-shell button[type="submit"] {
+  min-height: 58px !important;
+}
+
+/* FOOTER */
+.cmp-footer {
+  padding-top: 84px;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(83, 188, 118, 0.12), transparent 30%),
+    radial-gradient(circle at 84% 8%, rgba(57, 175, 242, 0.14), transparent 32%),
+    #062b35;
+}
+
+.cmp-footer-inner {
+  max-width: 920px;
+}
+
+.cmp-footer h2 {
+  font-size: clamp(32px, 3.6vw, 48px);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 1100px) {
+  .cmp-audience-section .cmp-grid.cols-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cmp-audience-section .cmp-card {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 1024px) {
+  .cmp-split,
+  .cmp-presentation-section .cmp-split {
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+
+  .cmp-experience-section .cmp-inline-cta,
+  .cmp-presentation-section .cmp-inline-cta {
+    justify-content: flex-start;
+  }
+
+  .cmp-institutional-lines {
+    max-width: 760px;
+  }
+}
+
+@media (max-width: 767px) {
+  .cmp-section,
+  .cmp-section.compact {
+    padding-top: 58px;
+    padding-bottom: 58px;
+  }
+
+  .cmp-hero {
+    padding-top: 42px;
+    padding-bottom: 52px;
+  }
+
+  .cmp-logo {
+    width: 148px;
+  }
+
+  .cmp-hero-title,
+  .cmp-free .cmp-hero-title {
+    margin-top: 18px;
+    font-size: clamp(29px, 8vw, 38px);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  .cmp-hero .cmp-subtitle {
+    margin-top: 18px;
+    font-size: 15px;
+  }
+
+  .cmp-hero-copy {
+    font-size: 14px;
+  }
+
+  .cmp-title.medium {
+    font-size: clamp(26px, 7vw, 32px);
+  }
+
+  .cmp-section-head {
+    margin-bottom: 30px;
+  }
+
+  .cmp-grid.cols-3,
+  .cmp-audience-section .cmp-grid.cols-3,
+  .cmp-institutional-lines {
+    grid-template-columns: 1fr;
+  }
+
+  .cmp-card {
+    padding: 21px;
+    border-radius: 20px;
+  }
+
+  .cmp-card h3 {
+    font-size: 17px;
+  }
+
+  .cmp-img-carousel-item {
+    width: calc((100vw - 38px) / 2);
+    height: calc(((100vw - 38px) / 2) * 1.25);
+    flex-basis: calc((100vw - 38px) / 2);
+    border-radius: 14px;
+  }
+
+  .cmp-panel {
+    padding: 22px;
+    border-radius: 22px;
+  }
+
+  .cmp-institutional .cmp-copy {
+    text-align: left;
+  }
+
+  .cmp-institutional-lines {
+    margin-top: 26px;
+  }
+
+  .cmp-journey-card {
+    padding: 38px 22px;
+    border-radius: 26px;
+  }
+
+  .cmp-journey-card h2 {
+    font-size: 27px;
+  }
+
+  .cmp-form-shell {
+    padding: 22px 18px;
+    border-radius: 22px;
+  }
+}
+
+@media (max-width: 390px) {
+  .cmp-hero-title,
+  .cmp-free .cmp-hero-title {
+    font-size: 28px;
+  }
+
+  .cmp-ticker span {
+    font-size: 11px;
+  }
+}
+
+/* =========================================================
+   CORREÇÃO DE VISIBILIDADE — BLOCO INSTITUCIONAL
+   O bloco não depende do IntersectionObserver para aparecer.
+========================================================= */
+
+.cmp-institutional-section {
+  position: relative;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  min-height: 1px;
+  isolation: isolate;
+}
+
+.cmp-institutional-section > .cmp-bg-grid {
+  z-index: 0;
+}
+
+.cmp-institutional-section > .cmp-container {
+  position: relative;
+  z-index: 3;
+}
+
+.cmp-institutional-section .cmp-institutional {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.cmp-free.js-reveal
+  .cmp-institutional-section
+  .cmp-institutional {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.cmp-institutional-section .cmp-kicker,
+.cmp-institutional-section .cmp-title,
+.cmp-institutional-section .cmp-institutional-copy,
+.cmp-institutional-section .cmp-institutional-lines {
+  position: relative;
+  z-index: 2;
+  visibility: visible;
+  opacity: 1;
+}
+
+/* =========================================================
+   BLOCO INSTITUCIONAL COM IMAGEM
+========================================================= */
+
+.cmp-institutional-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(390px, 0.88fr);
+  align-items: center;
+  gap: clamp(44px, 6vw, 82px);
+  width: 100%;
+}
+
+.cmp-institutional-section .cmp-institutional {
+  max-width: none;
+  margin: 0;
+  text-align: left;
+}
+
+.cmp-institutional-image-wrap {
+  position: relative;
+  width: 100%;
+  min-height: 610px;
+  overflow: hidden;
+  border: 1px solid rgba(14, 53, 65, 0.1);
+  border-radius: 34px;
+  background: #eaf3f5;
+  box-shadow:
+    0 30px 80px rgba(15, 23, 42, 0.12),
+    0 12px 30px rgba(14, 53, 65, 0.08);
+  isolation: isolate;
+}
+
+.cmp-institutional-image-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 24px;
+  pointer-events: none;
+}
+
+.cmp-institutional-image {
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.01);
+}
+
+.cmp-institutional-image-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(14, 53, 65, 0.02) 0%,
+      rgba(14, 53, 65, 0.04) 54%,
+      rgba(14, 53, 65, 0.28) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(83, 188, 118, 0.07),
+      transparent 38%,
+      rgba(57, 175, 242, 0.06)
+    );
+}
+
+.cmp-institutional-layout .cmp-institutional-lines {
+  grid-template-columns: 1fr;
+}
+
+.cmp-institutional-layout .cmp-line-item {
+  padding: 15px 16px;
+}
+
+@media (max-width: 1024px) {
+  .cmp-institutional-layout {
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+
+  .cmp-institutional-section .cmp-institutional {
+    width: 100%;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  .cmp-institutional-image-wrap {
+    width: 100%;
+    max-width: 820px;
+    min-height: 500px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .cmp-institutional-layout {
+    gap: 28px;
+  }
+
+  .cmp-institutional-image-wrap {
+    min-height: 340px;
+    border-radius: 24px;
+  }
+
+  .cmp-institutional-image-wrap::before {
+    inset: 10px;
+    border-radius: 17px;
+  }
+}
+
+@media (max-width: 390px) {
+  .cmp-institutional-image-wrap {
+    min-height: 300px;
+    border-radius: 22px;
   }
 }

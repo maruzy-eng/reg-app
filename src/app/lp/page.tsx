@@ -59,6 +59,7 @@ const LP_COLOR_LOGO_URL =
 const INSTITUTIONAL_IMAGE_URL =
   "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/property-media/properties/3-weston-st-lexington-ma-02421/images/000-3-weston2.jpeg";
 
+
 const TOP_CAROUSEL_IMAGES = [
   "17",
   "18",
@@ -433,7 +434,7 @@ export default async function FlipHouseLandingPage() {
       </section>
 
       {/* BLOCO 04 — EXPERIÊNCIA PRÁTICA */}
-      <section className="cmp-section compact cmp-dark-band">
+      <section className="cmp-section compact cmp-dark-band cmp-experience-section">
         <SectionBackground />
 
         <div className="cmp-container">
@@ -487,7 +488,7 @@ export default async function FlipHouseLandingPage() {
       </section>
 
       {/* BLOCO 05 — PÚBLICO */}
-      <section className="cmp-section">
+      <section className="cmp-section cmp-audience-section">
         <SectionBackground />
 
         <div className="cmp-container">
@@ -530,7 +531,7 @@ export default async function FlipHouseLandingPage() {
       </section>
 
       {/* BLOCO 06 — DEPOIMENTOS */}
-      <section className="cmp-section compact cmp-dark-band">
+      <section className="cmp-section compact cmp-dark-band cmp-testimonials-section">
         <SectionBackground />
 
         <div className="cmp-container">
@@ -590,12 +591,12 @@ export default async function FlipHouseLandingPage() {
       </section>
 
       {/* BLOCO 07 — INSTITUCIONAL */}
-      <section className="cmp-section">
+      <section className="cmp-section cmp-institutional-section">
         <SectionBackground />
 
         <div className="cmp-container">
-          <div className="cmp-institutional-split">
-            <div className="cmp-institutional cmp-reveal">
+          <div className="cmp-institutional-layout">
+            <div className="cmp-institutional">
               <div className="cmp-kicker">Sobre a Checkmate Property</div>
 
               <h2 className="cmp-title medium">
@@ -605,20 +606,22 @@ export default async function FlipHouseLandingPage() {
                 </span>
               </h2>
 
-              <p className="cmp-copy cmp-copy-lead">
-                A Checkmate Property foi criada por profissionais que atuam
-                diretamente em projetos de Flip House, novas construções e
-                desenvolvimento residencial nos Estados Unidos.
-              </p>
+              <div className="cmp-institutional-copy">
+                <p className="cmp-copy cmp-copy-lead">
+                  A Checkmate Property foi criada por profissionais que atuam
+                  diretamente em projetos de Flip House, novas construções e
+                  desenvolvimento residencial nos Estados Unidos.
+                </p>
 
-              <p className="cmp-copy">
-                Nossa tecnologia e nossos processos foram desenvolvidos a partir
-                das necessidades encontradas durante a pesquisa, análise,
-                planejamento, execução e acompanhamento de projetos
-                imobiliários.
-              </p>
+                <p className="cmp-copy">
+                  Nossa tecnologia e nossos processos foram desenvolvidos a partir
+                  das necessidades encontradas durante a pesquisa, análise,
+                  planejamento, execução e acompanhamento de projetos
+                  imobiliários.
+                </p>
+              </div>
 
-              <div className="cmp-lines">
+              <div className="cmp-lines cmp-institutional-lines">
                 {INSTITUTIONAL_ITEMS.map((item) => (
                   <div className="cmp-line-item" key={item}>
                     <span className="cmp-check" aria-hidden="true">
@@ -630,29 +633,25 @@ export default async function FlipHouseLandingPage() {
               </div>
             </div>
 
-            <div className="cmp-institutional-visual cmp-reveal cmp-delay-1">
+            <div className="cmp-institutional-image-wrap">
               <Image
-                className="cmp-institutional-visual-image"
+                className="cmp-institutional-image"
                 src={INSTITUTIONAL_IMAGE_URL}
-                alt="Projeto residencial Checkmate em Lexington, Massachusetts"
+                alt="Projeto residencial desenvolvido pela Checkmate Property em Lexington, Massachusetts"
                 fill
-                sizes="(max-width: 1024px) 100vw, 42vw"
+                sizes="(max-width: 1024px) 100vw, 44vw"
               />
               <div
-                className="cmp-institutional-visual-overlay"
+                className="cmp-institutional-image-shade"
                 aria-hidden="true"
               />
-              <div className="cmp-institutional-visual-label">
-                <strong>Projetos residenciais</strong>
-                <span>Experiência prática aplicada à tecnologia.</span>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* BLOCO 08 — CONTEÚDOS E RECURSOS */}
-      <section className="cmp-section compact">
+      <section className="cmp-section compact cmp-resources-section">
         <SectionBackground />
 
         <div className="cmp-container">
@@ -700,7 +699,7 @@ export default async function FlipHouseLandingPage() {
       </section>
 
       {/* BLOCO 09 — VÍDEO PRINCIPAL */}
-      <section className="cmp-section cmp-dark-band">
+      <section className="cmp-section cmp-dark-band cmp-presentation-section">
         <SectionBackground />
 
         <div className="cmp-container">
