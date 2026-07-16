@@ -297,9 +297,9 @@ export default async function FlipHouseLandingPage() {
             <h1 className="cmp-hero-title">
               <span className="cmp-hero-line">
                 Aprenda os fundamentos de Flip House 
-              </span>
+              </span><b> </b>
               <span className="cmp-gradient-text">
-                e conheça ferramentas para analisar propriedades nos Estados
+                 e conheça ferramentas para analisar propriedades nos Estados
                 Unidos
               </span>
             </h1>
