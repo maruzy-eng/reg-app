@@ -358,6 +358,48 @@ async function generateUniqueFormSlug(
   throw new Error("Unable to generate a unique form slug.");
 }
 
+async function generateUniqueFormFieldName(
+  supabase: ReturnType<typeof getSupabaseAdmin>,
+  formId: string,
+  value: string,
+) {
+  const baseName = slugify(value).replaceAll("-", "_") || "field";
+
+  for (let index = 1; index <= 100; index += 1) {
+    const candidate = index === 1 ? baseName : `${baseName}_${index}`;
+
+    const { data, error } = await supabase
+      .from("form_fields")
+      .select("id")
+      .eq("form_id", formId)
+      .eq("name", candidate)
+      .maybeSingle<{ id: string }>();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (!data) {
+      return candidate;
+    }
+  }
+
+  throw new Error("Unable to generate a unique field name.");
+}
+
+function isDuplicateFormFieldNameError(
+  error: { message?: string | null; code?: string | null } | null,
+) {
+  if (!error) {
+    return false;
+  }
+
+  return (
+    error.code === "23505" ||
+    Boolean(error.message?.includes("form_fields_form_id_name_unique"))
+  );
+}
+
 async function cleanupDuplicatedForm(
   supabase: ReturnType<typeof getSupabaseAdmin>,
   formId: string | null,
@@ -933,10 +975,9 @@ export async function createAdminFormFieldAction(formData: FormData) {
 
   const preset = getFormFieldPreset(rawType);
   const finalLabel = label || preset?.label || "";
-  const finalName = slugify(rawName || preset?.name || finalLabel).replaceAll(
-    "-",
-    "_",
-  );
+  const requestedName = slugify(
+    rawName || preset?.name || finalLabel,
+  ).replaceAll("-", "_");
   const finalType = preset
     ? preset.type
     : isAllowedFormFieldType(rawType)
@@ -954,9 +995,15 @@ export async function createAdminFormFieldAction(formData: FormData) {
     throw new Error("Field label is required.");
   }
 
-  if (!finalName) {
+  if (!requestedName) {
     throw new Error("Field name is required.");
   }
+
+  const finalName = await generateUniqueFormFieldName(
+    supabase,
+    formId,
+    requestedName,
+  );
 
   const { error } = await supabase.from("form_fields").insert({
     form_id: formId,
@@ -972,6 +1019,12 @@ export async function createAdminFormFieldAction(formData: FormData) {
   });
 
   if (error) {
+    if (isDuplicateFormFieldNameError(error)) {
+      throw new Error(
+        `A field named "${requestedName}" already exists on this form. Use a different name.`,
+      );
+    }
+
     throw new Error(error.message);
   }
 
