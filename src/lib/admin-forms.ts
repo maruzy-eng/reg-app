@@ -362,6 +362,7 @@ async function generateUniqueFormFieldName(
   supabase: ReturnType<typeof getSupabaseAdmin>,
   formId: string,
   value: string,
+  excludeFieldId?: string,
 ) {
   const baseName = slugify(value).replaceAll("-", "_") || "field";
 
@@ -379,7 +380,7 @@ async function generateUniqueFormFieldName(
       throw new Error(error.message);
     }
 
-    if (!data) {
+    if (!data || data.id === excludeFieldId) {
       return candidate;
     }
   }
@@ -1017,6 +1018,102 @@ export async function createAdminFormFieldAction(formData: FormData) {
     default_value: defaultValue || null,
     sort_order: sortOrder,
   });
+
+  if (error) {
+    if (isDuplicateFormFieldNameError(error)) {
+      throw new Error(
+        `A field named "${requestedName}" already exists on this form. Use a different name.`,
+      );
+    }
+
+    throw new Error(error.message);
+  }
+
+  revalidateFormPaths(formId);
+}
+
+export async function updateAdminFormFieldAction(formData: FormData) {
+  const supabase = getSupabaseAdmin();
+
+  const formId = getStringValue(formData, "form_id");
+  const fieldId = getStringValue(formData, "field_id");
+  const label = getStringValue(formData, "label");
+  const rawName = getStringValue(formData, "name");
+  const rawType = getStringValue(formData, "type") || "text";
+  const placeholder = getStringValue(formData, "placeholder");
+  const helpText = getStringValue(formData, "help_text");
+  const defaultValue = getStringValue(formData, "default_value");
+  const required = getBooleanValue(formData, "required");
+  const sortOrder = getNumberValue(formData, "sort_order", 0);
+  const optionsRaw = getStringValue(formData, "options");
+
+  const preset = getFormFieldPreset(rawType);
+  const finalLabel = label || preset?.label || "";
+  const requestedName = slugify(
+    rawName || preset?.name || finalLabel,
+  ).replaceAll("-", "_");
+  const finalType = preset
+    ? preset.type
+    : isAllowedFormFieldType(rawType)
+      ? rawType
+      : "text";
+  const finalPlaceholder = placeholder || preset?.placeholder || "";
+  const finalHelpText = helpText || preset?.help_text || "";
+  const options = preset ? preset.options : parseJsonValue(optionsRaw, []);
+
+  if (!formId || !fieldId) {
+    throw new Error("Missing field information.");
+  }
+
+  if (!finalLabel) {
+    throw new Error("Field label is required.");
+  }
+
+  if (!requestedName) {
+    throw new Error("Field name is required.");
+  }
+
+  const { data: existingField, error: existingError } = await supabase
+    .from("form_fields")
+    .select("id, name")
+    .eq("id", fieldId)
+    .eq("form_id", formId)
+    .maybeSingle<{ id: string; name: string }>();
+
+  if (existingError) {
+    throw new Error(existingError.message);
+  }
+
+  if (!existingField) {
+    throw new Error("Field not found.");
+  }
+
+  const finalName =
+    requestedName === existingField.name
+      ? existingField.name
+      : await generateUniqueFormFieldName(
+          supabase,
+          formId,
+          requestedName,
+          fieldId,
+        );
+
+  const { error } = await supabase
+    .from("form_fields")
+    .update({
+      label: finalLabel,
+      name: finalName,
+      type: finalType,
+      placeholder: finalPlaceholder || null,
+      help_text: finalHelpText || null,
+      required,
+      options,
+      default_value: defaultValue || null,
+      sort_order: sortOrder,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", fieldId)
+    .eq("form_id", formId);
 
   if (error) {
     if (isDuplicateFormFieldNameError(error)) {

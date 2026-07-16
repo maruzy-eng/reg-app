@@ -1,12 +1,27 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2, X } from "lucide-react";
+
+export type FieldBuilderField = {
+  id: string;
+  label: string;
+  name: string;
+  type: string;
+  placeholder: string | null;
+  help_text: string | null;
+  required: boolean;
+  options: unknown;
+  default_value: string | null;
+  sort_order: number;
+};
 
 type FieldBuilderFormProps = {
   formId: string;
   nextSortOrder: number;
   action: (formData: FormData) => void | Promise<void>;
+  field?: FieldBuilderField;
+  onCancel?: () => void;
 };
 
 type FieldType =
@@ -31,16 +46,16 @@ type OptionRow = {
   value: string;
 };
 
-function createOptionRow(): OptionRow {
+function createOptionRow(label = "", value = ""): OptionRow {
   const id =
     typeof crypto !== "undefined" && "randomUUID" in crypto
       ? crypto.randomUUID()
-      : String(Date.now());
+      : String(Date.now() + Math.random());
 
   return {
     id,
-    label: "",
-    value: "",
+    label,
+    value,
   };
 }
 
@@ -51,6 +66,79 @@ function slugifyOption(value: string) {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "_")
     .replace(/^_+|_+$/g, "");
+}
+
+function resolveEditorType(field?: FieldBuilderField): FieldType {
+  if (!field) {
+    return "text";
+  }
+
+  if (field.name === "state_br" && field.type === "select") {
+    return "state_br";
+  }
+
+  if (field.type === "phone" && field.options && typeof field.options === "object") {
+    const mask = (field.options as { mask?: string }).mask;
+
+    if (mask === "(99) 99999-9999") {
+      return "whatsapp_br";
+    }
+
+    if (mask === "(999) 999-9999") {
+      return "whatsapp_us";
+    }
+  }
+
+  const allowed: FieldType[] = [
+    "text",
+    "email",
+    "phone",
+    "number",
+    "textarea",
+    "select",
+    "state",
+    "checkbox",
+    "radio",
+    "hidden",
+    "password",
+  ];
+
+  if (allowed.includes(field.type as FieldType)) {
+    return field.type as FieldType;
+  }
+
+  return "text";
+}
+
+function parseOptionRows(options: unknown): OptionRow[] {
+  if (!Array.isArray(options)) {
+    return [createOptionRow(), createOptionRow()];
+  }
+
+  const rows = options
+    .map((option) => {
+      if (!option || typeof option !== "object") {
+        return null;
+      }
+
+      const label =
+        typeof (option as { label?: unknown }).label === "string"
+          ? (option as { label: string }).label
+          : "";
+      const value =
+        typeof (option as { value?: unknown }).value === "string"
+          ? (option as { value: string }).value
+          : "";
+
+      if (!label && !value) {
+        return null;
+      }
+
+      return createOptionRow(label, value || slugifyOption(label));
+    })
+    .filter((option): option is OptionRow => Boolean(option));
+
+  return rows.length > 0 ? rows : [createOptionRow(), createOptionRow()];
 }
 
 const presetDefaults: Partial<
@@ -92,13 +180,15 @@ export function FieldBuilderForm({
   formId,
   nextSortOrder,
   action,
+  field,
+  onCancel,
 }: FieldBuilderFormProps) {
-  const [type, setType] = useState<FieldType>("text");
-  const [required, setRequired] = useState(false);
-  const [options, setOptions] = useState<OptionRow[]>([
-    createOptionRow(),
-    createOptionRow(),
-  ]);
+  const isEditing = Boolean(field);
+  const [type, setType] = useState<FieldType>(() => resolveEditorType(field));
+  const [required, setRequired] = useState(() => field?.required ?? false);
+  const [options, setOptions] = useState<OptionRow[]>(() =>
+    parseOptionRows(field?.options),
+  );
 
   const shouldShowOptions = type === "radio" || type === "select";
   const selectedPreset = presetDefaults[type];
@@ -167,6 +257,7 @@ export function FieldBuilderForm({
   return (
     <form action={action} className="grid gap-4">
       <input type="hidden" name="form_id" value={formId} />
+      {field ? <input type="hidden" name="field_id" value={field.id} /> : null}
       <input
         type="hidden"
         name="options"
@@ -178,6 +269,7 @@ export function FieldBuilderForm({
           name="label"
           type="text"
           required={!selectedPreset}
+          defaultValue={field?.label || ""}
           placeholder={selectedPreset?.label || "Field label"}
           className="admin-input min-h-[46px] px-4"
         />
@@ -185,6 +277,7 @@ export function FieldBuilderForm({
         <input
           name="name"
           type="text"
+          defaultValue={field?.name || ""}
           placeholder={selectedPreset?.name || "field_name"}
           className="admin-input min-h-[46px] px-4"
         />
@@ -217,7 +310,7 @@ export function FieldBuilderForm({
           name="sort_order"
           type="number"
           placeholder="Order"
-          defaultValue={nextSortOrder}
+          defaultValue={field?.sort_order ?? nextSortOrder}
           className="admin-input min-h-[46px] px-4"
         />
 
@@ -236,6 +329,7 @@ export function FieldBuilderForm({
       <input
         name="placeholder"
         type="text"
+        defaultValue={field?.placeholder || ""}
         placeholder={
           selectedPreset
             ? selectedPreset.placeholder
@@ -251,6 +345,7 @@ export function FieldBuilderForm({
       <input
         name="help_text"
         type="text"
+        defaultValue={field?.help_text || ""}
         placeholder={selectedPreset?.helpText || "Help text"}
         className="admin-input min-h-[46px] px-4"
       />
@@ -258,6 +353,7 @@ export function FieldBuilderForm({
       <input
         name="default_value"
         type="text"
+        defaultValue={field?.default_value || ""}
         placeholder="Default value"
         className="admin-input min-h-[46px] px-4"
       />
@@ -344,13 +440,26 @@ export function FieldBuilderForm({
         </div>
       ) : null}
 
-      <button
-        type="submit"
-        className="admin-primary-button min-h-[46px] gap-2 px-5 text-sm"
-      >
-        <Plus size={17} />
-        Add Field
-      </button>
+      <div className="flex flex-wrap gap-3">
+        <button
+          type="submit"
+          className="admin-primary-button min-h-[46px] gap-2 px-5 text-sm"
+        >
+          {isEditing ? <Pencil size={17} /> : <Plus size={17} />}
+          {isEditing ? "Save Field" : "Add Field"}
+        </button>
+
+        {isEditing && onCancel ? (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="admin-secondary-button min-h-[46px] gap-2 px-5 text-sm"
+          >
+            <X size={17} />
+            Cancel
+          </button>
+        ) : null}
+      </div>
     </form>
   );
 }

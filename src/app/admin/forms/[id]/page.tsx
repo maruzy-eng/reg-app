@@ -11,7 +11,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { EmailBuilderForm } from "@/components/admin/forms/email-builder-form";
-import { FieldBuilderForm } from "@/components/admin/forms/field-builder-form";
+import { FormFieldsManager } from "@/components/admin/forms/form-fields-manager";
 import { DuplicateFormButton } from "@/components/admin/forms/duplicate-form-button";
 import { SubmissionsList } from "@/components/admin/forms/submissions-list";
 import {
@@ -24,6 +24,7 @@ import {
   getAdminFormDetails,
   toggleAdminFormWebhookAction,
   updateAdminFormAction,
+  updateAdminFormFieldAction,
 } from "@/lib/admin-forms";
 import {
   createAdminFormEmailAction,
@@ -42,62 +43,6 @@ type AdminFormDetailsPageProps = {
 
 function stringifyJson(value: unknown) {
   return JSON.stringify(value || {}, null, 2);
-}
-
-function getFieldTypeLabel(type: string) {
-  if (type === "state") {
-    return "States US";
-  }
-
-  if (type === "state_br") {
-    return "State BR";
-  }
-
-  if (type === "whatsapp_us") {
-    return "WhatsApp US";
-  }
-
-  if (type === "whatsapp_br") {
-    return "WhatsApp BR";
-  }
-
-  if (type === "radio") {
-    return "Radio";
-  }
-
-  if (type === "select") {
-    return "Select";
-  }
-
-  if (type === "textarea") {
-    return "Textarea";
-  }
-
-  if (type === "checkbox") {
-    return "Checkbox";
-  }
-
-  if (type === "hidden") {
-    return "Hidden";
-  }
-
-  if (type === "password") {
-    return "Password";
-  }
-
-  if (type === "phone") {
-    return "Phone";
-  }
-
-  if (type === "email") {
-    return "Email";
-  }
-
-  if (type === "number") {
-    return "Number";
-  }
-
-  return "Text";
 }
 
 export default async function AdminFormDetailsPage({
@@ -389,69 +334,18 @@ export default async function AdminFormDetailsPage({
               </h3>
 
               <p className="text-sm text-slate-500">
-                Add fields that will appear on the public form.
+                Add or edit fields that will appear on the public form.
               </p>
             </div>
           </div>
 
-          <FieldBuilderForm
+          <FormFieldsManager
             formId={form.id}
-            nextSortOrder={fields.length + 1}
-            action={createAdminFormFieldAction}
+            fields={fields}
+            createAction={createAdminFormFieldAction}
+            updateAction={updateAdminFormFieldAction}
+            deleteAction={deleteAdminFormFieldAction}
           />
-
-          <div className="mt-8 space-y-3">
-            {fields.length === 0 ? (
-              <p className="admin-empty-state rounded-2xl p-5 text-sm">
-                No fields yet.
-              </p>
-            ) : (
-              fields.map((field) => (
-                <div
-                  key={field.id}
-                  className="admin-form-list-item rounded-2xl p-4"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="admin-form-list-title font-bold">
-                        {field.label}
-                      </p>
-
-                      <p className="admin-form-list-meta mt-1 text-xs">
-                        {field.name} · {getFieldTypeLabel(field.type)} · order{" "}
-                        {field.sort_order}
-                        {field.required ? " · required" : ""}
-                      </p>
-
-                      {field.type === "radio" || field.type === "select" ? (
-                        <pre className="admin-code-block mt-3 max-h-[180px] overflow-auto rounded-xl p-3 text-xs">
-                          {stringifyJson(field.options)}
-                        </pre>
-                      ) : null}
-                    </div>
-
-                    <form action={deleteAdminFormFieldAction}>
-                      <input type="hidden" name="form_id" value={form.id} />
-
-                      <input
-                        type="hidden"
-                        name="field_id"
-                        value={field.id}
-                      />
-
-                      <button
-                        type="submit"
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-100"
-                        aria-label="Delete field"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
         </div>
 
         <div className="admin-section p-6 md:p-8">
