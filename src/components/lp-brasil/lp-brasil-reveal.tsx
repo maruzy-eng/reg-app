@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-const ROOT_SELECTOR = "#checkmate-invest-eua";
+const ROOT_SELECTOR = "#checkmate-property-free-br";
 
 export function LpBrasilReveal() {
   useEffect(() => {

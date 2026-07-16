@@ -3,7 +3,12 @@ import { Inter } from "next/font/google";
 import Image from "next/image";
 import { DynamicFormComponent } from "@/components/forms/dynamic-form";
 import { LpBrasilReveal } from "@/components/lp-brasil/lp-brasil-reveal";
+import { YouTubeVideoCover } from "@/components/lp-brasil/youtube-video-cover";
 import { getPublishedFormBySlug } from "@/lib/forms";
+import {
+  getFlipHouseImageUrl,
+  type LpFlipHouseImageNumber,
+} from "@/lib/lp-assets";
 import "./lp-brasil.css";
 
 const inter = Inter({
@@ -16,16 +21,220 @@ const inter = Inter({
 const LP_LOGO_URL =
   "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/lp-assets/logos/checkmate-logo-color.jpg";
 
+const INSTITUTIONAL_IMAGE_URL =
+  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/property-media/properties/3-weston-st-lexington-ma-02421/images/000-3-weston2.jpeg";
+
+const TOP_CAROUSEL_IMAGES = [
+  "17",
+  "18",
+  "19",
+  "20",
+  "17",
+  "18",
+  "19",
+  "20",
+  "17",
+  "18",
+  "19",
+  "20",
+] as LpFlipHouseImageNumber[];
+
+const BOTTOM_CAROUSEL_IMAGES = [
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31",
+  "32",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31",
+  "32",
+] as LpFlipHouseImageNumber[];
+
+/**
+ * Substitua pelos URLs definitivos dos depoimentos.
+ *
+ * Para YouTube, Vimeo ou vídeos hospedados, altere o conteúdo
+ * dos cards para iframe ou player próprio do projeto.
+ */
+const TESTIMONIALS = [
+  {
+    id: "testimonial-01",
+    type: "Relato",
+    title: "Conhecendo o ecossistema Checkmate",
+    youtubeId: "RvdnzJzm7QA",
+  },
+  {
+    id: "testimonial-02",
+    type: "Experiência",
+    title: "Aprendizado sobre o mercado imobiliário americano",
+    youtubeId: "1B3Rs5mR7-E",
+  },
+  {
+    id: "testimonial-03",
+    type: "História",
+    title: "Conteúdo e experiência prática com a Checkmate",
+    youtubeId: "Onyo9rSEoV8",
+  },
+] as const;
+
+const PRESENTATION_VIDEO = {
+  title: "Apresentação da Checkmate Property",
+  youtubeId: "Yl65_FE6v5I",
+} as const;
+
+const AUDIENCE_PROFILES = [
+  {
+    number: "01",
+    title: "Está conhecendo o mercado americano",
+    description:
+      "Para quem deseja entender os conceitos e as principais etapas antes de analisar um projeto.",
+  },
+  {
+    number: "02",
+    title: "Realtor ou profissional de Real Estate",
+    description:
+      "Para profissionais que desejam ampliar seus conhecimentos sobre análise, reforma e desenvolvimento de propriedades.",
+  },
+  {
+    number: "03",
+    title: "Construtor ou prestador de serviços",
+    description:
+      "Para quem trabalha com construção, reforma ou serviços relacionados ao setor imobiliário.",
+  },
+  {
+    number: "04",
+    title: "Empreendedor do setor imobiliário",
+    description:
+      "Para quem busca compreender melhor os processos envolvidos em projetos residenciais nos Estados Unidos.",
+  },
+  {
+    number: "05",
+    title: "Está estudando seu primeiro projeto",
+    description:
+      "Para quem deseja conhecer os fundamentos antes de tomar decisões sobre uma propriedade.",
+  },
+  {
+    number: "06",
+    title: "Já analisa propriedades",
+    description:
+      "Para quem deseja organizar melhor seus critérios de pesquisa, comparação e avaliação.",
+  },
+  {
+    number: "07",
+    title: "Já executou projetos imobiliários",
+    description:
+      "Para profissionais que desejam conhecer novas ferramentas e processos de análise.",
+  },
+  {
+    number: "08",
+    title: "Prefere aprender em português",
+    description:
+      "Para quem busca conteúdo claro e organizado sobre o mercado imobiliário americano em português.",
+  },
+] as const;
+
+const INTRODUCTORY_CONTENT_ITEMS = [
+  "Conteúdo direto e organizado sobre o mercado imobiliário americano.",
+  "Introdução aos fundamentos de Flip House e New Construction.",
+  "Conceitos iniciais de pesquisa e análise de propriedades.",
+  "Apresentação das ferramentas da Checkmate Property.",
+  "Explicações sobre custos, etapas e critérios de avaliação de projetos.",
+  "Experiência prática aplicada ao conteúdo e à tecnologia.",
+] as const;
+
+const INSTITUTIONAL_ITEMS = [
+  "Ferramentas para pesquisa e análise de propriedades.",
+  "Processos organizados para planejamento e acompanhamento de projetos.",
+  "Experiência prática aplicada ao desenvolvimento da plataforma.",
+  "Recursos criados para apoiar decisões com mais informação e organização.",
+] as const;
+
+const CONTENT_RESOURCES = [
+  {
+    icon: "⌂",
+    title: "Fundamentos de Flip House",
+    description:
+      "Conheça os conceitos iniciais, as principais etapas e os termos utilizados nesse tipo de projeto.",
+  },
+  {
+    icon: "⌕",
+    title: "Análise de propriedades",
+    description:
+      "Entenda os critérios básicos utilizados na pesquisa e avaliação de um projeto imobiliário.",
+  },
+  {
+    icon: "◎",
+    title: "Mercado imobiliário americano",
+    description:
+      "Conheça fatores do mercado que devem ser considerados antes da análise de uma propriedade.",
+  },
+  {
+    icon: "≋",
+    title: "COMPS e ARV",
+    description:
+      "Veja como propriedades comparáveis e estimativas de valor são utilizadas durante uma análise.",
+  },
+  {
+    icon: "▦",
+    title: "Plataforma Checkmate Property",
+    description:
+      "Conheça a estrutura da tecnologia e os principais recursos desenvolvidos pela Checkmate.",
+  },
+  {
+    icon: "✓",
+    title: "Planejamento de projetos",
+    description:
+      "Entenda como dados, custos e etapas podem ser organizados para apoiar o planejamento.",
+  },
+] as const;
+
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Invista em Real Estate nos EUA | Checkmate Group",
+  title:
+    "Conteúdo Gratuito de Flip House e Real Estate | Checkmate Property",
   description:
-    "Acesse gratuitamente conteúdos e informações sobre oportunidades no mercado imobiliário americano com estrutura profissional, lastro real e exposição em dólar.",
+    "Aprenda os fundamentos de Flip House, conheça processos de análise imobiliária e descubra as ferramentas da Checkmate Property para pesquisar propriedades nos Estados Unidos.",
 };
 
+function SectionBackground() {
+  return <div className="cmp-bg-grid" aria-hidden="true" />;
+}
+
+function PrimaryButton({
+  href = "#formulario",
+  children = "Acessar conteúdo gratuito",
+}: {
+  href?: string;
+  children?: string;
+}) {
+  return (
+    <a href={href} className="cmp-btn">
+      <span>{children}</span>
+      <span aria-hidden="true">→</span>
+    </a>
+  );
+}
+
 export default async function LpBrasilPage() {
-  let formData: Awaited<ReturnType<typeof getPublishedFormBySlug>> | null = null;
+  let formData: Awaited<ReturnType<typeof getPublishedFormBySlug>> | null =
+    null;
 
   try {
     formData = await getPublishedFormBySlug("lp-brasil");
@@ -34,16 +243,17 @@ export default async function LpBrasilPage() {
   }
 
   return (
-    <section
+    <main
       className={`${inter.variable} cmp-invest`}
-      id="checkmate-invest-eua"
+      id="checkmate-property-free-br"
     >
       <LpBrasilReveal />
 
+      {/* BLOCO 01 — HERO */}
       <section className="cmp-section cmp-hero">
-        <div className="cmp-bg-grid" />
+        <SectionBackground />
 
-        <div className="cmp-squares">
+        <div className="cmp-squares" aria-hidden="true">
           <span className="cmp-square s1" />
           <span className="cmp-square s2" />
           <span className="cmp-square s3" />
@@ -51,595 +261,514 @@ export default async function LpBrasilPage() {
           <span className="cmp-square s5" />
         </div>
 
-        <div className="cmp-blur one" />
-        <div className="cmp-blur two" />
+        <div className="cmp-blur one" aria-hidden="true" />
+        <div className="cmp-blur two" aria-hidden="true" />
+        <div className="cmp-hero-wash" aria-hidden="true" />
 
         <div className="cmp-container">
-          <div className="cmp-hero-inner">
-            <div className="cmp-hero-card cmp-reveal is-visible">
-              <div className="cmp-logo-wrap">
-                <Image
-                  className="cmp-logo"
-                  src={LP_LOGO_URL}
-                  alt="Checkmate Property"
-                  width={324}
-                  height={116}
-                  priority
-                />
-              </div>
-
-              <div className="cmp-kicker">
-                Real Estate americano com estrutura profissional
-              </div>
-
-              <h1 className="cmp-hero-title">
-                <span>Acesse oportunidades no</span>
-                <span className="cmp-gradient-text">
-                  mercado imobiliário dos EUA
-                </span>
-              </h1>
-
-              <p className="cmp-subtitle">
-                Com estrutura profissional, lastro real e exposição em dólar.
-                Veja como brasileiros estão posicionando capital através de
-                projetos de construção, valorização e venda de imóveis nos
-                Estados Unidos.
-                <br />
-                <br />
-                <strong>
-                  Acesso voltado para quem busca diversificar patrimônio,
-                  investir com visão de longo prazo e entender uma operação
-                  imobiliária real no mercado americano.
-                </strong>
-              </p>
-
-              <div className="cmp-hero-actions">
-                <a href="#formulario" className="cmp-btn">
-                  <span>Quero acesso gratuito</span>
-                  <span>→</span>
-                </a>
-              </div>
-
-              <div className="cmp-microcopy">
-                Flip House • New Construction • Real Estate • Investment
-              </div>
+          <div className="cmp-hero-inner cmp-reveal is-visible">
+            <div className="cmp-logo-wrap">
+              <Image
+                className="cmp-logo"
+                src={LP_LOGO_URL}
+                alt="Checkmate Property"
+                width={324}
+                height={116}
+                priority
+              />
             </div>
+
+            <div className="cmp-kicker">
+              Tecnologia, conteúdo e experiência prática
+            </div>
+
+            <h1 className="cmp-hero-title">
+              <span>Aprenda os fundamentos de Flip House</span>
+              <span className="cmp-gradient-text">
+                e conheça ferramentas para analisar propriedades nos Estados
+                Unidos
+              </span>
+            </h1>
+
+            <p className="cmp-subtitle">
+              Acesse gratuitamente um conteúdo introdutório sobre Flip House e
+              conheça a tecnologia da Checkmate Property para pesquisar
+              propriedades, analisar projetos e compreender melhor o mercado
+              imobiliário americano.
+            </p>
+
+            <p className="cmp-copy cmp-hero-copy">
+              Conteúdo em português, desenvolvido a partir da experiência
+              prática da Checkmate em projetos de reforma, construção e análise
+              imobiliária nos Estados Unidos.
+            </p>
+
+            <div className="cmp-hero-actions">
+              <PrimaryButton />
+            </div>
+
+            <p className="cmp-microcopy">
+              Cadastro gratuito • Sem cartão de crédito
+            </p>
           </div>
         </div>
       </section>
 
-      <div className="cmp-ticker-wrap">
+      {/* BLOCO 02 — TICKER */}
+      <div
+        className="cmp-ticker-wrap"
+        aria-label="Conceitos abordados no conteúdo"
+      >
         <div className="cmp-ticker">
-          <span>
-            Flip House • New Construction • Investment • Dollar Assets •
-            Massachusetts • Real Estate • Capital Preservation •
-          </span>
-          <span>
-            Flip House • New Construction • Investment • Dollar Assets •
-            Massachusetts • Real Estate • Capital Preservation •
-          </span>
-          <span>
-            Flip House • New Construction • Investment • Dollar Assets •
-            Massachusetts • Real Estate • Capital Preservation •
-          </span>
-          <span>
-            Flip House • New Construction • Investment • Dollar Assets •
-            Massachusetts • Real Estate • Capital Preservation •
-          </span>
+          {[1, 2, 3, 4].map((item) => (
+            <span key={item}>
+              FLIP HOUSE • NEW CONSTRUCTION • PROPERTY RESEARCH • DEAL ANALYSIS
+              • MARKET DATA • COMPS • ARV • PROJECT PLANNING •
+            </span>
+          ))}
         </div>
       </div>
 
-      <section className="cmp-section cmp-scenario-section">
-        <div className="cmp-bg-grid" />
+      {/* BLOCO 03 — PORTFÓLIO (carrossel de projetos da /lp) */}
+      <section className="cmp-section cmp-scenario-section cmp-portfolio-section">
+        <SectionBackground />
 
         <div className="cmp-container">
           <div className="cmp-section-head cmp-reveal">
-            <div className="cmp-kicker">O cenário atual</div>
+            <div className="cmp-kicker">Portfólio Checkmate</div>
 
             <h2 className="cmp-title medium">
-              Você está cansado de investir em um país onde seu patrimônio
-              parece estar sempre lutando contra o tempo?
+              Projetos desenvolvidos e executados pela{" "}
+              <span className="cmp-gradient-text">Checkmate</span>
             </h2>
 
             <p className="cmp-subtitle">
-              Para muitos brasileiros, proteger patrimônio no longo prazo se
-              tornou cada vez mais desafiador.
+              Conheça alguns projetos residenciais realizados pela Checkmate nos
+              Estados Unidos, incluindo reformas, novas construções e diferentes
+              etapas de desenvolvimento e execução.
+            </p>
+
+            <p className="cmp-copy cmp-section-copy">
+              Esses projetos demonstram a experiência prática da empresa no
+              mercado imobiliário americano. Cada propriedade possui
+              características, condições e resultados específicos.
             </p>
           </div>
+        </div>
 
-          <div className="cmp-grid cols-3">
-            <div className="cmp-card cmp-reveal">
-              <div className="cmp-icon">↘</div>
-              <h3>Desvalorização cambial</h3>
-              <p>
-                O Real perdeu grande parte do seu poder de compra frente ao
-                dólar. Na prática, seu patrimônio pode encolher silenciosamente
-                quando está concentrado em moeda fraca.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-1">
-              <div className="cmp-icon">⚖</div>
-              <h3>Inflação acumulada</h3>
-              <p>
-                A inflação reduz o poder de compra ano após ano e transforma
-                qualquer planejamento de longo prazo em uma corrida contra o
-                tempo.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-2">
-              <div className="cmp-icon">▣</div>
-              <h3>Burocracia e carga tributária</h3>
-              <p>
-                A complexidade brasileira limita crescimento, trava decisões e
-                muitas vezes deixa capital parado onde poderia estar melhor
-                posicionado.
-              </p>
+        <div className="cmp-img-carousel-wrap cmp-reveal">
+          <div
+            className="cmp-img-carousel-row"
+            aria-label="Carrossel superior de imagens"
+          >
+            <div className="cmp-img-carousel-track cmp-img-carousel-track-top">
+              {TOP_CAROUSEL_IMAGES.map((item, index) => (
+                <div
+                  key={`top-${item}-${index}`}
+                  className="cmp-img-carousel-item"
+                  aria-hidden={index >= 4 ? true : undefined}
+                >
+                  <Image
+                    src={getFlipHouseImageUrl(item)}
+                    alt={index >= 4 ? "" : `Checkmate Property tela ${item}`}
+                    width={420}
+                    height={525}
+                    sizes="(max-width: 768px) 300px, 420px"
+                  />
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="cmp-attention-box cmp-reveal">
-            <div className="cmp-attention-icon">✓</div>
+          <div
+            className="cmp-img-carousel-row"
+            aria-label="Carrossel inferior de imagens"
+          >
+            <div className="cmp-img-carousel-track cmp-img-carousel-track-bottom">
+              {BOTTOM_CAROUSEL_IMAGES.map((item, index) => (
+                <div
+                  key={`bottom-${item}-${index}`}
+                  className="cmp-img-carousel-item"
+                  aria-hidden={index >= 12 ? true : undefined}
+                >
+                  <Image
+                    src={getFlipHouseImageUrl(item)}
+                    alt={index >= 12 ? "" : `Checkmate Property tela ${item}`}
+                    width={420}
+                    height={525}
+                    sizes="(max-width: 768px) 300px, 420px"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="cmp-container">
+          <aside className="cmp-note cmp-reveal">
+            <span className="cmp-note-mark" aria-hidden="true">
+              !
+            </span>
             <p>
-              O mercado imobiliário dos Estados Unidos segue como um dos ativos
-              mais sólidos e previsíveis do mundo.
+              Os projetos apresentados são exemplos específicos do portfólio da
+              Checkmate Property e não constituem promessa ou garantia de
+              resultados.
             </p>
-          </div>
-
-          <div className="cmp-actions-center cmp-reveal">
-            <a href="#formulario" className="cmp-btn">
-              <span>Quero acesso gratuito</span>
-              <span>→</span>
-            </a>
-          </div>
+          </aside>
         </div>
       </section>
 
+      {/* BLOCO 04 — EXPERIÊNCIA PRÁTICA */}
       <section className="cmp-section compact cmp-dark-band">
-        <div className="cmp-bg-grid" />
-
-        <div className="cmp-container">
-          <div className="cmp-section-head cmp-reveal">
-            <div className="cmp-kicker">Vantagens estratégicas</div>
-
-            <h2 className="cmp-title medium">
-              Por que investidores brasileiros estão olhando para o{" "}
-              <span className="cmp-gradient-text">
-                mercado imobiliário americano?
-              </span>
-            </h2>
-          </div>
-
-          <div className="cmp-grid cols-3">
-            <div className="cmp-card cmp-reveal">
-              <div className="cmp-icon">$</div>
-              <h3>Exposição em dólar</h3>
-              <p>
-                Posicione parte do seu patrimônio em uma das moedas mais fortes
-                e relevantes do mundo.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-1">
-              <div className="cmp-icon">✓</div>
-              <h3>Segurança jurídica consolidada</h3>
-              <p>
-                Invista em um mercado com regras claras, sistema legal
-                estruturado e histórico de proteção ao investidor.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-2">
-              <div className="cmp-icon">↗</div>
-              <h3>Demanda real e alta liquidez</h3>
-              <p>
-                O mercado imobiliário americano possui volume, compradores,
-                financiamento e demanda consistente ao longo dos anos.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal">
-              <div className="cmp-icon">⌂</div>
-              <h3>Ativo tangível</h3>
-              <p>
-                Imóveis são bens reais, com valor físico, localização, utilidade
-                e potencial de preservação patrimonial.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-1">
-              <div className="cmp-icon">▲</div>
-              <h3>Potencial de valorização</h3>
-              <p>
-                Projetos bem analisados, comprados corretamente e executados com
-                eficiência podem gerar oportunidades relevantes de valorização.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-2">
-              <div className="cmp-icon">●</div>
-              <h3>Economia forte</h3>
-              <p>
-                Enquanto muitos apenas tentam proteger patrimônio no Brasil,
-                você pode entender como se posicionar em uma das maiores
-                economias do mundo.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="cmp-section">
-        <div className="cmp-bg-grid" />
+        <SectionBackground />
 
         <div className="cmp-container">
           <div className="cmp-split">
             <div className="cmp-reveal">
-              <div className="cmp-kicker">A operação</div>
+              <div className="cmp-kicker">Experiência prática Checkmate</div>
 
               <h2 className="cmp-title medium">
-                Quem está por trás dessa{" "}
-                <span className="cmp-gradient-text">estrutura?</span>
+                Entenda como funciona o{" "}
+                <span className="cmp-gradient-text">
+                  mercado imobiliário americano
+                </span>
               </h2>
 
-              <p className="cmp-copy" style={{ marginTop: "24px" }}>
-                O Grupo Checkmate, liderado por Victor Queirós e Thai Nunes,
-                atua diretamente no mercado imobiliário americano com foco em
-                aquisição, construção, valorização e venda de ativos.
-                <br />
-                <br />A operação combina experiência prática, inteligência
-                imobiliária, estrutura financeira e execução no campo.
+              <p className="cmp-copy cmp-copy-lead">
+                A partir da experiência prática da Checkmate em reformas, novas
+                construções e análise de propriedades nos Estados Unidos,
+                organizamos conteúdos e ferramentas para apresentar os
+                principais fundamentos desse mercado de forma clara e
+                estruturada.
               </p>
 
-              <div className="cmp-highlight">
-                Não se trata de teoria. É execução diária dentro de um dos
-                mercados imobiliários mais sólidos do mundo.
-              </div>
-
-              <div style={{ marginTop: "30px" }}>
-                <a href="#cmp-primeiro-passo" className="cmp-btn">
-                  <span>Quero acesso gratuito</span>
-                  <span>→</span>
-                </a>
-              </div>
-            </div>
-
-            <div className="cmp-visual-box cmp-reveal cmp-delay-1">
-              <div className="cmp-dashboard">
-                <div className="cmp-dashboard-top">
-                  <span className="cmp-dot" />
-                  <span className="cmp-dot" />
-                  <span className="cmp-dot" />
-                </div>
-
-                <div className="cmp-dash-row">
-                  <div className="cmp-dash-box">
-                    <div className="cmp-dash-label">Operação</div>
-                    <div className="cmp-dash-value">Flip</div>
-                    <div className="cmp-dash-bar">
-                      <span style={{ width: "82%" }} />
-                    </div>
-                  </div>
-
-                  <div className="cmp-dash-box">
-                    <div className="cmp-dash-label">Projetos</div>
-                    <div className="cmp-dash-value">Build</div>
-                    <div className="cmp-dash-bar">
-                      <span style={{ width: "74%" }} />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="cmp-dash-row">
-                  <div className="cmp-dash-box">
-                    <div className="cmp-dash-label">Mercado</div>
-                    <div className="cmp-dash-value">MA</div>
-                    <div className="cmp-dash-bar">
-                      <span style={{ width: "68%" }} />
-                    </div>
-                  </div>
-
-                  <div className="cmp-dash-box">
-                    <div className="cmp-dash-label">Estrutura</div>
-                    <div className="cmp-dash-value">Real</div>
-                    <div className="cmp-dash-bar">
-                      <span style={{ width: "88%" }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="cmp-section compact">
-        <div className="cmp-bg-grid" />
-
-        <div className="cmp-container">
-          <div className="cmp-section-head cmp-reveal">
-            <div className="cmp-kicker">Estrutura Checkmate</div>
-
-            <h2 className="cmp-title medium">
-              Hoje operamos através de uma estrutura{" "}
-              <span className="cmp-gradient-text">completa</span>
-            </h2>
-          </div>
-
-          <div className="cmp-grid cols-3">
-            <div className="cmp-card cmp-reveal">
-              <div className="cmp-icon">⌂</div>
-              <h3>Compra, reforma e revenda</h3>
-              <p>
-                Projetos de Flip House com análise de oportunidade, execução de
-                obra e estratégia de saída.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-1">
-              <div className="cmp-icon">▥</div>
-              <h3>Novas construções</h3>
-              <p>
-                Desenvolvimento de projetos residenciais em regiões estratégicas,
-                com foco em valorização e demanda real.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-2">
-              <div className="cmp-icon">◆</div>
-              <h3>Projetos em Massachusetts</h3>
-              <p>
-                Atuação em um dos mercados mais sólidos e competitivos dos
-                Estados Unidos.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal">
-              <div className="cmp-icon">▤</div>
-              <h3>Estrutura jurídica e financeira</h3>
-              <p>
-                Ecossistema pensado para dar clareza, organização e suporte à
-                operação.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-1">
-              <div className="cmp-icon">↗</div>
-              <h3>Tecnologia imobiliária</h3>
-              <p>
-                Ferramentas próprias para análise de propriedades, comparáveis,
-                ROI, ARV e oportunidades.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-2">
-              <div className="cmp-icon">✓</div>
-              <h3>Execução operacional</h3>
-              <p>
-                Projetos acompanhados na prática, com visão de aquisição, obra,
-                valorização e venda.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="cmp-section">
-        <div className="cmp-bg-grid" />
-
-        <div className="cmp-container">
-          <div className="cmp-split">
-            <div className="cmp-reveal">
-              <div className="cmp-kicker">O caminho</div>
-
-              <h2 className="cmp-title medium">
-                Agora você pode acessar essa estrutura e entender como
-                participar dessas{" "}
-                <span className="cmp-gradient-text">operações</span>
-              </h2>
-
-              <p className="cmp-copy" style={{ marginTop: "24px" }}>
-                O primeiro passo é entender como o mercado funciona, como os
-                projetos são analisados e quais critérios tornam uma
-                oportunidade mais segura e estratégica.
+              <p className="cmp-highlight">
+                Comece pelos fundamentos e conheça os processos utilizados na
+                análise de projetos imobiliários.
               </p>
 
-              <div className="cmp-highlight">
-                Mais clareza antes de tomar qualquer decisão.
+              <div className="cmp-inline-cta">
+                <PrimaryButton />
               </div>
             </div>
 
             <div className="cmp-panel cmp-reveal cmp-delay-1">
-              <p className="cmp-copy" style={{ margin: 0 }}>
-                <strong>Você vai entender:</strong>
+              <p className="cmp-panel-label">
+                Neste acesso introdutório, você encontrará:
               </p>
 
               <div className="cmp-lines">
-                <div className="cmp-line-item">
-                  <span className="cmp-check">✓</span>
-                  <span>
-                    Como funciona o mercado imobiliário nos EUA: aquisição,
-                    construção, valorização e venda.
-                  </span>
-                </div>
-
-                <div className="cmp-line-item">
-                  <span className="cmp-check">✓</span>
-                  <span>
-                    Como são estruturados projetos reais de Flip House e New
-                    Construction.
-                  </span>
-                </div>
-
-                <div className="cmp-line-item">
-                  <span className="cmp-check">✓</span>
-                  <span>
-                    Como brasileiros estão buscando diversificação patrimonial em
-                    dólar.
-                  </span>
-                </div>
-
-                <div className="cmp-line-item">
-                  <span className="cmp-check">✓</span>
-                  <span>
-                    Como avaliar oportunidades com mais clareza, segurança e
-                    visão estratégica.
-                  </span>
-                </div>
-
-                <div className="cmp-line-item">
-                  <span className="cmp-check">✓</span>
-                  <span>
-                    Quais possibilidades de participação podem fazer sentido
-                    para o seu perfil.
-                  </span>
-                </div>
-              </div>
-
-              <div style={{ marginTop: "30px" }}>
-                <a href="#cmp-primeiro-passo" className="cmp-btn">
-                  <span>Quero acesso gratuito</span>
-                  <span>→</span>
-                </a>
+                {INTRODUCTORY_CONTENT_ITEMS.map((item) => (
+                  <div className="cmp-line-item" key={item}>
+                    <span className="cmp-check" aria-hidden="true">
+                      ✓
+                    </span>
+                    <span>{item}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="cmp-section compact cmp-dark-band">
-        <div className="cmp-bg-grid" />
+      {/* BLOCO 05 — PÚBLICO */}
+      <section className="cmp-section">
+        <SectionBackground />
 
         <div className="cmp-container">
           <div className="cmp-section-head cmp-reveal">
-            <div className="cmp-kicker">Bastidores</div>
+            <div className="cmp-kicker">Perfis de público</div>
 
             <h2 className="cmp-title medium">
-              Acompanhe os bastidores das operações em{" "}
-              <span className="cmp-gradient-text">tempo real</span>
+              Para quem é este{" "}
+              <span className="cmp-gradient-text">conteúdo introdutório?</span>
             </h2>
 
             <p className="cmp-subtitle">
-              Dentro do ecossistema Checkmate, você poderá acompanhar conteúdos
-              e atualizações sobre operações reais no mercado americano.
+              Este conteúdo foi desenvolvido para pessoas interessadas em
+              compreender melhor os processos, ferramentas e critérios
+              utilizados no mercado imobiliário dos Estados Unidos.
             </p>
           </div>
 
           <div className="cmp-grid cols-3">
-            <div className="cmp-card cmp-reveal">
-              <h3>Projetos reais em andamento</h3>
-              <p>
-                Veja operações acontecendo na prática, com imóveis, obras e
-                decisões reais.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-1">
-              <h3>Explicações práticas</h3>
-              <p>
-                Entenda cada etapa: análise, aquisição, construção, valorização e
-                saída.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-2">
-              <h3>Ecossistema Checkmate</h3>
-              <p>
-                Acesse uma estrutura criada para brasileiros interessados no
-                mercado americano.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal">
-              <h3>Atualizações constantes</h3>
-              <p>
-                Conteúdos e bastidores para acompanhar a evolução das operações.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-1">
-              <h3>Conteúdo direto ao ponto</h3>
-              <p>
-                Sem excesso de teoria. Uma visão clara sobre o que acontece na
-                prática.
-              </p>
-            </div>
-
-            <div className="cmp-card cmp-reveal cmp-delay-2">
-              <h3>Visão para investidores</h3>
-              <p>
-                Desenvolva uma leitura mais estratégica sobre oportunidades em
-                dólar.
-              </p>
-            </div>
-          </div>
-
-          <div className="cmp-actions-center cmp-reveal">
-            <a href="#cmp-primeiro-passo" className="cmp-btn">
-              <span>Quero acesso gratuito</span>
-              <span>→</span>
-            </a>
+            {AUDIENCE_PROFILES.map((profile, index) => (
+              <article
+                key={profile.number}
+                className={`cmp-card cmp-reveal ${
+                  index % 3 === 1
+                    ? "cmp-delay-1"
+                    : index % 3 === 2
+                      ? "cmp-delay-2"
+                      : ""
+                }`}
+              >
+                <div className="cmp-icon" aria-hidden="true">
+                  {profile.number}
+                </div>
+                <h3>{profile.title}</h3>
+                <p>{profile.description}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
+      {/* BLOCO 06 — DEPOIMENTOS */}
+      <section className="cmp-section compact cmp-dark-band">
+        <SectionBackground />
+
+        <div className="cmp-container">
+          <div className="cmp-section-head cmp-reveal">
+            <div className="cmp-kicker">Experiências</div>
+
+            <h2 className="cmp-title medium">
+              Conheça experiências com o{" "}
+              <span className="cmp-gradient-text">ecossistema Checkmate</span>
+            </h2>
+
+            <p className="cmp-subtitle">
+              Veja relatos de pessoas que tiveram contato com os conteúdos,
+              atividades e ferramentas da Checkmate Property para compreender
+              melhor o mercado imobiliário americano.
+            </p>
+          </div>
+
+          <div className="cmp-grid cols-3">
+            {TESTIMONIALS.map((testimonial, index) => (
+              <article
+                key={testimonial.id}
+                className={`cmp-card cmp-media-card cmp-reveal ${
+                  index === 1
+                    ? "cmp-delay-1"
+                    : index === 2
+                      ? "cmp-delay-2"
+                      : ""
+                }`}
+              >
+                <YouTubeVideoCover
+                  youtubeId={testimonial.youtubeId}
+                  title={testimonial.title}
+                  phrase={testimonial.title}
+                  compact
+                />
+
+                <div className="cmp-media-body">
+                  <div className="cmp-kicker">{testimonial.type}</div>
+                  <h3>{testimonial.title}</h3>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <aside className="cmp-note cmp-note-on-dark cmp-reveal">
+            <span className="cmp-note-mark" aria-hidden="true">
+              !
+            </span>
+            <p>
+              Os relatos apresentados representam experiências individuais. O
+              uso dos conteúdos ou das ferramentas da Checkmate Property não
+              garante resultados financeiros, comerciais ou imobiliários.
+            </p>
+          </aside>
+        </div>
+      </section>
+
+      {/* BLOCO 07 — INSTITUCIONAL */}
+      <section className="cmp-section">
+        <SectionBackground />
+
+        <div className="cmp-container">
+          <div className="cmp-institutional-split">
+            <div className="cmp-institutional cmp-reveal">
+              <div className="cmp-kicker">Sobre a Checkmate Property</div>
+
+              <h2 className="cmp-title medium">
+                Tecnologia desenvolvida a partir da{" "}
+                <span className="cmp-gradient-text">
+                  experiência prática no mercado imobiliário
+                </span>
+              </h2>
+
+              <p className="cmp-copy cmp-copy-lead">
+                A Checkmate Property foi criada por profissionais que atuam
+                diretamente em projetos de Flip House, novas construções e
+                desenvolvimento residencial nos Estados Unidos.
+              </p>
+
+              <p className="cmp-copy">
+                Nossa tecnologia e nossos processos foram desenvolvidos a partir
+                das necessidades encontradas durante a pesquisa, análise,
+                planejamento, execução e acompanhamento de projetos
+                imobiliários.
+              </p>
+
+              <div className="cmp-lines">
+                {INSTITUTIONAL_ITEMS.map((item) => (
+                  <div className="cmp-line-item" key={item}>
+                    <span className="cmp-check" aria-hidden="true">
+                      ✓
+                    </span>
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="cmp-institutional-visual cmp-reveal cmp-delay-1">
+              <Image
+                className="cmp-institutional-visual-image"
+                src={INSTITUTIONAL_IMAGE_URL}
+                alt="Projeto residencial Checkmate em Lexington, Massachusetts"
+                fill
+                sizes="(max-width: 1024px) 100vw, 42vw"
+              />
+              <div className="cmp-institutional-visual-overlay" aria-hidden="true" />
+              <div className="cmp-institutional-visual-label">
+                <strong>Projetos residenciais</strong>
+                <span>Experiência prática aplicada à tecnologia.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* BLOCO 08 — CONTEÚDOS E RECURSOS */}
+      <section className="cmp-section compact">
+        <SectionBackground />
+
+        <div className="cmp-container">
+          <div className="cmp-section-head cmp-reveal">
+            <div className="cmp-kicker">Conteúdo e tecnologia</div>
+
+            <h2 className="cmp-title medium">
+              O que você encontrará neste{" "}
+              <span className="cmp-gradient-text">acesso introdutório</span>
+            </h2>
+          </div>
+
+          <div className="cmp-grid cols-3">
+            {CONTENT_RESOURCES.map((resource, index) => (
+              <article
+                key={resource.title}
+                className={`cmp-card cmp-reveal ${
+                  index % 3 === 1
+                    ? "cmp-delay-1"
+                    : index % 3 === 2
+                      ? "cmp-delay-2"
+                      : ""
+                }`}
+              >
+                <div className="cmp-icon" aria-hidden="true">
+                  {resource.icon}
+                </div>
+                <h3>{resource.title}</h3>
+                <p>{resource.description}</p>
+              </article>
+            ))}
+          </div>
+
+          <aside className="cmp-note cmp-reveal">
+            <span className="cmp-note-mark" aria-hidden="true">
+              i
+            </span>
+            <p>
+              O cadastro oferece acesso ao conteúdo introdutório e à
+              apresentação das ferramentas. A disponibilidade de recursos
+              adicionais pode variar conforme o plano contratado.
+            </p>
+          </aside>
+        </div>
+      </section>
+
+      {/* BLOCO 09 — VÍDEO PRINCIPAL */}
+      <section className="cmp-section cmp-dark-band">
+        <SectionBackground />
+
+        <div className="cmp-container">
+          <div className="cmp-split">
+            <div className="cmp-reveal">
+              <div className="cmp-kicker">Vídeo de apresentação</div>
+
+              <h2 className="cmp-title medium">
+                Veja como pesquisar, comparar e analisar propriedades com{" "}
+                <span className="cmp-gradient-text">mais clareza</span>
+              </h2>
+
+              <p className="cmp-copy cmp-copy-lead">
+                Assista ao vídeo e conheça os fundamentos, processos e
+                ferramentas apresentados pela Checkmate Property para
+                compreender melhor a análise de projetos imobiliários nos
+                Estados Unidos.
+              </p>
+
+              <div className="cmp-inline-cta">
+                <PrimaryButton />
+              </div>
+            </div>
+
+            <div className="cmp-visual-box cmp-reveal cmp-delay-1">
+              <YouTubeVideoCover
+                youtubeId={PRESENTATION_VIDEO.youtubeId}
+                title={PRESENTATION_VIDEO.title}
+                phrase="Veja a plataforma em ação"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* BLOCO 10 — CHAMADA PARA O FORMULÁRIO */}
       <section className="cmp-section" id="cmp-primeiro-passo">
-        <div className="cmp-bg-grid" />
+        <SectionBackground />
 
         <div className="cmp-container">
           <div className="cmp-journey-card cmp-reveal">
-            <div className="cmp-kicker">Visão estratégica</div>
+            <div className="cmp-kicker">Acesso gratuito</div>
 
-            <h2>Seu patrimônio não precisa estar limitado ao Brasil.</h2>
+            <h2>
+              Cadastre-se para acessar o conteúdo introdutório da Checkmate
+              Property
+            </h2>
 
             <p>
-              A maioria das pessoas conhece esse tipo de oportunidade tarde
-              demais. Outras até conhecem, mas não se posicionam.
-              <br />
-              <br />
-              Quem age com estratégia entende o mercado antes, avalia melhor as
-              possibilidades e constrói patrimônio com mais clareza.
-              <br />
-              <br />O primeiro passo não é investir às cegas. O primeiro passo é
-              entender como esse mercado funciona na prática e avaliar se essa
-              estrutura faz sentido para o seu momento.
+              Preencha seus dados para conhecer os fundamentos de Flip House, os
+              processos de análise de propriedades e as ferramentas apresentadas
+              pela Checkmate Property.
             </p>
 
             <div className="cmp-hero-actions">
-              <a href="#formulario" className="cmp-btn">
-                <span>Quero acesso gratuito</span>
-                <span>→</span>
-              </a>
+              <PrimaryButton />
             </div>
 
-            <div
-              className="cmp-microcopy"
-              style={{ color: "rgba(255,255,255,0.62)" }}
-            >
-              Conheça os bastidores, entenda os projetos e avalie se faz sentido
-              para você.
-            </div>
+            <p className="cmp-microcopy cmp-microcopy-on-dark">
+              Cadastro gratuito e sem necessidade de cartão de crédito. A
+              disponibilidade de recursos adicionais da plataforma pode variar
+              conforme o plano.
+            </p>
           </div>
         </div>
       </section>
 
+      {/* BLOCOS 11 E 12 — FORMULÁRIO E ACEITE */}
       <section className="cmp-section cmp-form-section" id="formulario">
-        <div className="cmp-bg-grid" />
+        <SectionBackground />
 
         <div className="cmp-container">
           <div className="cmp-form-heading cmp-reveal">
             <div className="cmp-kicker">Acesso gratuito</div>
 
             <h2 className="cmp-title medium">
-              Preencha seus dados para receber acesso à{" "}
-              <span className="cmp-gradient-text">LP Brasil</span>
+              Preencha seus dados para acessar o{" "}
+              <span className="cmp-gradient-text">conteúdo introdutório</span>
             </h2>
 
             <p className="cmp-subtitle">
-              Nossa equipe vai entender seu perfil e enviar os próximos passos
-              para você acompanhar conteúdos e oportunidades do ecossistema
-              Checkmate.
+              Conheça os fundamentos de Flip House, os processos de análise de
+              propriedades e as ferramentas apresentadas pela Checkmate
+              Property.
             </p>
           </div>
 
@@ -652,12 +781,44 @@ export default async function LpBrasilPage() {
             ) : (
               <div className="cmp-form-fallback">
                 <h3>Formulário lp-brasil ainda não encontrado.</h3>
+
                 <p>
-                  Crie e publique esse formulário no admin.
+                  Crie e publique o formulário com o slug{" "}
+                  <strong>lp-brasil</strong> no painel administrativo.
                 </p>
+
+                <div className="cmp-form-fallback-list">
+                  <strong>Campos obrigatórios do formulário:</strong>
+
+                  <div className="cmp-lines">
+                    {[
+                      "Nome completo",
+                      "E-mail",
+                      "WhatsApp com código do país e DDD",
+                      "Estado de interesse ou atuação",
+                      "Cidade de interesse ou atuação",
+                      "Profissão ou área de atuação — opcional",
+                      "Em qual estágio você está?",
+                      "Quais temas você deseja conhecer?",
+                      "Checkbox único de aceite dos termos, política de privacidade e autorização de contato",
+                    ].map((item) => (
+                      <div className="cmp-line-item" key={item}>
+                        <span className="cmp-check" aria-hidden="true">
+                          ✓
+                        </span>
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>
+
+          <p className="cmp-legal-sms cmp-reveal">
+            Para cancelar mensagens SMS, responda STOP. Tarifas de mensagens e
+            dados da operadora podem ser aplicadas.
+          </p>
         </div>
       </section>
 
@@ -673,24 +834,35 @@ export default async function LpBrasilPage() {
             />
           </div>
 
-          <div className="cmp-footer-kicker">Checkmate Group</div>
+          <div className="cmp-footer-kicker">Checkmate Property</div>
 
           <h2>
-            Real Estate americano com{" "}
-            <span className="cmp-gradient-text">estrutura profissional.</span>
+            Tecnologia e experiência prática para entender o{" "}
+            <span className="cmp-gradient-text">
+              mercado imobiliário americano.
+            </span>
           </h2>
 
           <p>
-            Plataforma, tecnologia, bastidores e uma operação real para
-            brasileiros que querem entender oportunidades no mercado imobiliário
-            dos Estados Unidos.
+            Conteúdo introdutório, ferramentas de pesquisa e processos
+            estruturados para brasileiros interessados em compreender melhor
+            projetos imobiliários nos Estados Unidos.
           </p>
 
+          <nav className="cmp-footer-nav" aria-label="Documentos legais">
+            <a href="/terms" target="_blank" rel="noopener noreferrer">
+              Termos de Uso
+            </a>
+            <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">
+              Política de Privacidade
+            </a>
+          </nav>
+
           <div className="cmp-footer-bottom">
-            © Checkmate Group. Todos os direitos reservados.
+            © Checkmate Property. Todos os direitos reservados.
           </div>
         </div>
       </footer>
-    </section>
+    </main>
   );
 }
