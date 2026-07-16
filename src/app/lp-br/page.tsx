@@ -869,7 +869,7 @@ export default async function LpBrInvestPage() {
           </div>
 
           <nav className="cmp-footer-nav" aria-label="Documentos legais">
-            <a href="/terms" target="_blank" rel="noopener noreferrer">
+            <a href="/terms-of-use" target="_blank" rel="noopener noreferrer">
               Termos de Uso
             </a>
             <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">

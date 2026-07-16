@@ -1740,7 +1740,7 @@
 .cmp-footer {
   position: relative;
   overflow: hidden;
-  padding: 56px 20px;
+  padding: 76px 20px 40px;
   background:
     radial-gradient(circle at 18% 20%, rgba(83, 188, 118, 0.28), transparent 32%),
     radial-gradient(circle at 86% 16%, rgba(57, 175, 242, 0.22), transparent 34%),
@@ -1786,7 +1786,7 @@
 .cmp-footer-logo-wrap {
   width: 198px;
   height: 76px;
-  margin: 0 auto 26px;
+  margin: 0 auto 28px;
   padding: 14px 22px;
   border-radius: 20px;
   background: #ffffff;
@@ -1837,12 +1837,12 @@
 }
 
 .cmp-footer-nav {
-  margin-top: 28px;
+  margin-top: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 8px 20px;
+  gap: 12px 28px;
 }
 
 .cmp-footer-nav a {
@@ -1860,10 +1860,10 @@
 
 .cmp-footer h2 {
   max-width: 760px;
-  margin: 0 auto;
+  margin: 24px auto 0;
   color: #ffffff;
   font-size: 34px;
-  line-height: 1.08;
+  line-height: 1.2;
   letter-spacing: -1px;
   font-weight: 900;
   text-wrap: balance;
@@ -1878,10 +1878,10 @@
 
 .cmp-footer p {
   max-width: 640px;
-  margin: 18px auto 0;
+  margin: 22px auto 0;
   color: rgba(255, 255, 255, 0.72);
   font-size: 16px;
-  line-height: 1.65;
+  line-height: 1.7;
 }
 
 .cmp-footer-actions {
@@ -1891,8 +1891,8 @@
 }
 
 .cmp-footer-bottom {
-  margin-top: 34px;
-  padding-top: 22px;
+  margin-top: 42px;
+  padding-top: 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   color: rgba(255, 255, 255, 0.56);
   font-size: 12px;
@@ -1920,13 +1920,13 @@
   }
 
   .cmp-footer {
-    padding: 46px 18px;
+    padding: 58px 18px 32px;
   }
 
   .cmp-footer-logo-wrap {
     width: 174px;
     height: 66px;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
     padding: 12px 18px;
     border-radius: 18px;
   }
@@ -1936,12 +1936,23 @@
   }
 
   .cmp-footer h2 {
+    margin-top: 20px;
     font-size: 26px;
-    line-height: 1.12;
+    line-height: 1.22;
   }
 
   .cmp-footer p {
+    margin-top: 18px;
     font-size: 15px;
+  }
+
+  .cmp-footer-nav {
+    margin-top: 28px;
+    gap: 14px 24px;
+  }
+
+  .cmp-footer-bottom {
+    margin-top: 36px;
   }
 
   .cmp-institutional-split {
