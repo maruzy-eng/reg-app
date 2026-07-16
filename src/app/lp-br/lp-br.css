@@ -730,14 +730,115 @@
   color: rgba(255, 255, 255, 0.86);
 }
 
+.cmp-invest .cmp-scenario-section .cmp-icon {
+  background: #ffffff;
+  color: var(--cmp-red);
+  border: 1px solid rgba(239, 68, 68, 0.16);
+  box-shadow: 0 14px 30px rgba(239, 68, 68, 0.12);
+}
+
+.cmp-invest .cmp-scenario-section .cmp-icon svg {
+  color: var(--cmp-red);
+}
+
+.cmp-invest .cmp-scenario-section .cmp-card {
+  background: #ffffff;
+}
+
+.cmp-invest .cmp-scenario-section .cmp-card:hover {
+  border-color: rgba(239, 68, 68, 0.22);
+  box-shadow: 0 26px 70px rgba(239, 68, 68, 0.08);
+}
+
+.cmp-invest .cmp-scenario-section .cmp-card::after {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.32), transparent 68%);
+}
+
 .cmp-invest .cmp-visual-box {
+  min-height: 480px;
   border-radius: 36px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: #0e3541;
+  border: 1px solid var(--cmp-line);
+  background:
+    radial-gradient(circle at 30% 20%, rgba(83, 188, 118, 0.22), transparent 34%),
+    radial-gradient(circle at 80% 70%, rgba(57, 175, 242, 0.22), transparent 35%),
+    #f8fafc;
   box-shadow: var(--cmp-shadow);
   overflow: hidden;
   position: relative;
-  padding: 0;
+}
+
+.cmp-invest .cmp-dashboard {
+  position: absolute;
+  left: 34px;
+  right: 34px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(14, 53, 65, 0.1);
+  box-shadow: 0 22px 60px rgba(15, 23, 42, 0.12);
+  padding: 22px;
+  backdrop-filter: blur(16px);
+}
+
+.cmp-invest .cmp-dashboard-top {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.cmp-invest .cmp-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(14, 53, 65, 0.18);
+}
+
+.cmp-invest .cmp-dash-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.cmp-invest .cmp-dash-box {
+  min-height: 90px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(14, 53, 65, 0.08);
+  padding: 16px;
+}
+
+.cmp-invest .cmp-dash-label {
+  color: var(--cmp-muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.cmp-invest .cmp-dash-value {
+  margin-top: 10px;
+  color: var(--cmp-dark);
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: -1px;
+}
+
+.cmp-invest .cmp-dash-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(14, 53, 65, 0.08);
+  overflow: hidden;
+  margin-top: 18px;
+}
+
+.cmp-invest .cmp-dash-bar span {
+  display: block;
+  width: 72%;
+  height: 100%;
+  background: var(--cmp-gradient);
+  border-radius: 999px;
 }
 
 .cmp-invest .cmp-portfolio-section {
@@ -1248,6 +1349,12 @@
   line-height: 1.68;
 }
 
+.cmp-invest .cmp-footer-actions {
+  margin-top: 28px;
+  display: flex;
+  justify-content: center;
+}
+
 .cmp-invest .cmp-footer-nav {
   margin-top: 28px;
   display: flex;
@@ -1526,7 +1633,28 @@
   }
 
   .cmp-invest .cmp-visual-box {
+    min-height: auto;
+    height: auto;
+    padding: 18px;
     border-radius: 28px;
+    overflow: visible;
+    display: block;
+  }
+
+  .cmp-invest .cmp-dashboard {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 22px;
+    padding: 16px;
+  }
+
+  .cmp-invest .cmp-dash-row {
+    grid-template-columns: 1fr;
   }
 
   .cmp-invest .cmp-journey-card {

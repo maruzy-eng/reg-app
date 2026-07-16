@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-const ROOT_SELECTOR = "#checkmate-property-free-br";
+const ROOT_SELECTOR = "#checkmate-invest-eua";
 
 export function LpBrasilReveal() {
   useEffect(() => {
@@ -66,7 +66,8 @@ export function LpBrasilReveal() {
 
         event.preventDefault();
 
-        const top = target.getBoundingClientRect().top + window.pageYOffset - 24;
+        const top =
+          target.getBoundingClientRect().top + window.pageYOffset - 24;
 
         window.scrollTo({
           top,

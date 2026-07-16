@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/lp-brasil",
+        destination: "/lp-br",
+        permanent: true,
+      },
+      {
         source: "/:path*",
         has: [
           {
@@ -20,11 +25,6 @@ const nextConfig: NextConfig = {
           },
         ],
         destination: "https://checkmateproperty.com/:path*",
-        permanent: true,
-      },
-      {
-        source: "/lp-br",
-        destination: "/lp-brasil",
         permanent: true,
       },
     ];

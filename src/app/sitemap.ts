@@ -69,7 +69,7 @@ function getStaticRoutes(siteUrl: string): MetadataRoute.Sitemap {
       priority: 0.6,
     },
     {
-      url: `${siteUrl}/lp-brasil`,
+      url: `${siteUrl}/lp-br`,
       lastModified,
       changeFrequency: "monthly",
       priority: 0.6,
