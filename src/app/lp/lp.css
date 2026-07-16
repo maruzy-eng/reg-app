@@ -330,18 +330,14 @@
   align-items: center;
   padding-top: 88px;
   padding-bottom: 72px;
-  background:
-    radial-gradient(ellipse 70% 55% at 50% 0%, rgba(83, 188, 118, 0.14), transparent 58%),
-    radial-gradient(ellipse 50% 45% at 90% 80%, rgba(57, 175, 242, 0.12), transparent 55%),
-    linear-gradient(180deg, #f7fbfc 0%, #ffffff 72%);
+  background: #ffffff;
 }
 
-.cmp-hero-wash {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  background: linear-gradient(180deg, transparent 60%, rgba(255, 255, 255, 0.85) 100%);
+.cmp-hero .cmp-bg-grid,
+.cmp-hero .cmp-squares,
+.cmp-hero .cmp-blur,
+.cmp-hero .cmp-hero-wash {
+  display: none;
 }
 
 .cmp-hero-inner {

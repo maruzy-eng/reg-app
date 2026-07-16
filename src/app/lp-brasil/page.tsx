@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 import { DynamicFormComponent } from "@/components/forms/dynamic-form";
-import { LpReveal } from "@/components/lp/lp-reveal";
+import { LpBrasilReveal } from "@/components/lp-brasil/lp-brasil-reveal";
 import { YouTubeVideoCover } from "@/components/lp/youtube-video-cover";
 import { getPublishedFormBySlug } from "@/lib/forms";
 import {
   getFlipHouseImageUrl,
   type LpFlipHouseImageNumber,
 } from "@/lib/lp-assets";
-import "./lp.css";
+import "./lp-brasil.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,42 +18,8 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
-export const metadata: Metadata = {
-  title:
-    "Conteúdo Gratuito de Flip House e Real Estate | Checkmate Property",
-  description:
-    "Aprenda os fundamentos de Flip House, conheça processos de análise imobiliária e descubra as ferramentas da Checkmate Property para pesquisar propriedades nos Estados Unidos.",
-  alternates: {
-    canonical: "/lp",
-  },
-  openGraph: {
-    title:
-      "Conteúdo Gratuito de Flip House e Real Estate | Checkmate Property",
-    description:
-      "Aprenda os fundamentos de Flip House, conheça processos de análise imobiliária e descubra as ferramentas da Checkmate Property para pesquisar propriedades nos Estados Unidos.",
-    url: "/lp",
-    siteName: "Checkmate Property",
-    type: "website",
-    locale: "pt_BR",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-    },
-  },
-};
-
-const LP_COLOR_LOGO_URL =
-  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/site-assets/branding/logo-1783036134455-checkmate-logo-color.jpg";
+const LP_LOGO_URL =
+  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/lp-assets/logos/checkmate-logo-color.jpg";
 
 const INSTITUTIONAL_IMAGE_URL =
   "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/property-media/properties/3-weston-st-lexington-ma-02421/images/000-3-weston2.jpeg";
@@ -233,6 +198,18 @@ const CONTENT_RESOURCES = [
   },
 ] as const;
 
+export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title:
+    "Conteúdo Gratuito de Flip House e Real Estate | Checkmate Property",
+  description:
+    "Aprenda os fundamentos de Flip House, conheça processos de análise imobiliária e descubra as ferramentas da Checkmate Property para pesquisar propriedades nos Estados Unidos.",
+  alternates: {
+    canonical: "/lp-brasil",
+  },
+};
+
 function SectionBackground() {
   return <div className="cmp-bg-grid" aria-hidden="true" />;
 }
@@ -247,23 +224,27 @@ function PrimaryButton({
   return (
     <a href={href} className="cmp-btn">
       <span>{children}</span>
-      <span className="cmp-btn-icon" aria-hidden="true">
-        →
-      </span>
+      <span aria-hidden="true">→</span>
     </a>
   );
 }
 
-export default async function FlipHouseLandingPage() {
-  const { form, fields } = await getPublishedFormBySlug("flip-house");
+export default async function LpBrasilPage() {
+  let formData: Awaited<ReturnType<typeof getPublishedFormBySlug>> | null =
+    null;
 
-  if (!form) {
-    notFound();
+  try {
+    formData = await getPublishedFormBySlug("lp-brasil");
+  } catch (error) {
+    console.error("Erro ao carregar formulário lp-brasil:", error);
   }
 
   return (
-    <main className={`${inter.variable} cmp-free`} id="checkmate-property-free">
-      <LpReveal />
+    <main
+      className={`${inter.variable} cmp-invest`}
+      id="checkmate-property-free-br"
+    >
+      <LpBrasilReveal />
 
       {/* BLOCO 01 — HERO */}
       <section className="cmp-section cmp-hero">
@@ -277,53 +258,56 @@ export default async function FlipHouseLandingPage() {
           <span className="cmp-square s5" />
         </div>
 
+        <div className="cmp-blur one" aria-hidden="true" />
+        <div className="cmp-blur two" aria-hidden="true" />
+
         <div className="cmp-container">
-          <div className="cmp-hero-inner cmp-reveal is-visible">
-            <div className="cmp-logo-wrap">
-              <Image
-                className="cmp-logo"
-                src={LP_COLOR_LOGO_URL}
-                alt="Checkmate Property"
-                width={324}
-                height={116}
-                priority
-              />
+          <div className="cmp-hero-inner">
+            <div className="cmp-hero-card cmp-reveal is-visible">
+              <div className="cmp-logo-wrap">
+                <Image
+                  className="cmp-logo"
+                  src={LP_LOGO_URL}
+                  alt="Checkmate Property"
+                  width={324}
+                  height={116}
+                  priority
+                />
+              </div>
+
+              <div className="cmp-kicker">
+                Tecnologia, conteúdo e experiência prática
+              </div>
+
+              <h1 className="cmp-hero-title">
+                <span>Aprenda os fundamentos de Flip House</span>
+                <span className="cmp-gradient-text">
+                  e conheça ferramentas para analisar propriedades nos Estados
+                  Unidos
+                </span>
+              </h1>
+
+              <p className="cmp-subtitle">
+                Acesse gratuitamente um conteúdo introdutório sobre Flip House e
+                conheça a tecnologia da Checkmate Property para pesquisar
+                propriedades, analisar projetos e compreender melhor o mercado
+                imobiliário americano.
+              </p>
+
+              <p className="cmp-copy cmp-hero-copy">
+                Conteúdo em português, desenvolvido a partir da experiência
+                prática da Checkmate em projetos de reforma, construção e
+                análise imobiliária nos Estados Unidos.
+              </p>
+
+              <div className="cmp-hero-actions">
+                <PrimaryButton />
+              </div>
+
+              <p className="cmp-microcopy">
+                Cadastro gratuito • Sem cartão de crédito
+              </p>
             </div>
-
-            <div className="cmp-kicker">
-              Tecnologia, conteúdo e experiência prática
-            </div>
-
-            <h1 className="cmp-hero-title">
-              <span className="cmp-hero-line">
-                Aprenda os fundamentos de Flip House 
-              </span>
-              <span className="cmp-gradient-text">
-                e conheça ferramentas para analisar propriedades nos Estados
-                Unidos
-              </span>
-            </h1>
-
-            <p className="cmp-subtitle">
-              Acesse gratuitamente um conteúdo introdutório sobre Flip House e
-              conheça a tecnologia da Checkmate Property para pesquisar
-              propriedades, analisar projetos e compreender melhor o mercado
-              imobiliário americano.
-            </p>
-
-            <p className="cmp-copy cmp-hero-copy">
-              Conteúdo em português, desenvolvido a partir da experiência
-              prática da Checkmate em projetos de reforma, construção e análise
-              imobiliária nos Estados Unidos.
-            </p>
-
-            <div className="cmp-hero-actions">
-              <PrimaryButton />
-            </div>
-
-            <p className="cmp-microcopy">
-              Cadastro gratuito • Sem cartão de crédito
-            </p>
           </div>
         </div>
       </section>
@@ -344,7 +328,7 @@ export default async function FlipHouseLandingPage() {
       </div>
 
       {/* BLOCO 03 — PORTFÓLIO */}
-      <section className="cmp-image-carousel-section cmp-portfolio-section">
+      <section className="cmp-section cmp-portfolio-section">
         <SectionBackground />
 
         <div className="cmp-container">
@@ -419,16 +403,14 @@ export default async function FlipHouseLandingPage() {
         </div>
 
         <div className="cmp-container">
-          <aside className="cmp-note cmp-reveal">
-            <span className="cmp-note-mark" aria-hidden="true">
-              !
-            </span>
+          <div className="cmp-attention-box cmp-reveal">
+            <div className="cmp-attention-icon">!</div>
             <p>
               Os projetos apresentados são exemplos específicos do portfólio da
               Checkmate Property e não constituem promessa ou garantia de
               resultados.
             </p>
-          </aside>
+          </div>
         </div>
       </section>
 
@@ -576,16 +558,14 @@ export default async function FlipHouseLandingPage() {
             ))}
           </div>
 
-          <aside className="cmp-note cmp-note-on-dark cmp-reveal">
-            <span className="cmp-note-mark" aria-hidden="true">
-              !
-            </span>
+          <div className="cmp-attention-box cmp-reveal">
+            <div className="cmp-attention-icon">!</div>
             <p>
               Os relatos apresentados representam experiências individuais. O
               uso dos conteúdos ou das ferramentas da Checkmate Property não
               garante resultados financeiros, comerciais ou imobiliários.
             </p>
-          </aside>
+          </div>
         </div>
       </section>
 
@@ -686,16 +666,14 @@ export default async function FlipHouseLandingPage() {
             ))}
           </div>
 
-          <aside className="cmp-note cmp-reveal">
-            <span className="cmp-note-mark" aria-hidden="true">
-              i
-            </span>
+          <div className="cmp-attention-box cmp-reveal">
+            <div className="cmp-attention-icon">i</div>
             <p>
               O cadastro oferece acesso ao conteúdo introdutório e à
               apresentação das ferramentas. A disponibilidade de recursos
               adicionais pode variar conforme o plano contratado.
             </p>
-          </aside>
+          </div>
         </div>
       </section>
 
@@ -738,10 +716,7 @@ export default async function FlipHouseLandingPage() {
       </section>
 
       {/* BLOCO 10 — CHAMADA PARA O FORMULÁRIO */}
-      <section
-        className="cmp-section"
-        id="cmp-property-journey"
-      >
+      <section className="cmp-section" id="cmp-primeiro-passo">
         <SectionBackground />
 
         <div className="cmp-container">
@@ -773,10 +748,7 @@ export default async function FlipHouseLandingPage() {
       </section>
 
       {/* BLOCOS 11 E 12 — FORMULÁRIO E ACEITE */}
-      <section
-        className="cmp-section cmp-form-section"
-        id="formulario"
-      >
+      <section className="cmp-section cmp-form-section" id="formulario">
         <SectionBackground />
 
         <div className="cmp-container">
@@ -796,7 +768,46 @@ export default async function FlipHouseLandingPage() {
           </div>
 
           <div className="cmp-form-shell cmp-reveal cmp-delay-1">
-            <DynamicFormComponent form={form} fields={fields} />
+            {formData?.form && formData?.fields ? (
+              <DynamicFormComponent
+                form={formData.form}
+                fields={formData.fields}
+              />
+            ) : (
+              <div className="cmp-form-fallback">
+                <h3>Formulário lp-brasil ainda não encontrado.</h3>
+
+                <p>
+                  Crie e publique o formulário com o slug{" "}
+                  <strong>lp-brasil</strong> no painel administrativo.
+                </p>
+
+                <div className="cmp-form-fallback-list">
+                  <strong>Campos obrigatórios do formulário:</strong>
+
+                  <div className="cmp-lines">
+                    {[
+                      "Nome completo",
+                      "E-mail",
+                      "WhatsApp com código do país e DDD",
+                      "Estado de interesse ou atuação",
+                      "Cidade de interesse ou atuação",
+                      "Profissão ou área de atuação — opcional",
+                      "Em qual estágio você está?",
+                      "Quais temas você deseja conhecer?",
+                      "Checkbox único de aceite dos termos, política de privacidade e autorização de contato",
+                    ].map((item) => (
+                      <div className="cmp-line-item" key={item}>
+                        <span className="cmp-check" aria-hidden="true">
+                          ✓
+                        </span>
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <p className="cmp-legal-sms cmp-reveal">
@@ -811,7 +822,7 @@ export default async function FlipHouseLandingPage() {
           <div className="cmp-footer-logo-wrap">
             <Image
               className="cmp-footer-logo"
-              src={LP_COLOR_LOGO_URL}
+              src={LP_LOGO_URL}
               alt="Checkmate Property"
               width={308}
               height={110}

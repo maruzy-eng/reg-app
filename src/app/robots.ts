@@ -15,7 +15,7 @@ export default function robots(): MetadataRoute.Robots {
           "/properties/",
           "/en/contact-us",
           "/lp",
-          "/lp-br",
+          "/lp-brasil",
           "/aprenda",
           "/tutorial",
           "/privacy-policy",

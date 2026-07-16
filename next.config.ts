@@ -22,6 +22,11 @@ const nextConfig: NextConfig = {
         destination: "https://checkmateproperty.com/:path*",
         permanent: true,
       },
+      {
+        source: "/lp-br",
+        destination: "/lp-brasil",
+        permanent: true,
+      },
     ];
   },
 
