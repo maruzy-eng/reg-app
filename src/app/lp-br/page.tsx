@@ -353,9 +353,9 @@ export default async function LpBrInvestPage() {
     null;
 
   try {
-    formData = await getPublishedFormBySlug("lp-br");
+    formData = await getPublishedFormBySlug("lp-brasil");
   } catch (error) {
-    console.error("Erro ao carregar formulário lp-br:", error);
+    console.error("Erro ao carregar formulário lp-brasil:", error);
   }
 
   return (
@@ -808,10 +808,10 @@ export default async function LpBrInvestPage() {
               />
             ) : (
               <div className="cmp-form-fallback">
-                <h3>Formulário lp-br ainda não encontrado.</h3>
+                <h3>Formulário lp-brasil ainda não encontrado.</h3>
                 <p>
-                  Crie e publique o formulário com o slug{" "}
-                  <strong>lp-br</strong> no painel administrativo.
+                  Publique o formulário com o slug{" "}
+                  <strong>lp-brasil</strong> no painel administrativo.
                 </p>
                 <div className="cmp-form-fallback-list">
                   <strong>Campos sugeridos:</strong>
