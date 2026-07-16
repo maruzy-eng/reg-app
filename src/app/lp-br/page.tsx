@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import Image from "next/image";
 import { DynamicFormComponent } from "@/components/forms/dynamic-form";
 import { LpBrasilReveal } from "@/components/lp-brasil/lp-brasil-reveal";
-import { YouTubeVideoCover } from "@/components/lp-brasil/youtube-video-cover";
+import { YouTubeVideoCover } from "@/components/lp/youtube-video-cover";
 import { getPublishedFormBySlug } from "@/lib/forms";
 import {
   getFlipHouseImageUrl,
@@ -66,12 +66,6 @@ const BOTTOM_CAROUSEL_IMAGES = [
   "32",
 ] as LpFlipHouseImageNumber[];
 
-/**
- * Substitua pelos URLs definitivos dos depoimentos.
- *
- * Para YouTube, Vimeo ou vídeos hospedados, altere o conteúdo
- * dos cards para iframe ou player próprio do projeto.
- */
 const TESTIMONIALS = [
   {
     id: "testimonial-01",
@@ -263,53 +257,54 @@ export default async function LpBrasilPage() {
 
         <div className="cmp-blur one" aria-hidden="true" />
         <div className="cmp-blur two" aria-hidden="true" />
-        <div className="cmp-hero-wash" aria-hidden="true" />
 
         <div className="cmp-container">
-          <div className="cmp-hero-inner cmp-reveal is-visible">
-            <div className="cmp-logo-wrap">
-              <Image
-                className="cmp-logo"
-                src={LP_LOGO_URL}
-                alt="Checkmate Property"
-                width={324}
-                height={116}
-                priority
-              />
+          <div className="cmp-hero-inner">
+            <div className="cmp-hero-card cmp-reveal is-visible">
+              <div className="cmp-logo-wrap">
+                <Image
+                  className="cmp-logo"
+                  src={LP_LOGO_URL}
+                  alt="Checkmate Property"
+                  width={324}
+                  height={116}
+                  priority
+                />
+              </div>
+
+              <div className="cmp-kicker">
+                Tecnologia, conteúdo e experiência prática
+              </div>
+
+              <h1 className="cmp-hero-title">
+                <span>Aprenda os fundamentos de Flip House</span>
+                <span className="cmp-gradient-text">
+                  e conheça ferramentas para analisar propriedades nos Estados
+                  Unidos
+                </span>
+              </h1>
+
+              <p className="cmp-subtitle">
+                Acesse gratuitamente um conteúdo introdutório sobre Flip House e
+                conheça a tecnologia da Checkmate Property para pesquisar
+                propriedades, analisar projetos e compreender melhor o mercado
+                imobiliário americano.
+              </p>
+
+              <p className="cmp-copy cmp-hero-copy">
+                Conteúdo em português, desenvolvido a partir da experiência
+                prática da Checkmate em projetos de reforma, construção e
+                análise imobiliária nos Estados Unidos.
+              </p>
+
+              <div className="cmp-hero-actions">
+                <PrimaryButton />
+              </div>
+
+              <p className="cmp-microcopy">
+                Cadastro gratuito • Sem cartão de crédito
+              </p>
             </div>
-
-            <div className="cmp-kicker">
-              Tecnologia, conteúdo e experiência prática
-            </div>
-
-            <h1 className="cmp-hero-title">
-              <span>Aprenda os fundamentos de Flip House</span>
-              <span className="cmp-gradient-text">
-                e conheça ferramentas para analisar propriedades nos Estados
-                Unidos
-              </span>
-            </h1>
-
-            <p className="cmp-subtitle">
-              Acesse gratuitamente um conteúdo introdutório sobre Flip House e
-              conheça a tecnologia da Checkmate Property para pesquisar
-              propriedades, analisar projetos e compreender melhor o mercado
-              imobiliário americano.
-            </p>
-
-            <p className="cmp-copy cmp-hero-copy">
-              Conteúdo em português, desenvolvido a partir da experiência
-              prática da Checkmate em projetos de reforma, construção e análise
-              imobiliária nos Estados Unidos.
-            </p>
-
-            <div className="cmp-hero-actions">
-              <PrimaryButton />
-            </div>
-
-            <p className="cmp-microcopy">
-              Cadastro gratuito • Sem cartão de crédito
-            </p>
           </div>
         </div>
       </section>
@@ -329,8 +324,8 @@ export default async function LpBrasilPage() {
         </div>
       </div>
 
-      {/* BLOCO 03 — PORTFÓLIO (carrossel de projetos da /lp) */}
-      <section className="cmp-section cmp-scenario-section cmp-portfolio-section">
+      {/* BLOCO 03 — PORTFÓLIO */}
+      <section className="cmp-section cmp-portfolio-section">
         <SectionBackground />
 
         <div className="cmp-container">
@@ -405,16 +400,14 @@ export default async function LpBrasilPage() {
         </div>
 
         <div className="cmp-container">
-          <aside className="cmp-note cmp-reveal">
-            <span className="cmp-note-mark" aria-hidden="true">
-              !
-            </span>
+          <div className="cmp-attention-box cmp-reveal">
+            <div className="cmp-attention-icon">!</div>
             <p>
               Os projetos apresentados são exemplos específicos do portfólio da
               Checkmate Property e não constituem promessa ou garantia de
               resultados.
             </p>
-          </aside>
+          </div>
         </div>
       </section>
 
@@ -562,16 +555,14 @@ export default async function LpBrasilPage() {
             ))}
           </div>
 
-          <aside className="cmp-note cmp-note-on-dark cmp-reveal">
-            <span className="cmp-note-mark" aria-hidden="true">
-              !
-            </span>
+          <div className="cmp-attention-box cmp-reveal">
+            <div className="cmp-attention-icon">!</div>
             <p>
               Os relatos apresentados representam experiências individuais. O
               uso dos conteúdos ou das ferramentas da Checkmate Property não
               garante resultados financeiros, comerciais ou imobiliários.
             </p>
-          </aside>
+          </div>
         </div>
       </section>
 
@@ -624,7 +615,10 @@ export default async function LpBrasilPage() {
                 fill
                 sizes="(max-width: 1024px) 100vw, 42vw"
               />
-              <div className="cmp-institutional-visual-overlay" aria-hidden="true" />
+              <div
+                className="cmp-institutional-visual-overlay"
+                aria-hidden="true"
+              />
               <div className="cmp-institutional-visual-label">
                 <strong>Projetos residenciais</strong>
                 <span>Experiência prática aplicada à tecnologia.</span>
@@ -669,16 +663,14 @@ export default async function LpBrasilPage() {
             ))}
           </div>
 
-          <aside className="cmp-note cmp-reveal">
-            <span className="cmp-note-mark" aria-hidden="true">
-              i
-            </span>
+          <div className="cmp-attention-box cmp-reveal">
+            <div className="cmp-attention-icon">i</div>
             <p>
               O cadastro oferece acesso ao conteúdo introdutório e à
               apresentação das ferramentas. A disponibilidade de recursos
               adicionais pode variar conforme o plano contratado.
             </p>
-          </aside>
+          </div>
         </div>
       </section>
 

@@ -10,20 +10,34 @@ export function LpReveal() {
       return;
     }
 
-    const revealElements = root.querySelectorAll(".cmp-reveal");
+    const revealElements = Array.from(root.querySelectorAll(".cmp-reveal"));
+
+    root.classList.add("js-reveal");
+
+    if (!("IntersectionObserver" in window)) {
+      revealElements.forEach((element) => {
+        element.classList.add("is-visible");
+      });
+
+      return () => {
+        root.classList.remove("js-reveal");
+      };
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
+          if (!entry.isIntersecting) {
+            return;
           }
+
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
         });
       },
       {
-        threshold: 0.15,
-        rootMargin: "0px 0px -40px 0px",
+        threshold: 0.12,
+        rootMargin: "0px 0px -36px 0px",
       },
     );
 
@@ -38,11 +52,11 @@ export function LpReveal() {
       const handleClick = (event: MouseEvent) => {
         const targetId = link.getAttribute("href");
 
-        if (!targetId) {
+        if (!targetId || targetId === "#") {
           return;
         }
 
-        const target = document.querySelector(targetId);
+        const target = root.querySelector(targetId);
 
         if (!target) {
           return;
@@ -66,6 +80,7 @@ export function LpReveal() {
     });
 
     return () => {
+      root.classList.remove("js-reveal");
       observer.disconnect();
       cleanups.forEach((cleanup) => cleanup());
     };
