@@ -1,3 +1,5 @@
+import { normalizeUSPhoneDigits } from "@/lib/phone";
+
 export type FormEmailType = "user" | "admin";
 
 export type FormEmailRecord = {
@@ -46,24 +48,6 @@ type SubmissionTemplateContextParams = {
     created_at: string;
   };
 };
-
-function onlyDigits(value: unknown) {
-  if (typeof value !== "string" && typeof value !== "number") {
-    return "";
-  }
-
-  return String(value).replace(/\D/g, "");
-}
-
-function normalizePhoneDigits(value: unknown) {
-  let digits = onlyDigits(value);
-
-  if (digits.length === 11 && digits.startsWith("1")) {
-    digits = digits.slice(1);
-  }
-
-  return digits;
-}
 
 export function isValidEmail(value: unknown) {
   if (typeof value !== "string") {
@@ -137,12 +121,12 @@ export function buildSubmissionTemplateContext(
       key.endsWith("_phone") ||
       key.includes("phone")
     ) {
-      extraData[`${key}_clean`] = normalizePhoneDigits(value);
+      extraData[`${key}_clean`] = normalizeUSPhoneDigits(value);
     }
   }
 
   if (params.submission.data.phone !== undefined) {
-    extraData.phone_clean = normalizePhoneDigits(params.submission.data.phone);
+    extraData.phone_clean = normalizeUSPhoneDigits(params.submission.data.phone);
   }
 
   return extraData;

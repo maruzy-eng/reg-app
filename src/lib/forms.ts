@@ -7,6 +7,13 @@ import {
   type FormEmailRecord,
 } from "@/lib/form-emails";
 import { sendTransactionalEmail } from "@/lib/email-service";
+import {
+  applyDigitMask,
+  countPhoneMaskDigits,
+  formatUSPhone,
+  normalizeUSPhoneDigits,
+  onlyPhoneDigits,
+} from "@/lib/phone";
 
 type JsonValue =
   | string
@@ -120,28 +127,6 @@ function getSupabaseAdmin() {
   });
 }
 
-function onlyDigits(value: unknown) {
-  if (typeof value !== "string" && typeof value !== "number") {
-    return "";
-  }
-
-  return String(value).replace(/\D/g, "");
-}
-
-function normalizePhoneDigits(value: unknown) {
-  let digits = onlyDigits(value);
-
-  if (digits.length === 11 && digits.startsWith("1")) {
-    digits = digits.slice(1);
-  }
-
-  return digits;
-}
-
-function cleanPhoneNumber(value: unknown) {
-  return onlyDigits(value);
-}
-
 function getPrimaryPhoneValue(data: Record<string, unknown>) {
   return (
     data.phone ??
@@ -196,10 +181,21 @@ function buildWebhookData(params: {
 }) {
   const phone = getPrimaryPhoneValue(params.data);
   const password = getPrimaryPasswordValue(params.data, params.fields);
+  const phoneField = getPrimaryPhoneField(params.fields, params.data);
+  const phoneClean = normalizePhoneDigitsForField(phone, phoneField);
+  const phoneCleanFields = Object.fromEntries(
+    params.fields
+      .filter((field) => field.type === "phone")
+      .map((field) => [
+        `${field.name}_clean`,
+        normalizePhoneDigitsForField(params.data[field.name], field),
+      ]),
+  );
 
   return {
     ...params.data,
-    phone_clean: cleanPhoneNumber(phone),
+    ...phoneCleanFields,
+    phone_clean: phoneClean,
     password,
   };
 }
@@ -219,7 +215,80 @@ function getFieldOptionsMask(field: DynamicFormField) {
 }
 
 function countMaskDigits(mask: string) {
-  return [...mask].filter((char) => char === "9").length;
+  return countPhoneMaskDigits(mask);
+}
+
+function isUSPhoneField(field?: DynamicFormField | null) {
+  const mask = field ? getFieldOptionsMask(field) : null;
+
+  return !mask || countMaskDigits(mask) === 10;
+}
+
+function normalizePhoneDigitsForField(
+  value: unknown,
+  field?: DynamicFormField | null,
+) {
+  return isUSPhoneField(field) ? normalizeUSPhoneDigits(value) : onlyPhoneDigits(value);
+}
+
+function formatPhoneValueForField(value: unknown, field: DynamicFormField) {
+  const mask = getFieldOptionsMask(field);
+
+  if (!mask) {
+    return formatUSPhone(value);
+  }
+
+  if (countMaskDigits(mask) === 10) {
+    return formatUSPhone(value);
+  }
+
+  return applyDigitMask(value, mask);
+}
+
+function getPrimaryPhoneField(
+  fields: DynamicFormField[],
+  data: Record<string, unknown>,
+) {
+  const primaryNames = [
+    "phone",
+    "telephone",
+    "telefone",
+    "whatsapp",
+    "whatsapp_us",
+    "numero",
+    "number",
+  ];
+
+  return (
+    primaryNames
+      .map((name) => fields.find((field) => field.name === name))
+      .find((field) => field && data[field.name] !== undefined) ||
+    fields.find((field) => field.type === "phone" && data[field.name] !== undefined) ||
+    null
+  );
+}
+
+function normalizePhoneFieldValues(
+  fields: DynamicFormField[],
+  data: Record<string, unknown>,
+) {
+  const nextData = { ...data };
+
+  for (const field of fields) {
+    if (field.type !== "phone") {
+      continue;
+    }
+
+    const value = nextData[field.name];
+
+    if (typeof value !== "string" || value.trim() === "") {
+      continue;
+    }
+
+    nextData[field.name] = formatPhoneValueForField(value, field);
+  }
+
+  return nextData;
 }
 
 export function isSensitiveSubmissionField(
@@ -374,7 +443,7 @@ export function validatePhoneFields(
 
     const mask = getFieldOptionsMask(field);
     const expectedDigits = mask ? countMaskDigits(mask) : 0;
-    const digits = mask ? onlyDigits(value) : normalizePhoneDigits(value);
+    const digits = mask ? onlyPhoneDigits(value) : normalizeUSPhoneDigits(value);
     const normalizedDigits =
       mask &&
       expectedDigits === 10 &&
@@ -601,6 +670,7 @@ function buildWebhookTemplateContext(params: {
   form: DynamicForm;
   submission: FormSubmission;
   data: Record<string, unknown>;
+  fields?: DynamicFormField[];
 }) {
   const baseContext = buildSubmissionTemplateContext({
     form: params.form,
@@ -610,9 +680,25 @@ function buildWebhookTemplateContext(params: {
     },
   });
 
+  const phoneField = params.fields
+    ? getPrimaryPhoneField(params.fields, params.data)
+    : null;
+  const phoneCleanFields = Object.fromEntries(
+    (params.fields || [])
+      .filter((field) => field.type === "phone")
+      .map((field) => [
+        `${field.name}_clean`,
+        normalizePhoneDigitsForField(params.data[field.name], field),
+      ]),
+  );
+
   return {
     ...baseContext,
-    phone_clean: cleanPhoneNumber(getPrimaryPhoneValue(params.data)),
+    ...phoneCleanFields,
+    phone_clean: normalizePhoneDigitsForField(
+      getPrimaryPhoneValue(params.data),
+      phoneField,
+    ),
     password: getPrimaryPasswordValue(params.data),
   };
 }
@@ -898,6 +984,7 @@ async function executeFormEmail(params: {
   email: DynamicFormEmail;
   form: DynamicForm;
   submission: FormSubmission;
+  fields: DynamicFormField[];
 }) {
   const sanitizedSubmission = {
     ...params.submission,
@@ -908,17 +995,29 @@ async function executeFormEmail(params: {
     form: params.form,
     submission: sanitizedSubmission,
   });
+  const phoneCleanFields = Object.fromEntries(
+    params.fields
+      .filter((field) => field.type === "phone")
+      .map((field) => [
+        `${field.name}_clean`,
+        normalizePhoneDigitsForField(sanitizedSubmission.data[field.name], field),
+      ]),
+  );
+  const templateExtraData = {
+    ...extraData,
+    ...phoneCleanFields,
+  };
 
   const subject = renderTemplateString(
     params.email.subject_template,
     sanitizedSubmission.data,
-    extraData,
+    templateExtraData,
   );
 
   const bodyHtml = renderTemplateString(
     params.email.body_html_template,
     sanitizedSubmission.data,
-    extraData,
+    templateExtraData,
   );
 
   const replyToField = params.email.reply_to_field || null;
@@ -1006,7 +1105,10 @@ export async function submitDynamicForm(params: {
     };
   }
 
-  const normalizedData = normalizeFormData(params.data);
+  const normalizedData = normalizePhoneFieldValues(
+    fields,
+    normalizeFormData(params.data),
+  );
 
   const requiredErrors = validateRequiredFields(fields, normalizedData);
   const emailErrors = validateEmailFields(fields, normalizedData);
@@ -1051,6 +1153,7 @@ export async function submitDynamicForm(params: {
       email,
       form,
       submission,
+      fields,
     });
   }
 

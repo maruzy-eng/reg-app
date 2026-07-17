@@ -7,6 +7,7 @@ import {
   getResendClient,
   getResendFromEmail,
 } from "@/lib/resend";
+import { formatUSPhone } from "@/lib/phone";
 
 function getStringValue(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -46,7 +47,8 @@ export async function createPropertyLeadAction(formData: FormData) {
 
   const name = getStringValue(formData, "name");
   const email = getNullableStringValue(formData, "email");
-  const phone = getNullableStringValue(formData, "phone");
+  const rawPhone = getNullableStringValue(formData, "phone");
+  const phone = rawPhone ? formatUSPhone(rawPhone) : null;
   const message = getNullableStringValue(formData, "message");
   const phoneSmsConsent = getStringValue(formData, "phone_sms_consent");
 

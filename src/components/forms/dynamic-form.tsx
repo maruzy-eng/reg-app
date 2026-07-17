@@ -16,6 +16,12 @@ import {
   User,
 } from "lucide-react";
 import type { DynamicForm, DynamicFormField } from "@/lib/forms";
+import {
+  applyDigitMask,
+  countPhoneMaskDigits,
+  formatUSPhone,
+  normalizeUSPhoneDigits,
+} from "@/lib/phone";
 import { US_STATES } from "@/lib/us-states";
 
 type DynamicFormProps = {
@@ -89,52 +95,6 @@ function getInitialValue(
   }
 
   return field.default_value || "";
-}
-
-function formatUSPhone(value: string) {
-  let digits = value.replace(/\D/g, "");
-
-  if (digits.length === 11 && digits.startsWith("1")) {
-    digits = digits.slice(1);
-  }
-
-  digits = digits.slice(0, 10);
-
-  if (digits.length <= 3) {
-    return digits;
-  }
-
-  if (digits.length <= 6) {
-    return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
-  }
-
-  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
-}
-
-function applyPhoneMask(value: string, mask: string) {
-  const digits = value.replace(/\D/g, "");
-  let digitIndex = 0;
-  let formatted = "";
-
-  for (const char of mask) {
-    if (char === "9") {
-      const digit = digits[digitIndex];
-
-      if (!digit) {
-        break;
-      }
-
-      formatted += digit;
-      digitIndex += 1;
-      continue;
-    }
-
-    if (digitIndex < digits.length) {
-      formatted += char;
-    }
-  }
-
-  return formatted;
 }
 
 function getFieldIcon(field: DynamicFormField) {
@@ -307,10 +267,13 @@ export function DynamicFormComponent({
 
   function updatePhoneField(field: DynamicFormField, value: string) {
     const mask = getOptionsMask(field.options);
+    const isUSMask = mask ? countPhoneMaskDigits(mask) === 10 : true;
 
     updateField(
       field.name,
-      mask ? applyPhoneMask(value, mask) : formatUSPhone(value),
+      mask
+        ? applyDigitMask(isUSMask ? normalizeUSPhoneDigits(value) : value, mask)
+        : formatUSPhone(value),
     );
   }
 
