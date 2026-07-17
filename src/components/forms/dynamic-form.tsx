@@ -28,9 +28,18 @@ type DynamicFormProps = {
   form: DynamicForm;
   fields: DynamicFormField[];
   defaultValues?: Record<string, string>;
+  showSignInForm?: boolean;
+  onSignIn?: (
+    credentials: DynamicFormSignInCredentials,
+  ) => Promise<DynamicFormSubmitOverrideResult | void>;
   onSubmitOverride?: (
     context: DynamicFormSubmitOverrideContext,
   ) => Promise<DynamicFormSubmitOverrideResult | void>;
+};
+
+export type DynamicFormSignInCredentials = {
+  email: string;
+  password: string;
 };
 
 export type DynamicFormSubmitOverrideContext = {
@@ -225,6 +234,8 @@ export function DynamicFormComponent({
   form,
   fields,
   defaultValues = {},
+  showSignInForm = false,
+  onSignIn,
   onSubmitOverride,
 }: DynamicFormProps) {
   const router = useRouter();
@@ -246,6 +257,10 @@ export function DynamicFormComponent({
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [signInEmail, setSignInEmail] = useState("");
+  const [signInPassword, setSignInPassword] = useState("");
+  const [signInState, setSignInState] = useState<SubmitState>("idle");
+  const [signInError, setSignInError] = useState<string | null>(null);
 
   function updateField(name: string, value: unknown) {
     setFormData((current) => ({
@@ -275,6 +290,43 @@ export function DynamicFormComponent({
         ? applyDigitMask(isUSMask ? normalizeUSPhoneDigits(value) : value, mask)
         : formatUSPhone(value),
     );
+  }
+
+  async function handleSignIn() {
+    if (!onSignIn) {
+      return;
+    }
+
+    const email = signInEmail.trim();
+    const password = signInPassword;
+
+    if (!email || !password) {
+      setSignInState("error");
+      setSignInError("Enter your email and password to sign in.");
+      return;
+    }
+
+    setSignInState("submitting");
+    setSignInError(null);
+
+    try {
+      const result = await onSignIn({ email, password });
+
+      if (result?.error) {
+        setSignInState("error");
+        setSignInError(result.error);
+        return;
+      }
+
+      if (result?.redirecting) {
+        return;
+      }
+
+      setSignInState(result?.success === false ? "error" : "success");
+    } catch {
+      setSignInState("error");
+      setSignInError("Unable to sign in. Please try again.");
+    }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -642,6 +694,133 @@ export function DynamicFormComponent({
           </>
         )}
       </button>
+
+      {showSignInForm && onSignIn ? (
+        <>
+          <div className="flex items-center gap-4" aria-hidden="true">
+            <span className="h-px flex-1 bg-[rgba(12,41,51,0.12)]" />
+            <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#94a3b8]">
+              Or
+            </span>
+            <span className="h-px flex-1 bg-[rgba(12,41,51,0.12)]" />
+          </div>
+
+          <div className="rounded-2xl border border-[rgba(12,41,51,0.10)] bg-white p-4 sm:p-5">
+            <div className="mb-4">
+              <p className="m-0 text-[15px] font-bold leading-5 text-[#0c2933]">
+                Already have an account?
+              </p>
+              <p className="mt-1 mb-0 text-sm font-medium leading-5 text-[#64748b]">
+                Sign in to continue your search.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label
+                  htmlFor="campaign-sign-in-email"
+                  className="block text-sm font-bold text-[#0c2933]"
+                >
+                  Email
+                </label>
+                <div className="relative">
+                  <Mail
+                    size={18}
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#64748b]"
+                  />
+                  <input
+                    id="campaign-sign-in-email"
+                    type="email"
+                    autoComplete="username"
+                    value={signInEmail}
+                    onChange={(event) => {
+                      setSignInEmail(event.target.value);
+                      if (signInError) {
+                        setSignInError(null);
+                        setSignInState("idle");
+                      }
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        void handleSignIn();
+                      }
+                    }}
+                    placeholder="Insert your email"
+                    className="w-full rounded-2xl border border-[rgba(12,41,51,0.12)] bg-white py-3.5 pl-12 pr-4 text-sm font-medium text-[#0c2933] outline-none transition focus:border-[#53bc76] focus:ring-4 focus:ring-[#53bc76]/15"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label
+                  htmlFor="campaign-sign-in-password"
+                  className="block text-sm font-bold text-[#0c2933]"
+                >
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock
+                    size={18}
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#64748b]"
+                  />
+                  <input
+                    id="campaign-sign-in-password"
+                    type="password"
+                    autoComplete="current-password"
+                    value={signInPassword}
+                    onChange={(event) => {
+                      setSignInPassword(event.target.value);
+                      if (signInError) {
+                        setSignInError(null);
+                        setSignInState("idle");
+                      }
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        void handleSignIn();
+                      }
+                    }}
+                    placeholder="Insert your password"
+                    className="w-full rounded-2xl border border-[rgba(12,41,51,0.12)] bg-white py-3.5 pl-12 pr-4 text-sm font-medium text-[#0c2933] outline-none transition focus:border-[#53bc76] focus:ring-4 focus:ring-[#53bc76]/15"
+                  />
+                </div>
+              </div>
+
+              {signInError ? (
+                <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+                  <AlertCircle size={18} className="mt-0.5 shrink-0" />
+                  <p>{signInError}</p>
+                </div>
+              ) : null}
+
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  disabled={signInState === "submitting"}
+                  onClick={() => {
+                    void handleSignIn();
+                  }}
+                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-[#53bc76] bg-white px-5 text-sm font-bold text-[#53bc76] transition hover:bg-[#f8fffb] disabled:pointer-events-none disabled:opacity-70"
+                >
+                  {signInState === "submitting" ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      Signing in...
+                    </>
+                  ) : (
+                    <>
+                      Sign in
+                      <ArrowRight size={16} />
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : null}
 
       {form.acceptance_message ? (
         <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-[rgba(12,41,51,0.10)] bg-white px-4 py-3 text-sm font-semibold leading-6 text-[#0c2933] transition hover:border-[#53bc76]/40">

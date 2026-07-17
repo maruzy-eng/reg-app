@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Loader2, MapPin, Search, ShieldCheck, X } from "lucide-react";
 import type {
+  DynamicFormSignInCredentials,
   DynamicFormSubmitOverrideContext,
   DynamicFormSubmitOverrideResult,
 } from "@/components/forms/dynamic-form";
@@ -62,6 +63,7 @@ type CampaignRegisterResponse = {
 };
 
 const CAMPAIGN_REGISTER_ENDPOINT = "/api/campaign/register";
+const CAMPAIGN_LOGIN_ENDPOINT = "/api/campaign/login";
 const CAMPAIGN_ENTRY_URL =
   "https://app.checkmateproperty.com/#/campaign-entry";
 
@@ -234,12 +236,11 @@ async function readJsonResponse(response: Response) {
   }
 }
 
-function getCampaignErrorMessage(result: CampaignRegisterResponse | null) {
-  return (
-    result?.error ||
-    result?.message ||
-    "Unable to create your campaign access. Please try again."
-  );
+function getCampaignErrorMessage(
+  result: CampaignRegisterResponse | null,
+  fallback = "Unable to create your campaign access. Please try again.",
+) {
+  return result?.error || result?.message || fallback;
 }
 
 function buildCampaignRedirectUrl(params: {
@@ -590,6 +591,65 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
     };
   }
 
+  async function handleCampaignSignIn(
+    credentials: DynamicFormSignInCredentials,
+  ): Promise<DynamicFormSubmitOverrideResult> {
+    if (!selectedSuggestion) {
+      return {
+        error: "Select a valid location from the list to continue.",
+      };
+    }
+
+    const email = credentials.email.trim();
+    const password = credentials.password;
+
+    if (!email || !password) {
+      return {
+        error: "Enter your email and password to sign in.",
+      };
+    }
+
+    const loginResponse = await fetch(CAMPAIGN_LOGIN_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const loginResult = await readJsonResponse(loginResponse);
+    const tokens = loginResult?.data;
+
+    if (
+      !loginResponse.ok ||
+      !tokens?.accessToken ||
+      !tokens.refreshToken ||
+      !tokens.idToken ||
+      !tokens.expiresIn
+    ) {
+      return {
+        error: getCampaignErrorMessage(
+          loginResult,
+          "Unable to sign in. Please check your email and password.",
+        ),
+      };
+    }
+
+    const redirectUrl = buildCampaignRedirectUrl({
+      tokens,
+      selectedSearchItem: selectedSuggestion,
+    });
+
+    window.location.assign(redirectUrl);
+
+    return {
+      redirecting: true,
+    };
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     openLeadModal();
@@ -675,6 +735,8 @@ export function HeroLocationSearch({ searchForm }: HeroLocationSearchProps) {
               <DynamicFormComponent
                 form={searchForm.form as never}
                 fields={modalFields as never}
+                showSignInForm
+                onSignIn={handleCampaignSignIn}
                 onSubmitOverride={handleCampaignSubmit}
               />
             </div>

@@ -573,6 +573,17 @@
   padding: 20px !important;
 }
 
+.hero-search-modal-form-shell label:has(input[name="acceptance_message_accepted"]) {
+  font-size: 12px !important;
+  font-weight: 300 !important;
+  line-height: 1.5 !important;
+}
+
+.hero-search-modal-form-shell label:has(input[name="acceptance_message_accepted"]) span {
+  font-size: 12px !important;
+  font-weight: 300 !important;
+}
+
 .hero-search-modal-loading,
 .hero-search-modal-warning {
   border: 1px solid rgba(14, 53, 65, 0.1) !important;
