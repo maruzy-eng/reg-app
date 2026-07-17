@@ -428,13 +428,13 @@ function ProjectsHeader() {
   return (
     <header className="projects-header">
       <div className="projects-header-inner">
-        <Link href="/projects" className="projects-header-logo-link">
+        <Link href="/" className="projects-header-logo-link">
           <Image
             src={CHECKMATE_LOGO_URL}
             alt="Checkmate Property"
-            width={155}
-            height={38}
-            sizes="155px"
+            width={180}
+            height={44}
+            sizes="(max-width: 720px) 180px, 155px"
             className="projects-header-logo"
             priority
           />
