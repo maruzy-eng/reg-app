@@ -101,22 +101,18 @@ export default async function AdminDashboardPage() {
     .slice(0, 8);
 
   return (
-    <div className="admin-dashboard-page w-full space-y-8">
-      <section className="admin-dark-panel relative overflow-hidden rounded-[34px] p-7 md:p-9">
-        <div className="absolute right-[-90px] top-[-100px] h-[260px] w-[260px] rounded-full bg-white/10 blur-3xl" />
-        <div className="absolute bottom-[-120px] left-[28%] h-[220px] w-[220px] rounded-full bg-[#53bc76]/12 blur-3xl" />
+    <div className="admin-dashboard-page flex w-full flex-col">
+      <section className="admin-dark-panel relative overflow-hidden rounded-[22px] p-5 md:p-6">
+        <div className="admin-glow-orb absolute right-[-70px] top-[-80px] h-[200px] w-[200px] rounded-full bg-white/10 blur-3xl" />
+        <div className="admin-glow-orb absolute bottom-[-100px] left-[28%] h-[180px] w-[180px] rounded-full bg-[#53bc76]/14 blur-3xl" />
 
-        <div className="relative z-10 flex flex-col justify-between gap-7 md:flex-row md:items-end">
+        <div className="relative z-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#8df0a9]">
-              Dashboard KPIs
-            </p>
+            <p className="admin-eyebrow text-[#8df0a9]">Dashboard KPIs</p>
 
-            <h2 className="mt-3 text-[38px] font-semibold leading-[1] tracking-normal text-white md:text-[58px]">
-              Admin overview.
-            </h2>
+            <h2 className="admin-title-lg mt-2 text-white">Admin overview.</h2>
 
-            <p className="mt-4 max-w-3xl text-sm font-normal leading-7 text-white/72 md:text-base">
+            <p className="admin-body-sm mt-2.5 max-w-2xl text-white/68">
               Acompanhe as principais métricas do portal, páginas públicas,
               formulários, acessos, usuários e imóveis cadastrados.
             </p>
@@ -124,92 +120,98 @@ export default async function AdminDashboardPage() {
 
           <Link
             href="/admin/properties"
-            className="admin-primary-button inline-flex min-h-[50px] gap-2 px-6 text-sm no-underline transition hover:-translate-y-0.5"
+            className="admin-primary-button inline-flex min-h-[40px] gap-1.5 rounded-xl px-4 text-[12px] font-semibold no-underline"
           >
             Manage Properties
-            <ArrowUpRight size={17} />
+            <ArrowUpRight size={14} />
           </Link>
         </div>
       </section>
 
-      <section className="grid w-full gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <section className="grid w-full gap-3 md:grid-cols-2 xl:grid-cols-4">
         <DashboardKpiCard
           title="Páginas Públicas Cadastradas"
           value={publicPagesRegistered}
           description="Total de imóveis/páginas no banco"
-          icon={<LayoutTemplate size={22} />}
+          icon={<LayoutTemplate size={16} />}
+          delay={1}
         />
 
         <DashboardKpiCard
           title="Páginas Públicas Criadas"
           value={publicPagesCreated}
           description="Páginas com visibilidade pública"
-          icon={<Globe2 size={22} />}
+          icon={<Globe2 size={16} />}
+          delay={2}
         />
 
         <DashboardKpiCard
           title="Páginas Públicas Off"
           value={publicPagesOff}
           description="Páginas em draft ou não públicas"
-          icon={<FileText size={22} />}
+          icon={<FileText size={16} />}
+          delay={3}
         />
 
         <DashboardKpiCard
           title="Formulários Enviados"
           value={formSubmissionsCount}
           description="Registros em form_submissions"
-          icon={<ClipboardCheck size={22} />}
+          icon={<ClipboardCheck size={16} />}
+          delay={4}
         />
 
         <DashboardKpiCard
           title="Formulários Recebidos"
           value={leadsCount}
           description="Leads recebidos no banco"
-          icon={<Inbox size={22} />}
+          icon={<Inbox size={16} />}
+          delay={5}
         />
 
         <DashboardKpiCard
           title="Acessos à Home"
           value={analyticsEventsCount}
           description="Eventos registrados em analytics_events"
-          icon={<Eye size={22} />}
+          icon={<Eye size={16} />}
+          delay={6}
         />
 
         <DashboardKpiCard
           title="Usuários Cadastrados"
           value={adminUsersCount}
           description="Usuários cadastrados no admin"
-          icon={<Users size={22} />}
+          icon={<Users size={16} />}
+          delay={7}
         />
 
         <DashboardKpiCard
           title="Imóveis Cadastrados"
           value={propertiesCount}
           description="Total de imóveis cadastrados"
-          icon={<Building2 size={22} />}
+          icon={<Building2 size={16} />}
+          delay={8}
         />
       </section>
 
-      <section className="grid w-full gap-6 xl:grid-cols-[minmax(0,1fr)_390px]">
-        <div className="admin-card overflow-hidden rounded-[32px]">
-          <div className="admin-panel-header flex flex-col justify-between gap-4 px-6 py-5 md:flex-row md:items-center">
+      <section className="grid w-full gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="admin-card overflow-hidden rounded-[20px]">
+          <div className="admin-panel-header flex flex-col justify-between gap-3 px-4 py-3.5 md:flex-row md:items-center md:px-5">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#53bc76]">
-                Portfolio
-              </p>
+              <p className="admin-eyebrow text-[#53bc76]">Portfolio</p>
 
-              <h2 className="admin-list-title mt-1 text-2xl font-bold tracking-normal">
+              <h2 className="admin-list-title admin-title-md mt-1">
                 Recent Properties
               </h2>
 
-              <p className="admin-list-meta mt-1 text-sm font-normal">
+              <p className="admin-list-meta mt-0.5 text-[12px]">
                 Latest properties registered in Supabase.
               </p>
             </div>
 
             <Link
               href="/admin/properties"
-              className="admin-secondary-button inline-flex min-h-[42px] items-center justify-center rounded-full px-5 text-sm font-bold no-underline transition hover:-translate-y-0.5"
+              className="admin-secondary-button inline-flex min-h-[34px] items-center justify-center rounded-full px-4 text-[12px] font-semibold no-underline"
             >
               View All
             </Link>
@@ -223,33 +225,33 @@ export default async function AdminDashboardPage() {
                 <Link
                   key={property.id}
                   href={`/admin/properties/${property.id}`}
-                  className="admin-list-row flex items-center gap-4 px-6 py-4 transition"
+                  className="admin-list-row flex items-center gap-3 px-4 py-3 md:px-5"
                 >
-                  <div className="h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-[#f8fafc] ring-1 ring-[rgba(14,53,65,0.08)]">
+                  <div className="h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-[#f8fafc] ring-1 ring-[rgba(14,53,65,0.08)]">
                     {card.imageUrl ? (
                       <img
                         src={card.imageUrl}
                         alt={property.title}
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-cover transition duration-300 hover:scale-105"
                       />
                     ) : (
                       <div className="admin-list-title flex h-full w-full items-center justify-center">
-                        <Building2 size={22} />
+                        <Building2 size={16} />
                       </div>
                     )}
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <p className="admin-list-title truncate text-sm font-bold">
+                    <p className="admin-list-title truncate text-[13px] font-semibold">
                       {property.title}
                     </p>
 
-                    <p className="admin-list-meta mt-1 truncate text-xs font-normal">
+                    <p className="admin-list-meta mt-0.5 truncate text-[11px]">
                       {property.slug}
                     </p>
                   </div>
 
-                  <span className="admin-badge hidden px-3 py-1 text-[11px] uppercase tracking-[0.08em] md:inline-flex">
+                  <span className="admin-badge hidden px-2.5 py-0.5 text-[10px] uppercase tracking-[0.08em] md:inline-flex">
                     {property.status}
                   </span>
                 </Link>
@@ -257,28 +259,26 @@ export default async function AdminDashboardPage() {
             })}
 
             {recentProperties.length === 0 ? (
-              <div className="admin-list-meta px-6 py-14 text-center text-sm font-normal">
+              <div className="admin-list-meta px-5 py-10 text-center text-[12px]">
                 No properties registered yet.
               </div>
             ) : null}
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="admin-card rounded-[32px] p-6">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#53bc76]">
-              Visibility
-            </p>
+        <div className="space-y-4">
+          <div className="admin-card rounded-[20px] p-4 md:p-5">
+            <p className="admin-eyebrow text-[#53bc76]">Visibility</p>
 
-            <h2 className="admin-list-title mt-1 text-2xl font-bold tracking-normal">
+            <h2 className="admin-list-title admin-title-md mt-1">
               Public Pages Status
             </h2>
 
-            <p className="admin-list-meta mt-2 text-sm font-normal leading-6">
+            <p className="admin-list-meta mt-1.5 text-[12px] leading-5">
               Distribuição atual das páginas públicas do portal.
             </p>
 
-            <div className="mt-6 space-y-5">
+            <div className="mt-4 space-y-4">
               <ProgressRow
                 label="Criadas"
                 value={publicPagesCreated}
@@ -293,36 +293,34 @@ export default async function AdminDashboardPage() {
             </div>
           </div>
 
-          <div className="admin-dark-panel rounded-[32px] p-6">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8df0a9]">
-              System
-            </p>
+          <div className="admin-dark-panel rounded-[20px] p-4 md:p-5">
+            <p className="admin-eyebrow relative z-10 text-[#8df0a9]">System</p>
 
-            <h2 className="mt-1 text-2xl font-bold tracking-normal text-white">
+            <h2 className="admin-title-md relative z-10 mt-1 text-white">
               Database Health
             </h2>
 
-            <div className="mt-5 grid gap-3">
+            <div className="relative z-10 mt-4 grid gap-2">
               <HealthItem
-                icon={<Database size={19} />}
+                icon={<Database size={15} />}
                 title="Supabase"
                 description="Connected"
               />
 
               <HealthItem
-                icon={<Building2 size={19} />}
+                icon={<Building2 size={15} />}
                 title="Properties Loaded"
                 description={`${propertiesCount} records`}
               />
 
               <HealthItem
-                icon={<ClipboardList size={19} />}
+                icon={<ClipboardList size={15} />}
                 title="Forms"
                 description={`${formSubmissionsCount} submissions`}
               />
 
               <HealthItem
-                icon={<CheckCircle2 size={19} />}
+                icon={<CheckCircle2 size={15} />}
                 title="Admin Access"
                 description="Protected area"
               />
@@ -339,33 +337,37 @@ function DashboardKpiCard({
   value,
   description,
   icon,
+  delay = 1,
 }: {
   title: string;
   value: number;
   description: string;
   icon: ReactNode;
+  delay?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 }) {
   return (
-    <div className="admin-kpi-card group relative overflow-hidden rounded-[28px] p-5 transition hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(14,53,65,0.12)]">
-      <div className="absolute right-[-46px] top-[-46px] h-32 w-32 rounded-full bg-[#53bc76]/8 blur-xl transition group-hover:bg-[#53bc76]/12" />
-      <div className="absolute bottom-[-70px] left-[-60px] h-32 w-32 rounded-full bg-slate-900/5 blur-xl" />
+    <div
+      className={`admin-kpi-card admin-reveal admin-reveal-delay-${delay} group relative overflow-hidden rounded-[18px] p-4`}
+    >
+      <div className="absolute right-[-40px] top-[-40px] h-28 w-28 rounded-full bg-[#53bc76]/8 blur-xl transition group-hover:bg-[#53bc76]/14" />
+      <div className="absolute bottom-[-60px] left-[-50px] h-28 w-28 rounded-full bg-slate-900/5 blur-xl" />
 
-      <div className="relative z-10 flex items-start justify-between gap-5">
+      <div className="relative z-10 flex items-start justify-between gap-3">
         <div>
-          <p className="admin-kpi-title max-w-[220px] text-sm font-bold leading-5">
+          <p className="admin-kpi-title max-w-[200px] text-[12px] font-semibold leading-4">
             {title}
           </p>
 
-          <p className="admin-kpi-value mt-4 text-[36px] font-semibold leading-none tracking-normal">
+          <p className="admin-kpi-value mt-3 text-[28px] font-semibold leading-none tracking-[-0.03em]">
             {formatNumber(value)}
           </p>
 
-          <p className="admin-kpi-description mt-3 text-sm font-normal leading-5">
+          <p className="admin-kpi-description mt-2 text-[11px] leading-4">
             {description}
           </p>
         </div>
 
-        <span className="admin-kpi-icon flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition group-hover:bg-[#53bc76] group-hover:text-white">
+        <span className="admin-kpi-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition duration-200 group-hover:scale-105 group-hover:bg-[#53bc76] group-hover:text-white">
           {icon}
         </span>
       </div>
@@ -386,17 +388,17 @@ function ProgressRow({
 
   return (
     <div>
-      <div className="mb-2 flex items-center justify-between gap-4">
-        <span className="admin-progress-label text-sm font-semibold">
+      <div className="mb-1.5 flex items-center justify-between gap-3">
+        <span className="admin-progress-label text-[12px] font-medium">
           {label}
         </span>
 
-        <span className="admin-progress-label text-sm font-bold">
+        <span className="admin-progress-label text-[12px] font-semibold">
           {value} / {total}
         </span>
       </div>
 
-      <div className="admin-progress-track h-3 overflow-hidden rounded-full">
+      <div className="admin-progress-track h-2 overflow-hidden rounded-full">
         <div
           className="admin-progress-value h-full rounded-full"
           style={{
@@ -418,17 +420,15 @@ function HealthItem({
   description: string;
 }) {
   return (
-    <div className="flex items-center gap-4 rounded-[22px] border border-[rgba(255,255,255,0.1)] bg-white/[0.08] p-4">
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#53bc76]/15 text-[#53bc76]">
+    <div className="flex items-center gap-3 rounded-[14px] border border-[rgba(255,255,255,0.1)] bg-white/[0.07] px-3 py-2.5 transition duration-200 hover:bg-white/[0.11]">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#53bc76]/15 text-[#53bc76]">
         {icon}
       </span>
 
       <div>
-        <p className="text-sm font-bold text-white">{title}</p>
+        <p className="text-[12px] font-semibold text-white">{title}</p>
 
-        <p className="mt-1 text-sm font-normal text-white/58">
-          {description}
-        </p>
+        <p className="mt-0.5 text-[11px] text-white/55">{description}</p>
       </div>
     </div>
   );

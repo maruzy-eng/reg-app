@@ -47,7 +47,7 @@ export function AdminSidebarNav({ items }: AdminSidebarNavProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="mt-8 space-y-2">
+    <nav className="mt-6 space-y-1">
       {items.map((item) => {
         const Icon = adminSidebarIcons[item.icon];
         const isActive =
@@ -60,23 +60,23 @@ export function AdminSidebarNav({ items }: AdminSidebarNavProps) {
             aria-current={isActive ? "page" : undefined}
             data-active={isActive ? "true" : undefined}
             className={cn(
-              "admin-sidebar-nav-link flex min-h-[50px] items-center gap-3 rounded-[18px] px-3.5 text-sm font-semibold no-underline transition",
+              "admin-sidebar-nav-link flex min-h-[42px] items-center gap-2.5 rounded-[14px] px-2.5 text-[13px] no-underline",
               isActive && "admin-sidebar-nav-link-active",
             )}
           >
             <span
               className={cn(
-                "admin-sidebar-nav-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl",
+                "admin-sidebar-nav-icon flex h-7 w-7 shrink-0 items-center justify-center rounded-xl",
                 isActive && "admin-sidebar-nav-icon-active",
               )}
             >
-              <Icon size={18} />
+              <Icon size={15} />
             </span>
 
             <span
               className={cn(
-                "admin-sidebar-nav-label font-semibold",
-                isActive && "admin-sidebar-nav-label-active font-bold",
+                "admin-sidebar-nav-label",
+                isActive && "admin-sidebar-nav-label-active",
               )}
             >
               {item.label}

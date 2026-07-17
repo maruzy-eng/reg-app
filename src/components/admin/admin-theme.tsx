@@ -96,10 +96,10 @@ export function AdminThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="admin-secondary-button inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm"
+      className="admin-secondary-button inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-[12px] font-semibold"
       aria-label="Toggle admin theme"
     >
-      <Icon size={15} />
+      <Icon size={13} />
       {isDark ? "Light" : "Dark"}
     </button>
   );
