@@ -23,15 +23,16 @@ export function PropertyAppliancesSection({
     <section className="rounded-[32px] border border-[#0e3541]/10 bg-white p-6 shadow-[0_20px_45px_rgba(15,23,42,0.06)] md:p-8">
       <div className="max-w-3xl">
         <span className="inline-flex items-center rounded-full border border-[#53bc76]/20 bg-[#53bc76]/10 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#0e3541]">
-          Included Appliances
+          Thermador
         </span>
 
         <h2 className="mt-4 text-[28px] font-bold leading-tight tracking-[-0.03em] text-[#0e3541] md:text-[34px]">
-          Appliances & Equipment
+          Included Appliances
         </h2>
 
         <p className="mt-3 text-sm leading-7 text-[#64748b] md:text-base">
-          Review the appliances and equipment included in this property.
+          Review the Thermador appliances and equipment included in this
+          property.
         </p>
       </div>
 

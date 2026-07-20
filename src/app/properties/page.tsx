@@ -676,9 +676,9 @@ export default async function PropertyDetailPage({
             id: "legacy-appliances",
             slug: "appliances",
             title: "Included Appliances",
-            eyebrow: "Appliances",
+            eyebrow: "Thermador",
             description:
-              "Review the appliances and equipment included in this property.",
+              "Review the Thermador appliances and equipment included in this property.",
             sort_order: 1,
             is_active: true,
             created_at: "",
