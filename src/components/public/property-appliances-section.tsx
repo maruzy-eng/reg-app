@@ -23,7 +23,7 @@ export function PropertyAppliancesSection({
     <section className="rounded-[32px] border border-[#0e3541]/10 bg-white p-6 shadow-[0_20px_45px_rgba(15,23,42,0.06)] md:p-8">
       <div className="max-w-3xl">
         <span className="inline-flex items-center rounded-full border border-[#53bc76]/20 bg-[#53bc76]/10 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#0e3541]">
-          Thermador
+          Thermador appliance package
         </span>
 
         <h2 className="mt-4 text-[28px] font-bold leading-tight tracking-[-0.03em] text-[#0e3541] md:text-[34px]">
@@ -66,7 +66,7 @@ export function PropertyAppliancesSection({
 
                   <div className="pointer-events-none absolute left-4 top-4">
                     <span className="inline-flex items-center rounded-full border border-white/30 bg-white/90 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#0e3541] shadow-sm backdrop-blur">
-                      Appliance
+                      Appliances
                     </span>
                   </div>
                 </div>

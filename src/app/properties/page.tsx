@@ -676,7 +676,7 @@ export default async function PropertyDetailPage({
             id: "legacy-appliances",
             slug: "appliances",
             title: "Included Appliances",
-            eyebrow: "Thermador",
+            eyebrow: "Thermador appliance package",
             description:
               "Review the Thermador appliances and equipment included in this property.",
             sort_order: 1,
@@ -1037,7 +1037,11 @@ export default async function PropertyDetailPage({
                       <ComplementItemCard
                         key={item.id || `${block.slug}-${index}`}
                         item={item}
-                        blockEyebrow={block.eyebrow || block.title}
+                        blockEyebrow={
+                          block.slug === "appliances"
+                            ? "Appliances"
+                            : block.eyebrow || block.title
+                        }
                         propertyTitle={property.title}
                       />
                     ))}
