@@ -52,6 +52,8 @@ export type PropertyCard = {
   condListedPrice: string | null;
   condAvgPrice: string | null;
   condSqft: number | null;
+  condBedrooms: number | null;
+  condBathrooms: number | null;
 };
 
 export function mapPropertyToCard(property: PropertyRow): PropertyCard {
@@ -79,6 +81,8 @@ export function mapPropertyToCard(property: PropertyRow): PropertyCard {
     condListedPrice: property.cond_listed_price,
     condAvgPrice: property.cond_avg_price,
     condSqft: property.cond_sqft,
+    condBedrooms: property.cond_bedrooms,
+    condBathrooms: property.cond_bathrooms,
   };
 }
 

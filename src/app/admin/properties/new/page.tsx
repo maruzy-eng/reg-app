@@ -262,7 +262,7 @@ export default async function NewPropertyPage() {
               <SectionHeader
                 icon={<Building2 size={22} />}
                 title="Cond"
-                description="When active, listed price, sqft and avg price are shown on the home property card."
+                description="When active, listed price, beds, baths, sqft and avg price are shown on the home property card."
               />
 
               <div className="mt-6 space-y-5">
@@ -295,6 +295,20 @@ export default async function NewPropertyPage() {
                     label="Avg. Price"
                     name="cond_avg_price"
                     placeholder="e.g. $1.8M"
+                  />
+
+                  <InputField
+                    label="Beds"
+                    name="cond_bedrooms"
+                    type="number"
+                    step="0.5"
+                  />
+
+                  <InputField
+                    label="Baths"
+                    name="cond_bathrooms"
+                    type="number"
+                    step="0.5"
                   />
 
                   <InputField

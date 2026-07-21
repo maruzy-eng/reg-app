@@ -488,7 +488,7 @@ export default async function EditPropertyPage({
             <AccordionSection
               icon={<Building2 size={21} />}
               title="Cond"
-              description="When active, listed price, sqft and avg price are shown on the home property card."
+              description="When active, listed price, beds, baths, sqft and avg price are shown on the home property card."
             >
               <div className="space-y-5">
                 <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
@@ -523,6 +523,22 @@ export default async function EditPropertyPage({
                     name="cond_avg_price"
                     defaultValue={property.cond_avg_price || ""}
                     placeholder="e.g. $1.8M"
+                  />
+
+                  <InputField
+                    label="Beds"
+                    name="cond_bedrooms"
+                    type="number"
+                    step="0.5"
+                    defaultValue={property.cond_bedrooms || ""}
+                  />
+
+                  <InputField
+                    label="Baths"
+                    name="cond_bathrooms"
+                    type="number"
+                    step="0.5"
+                    defaultValue={property.cond_bathrooms || ""}
                   />
 
                   <InputField

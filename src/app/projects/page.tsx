@@ -6,6 +6,7 @@ import {
   Bath,
   BedDouble,
   Building2,
+  Calendar,
   CheckCircle2,
   FileText,
   ImageIcon,
@@ -320,14 +321,35 @@ export default async function ProjectsPage() {
 
                         {property.condActive ? (
                           <>
-                            {property.condSqft != null ? (
-                              <div className="projects-property-specs">
+                            <div className="projects-property-specs">
+                              {property.condBedrooms != null ? (
+                                <span>
+                                  <BedDouble size={14} />
+                                  {formatNumber(property.condBedrooms)} beds
+                                </span>
+                              ) : null}
+
+                              {property.condBathrooms != null ? (
+                                <span>
+                                  <Bath size={14} />
+                                  {formatNumber(property.condBathrooms)} baths
+                                </span>
+                              ) : null}
+
+                              {property.condSqft != null ? (
                                 <span>
                                   <Ruler size={14} />
                                   {formatNumber(property.condSqft)} sqft
                                 </span>
-                              </div>
-                            ) : null}
+                              ) : null}
+
+                              {property.yearBuilt != null ? (
+                                <span>
+                                  <Calendar size={14} />
+                                  Built {property.yearBuilt}
+                                </span>
+                              ) : null}
+                            </div>
 
                             {property.condAvgPrice ? (
                               <p className="projects-property-avg-price">
