@@ -6,8 +6,10 @@ import {
   Bath,
   BedDouble,
   Building2,
+  Calendar,
   CheckCircle2,
   FileText,
+  Home,
   ImageIcon,
   MapPin,
   PlayCircle,
@@ -330,6 +332,25 @@ export default async function ProjectsPage() {
                             {formatNumber(property.sqft)} sqft
                           </span>
                         </div>
+
+                        {property.condActive ? (
+                          <div className="projects-property-cond">
+                            {property.condNumberOfHouses != null ? (
+                              <span>
+                                <Home size={14} />
+                                {formatNumber(property.condNumberOfHouses)}{" "}
+                                houses
+                              </span>
+                            ) : null}
+
+                            {property.yearBuilt != null ? (
+                              <span>
+                                <Calendar size={14} />
+                                Built {property.yearBuilt}
+                              </span>
+                            ) : null}
+                          </div>
+                        ) : null}
 
                         <Link href={propertyUrl} className="projects-address">
                           <MapPin size={14} />
