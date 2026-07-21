@@ -436,7 +436,11 @@ body:has(.projects-page) footer:not(.projects-page footer) {
 }
 
 .projects-property-card:hover .projects-price-link h3 {
-  color: #39aff2;
+  color: #000000;
+}
+
+.projects-price-link:hover h3 {
+  color: #000000;
 }
 
 .projects-property-specs {
