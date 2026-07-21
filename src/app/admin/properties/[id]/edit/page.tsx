@@ -26,6 +26,7 @@ import {
   Upload,
 } from "lucide-react";
 import { AdminRichTextEditor } from "@/components/admin/admin-rich-text-editor";
+import { CurrencyInputField } from "@/components/admin/currency-input-field";
 import { PropertyImageSortableGallery } from "@/components/admin/property-image-sortable-gallery";
 import { getAdminPropertyById } from "@/lib/properties";
 import {
@@ -382,39 +383,34 @@ export default async function EditPropertyPage({
               description="Price, purchase, rehab, ARV, rent and ROI."
             >
               <div className="grid gap-5 md:grid-cols-3">
-                <InputField
+                <CurrencyInputField
                   label="Listed Price"
                   name="price"
-                  type="number"
-                  defaultValue={property.price || ""}
+                  defaultValue={property.price}
                 />
 
-                <InputField
+                <CurrencyInputField
                   label="Purchase Price"
                   name="purchase_price"
-                  type="number"
-                  defaultValue={property.purchase_price || ""}
+                  defaultValue={property.purchase_price}
                 />
 
-                <InputField
+                <CurrencyInputField
                   label="Rehab Estimate"
                   name="rehab_estimate"
-                  type="number"
-                  defaultValue={property.rehab_estimate || ""}
+                  defaultValue={property.rehab_estimate}
                 />
 
-                <InputField
+                <CurrencyInputField
                   label="Projected ARV"
                   name="projected_arv"
-                  type="number"
-                  defaultValue={property.projected_arv || ""}
+                  defaultValue={property.projected_arv}
                 />
 
-                <InputField
+                <CurrencyInputField
                   label="Projected Rent"
                   name="projected_rent"
-                  type="number"
-                  defaultValue={property.projected_rent || ""}
+                  defaultValue={property.projected_rent}
                 />
 
                 <InputField
@@ -430,7 +426,7 @@ export default async function EditPropertyPage({
             <AccordionSection
               icon={<Settings2 size={21} />}
               title="Property Details"
-              description="Bedrooms, bathrooms, square footage, lot and year built."
+              description="Bedrooms, bathrooms, square footage and lot."
             >
               <div className="grid gap-5 md:grid-cols-4">
                 <InputField
@@ -464,13 +460,6 @@ export default async function EditPropertyPage({
                 />
 
                 <InputField
-                  label="Year Built"
-                  name="year_built"
-                  type="number"
-                  defaultValue={property.year_built || ""}
-                />
-
-                <InputField
                   label="Garage Spaces"
                   name="garage_spaces"
                   type="number"
@@ -493,6 +482,49 @@ export default async function EditPropertyPage({
                   step="0.5"
                   defaultValue={property.stories || ""}
                 />
+              </div>
+            </AccordionSection>
+
+            <AccordionSection
+              icon={<Building2 size={21} />}
+              title="Cond"
+              description="When active, number of houses and year built are shown on the home property card."
+            >
+              <div className="space-y-5">
+                <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
+                  <input
+                    name="cond_active"
+                    type="checkbox"
+                    defaultChecked={property.cond_active}
+                    className="mt-1 h-4 w-4 accent-[#53bc76]"
+                  />
+
+                  <span>
+                    <span className="block text-sm font-bold text-[#0e3541]">
+                      Active
+                    </span>
+
+                    <span className="mt-1 block text-xs leading-5 text-[#64748b]">
+                      Show Cond info on the home property card.
+                    </span>
+                  </span>
+                </label>
+
+                <div className="grid gap-5 md:grid-cols-2">
+                  <InputField
+                    label="Number of Houses"
+                    name="cond_number_of_houses"
+                    type="number"
+                    defaultValue={property.cond_number_of_houses || ""}
+                  />
+
+                  <InputField
+                    label="Year Built"
+                    name="year_built"
+                    type="number"
+                    defaultValue={property.year_built || ""}
+                  />
+                </div>
               </div>
             </AccordionSection>
 

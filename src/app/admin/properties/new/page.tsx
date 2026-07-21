@@ -11,6 +11,7 @@ import {
   Settings2,
 } from "lucide-react";
 import { createPropertyAction } from "@/app/admin/properties/actions";
+import { CurrencyInputField } from "@/components/admin/currency-input-field";
 import { requireAdminPermission } from "@/lib/admin-permissions";
 
 const propertyTypes = [
@@ -173,30 +174,26 @@ export default async function NewPropertyPage() {
               />
 
               <div className="mt-6 grid gap-5 md:grid-cols-3">
-                <InputField label="Listed Price" name="price" type="number" />
+                <CurrencyInputField label="Listed Price" name="price" />
 
-                <InputField
+                <CurrencyInputField
                   label="Purchase Price"
                   name="purchase_price"
-                  type="number"
                 />
 
-                <InputField
+                <CurrencyInputField
                   label="Rehab Estimate"
                   name="rehab_estimate"
-                  type="number"
                 />
 
-                <InputField
+                <CurrencyInputField
                   label="Projected ARV"
                   name="projected_arv"
-                  type="number"
                 />
 
-                <InputField
+                <CurrencyInputField
                   label="Projected Rent"
                   name="projected_rent"
-                  type="number"
                 />
 
                 <InputField
@@ -212,7 +209,7 @@ export default async function NewPropertyPage() {
               <SectionHeader
                 icon={<Settings2 size={22} />}
                 title="Property Details"
-                description="Bedrooms, bathrooms, square footage, lot and year built."
+                description="Bedrooms, bathrooms, square footage and lot."
               />
 
               <div className="mt-6 grid gap-5 md:grid-cols-4">
@@ -239,12 +236,6 @@ export default async function NewPropertyPage() {
                 />
 
                 <InputField
-                  label="Year Built"
-                  name="year_built"
-                  type="number"
-                />
-
-                <InputField
                   label="Garage Spaces"
                   name="garage_spaces"
                   type="number"
@@ -264,6 +255,48 @@ export default async function NewPropertyPage() {
                   type="number"
                   step="0.5"
                 />
+              </div>
+            </section>
+
+            <section className="admin-section p-6">
+              <SectionHeader
+                icon={<Building2 size={22} />}
+                title="Cond"
+                description="When active, number of houses and year built are shown on the home property card."
+              />
+
+              <div className="mt-6 space-y-5">
+                <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
+                  <input
+                    name="cond_active"
+                    type="checkbox"
+                    className="mt-1 h-4 w-4 accent-[#53bc76]"
+                  />
+
+                  <span>
+                    <span className="block text-sm font-bold text-[#0c2933]">
+                      Active
+                    </span>
+
+                    <span className="mt-1 block text-xs leading-5 text-[#64748b]">
+                      Show Cond info on the home property card.
+                    </span>
+                  </span>
+                </label>
+
+                <div className="grid gap-5 md:grid-cols-2">
+                  <InputField
+                    label="Number of Houses"
+                    name="cond_number_of_houses"
+                    type="number"
+                  />
+
+                  <InputField
+                    label="Year Built"
+                    name="year_built"
+                    type="number"
+                  />
+                </div>
               </div>
             </section>
 

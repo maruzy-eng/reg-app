@@ -6,6 +6,7 @@ import {
   BedDouble,
   BrainCircuit,
   Building2,
+  Calendar,
   ChartNoAxesColumnIncreasing,
   Check,
   Ellipsis,
@@ -465,6 +466,24 @@ export default async function HomePage() {
                           {formatNumber(property.sqft)} sqft
                         </span>
                       </div>
+
+                      {property.condActive ? (
+                        <div className="home-property-cond">
+                          {property.condNumberOfHouses != null ? (
+                            <span>
+                              <Home size={14} />
+                              {formatNumber(property.condNumberOfHouses)} houses
+                            </span>
+                          ) : null}
+
+                          {property.yearBuilt != null ? (
+                            <span>
+                              <Calendar size={14} />
+                              Built {property.yearBuilt}
+                            </span>
+                          ) : null}
+                        </div>
+                      ) : null}
 
                       <Link href={propertyUrl} className="home-property-address">
                         <MapPin size={14} />

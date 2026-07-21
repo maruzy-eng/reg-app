@@ -352,6 +352,9 @@ export type Database = {
           is_featured: boolean;
           published_at: string | null;
 
+          cond_active: boolean;
+          cond_number_of_houses: number | null;
+
           meta_title: string | null;
           meta_description: string | null;
 
@@ -434,6 +437,9 @@ export type Database = {
           is_featured?: boolean;
           published_at?: string | null;
 
+          cond_active?: boolean;
+          cond_number_of_houses?: number | null;
+
           meta_title?: string | null;
           meta_description?: string | null;
 
@@ -515,6 +521,9 @@ export type Database = {
 
           is_featured?: boolean;
           published_at?: string | null;
+
+          cond_active?: boolean;
+          cond_number_of_houses?: number | null;
 
           meta_title?: string | null;
           meta_description?: string | null;

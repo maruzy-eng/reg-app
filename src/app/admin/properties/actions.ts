@@ -80,6 +80,24 @@ function getNullableNumberValue(formData: FormData, key: string) {
   return numberValue;
 }
 
+function getNullableCurrencyValue(formData: FormData, key: string) {
+  const value = getStringValue(formData, key);
+
+  if (!value) {
+    return null;
+  }
+
+  // Currency masks use "." as thousand separator (e.g. $80.000).
+  const normalizedValue = value.replace(/[^\d-]/g, "");
+  const numberValue = Number(normalizedValue);
+
+  if (!normalizedValue || Number.isNaN(numberValue)) {
+    return null;
+  }
+
+  return numberValue;
+}
+
 function getBooleanValue(formData: FormData, key: string) {
   return formData.get(key) === "on";
 }
@@ -333,11 +351,11 @@ export async function createPropertyAction(formData: FormData) {
     state,
     zip_code: getNullableStringValue(formData, "zip_code"),
     country: getStringValue(formData, "country") || "USA",
-    price: getNullableNumberValue(formData, "price"),
-    purchase_price: getNullableNumberValue(formData, "purchase_price"),
-    rehab_estimate: getNullableNumberValue(formData, "rehab_estimate"),
-    projected_arv: getNullableNumberValue(formData, "projected_arv"),
-    projected_rent: getNullableNumberValue(formData, "projected_rent"),
+    price: getNullableCurrencyValue(formData, "price"),
+    purchase_price: getNullableCurrencyValue(formData, "purchase_price"),
+    rehab_estimate: getNullableCurrencyValue(formData, "rehab_estimate"),
+    projected_arv: getNullableCurrencyValue(formData, "projected_arv"),
+    projected_rent: getNullableCurrencyValue(formData, "projected_rent"),
     projected_roi: getNullableNumberValue(formData, "projected_roi"),
     bedrooms: getNullableNumberValue(formData, "bedrooms"),
     bathrooms: getNullableNumberValue(formData, "bathrooms"),
@@ -365,6 +383,11 @@ export async function createPropertyAction(formData: FormData) {
     contact_phone: getNullableStringValue(formData, "contact_phone"),
     contact_email: getNullableStringValue(formData, "contact_email"),
     is_featured: getBooleanValue(formData, "is_featured"),
+    cond_active: getBooleanValue(formData, "cond_active"),
+    cond_number_of_houses: getNullableNumberValue(
+      formData,
+      "cond_number_of_houses",
+    ),
     published_at: getBooleanValue(formData, "publish_now")
       ? new Date().toISOString()
       : null,
@@ -437,11 +460,11 @@ export async function updatePropertyAction(formData: FormData) {
     state,
     zip_code: getNullableStringValue(formData, "zip_code"),
     country: getStringValue(formData, "country") || "USA",
-    price: getNullableNumberValue(formData, "price"),
-    purchase_price: getNullableNumberValue(formData, "purchase_price"),
-    rehab_estimate: getNullableNumberValue(formData, "rehab_estimate"),
-    projected_arv: getNullableNumberValue(formData, "projected_arv"),
-    projected_rent: getNullableNumberValue(formData, "projected_rent"),
+    price: getNullableCurrencyValue(formData, "price"),
+    purchase_price: getNullableCurrencyValue(formData, "purchase_price"),
+    rehab_estimate: getNullableCurrencyValue(formData, "rehab_estimate"),
+    projected_arv: getNullableCurrencyValue(formData, "projected_arv"),
+    projected_rent: getNullableCurrencyValue(formData, "projected_rent"),
     projected_roi: getNullableNumberValue(formData, "projected_roi"),
     bedrooms: getNullableNumberValue(formData, "bedrooms"),
     bathrooms: getNullableNumberValue(formData, "bathrooms"),
@@ -469,6 +492,11 @@ export async function updatePropertyAction(formData: FormData) {
     contact_phone: getNullableStringValue(formData, "contact_phone"),
     contact_email: getNullableStringValue(formData, "contact_email"),
     is_featured: getBooleanValue(formData, "is_featured"),
+    cond_active: getBooleanValue(formData, "cond_active"),
+    cond_number_of_houses: getNullableNumberValue(
+      formData,
+      "cond_number_of_houses",
+    ),
     published_at: getBooleanValue(formData, "publish_now")
       ? new Date().toISOString()
       : getNullableStringValue(formData, "current_published_at"),

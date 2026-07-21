@@ -47,6 +47,8 @@ export type PropertyCard = {
   description: string | null;
   projectedArv?: number | null;
   rehabEstimate?: number | null;
+  condActive: boolean;
+  condNumberOfHouses: number | null;
 };
 
 export function mapPropertyToCard(property: PropertyRow): PropertyCard {
@@ -69,6 +71,8 @@ export function mapPropertyToCard(property: PropertyRow): PropertyCard {
     description: property.short_description || property.description,
     projectedArv: property.projected_arv,
     rehabEstimate: property.rehab_estimate,
+    condActive: property.cond_active,
+    condNumberOfHouses: property.cond_number_of_houses,
   };
 }
 

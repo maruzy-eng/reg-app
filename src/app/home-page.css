@@ -1092,6 +1092,23 @@
   gap: 6px;
 }
 
+.home-property-cond {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-top: 10px;
+  color: #0e3541;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.home-property-cond span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .home-property-address {
   display: flex;
   align-items: flex-start;
