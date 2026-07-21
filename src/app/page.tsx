@@ -43,7 +43,7 @@ const HOME_DESCRIPTION =
   "Search real estate opportunities, investment properties, development projects, comps, ARV, ROI, and market data with Checkmate Property.";
 
 const DEFAULT_HERO_IMAGE =
-  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/property-media/properties/4great-rock-f8d8d89155f740bb8eeeefc6049e3a18-uncropped_scaled_within_1536_1152.webp";
+  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/property-media/properties/WhatsApp%20Image%202026-07-07%20at%2022.47.54.jpeg";
 
 const SIGN_UP_URL =
   "https://app.checkmateproperty.com/#/register";
@@ -227,9 +227,7 @@ export default async function HomePage() {
 
   const propertyCards = properties.map(mapPropertyToCard);
 
-  const heroImage =
-    propertyCards.find((property) => property.imageUrl)?.imageUrl ||
-    DEFAULT_HERO_IMAGE;
+  const heroImage = DEFAULT_HERO_IMAGE;
 
   const searchForm = searchFormResult.form
     ? {
