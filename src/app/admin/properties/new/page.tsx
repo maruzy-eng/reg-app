@@ -4,6 +4,7 @@ import {
   BadgeDollarSign,
   Building2,
   FileText,
+  Gift,
   Image,
   LinkIcon,
   MapPin,
@@ -327,6 +328,46 @@ export default async function NewPropertyPage() {
                     label="Year Built"
                     name="year_built"
                     type="number"
+                  />
+                </div>
+              </div>
+            </section>
+
+            <section className="admin-section p-6">
+              <SectionHeader
+                icon={<Gift size={22} />}
+                title="Credit"
+                description="When active, the home card shows the old price crossed out, the new price, and a buyer credit highlight."
+              />
+
+              <div className="mt-6 space-y-5">
+                <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
+                  <input
+                    name="credit_active"
+                    type="checkbox"
+                    className="mt-1 h-4 w-4 accent-[#53bc76]"
+                  />
+
+                  <span>
+                    <span className="block text-sm font-bold text-[#0c2933]">
+                      Active
+                    </span>
+
+                    <span className="mt-1 block text-xs leading-5 text-[#64748b]">
+                      Show credit pricing on the home property card.
+                    </span>
+                  </span>
+                </label>
+
+                <div className="grid gap-5 md:grid-cols-2">
+                  <CurrencyInputField
+                    label="Old Price"
+                    name="credit_old_price"
+                  />
+
+                  <CurrencyInputField
+                    label="New Price"
+                    name="credit_new_price"
                   />
                 </div>
               </div>

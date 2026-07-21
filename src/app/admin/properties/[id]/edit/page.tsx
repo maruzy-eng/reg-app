@@ -12,6 +12,7 @@ import {
   ExternalLink,
   Eye,
   FileText,
+  Gift,
   Image as ImageIcon,
   LinkIcon,
   MapPin,
@@ -560,6 +561,47 @@ export default async function EditPropertyPage({
                     name="year_built"
                     type="number"
                     defaultValue={property.year_built || ""}
+                  />
+                </div>
+              </div>
+            </AccordionSection>
+
+            <AccordionSection
+              icon={<Gift size={21} />}
+              title="Credit"
+              description="When active, the home card shows the old price crossed out, the new price, and a buyer credit highlight."
+            >
+              <div className="space-y-5">
+                <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
+                  <input
+                    name="credit_active"
+                    type="checkbox"
+                    defaultChecked={property.credit_active}
+                    className="mt-1 h-4 w-4 accent-[#53bc76]"
+                  />
+
+                  <span>
+                    <span className="block text-sm font-bold text-[#0e3541]">
+                      Active
+                    </span>
+
+                    <span className="mt-1 block text-xs leading-5 text-[#64748b]">
+                      Show credit pricing on the home property card.
+                    </span>
+                  </span>
+                </label>
+
+                <div className="grid gap-5 md:grid-cols-2">
+                  <CurrencyInputField
+                    label="Old Price"
+                    name="credit_old_price"
+                    defaultValue={property.credit_old_price}
+                  />
+
+                  <CurrencyInputField
+                    label="New Price"
+                    name="credit_new_price"
+                    defaultValue={property.credit_new_price}
                   />
                 </div>
               </div>

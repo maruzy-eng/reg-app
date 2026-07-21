@@ -360,6 +360,10 @@ export type Database = {
           cond_bedrooms: number | null;
           cond_bathrooms: number | null;
 
+          credit_active: boolean;
+          credit_old_price: number | null;
+          credit_new_price: number | null;
+
           meta_title: string | null;
           meta_description: string | null;
 
@@ -450,6 +454,10 @@ export type Database = {
           cond_bedrooms?: number | null;
           cond_bathrooms?: number | null;
 
+          credit_active?: boolean;
+          credit_old_price?: number | null;
+          credit_new_price?: number | null;
+
           meta_title?: string | null;
           meta_description?: string | null;
 
@@ -539,6 +547,10 @@ export type Database = {
           cond_sqft?: number | null;
           cond_bedrooms?: number | null;
           cond_bathrooms?: number | null;
+
+          credit_active?: boolean;
+          credit_old_price?: number | null;
+          credit_new_price?: number | null;
 
           meta_title?: string | null;
           meta_description?: string | null;

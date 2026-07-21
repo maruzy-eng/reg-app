@@ -443,6 +443,63 @@ body:has(.projects-page) footer:not(.projects-page footer) {
   color: #000000;
 }
 
+.projects-property-credit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.projects-property-credit-old {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: line-through;
+  text-decoration-color: #ef4444;
+  text-decoration-thickness: 2px;
+}
+
+.projects-property-credit .projects-price-link h3 {
+  color: #0e3541;
+  font-weight: 700;
+}
+
+.projects-property-credit-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: #53bc76;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.projects-property-credit-label span {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.projects-property-credit-badge {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  background: rgba(83, 188, 118, 0.12);
+  padding: 8px 12px;
+  color: #0e3541;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.projects-property-credit-badge svg {
+  flex: 0 0 auto;
+  color: #53bc76;
+}
+
 .projects-property-specs {
   display: flex;
   flex-wrap: wrap;

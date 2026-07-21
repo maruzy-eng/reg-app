@@ -54,6 +54,9 @@ export type PropertyCard = {
   condSqft: number | null;
   condBedrooms: number | null;
   condBathrooms: number | null;
+  creditActive: boolean;
+  creditOldPrice: number | null;
+  creditNewPrice: number | null;
 };
 
 export function mapPropertyToCard(property: PropertyRow): PropertyCard {
@@ -83,6 +86,9 @@ export function mapPropertyToCard(property: PropertyRow): PropertyCard {
     condSqft: property.cond_sqft,
     condBedrooms: property.cond_bedrooms,
     condBathrooms: property.cond_bathrooms,
+    creditActive: property.credit_active,
+    creditOldPrice: property.credit_old_price,
+    creditNewPrice: property.credit_new_price,
   };
 }
 

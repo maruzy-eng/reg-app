@@ -10,6 +10,7 @@ import {
   ChartNoAxesColumnIncreasing,
   Check,
   Ellipsis,
+  Gift,
   Home,
   HousePlus,
   Mail,
@@ -446,13 +447,40 @@ export default async function HomePage() {
                     </Link>
 
                     <div className="home-property-body">
-                      <Link href={propertyUrl} className="home-price-link">
-                        <h3>
-                          {property.condActive && property.condListedPrice
-                            ? property.condListedPrice
-                            : formatCurrency(property.price)}
-                        </h3>
-                      </Link>
+                      {property.creditActive && !property.condActive ? (
+                        <div className="home-property-credit">
+                          {property.creditOldPrice != null ? (
+                            <p className="home-property-credit-old">
+                              {formatCurrency(property.creditOldPrice)}
+                            </p>
+                          ) : null}
+
+                          <Link href={propertyUrl} className="home-price-link">
+                            <h3>
+                              {formatCurrency(
+                                property.creditNewPrice ?? property.price,
+                              )}
+                            </h3>
+                          </Link>
+
+                          <p className="home-property-credit-label">
+                            <span aria-hidden="true">+</span> Credit Available
+                          </p>
+
+                          <div className="home-property-credit-badge">
+                            <Gift size={14} />
+                            <span>Ask about our buyer credit</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <Link href={propertyUrl} className="home-price-link">
+                          <h3>
+                            {property.condActive && property.condListedPrice
+                              ? property.condListedPrice
+                              : formatCurrency(property.price)}
+                          </h3>
+                        </Link>
+                      )}
 
                       {property.condActive ? (
                         <>

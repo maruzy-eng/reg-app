@@ -9,6 +9,7 @@ import {
   Calendar,
   CheckCircle2,
   FileText,
+  Gift,
   ImageIcon,
   MapPin,
   PlayCircle,
@@ -311,13 +312,46 @@ export default async function ProjectsPage() {
                       </Link>
 
                       <div className="projects-property-body">
-                        <Link href={propertyUrl} className="projects-price-link">
-                          <h3>
-                            {property.condActive && property.condListedPrice
-                              ? property.condListedPrice
-                              : formatCurrency(property.price)}
-                          </h3>
-                        </Link>
+                        {property.creditActive && !property.condActive ? (
+                          <div className="projects-property-credit">
+                            {property.creditOldPrice != null ? (
+                              <p className="projects-property-credit-old">
+                                {formatCurrency(property.creditOldPrice)}
+                              </p>
+                            ) : null}
+
+                            <Link
+                              href={propertyUrl}
+                              className="projects-price-link"
+                            >
+                              <h3>
+                                {formatCurrency(
+                                  property.creditNewPrice ?? property.price,
+                                )}
+                              </h3>
+                            </Link>
+
+                            <p className="projects-property-credit-label">
+                              <span aria-hidden="true">+</span> Credit Available
+                            </p>
+
+                            <div className="projects-property-credit-badge">
+                              <Gift size={14} />
+                              <span>Ask about our buyer credit</span>
+                            </div>
+                          </div>
+                        ) : (
+                          <Link
+                            href={propertyUrl}
+                            className="projects-price-link"
+                          >
+                            <h3>
+                              {property.condActive && property.condListedPrice
+                                ? property.condListedPrice
+                                : formatCurrency(property.price)}
+                            </h3>
+                          </Link>
+                        )}
 
                         {property.condActive ? (
                           <>
