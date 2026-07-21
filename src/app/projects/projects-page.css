@@ -460,21 +460,12 @@ body:has(.projects-page) footer:not(.projects-page footer) {
   gap: 6px;
 }
 
-.projects-property-cond {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 16px;
-  margin-top: 10px;
+.projects-property-avg-price {
+  margin: 10px 0 0;
   color: #0e3541;
   font-size: 13px;
   font-weight: 600;
-}
-
-.projects-property-cond span {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  line-height: 1.4;
 }
 
 .projects-address {

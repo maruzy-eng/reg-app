@@ -488,7 +488,7 @@ export default async function EditPropertyPage({
             <AccordionSection
               icon={<Building2 size={21} />}
               title="Cond"
-              description="When active, number of houses and year built are shown on the home property card."
+              description="When active, listed price, sqft and avg price are shown on the home property card."
             >
               <div className="space-y-5">
                 <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
@@ -511,6 +511,27 @@ export default async function EditPropertyPage({
                 </label>
 
                 <div className="grid gap-5 md:grid-cols-2">
+                  <InputField
+                    label="Listed Price"
+                    name="cond_listed_price"
+                    defaultValue={property.cond_listed_price || ""}
+                    placeholder="e.g. From $2.5M"
+                  />
+
+                  <InputField
+                    label="Avg. Price"
+                    name="cond_avg_price"
+                    defaultValue={property.cond_avg_price || ""}
+                    placeholder="e.g. $1.8M"
+                  />
+
+                  <InputField
+                    label="Sqft"
+                    name="cond_sqft"
+                    type="number"
+                    defaultValue={property.cond_sqft || ""}
+                  />
+
                   <InputField
                     label="Number of Houses"
                     name="cond_number_of_houses"
@@ -1331,6 +1352,7 @@ function InputField({
   name,
   type = "text",
   defaultValue = "",
+  placeholder,
   required = false,
   step,
   helpText,
@@ -1340,6 +1362,7 @@ function InputField({
   name: string;
   type?: string;
   defaultValue?: string | number;
+  placeholder?: string;
   required?: boolean;
   step?: string;
   helpText?: string;
@@ -1355,6 +1378,7 @@ function InputField({
         required={required}
         step={step}
         defaultValue={defaultValue}
+        placeholder={placeholder}
         className="admin-input mt-2 w-full px-4 py-3 text-sm"
       />
 

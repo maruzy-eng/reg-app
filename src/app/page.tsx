@@ -6,7 +6,6 @@ import {
   BedDouble,
   BrainCircuit,
   Building2,
-  Calendar,
   ChartNoAxesColumnIncreasing,
   Check,
   Ellipsis,
@@ -447,43 +446,48 @@ export default async function HomePage() {
 
                     <div className="home-property-body">
                       <Link href={propertyUrl} className="home-price-link">
-                        <h3>{formatCurrency(property.price)}</h3>
+                        <h3>
+                          {property.condActive && property.condListedPrice
+                            ? property.condListedPrice
+                            : formatCurrency(property.price)}
+                        </h3>
                       </Link>
 
-                      <div className="home-property-specs">
-                        <span>
-                          <BedDouble size={14} />
-                          {formatNumber(property.bedrooms)} beds
-                        </span>
-
-                        <span>
-                          <Bath size={14} />
-                          {formatNumber(property.bathrooms)} baths
-                        </span>
-
-                        <span>
-                          <Ruler size={14} />
-                          {formatNumber(property.sqft)} sqft
-                        </span>
-                      </div>
-
                       {property.condActive ? (
-                        <div className="home-property-cond">
-                          {property.condNumberOfHouses != null ? (
-                            <span>
-                              <Home size={14} />
-                              {formatNumber(property.condNumberOfHouses)} houses
-                            </span>
+                        <>
+                          {property.condSqft != null ? (
+                            <div className="home-property-specs">
+                              <span>
+                                <Ruler size={14} />
+                                {formatNumber(property.condSqft)} sqft
+                              </span>
+                            </div>
                           ) : null}
 
-                          {property.yearBuilt != null ? (
-                            <span>
-                              <Calendar size={14} />
-                              Built {property.yearBuilt}
-                            </span>
+                          {property.condAvgPrice ? (
+                            <p className="home-property-avg-price">
+                              Avg. Price: {property.condAvgPrice}
+                            </p>
                           ) : null}
+                        </>
+                      ) : (
+                        <div className="home-property-specs">
+                          <span>
+                            <BedDouble size={14} />
+                            {formatNumber(property.bedrooms)} beds
+                          </span>
+
+                          <span>
+                            <Bath size={14} />
+                            {formatNumber(property.bathrooms)} baths
+                          </span>
+
+                          <span>
+                            <Ruler size={14} />
+                            {formatNumber(property.sqft)} sqft
+                          </span>
                         </div>
-                      ) : null}
+                      )}
 
                       <Link href={propertyUrl} className="home-property-address">
                         <MapPin size={14} />

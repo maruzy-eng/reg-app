@@ -6,10 +6,8 @@ import {
   Bath,
   BedDouble,
   Building2,
-  Calendar,
   CheckCircle2,
   FileText,
-  Home,
   ImageIcon,
   MapPin,
   PlayCircle,
@@ -313,44 +311,48 @@ export default async function ProjectsPage() {
 
                       <div className="projects-property-body">
                         <Link href={propertyUrl} className="projects-price-link">
-                          <h3>{formatCurrency(property.price)}</h3>
+                          <h3>
+                            {property.condActive && property.condListedPrice
+                              ? property.condListedPrice
+                              : formatCurrency(property.price)}
+                          </h3>
                         </Link>
 
-                        <div className="projects-property-specs">
-                          <span>
-                            <BedDouble size={14} />
-                            {formatNumber(property.bedrooms)} beds
-                          </span>
-
-                          <span>
-                            <Bath size={14} />
-                            {formatNumber(property.bathrooms)} baths
-                          </span>
-
-                          <span>
-                            <Ruler size={14} />
-                            {formatNumber(property.sqft)} sqft
-                          </span>
-                        </div>
-
                         {property.condActive ? (
-                          <div className="projects-property-cond">
-                            {property.condNumberOfHouses != null ? (
-                              <span>
-                                <Home size={14} />
-                                {formatNumber(property.condNumberOfHouses)}{" "}
-                                houses
-                              </span>
+                          <>
+                            {property.condSqft != null ? (
+                              <div className="projects-property-specs">
+                                <span>
+                                  <Ruler size={14} />
+                                  {formatNumber(property.condSqft)} sqft
+                                </span>
+                              </div>
                             ) : null}
 
-                            {property.yearBuilt != null ? (
-                              <span>
-                                <Calendar size={14} />
-                                Built {property.yearBuilt}
-                              </span>
+                            {property.condAvgPrice ? (
+                              <p className="projects-property-avg-price">
+                                Avg. Price: {property.condAvgPrice}
+                              </p>
                             ) : null}
+                          </>
+                        ) : (
+                          <div className="projects-property-specs">
+                            <span>
+                              <BedDouble size={14} />
+                              {formatNumber(property.bedrooms)} beds
+                            </span>
+
+                            <span>
+                              <Bath size={14} />
+                              {formatNumber(property.bathrooms)} baths
+                            </span>
+
+                            <span>
+                              <Ruler size={14} />
+                              {formatNumber(property.sqft)} sqft
+                            </span>
                           </div>
-                        ) : null}
+                        )}
 
                         <Link href={propertyUrl} className="projects-address">
                           <MapPin size={14} />

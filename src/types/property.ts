@@ -49,6 +49,9 @@ export type PropertyCard = {
   rehabEstimate?: number | null;
   condActive: boolean;
   condNumberOfHouses: number | null;
+  condListedPrice: string | null;
+  condAvgPrice: string | null;
+  condSqft: number | null;
 };
 
 export function mapPropertyToCard(property: PropertyRow): PropertyCard {
@@ -73,6 +76,9 @@ export function mapPropertyToCard(property: PropertyRow): PropertyCard {
     rehabEstimate: property.rehab_estimate,
     condActive: property.cond_active,
     condNumberOfHouses: property.cond_number_of_houses,
+    condListedPrice: property.cond_listed_price,
+    condAvgPrice: property.cond_avg_price,
+    condSqft: property.cond_sqft,
   };
 }
 

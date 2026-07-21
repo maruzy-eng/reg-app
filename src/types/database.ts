@@ -354,6 +354,9 @@ export type Database = {
 
           cond_active: boolean;
           cond_number_of_houses: number | null;
+          cond_listed_price: string | null;
+          cond_avg_price: string | null;
+          cond_sqft: number | null;
 
           meta_title: string | null;
           meta_description: string | null;
@@ -439,6 +442,9 @@ export type Database = {
 
           cond_active?: boolean;
           cond_number_of_houses?: number | null;
+          cond_listed_price?: string | null;
+          cond_avg_price?: string | null;
+          cond_sqft?: number | null;
 
           meta_title?: string | null;
           meta_description?: string | null;
@@ -524,6 +530,9 @@ export type Database = {
 
           cond_active?: boolean;
           cond_number_of_houses?: number | null;
+          cond_listed_price?: string | null;
+          cond_avg_price?: string | null;
+          cond_sqft?: number | null;
 
           meta_title?: string | null;
           meta_description?: string | null;

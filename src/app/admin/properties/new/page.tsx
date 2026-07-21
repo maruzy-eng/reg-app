@@ -262,7 +262,7 @@ export default async function NewPropertyPage() {
               <SectionHeader
                 icon={<Building2 size={22} />}
                 title="Cond"
-                description="When active, number of houses and year built are shown on the home property card."
+                description="When active, listed price, sqft and avg price are shown on the home property card."
               />
 
               <div className="mt-6 space-y-5">
@@ -285,6 +285,24 @@ export default async function NewPropertyPage() {
                 </label>
 
                 <div className="grid gap-5 md:grid-cols-2">
+                  <InputField
+                    label="Listed Price"
+                    name="cond_listed_price"
+                    placeholder="e.g. From $2.5M"
+                  />
+
+                  <InputField
+                    label="Avg. Price"
+                    name="cond_avg_price"
+                    placeholder="e.g. $1.8M"
+                  />
+
+                  <InputField
+                    label="Sqft"
+                    name="cond_sqft"
+                    type="number"
+                  />
+
                   <InputField
                     label="Number of Houses"
                     name="cond_number_of_houses"

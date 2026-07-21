@@ -388,6 +388,9 @@ export async function createPropertyAction(formData: FormData) {
       formData,
       "cond_number_of_houses",
     ),
+    cond_listed_price: getNullableStringValue(formData, "cond_listed_price"),
+    cond_avg_price: getNullableStringValue(formData, "cond_avg_price"),
+    cond_sqft: getNullableNumberValue(formData, "cond_sqft"),
     published_at: getBooleanValue(formData, "publish_now")
       ? new Date().toISOString()
       : null,
@@ -497,6 +500,9 @@ export async function updatePropertyAction(formData: FormData) {
       formData,
       "cond_number_of_houses",
     ),
+    cond_listed_price: getNullableStringValue(formData, "cond_listed_price"),
+    cond_avg_price: getNullableStringValue(formData, "cond_avg_price"),
+    cond_sqft: getNullableNumberValue(formData, "cond_sqft"),
     published_at: getBooleanValue(formData, "publish_now")
       ? new Date().toISOString()
       : getNullableStringValue(formData, "current_published_at"),
