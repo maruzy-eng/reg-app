@@ -27,6 +27,10 @@ import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { HeroLocationSearch } from "@/components/public/hero-location-search";
 import {
+  HomeSignupCardButton,
+  HomeSignupCtaButton,
+} from "@/components/public/signup-lead-modal";
+import {
   formatCurrency,
   formatNumber,
   getPropertyStatusLabel,
@@ -46,9 +50,6 @@ const HOME_DESCRIPTION =
 
 const DEFAULT_HERO_IMAGE =
   "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/property-media/properties/WhatsApp%20Image%202026-07-07%20at%2022.47.54.jpeg";
-
-const SIGN_UP_URL =
-  "https://app.checkmateproperty.com/#/register";
 
 const heroFeatures = [
   {
@@ -282,18 +283,7 @@ export default async function HomePage() {
             <HeroLocationSearch searchForm={searchForm} />
           </div>
 
-          <Link
-            href={SIGN_UP_URL}
-            className="home-signup-cta group"
-          >
-            <span className="home-signup-cta-icon" aria-hidden="true">
-              <UserRoundPlus size={24} strokeWidth={2.1} />
-            </span>
-
-            <span className="home-signup-cta-label">Sign Up Free</span>
-
-            <span className="home-signup-cta-glow" aria-hidden="true" />
-          </Link>
+          <HomeSignupCtaButton searchForm={searchForm} />
 
           <div className="home-hero-features">
             {heroFeatures.map((feature, index) => {
@@ -359,9 +349,7 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <Link href={SIGN_UP_URL} className="home-signup-button">
-              Sign Up Free
-            </Link>
+            <HomeSignupCardButton searchForm={searchForm} />
           </div>
 
         </div>
