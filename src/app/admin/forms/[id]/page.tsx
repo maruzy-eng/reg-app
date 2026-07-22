@@ -5,6 +5,7 @@ import {
   ClipboardList,
   Eye,
   FileText,
+  Link2,
   Mail,
   RadioTower,
   Save,
@@ -25,12 +26,14 @@ import {
   toggleAdminFormWebhookAction,
   updateAdminFormAction,
   updateAdminFormFieldAction,
+  updateAdminFormPageConnectionAction,
 } from "@/lib/admin-forms";
 import {
   createAdminFormEmailAction,
   deleteAdminFormEmailAction,
   toggleAdminFormEmailAction,
 } from "@/lib/admin-form-emails";
+import { FORM_PAGE_CONNECTION_DEFINITIONS } from "@/lib/form-page-connections";
 
 type AdminFormDetailsPageProps = {
   params: Promise<{
@@ -57,8 +60,12 @@ export default async function AdminFormDetailsPage({
     notFound();
   }
 
-  const { form, fields, emails, webhooks, submissions } = details;
+  const { form, fields, emails, webhooks, submissions, pageConnections } =
+    details;
   const wasDuplicated = resolvedSearchParams.duplicated === "1";
+  const connectedPageKeys = new Set(
+    pageConnections.map((connection) => connection.page_key),
+  );
 
   return (
     <div className="w-full space-y-8">
@@ -166,6 +173,96 @@ export default async function AdminFormDetailsPage({
           <p className="mt-2 text-2xl font-bold text-[#0c2933]">
             {submissions.length}
           </p>
+        </div>
+      </section>
+
+      <section className="admin-section p-6 md:p-8">
+        <div className="mb-6 flex items-center gap-3">
+          <div className="admin-icon-box h-11 w-11">
+            <Link2 size={20} />
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+              Page connections
+            </h3>
+
+            <p className="text-sm text-slate-500">
+              Connect this form to a public site page. Only one form can be
+              connected to each page at a time.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-4">
+          {FORM_PAGE_CONNECTION_DEFINITIONS.map((definition) => {
+            const isConnected = connectedPageKeys.has(definition.key);
+
+            return (
+              <div
+                key={definition.key}
+                className="flex flex-col gap-4 rounded-2xl border border-[rgba(12,41,51,0.08)] bg-[#f8fafc] px-5 py-4 md:flex-row md:items-center md:justify-between"
+              >
+                <div>
+                  <p className="text-sm font-bold text-[#0c2933]">
+                    {definition.label}
+                  </p>
+                  <p className="mt-1 text-sm text-slate-500">
+                    {definition.description}
+                  </p>
+                  <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-slate-400">
+                    {definition.path}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  {isConnected ? (
+                    <span className="admin-user-pill-active admin-user-pill px-3 py-1 text-xs uppercase tracking-[0.08em]">
+                      Connected
+                    </span>
+                  ) : (
+                    <span className="admin-user-pill-viewer admin-user-pill px-3 py-1 text-xs uppercase tracking-[0.08em]">
+                      Not connected
+                    </span>
+                  )}
+
+                  <Link
+                    href={definition.path}
+                    target="_blank"
+                    className="admin-secondary-button min-h-[40px] gap-2 px-4 text-xs no-underline"
+                  >
+                    <Eye size={15} />
+                    Open page
+                  </Link>
+
+                  <form action={updateAdminFormPageConnectionAction}>
+                    <input type="hidden" name="form_id" value={form.id} />
+                    <input
+                      type="hidden"
+                      name="page_key"
+                      value={definition.key}
+                    />
+                    <input
+                      type="hidden"
+                      name="enabled"
+                      value={isConnected ? "false" : "true"}
+                    />
+
+                    <button
+                      type="submit"
+                      className={
+                        isConnected
+                          ? "admin-secondary-button min-h-[40px] gap-2 px-4 text-xs"
+                          : "admin-primary-button min-h-[40px] gap-2 px-4 text-xs"
+                      }
+                    >
+                      {isConnected ? "Disconnect" : "Connect"}
+                    </button>
+                  </form>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 

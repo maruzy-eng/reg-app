@@ -9,6 +9,15 @@ import {
   type AdminFormEmailLog,
 } from "@/lib/admin-form-emails";
 import { requireAdminPermission } from "@/lib/admin-permissions";
+import {
+  FORM_PAGE_CONNECTION_DEFINITIONS,
+  getAllFormPageConnections,
+  getFormPageConnectionDefinition,
+  getFormPageConnectionsByFormId,
+  setFormPageConnection,
+  type FormPageConnection,
+  type FormPageConnectionKey,
+} from "@/lib/form-page-connections";
 
 export type AdminForm = {
   id: string;
@@ -110,6 +119,7 @@ export type AdminFormWithCounts = AdminForm & {
   fields_count?: number;
   webhooks_count?: number;
   submissions_count?: number;
+  page_connections?: FormPageConnection[];
 };
 
 export type AdminFormDetails = {
@@ -118,6 +128,7 @@ export type AdminFormDetails = {
   emails: AdminFormEmail[];
   webhooks: AdminFormWebhook[];
   submissions: AdminFormSubmission[];
+  pageConnections: FormPageConnection[];
 };
 
 export type AdminSubmissionDetails = {
@@ -325,9 +336,14 @@ function isMissingAcceptanceMessageColumnError(
 function revalidateFormPaths(formId: string, slug?: string | null) {
   revalidatePath("/admin/forms");
   revalidatePath(`/admin/forms/${formId}`);
+  revalidatePath("/calculator");
 
   if (slug) {
     revalidatePath(`/forms/${slug}`);
+  }
+
+  for (const definition of FORM_PAGE_CONNECTION_DEFINITIONS) {
+    revalidatePath(definition.path);
   }
 }
 
@@ -441,11 +457,13 @@ export async function getAdminForms() {
 
   const formIds = formList.map((form) => form.id);
 
-  const [fieldsResult, webhooksResult, submissionsResult] = await Promise.all([
-    supabase.from("form_fields").select("form_id").in("form_id", formIds),
-    supabase.from("form_webhooks").select("form_id").in("form_id", formIds),
-    supabase.from("form_submissions").select("form_id").in("form_id", formIds),
-  ]);
+  const [fieldsResult, webhooksResult, submissionsResult, pageConnections] =
+    await Promise.all([
+      supabase.from("form_fields").select("form_id").in("form_id", formIds),
+      supabase.from("form_webhooks").select("form_id").in("form_id", formIds),
+      supabase.from("form_submissions").select("form_id").in("form_id", formIds),
+      getAllFormPageConnections(),
+    ]);
 
   const countByFormId = (rows: Array<{ form_id: string | null }> | null) => {
     const counts = new Map<string, number>();
@@ -464,12 +482,20 @@ export async function getAdminForms() {
   const fieldsCount = countByFormId(fieldsResult.data || []);
   const webhooksCount = countByFormId(webhooksResult.data || []);
   const submissionsCount = countByFormId(submissionsResult.data || []);
+  const connectionsByFormId = new Map<string, FormPageConnection[]>();
+
+  for (const connection of pageConnections) {
+    const current = connectionsByFormId.get(connection.form_id) || [];
+    current.push(connection);
+    connectionsByFormId.set(connection.form_id, current);
+  }
 
   return formList.map((form) => ({
     ...form,
     fields_count: fieldsCount.get(form.id) || 0,
     webhooks_count: webhooksCount.get(form.id) || 0,
     submissions_count: submissionsCount.get(form.id) || 0,
+    page_connections: connectionsByFormId.get(form.id) || [],
   })) satisfies AdminFormWithCounts[];
 }
 
@@ -498,7 +524,7 @@ export async function getAdminFormDetails(id: string) {
     return null;
   }
 
-  const [fieldsResult, emails, webhooksResult, submissionsResult] =
+  const [fieldsResult, emails, webhooksResult, submissionsResult, pageConnections] =
     await Promise.all([
       supabase
         .from("form_fields")
@@ -523,6 +549,8 @@ export async function getAdminFormDetails(id: string) {
         .order("created_at", { ascending: false })
         .limit(20)
         .returns<AdminFormSubmission[]>(),
+
+      getFormPageConnectionsByFormId(id),
     ]);
 
   if (fieldsResult.error) {
@@ -543,6 +571,7 @@ export async function getAdminFormDetails(id: string) {
     emails,
     webhooks: webhooksResult.data || [],
     submissions: submissionsResult.data || [],
+    pageConnections,
   } satisfies AdminFormDetails;
 }
 
@@ -758,6 +787,32 @@ export async function updateAdminFormAction(formData: FormData) {
   }
 
   revalidateFormPaths(id, slug);
+}
+
+export async function updateAdminFormPageConnectionAction(formData: FormData) {
+  await requireAdminPermission("forms.update");
+
+  const formId = getStringValue(formData, "form_id");
+  const pageKey = getStringValue(formData, "page_key");
+  const enabled = getBooleanValue(formData, "enabled");
+
+  if (!formId) {
+    throw new Error("Missing form id.");
+  }
+
+  const definition = getFormPageConnectionDefinition(pageKey);
+
+  if (!definition) {
+    throw new Error("Unknown page connection.");
+  }
+
+  await setFormPageConnection({
+    pageKey: pageKey as FormPageConnectionKey,
+    formId: enabled ? formId : null,
+  });
+
+  revalidateFormPaths(formId);
+  revalidatePath(definition.path);
 }
 
 export async function deleteAdminFormAction(formData: FormData) {

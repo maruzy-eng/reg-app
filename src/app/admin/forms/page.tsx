@@ -4,12 +4,14 @@ import {
   ClipboardList,
   Eye,
   FileText,
+  Link2,
   Plus,
   RadioTower,
   Send,
 } from "lucide-react";
 import { DuplicateFormButton } from "@/components/admin/forms/duplicate-form-button";
 import { duplicateAdminFormAction, getAdminForms } from "@/lib/admin-forms";
+import { getFormPageConnectionDefinition } from "@/lib/form-page-connections";
 
 function getStatusClass(status: string) {
   if (status === "published") {
@@ -94,7 +96,7 @@ export default async function AdminFormsPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[900px] border-collapse text-left">
+              <table className="w-full min-w-[1040px] border-collapse text-left">
                 <thead>
                   <tr className="admin-panel-header">
                     <th className="admin-list-meta px-6 py-4 text-xs font-extrabold uppercase tracking-[0.12em]">
@@ -102,6 +104,9 @@ export default async function AdminFormsPage() {
                     </th>
                     <th className="admin-list-meta px-6 py-4 text-xs font-extrabold uppercase tracking-[0.12em]">
                       Status
+                    </th>
+                    <th className="admin-list-meta px-6 py-4 text-xs font-extrabold uppercase tracking-[0.12em]">
+                      Page
                     </th>
                     <th className="admin-list-meta px-6 py-4 text-xs font-extrabold uppercase tracking-[0.12em]">
                       Fields
@@ -154,6 +159,35 @@ export default async function AdminFormsPage() {
                         >
                           {form.status}
                         </span>
+                      </td>
+
+                      <td className="px-6 py-5">
+                        {(form.page_connections || []).length > 0 ? (
+                          <div className="flex flex-col gap-2">
+                            {(form.page_connections || []).map((connection) => {
+                              const definition = getFormPageConnectionDefinition(
+                                connection.page_key,
+                              );
+
+                              return (
+                                <div
+                                  key={connection.id}
+                                  className="admin-list-title flex items-center gap-2 text-sm font-bold"
+                                >
+                                  <Link2
+                                    size={16}
+                                    className="shrink-0 text-[#53bc76]"
+                                  />
+                                  <span>
+                                    {definition?.label || connection.page_key}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <span className="admin-list-meta text-sm">—</span>
+                        )}
                       </td>
 
                       <td className="px-6 py-5">
