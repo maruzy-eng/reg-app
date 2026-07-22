@@ -25,6 +25,8 @@ export type AdminFormEmailEditDetails = {
 
 export type AdminFormEmailActionResult = {
   error?: string;
+  success?: boolean;
+  formId?: string;
 };
 
 function getStringValue(formData: FormData, key: string) {
@@ -259,7 +261,7 @@ export async function createAdminFormEmailAction(formData: FormData) {
   }
 
   revalidateFormEmailPaths(formId);
-  redirect(`/admin/forms/${formId}`);
+  return { success: true, formId } satisfies AdminFormEmailActionResult;
 }
 
 export async function updateAdminFormEmailAction(formData: FormData) {
@@ -329,7 +331,7 @@ export async function updateAdminFormEmailAction(formData: FormData) {
   }
 
   revalidateFormEmailPaths(formId, emailId);
-  redirect(`/admin/forms/${formId}`);
+  return { success: true, formId } satisfies AdminFormEmailActionResult;
 }
 
 export async function toggleAdminFormEmailAction(formData: FormData) {

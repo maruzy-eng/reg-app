@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { Plus, Save } from "lucide-react";
 import { normalizeEmailList, type FormEmailType } from "@/lib/form-emails";
 import type { AdminFormEmailActionResult } from "@/lib/admin-form-emails";
@@ -28,12 +29,24 @@ type EmailBuilderFormProps = {
 
 const defaultTemplate = `<html>
   <body style="font-family: Arial, sans-serif; color: #0c2933;">
-    <h1>Hello {{name}}</h1>
-    <p>This is a sample email body.</p>
-    <p>Form: {{form_name}}</p>
-    <p>Submission ID: {{submission_id}}</p>
+    <h1>New lead from {{form_name}}</h1>
+    <p><strong>Name:</strong> {{name}}</p>
+    <p><strong>Email:</strong> {{email}}</p>
+    <p><strong>Phone:</strong> {{phone}}</p>
+    <p><strong>Source:</strong> {{source_url}}</p>
+    <p><strong>Submission ID:</strong> {{submission_id}}</p>
   </body>
 </html>`;
+
+function isNextRedirectError(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "digest" in error &&
+    typeof (error as { digest?: unknown }).digest === "string" &&
+    String((error as { digest: string }).digest).startsWith("NEXT_REDIRECT")
+  );
+}
 
 export function EmailBuilderForm({
   formId,
@@ -41,6 +54,7 @@ export function EmailBuilderForm({
   submitLabel,
   initialValues,
 }: EmailBuilderFormProps) {
+  const router = useRouter();
   const [type, setType] = useState<FormEmailType>(initialValues?.type || "user");
   const [recipientField, setRecipientField] = useState(
     initialValues?.recipient_field || "email",
@@ -82,8 +96,21 @@ export function EmailBuilderForm({
 
       if (result && "error" in result && result.error) {
         setErrorMessage(result.error);
+        return;
       }
+
+      if (result && "success" in result && result.success && result.formId) {
+        router.push(`/admin/forms/${result.formId}`);
+        router.refresh();
+        return;
+      }
+
+      router.refresh();
     } catch (error) {
+      if (isNextRedirectError(error)) {
+        throw error;
+      }
+
       setErrorMessage(
         error instanceof Error ? error.message : "Unable to save email.",
       );
@@ -283,9 +310,11 @@ export function EmailBuilderForm({
         <pre className="admin-code-block mt-3 overflow-x-auto rounded-2xl p-4 text-xs leading-5">
 {`<html>
   <body style="font-family: Arial, sans-serif; color: #0c2933;">
-    <h1>Hello {{name}}</h1>
-    <p>Form: {{form_name}}</p>
-    <p>Email: {{email}}</p>
+    <h1>New lead from {{form_name}}</h1>
+    <p><strong>Name:</strong> {{name}}</p>
+    <p><strong>Email:</strong> {{email}}</p>
+    <p><strong>Phone:</strong> {{phone}}</p>
+    <p><strong>Source:</strong> {{source_url}}</p>
   </body>
 </html>`}
         </pre>

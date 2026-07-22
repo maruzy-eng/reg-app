@@ -859,8 +859,12 @@
   }
 
   .cmp-hero {
-    background-size: 34px 34px;
     padding: 58px 0 34px;
+  }
+
+  .cmp-hero::before {
+    opacity: 0.06;
+    background-size: 48px 48px;
   }
 
   .cmp-hero h1 {
