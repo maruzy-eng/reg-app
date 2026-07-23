@@ -455,6 +455,151 @@
 .calc-form-header h3 { margin: 8px 0 0; color: var(--calc-dark); font-size: clamp(28px,3vw,36px); font-weight: 800; letter-spacing: -.045em; line-height: 1.05; }
 .calc-form-header > span { display: block; margin-top: 12px; color: var(--calc-muted); font-size: 14px; line-height: 1.65; }
 .calc-form-body { border: 1px solid var(--calc-line); border-radius: 22px; background: #f8fafc; padding: 20px; }
+
+.calc-signup-form {
+  display: grid;
+  gap: 16px;
+}
+
+.calc-signup-field {
+  display: grid;
+  gap: 8px;
+}
+
+.calc-signup-field label {
+  color: var(--calc-dark);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.calc-signup-input-wrap {
+  position: relative;
+}
+
+.calc-signup-input-wrap svg {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  color: #64748b;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.calc-signup-input-wrap input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px 0 46px;
+  border: 1px solid var(--calc-line);
+  border-radius: 16px;
+  background: #fff;
+  color: var(--calc-dark);
+  font-size: 14px;
+  font-weight: 600;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.calc-signup-input-wrap input:focus {
+  border-color: rgba(69, 201, 131, .55);
+  box-shadow: 0 0 0 4px rgba(69, 201, 131, .12);
+}
+
+.calc-signup-input-wrap input:disabled {
+  opacity: .7;
+}
+
+.calc-signup-field-error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.calc-signup-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 16px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.calc-signup-error p {
+  margin: 0;
+}
+
+.calc-signup-consent {
+  margin: 0;
+  color: var(--calc-muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.calc-signup-submit {
+  display: inline-flex;
+  min-height: 56px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(94deg, #53bc76 0%, #1f9f5f 100%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 18px 44px rgba(83, 188, 118, .24);
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.calc-signup-submit:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.calc-signup-submit:disabled {
+  cursor: not-allowed;
+  opacity: .75;
+  transform: none;
+}
+
+.calc-signup-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid rgba(83, 188, 118, .28);
+  border-radius: 18px;
+  background: rgba(83, 188, 118, .1);
+  color: var(--calc-dark);
+}
+
+.calc-signup-success svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--calc-green-strong);
+}
+
+.calc-signup-success strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.calc-signup-success p {
+  margin: 6px 0 0;
+  color: var(--calc-muted);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
 .calc-form-body label:has(input[name="acceptance_message_accepted"]),
 .calc-form-body label:has(input[name="acceptance_message_accepted"]) span { font-size: 13px; font-weight: 400; line-height: 1.55; }
 .calc-page .hero-search-modal-loading, .calc-page .hero-search-modal-warning { border: 1px solid var(--calc-line); border-radius: 18px; background: #fff; padding: 18px; color: var(--calc-muted); font-size: 14px; font-weight: 600; }

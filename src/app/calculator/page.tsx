@@ -18,11 +18,10 @@ import {
   Users,
   WalletCards,
 } from "lucide-react";
-import { CampaignSignupForm } from "@/components/public/campaign-signup-form";
 import { CalculatorFooter } from "@/components/public/calculator-footer";
 import { CalculatorHeader } from "@/components/public/calculator-header";
 import { CalculatorPageReveal } from "@/components/public/calculator-page-reveal";
-import { getPublishedFormByPageKey } from "@/lib/form-page-connections";
+import { CalculatorSignupForm } from "@/components/public/calculator-signup-form";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getCanonicalSiteUrl } from "@/lib/site-url";
 import "./calculator-page.css";
@@ -204,17 +203,7 @@ function ProductPreview() {
 }
 
 export default async function CalculatorLandingPage() {
-  const [settings, calculatorFormResult] = await Promise.all([
-    getSiteSettings(),
-    getPublishedFormByPageKey("calculator"),
-  ]);
-
-  const calculatorForm = calculatorFormResult.form
-    ? {
-        form: calculatorFormResult.form,
-        fields: calculatorFormResult.fields,
-      }
-    : null;
+  const settings = await getSiteSettings();
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -517,14 +506,9 @@ export default async function CalculatorLandingPage() {
               </span>
             </div>
 
-            <CampaignSignupForm
-              searchForm={calculatorForm}
-              signupSource="calculator_page"
-              showSignInForm={false}
-              trackMetaLeadOnSuccess
-              missingFormHint="Connect a published form to the Flip Calculator page in Admin > Forms."
-              className="calc-form-body"
-            />
+            <div className="calc-form-body">
+              <CalculatorSignupForm />
+            </div>
           </div>
         </div>
       </section>
