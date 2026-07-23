@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIpFromHeaders } from "@/lib/forms";
-import { sendMetaLeadEvent } from "@/lib/meta-conversions";
+import {
+  CALCULATOR_META_CONTENT_NAME,
+  CALCULATOR_META_EVENT_SOURCE_URL,
+} from "@/lib/meta-constants";
+import { sendMetaConversionEvent } from "@/lib/meta-conversions";
 import { splitFullName } from "@/lib/meta-normalize";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+
+const SUPPORTED_EVENTS = new Set(["CompleteRegistration", "Lead"]);
 
 function getStringValue(body: Record<string, unknown>, key: string) {
   const value = body[key];
@@ -41,18 +47,19 @@ export async function POST(request: NextRequest) {
   }
 
   const bodyRecord = body as Record<string, unknown>;
-  const eventName = getStringValue(bodyRecord, "event_name") || "Lead";
+  const eventName =
+    getStringValue(bodyRecord, "event_name") || "CompleteRegistration";
   const eventId = getStringValue(bodyRecord, "event_id");
   const eventSourceUrl =
     getStringValue(bodyRecord, "event_source_url") ||
     request.headers.get("referer") ||
-    "";
+    CALCULATOR_META_EVENT_SOURCE_URL;
 
-  if (eventName !== "Lead") {
+  if (!SUPPORTED_EVENTS.has(eventName)) {
     return NextResponse.json(
       {
         success: false,
-        error: "Only Lead events are supported.",
+        error: "Unsupported Meta event.",
       },
       { status: 400 },
     );
@@ -63,16 +70,6 @@ export async function POST(request: NextRequest) {
       {
         success: false,
         error: "Missing event_id.",
-      },
-      { status: 400 },
-    );
-  }
-
-  if (!eventSourceUrl) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Missing event_source_url.",
       },
       { status: 400 },
     );
@@ -90,8 +87,13 @@ export async function POST(request: NextRequest) {
   const fbc =
     getStringValue(bodyRecord, "fbc") || getCookieValue(request, "_fbc");
 
+  const contentName =
+    getStringValue(bodyRecord, "content_name") || CALCULATOR_META_CONTENT_NAME;
+  const status = getStringValue(bodyRecord, "status") || "completed";
+
   try {
-    const result = await sendMetaLeadEvent({
+    const result = await sendMetaConversionEvent({
+      eventName: eventName as "CompleteRegistration" | "Lead",
       eventId,
       eventSourceUrl,
       user: {
@@ -104,9 +106,16 @@ export async function POST(request: NextRequest) {
         fbp: fbp || undefined,
         fbc: fbc || undefined,
       },
+      customData:
+        eventName === "CompleteRegistration"
+          ? {
+              content_name: contentName,
+              status,
+            }
+          : undefined,
     });
 
-    // Never fail the lead flow because of Meta issues.
+    // Never fail the registration flow because of Meta issues.
     return NextResponse.json(
       {
         success: true,

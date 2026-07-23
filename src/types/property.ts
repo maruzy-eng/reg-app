@@ -59,7 +59,11 @@ export type PropertyCard = {
   creditNewPrice: number | null;
 };
 
-export function mapPropertyToCard(property: PropertyRow): PropertyCard {
+export function mapPropertyToCard(
+  property: PropertyRow | PropertyWithMedia,
+): PropertyCard {
+  const propertyWithMedia = property as PropertyWithMedia;
+
   return {
     id: property.id,
     title: property.title,
@@ -75,7 +79,7 @@ export function mapPropertyToCard(property: PropertyRow): PropertyCard {
     yearBuilt: property.year_built,
     propertyType: property.property_type,
     status: property.status,
-    imageUrl: property.cover_image_url,
+    imageUrl: getMainPropertyImage(propertyWithMedia),
     description: property.short_description || property.description,
     projectedArv: property.projected_arv,
     rehabEstimate: property.rehab_estimate,
@@ -175,13 +179,21 @@ export function slugifyPropertyTitle(value: string) {
 }
 
 export function getMainPropertyImage(property: PropertyWithMedia) {
-  const images = property.property_images || [];
+  const images = [...(property.property_images || [])].sort(
+    (a, b) => a.position - b.position,
+  );
 
-  const coverImage =
-    images.find((image) => image.is_cover) ||
-    images.sort((a, b) => a.position - b.position)[0];
+  const markedCover = images.find((image) => image.is_cover);
 
-  return coverImage?.image_url || property.cover_image_url || null;
+  if (markedCover?.image_url) {
+    return markedCover.image_url;
+  }
+
+  if (property.cover_image_url) {
+    return property.cover_image_url;
+  }
+
+  return images[0]?.image_url || null;
 }
 
 export function getPropertyGalleryImages(property: PropertyWithMedia) {

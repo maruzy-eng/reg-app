@@ -575,6 +575,22 @@ export async function addPropertyImageAction(formData: FormData) {
     is_cover: getBooleanValue(formData, "is_cover"),
   };
 
+  if (payload.is_cover) {
+    const { error: clearCoverError } = await supabase
+      .from("property_images")
+      .update({ is_cover: false })
+      .eq("property_id", propertyId)
+      .eq("is_cover", true);
+
+    if (clearCoverError) {
+      console.error(
+        "Error clearing previous property covers:",
+        clearCoverError.message,
+      );
+      throw new Error(clearCoverError.message);
+    }
+  }
+
   const { error } = await supabase.from("property_images").insert(payload);
 
   if (error) {

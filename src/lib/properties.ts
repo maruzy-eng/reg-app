@@ -25,12 +25,23 @@ function isMissingRentedStatusError(error: { message?: string | null } | null) {
   );
 }
 
-export async function getPublicProperties(): Promise<PropertyRow[]> {
+export async function getPublicProperties(): Promise<PropertyWithMedia[]> {
+  noStore();
   const supabase = createAdminClient();
+
+  const selectWithImages = `
+    *,
+    property_images (
+      id,
+      image_url,
+      is_cover,
+      position
+    )
+  `;
 
   const { data, error } = await supabase
     .from("properties")
-    .select("*")
+    .select(selectWithImages)
     .eq("visibility", "public")
     .in("status", publicPropertyStatuses)
     .order("sort_order", { ascending: true })
@@ -40,14 +51,14 @@ export async function getPublicProperties(): Promise<PropertyRow[]> {
     if (isMissingRentedStatusError(error)) {
       const { data: legacyData, error: legacyError } = await supabase
         .from("properties")
-        .select("*")
+        .select(selectWithImages)
         .eq("visibility", "public")
         .in("status", legacyPublicPropertyStatuses)
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
 
       if (!legacyError) {
-        return legacyData || [];
+        return (legacyData || []) as unknown as PropertyWithMedia[];
       }
     }
 
@@ -55,7 +66,7 @@ export async function getPublicProperties(): Promise<PropertyRow[]> {
     return [];
   }
 
-  return data || [];
+  return (data || []) as unknown as PropertyWithMedia[];
 }
 
 export async function getPropertyBySlug(

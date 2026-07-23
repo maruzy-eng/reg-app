@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  CALCULATOR_META_CONTENT_NAME,
+  CALCULATOR_META_EVENT_SOURCE_URL,
+} from "@/lib/meta-constants";
+
 type FbqFunction = (
   command: string,
   eventOrId?: string,
@@ -13,6 +18,11 @@ declare global {
     _fbq?: FbqFunction;
   }
 }
+
+export {
+  CALCULATOR_META_CONTENT_NAME,
+  CALCULATOR_META_EVENT_SOURCE_URL,
+} from "@/lib/meta-constants";
 
 export function getBrowserCookie(name: string) {
   if (typeof document === "undefined") {
@@ -38,29 +48,43 @@ export function createMetaEventId() {
     return crypto.randomUUID();
   }
 
-  return `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+  return `meta_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
-export function trackMetaLead(eventId: string) {
+export function trackMetaCompleteRegistration(eventId: string) {
   if (typeof window === "undefined" || typeof window.fbq !== "function") {
     return false;
   }
 
-  window.fbq("track", "Lead", {}, { eventID: eventId });
+  window.fbq(
+    "track",
+    "CompleteRegistration",
+    {
+      content_name: CALCULATOR_META_CONTENT_NAME,
+      status: "completed",
+    },
+    { eventID: eventId },
+  );
+
   return true;
 }
 
-export type MetaLeadConversionPayload = {
+/** @deprecated Prefer trackMetaCompleteRegistration */
+export function trackMetaLead(eventId: string) {
+  return trackMetaCompleteRegistration(eventId);
+}
+
+export type MetaCompleteRegistrationPayload = {
   eventId: string;
-  eventSourceUrl: string;
+  eventSourceUrl?: string;
   email: string;
   phone: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
 };
 
-export async function sendMetaLeadConversion(
-  payload: MetaLeadConversionPayload,
+export async function sendMetaCompleteRegistrationConversion(
+  payload: MetaCompleteRegistrationPayload,
 ) {
   const response = await fetch("/api/meta/conversions", {
     method: "POST",
@@ -68,13 +92,16 @@ export async function sendMetaLeadConversion(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      event_name: "Lead",
+      event_name: "CompleteRegistration",
       event_id: payload.eventId,
-      event_source_url: payload.eventSourceUrl,
+      event_source_url:
+        payload.eventSourceUrl || CALCULATOR_META_EVENT_SOURCE_URL,
       email: payload.email,
       phone: payload.phone,
-      first_name: payload.firstName,
-      last_name: payload.lastName,
+      first_name: payload.firstName || undefined,
+      last_name: payload.lastName || undefined,
+      content_name: CALCULATOR_META_CONTENT_NAME,
+      status: "completed",
       fbp: getBrowserCookie("_fbp") || undefined,
       fbc: getBrowserCookie("_fbc") || undefined,
     }),
@@ -88,4 +115,14 @@ export async function sendMetaLeadConversion(
   }
 
   return response.json();
+}
+
+/** @deprecated Prefer sendMetaCompleteRegistrationConversion */
+export async function sendMetaLeadConversion(
+  payload: MetaCompleteRegistrationPayload & {
+    firstName: string;
+    lastName: string;
+  },
+) {
+  return sendMetaCompleteRegistrationConversion(payload);
 }

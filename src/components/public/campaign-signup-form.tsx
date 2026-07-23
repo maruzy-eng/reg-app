@@ -6,12 +6,13 @@ import type {
   DynamicFormSubmitOverrideContext,
   DynamicFormSubmitOverrideResult,
 } from "@/components/forms/dynamic-form";
-import { splitFullName } from "@/lib/meta-normalize";
 import {
   createMetaEventId,
-  sendMetaLeadConversion,
-  trackMetaLead,
+  sendMetaCompleteRegistrationConversion,
+  trackMetaCompleteRegistration,
+  CALCULATOR_META_EVENT_SOURCE_URL,
 } from "@/lib/meta-pixel";
+import { splitFullName } from "@/lib/meta-normalize";
 
 const DynamicFormComponent = dynamic(
   () =>
@@ -145,7 +146,7 @@ function buildCampaignRedirectUrl(
   return `${CAMPAIGN_ENTRY_URL}?${query.toString()}`;
 }
 
-async function reportMetaLeadConversion(params: {
+async function reportMetaCompleteRegistration(params: {
   name: string;
   email: string;
   phone: string;
@@ -153,16 +154,15 @@ async function reportMetaLeadConversion(params: {
 }) {
   const eventId = createMetaEventId();
   const eventSourceUrl =
-    params.sourceUrl ||
-    (typeof window !== "undefined" ? window.location.href : "");
+    params.sourceUrl || CALCULATOR_META_EVENT_SOURCE_URL;
   const { firstName, lastName } = splitFullName(params.name);
 
-  // Browser Pixel Lead — only after successful registration.
-  trackMetaLead(eventId);
+  // Browser Pixel — only after successful registration.
+  trackMetaCompleteRegistration(eventId);
 
-  // Server Conversions API — failures must never block the lead.
+  // Server Conversions API — failures must never block registration.
   try {
-    await sendMetaLeadConversion({
+    await sendMetaCompleteRegistrationConversion({
       eventId,
       eventSourceUrl,
       email: params.email,
@@ -171,7 +171,7 @@ async function reportMetaLeadConversion(params: {
       lastName,
     });
   } catch (error) {
-    console.error("Meta Lead conversion failed:", error);
+    console.error("Meta CompleteRegistration conversion failed:", error);
   }
 }
 
@@ -271,11 +271,11 @@ export function CampaignSignupForm({
     }
 
     if (trackMetaLeadOnSuccess) {
-      await reportMetaLeadConversion({
+      await reportMetaCompleteRegistration({
         name,
         email,
         phone,
-        sourceUrl: context.sourceUrl,
+        sourceUrl: context.sourceUrl || CALCULATOR_META_EVENT_SOURCE_URL,
       });
     }
 

@@ -5,7 +5,7 @@ import {
   normalizeMetaPhone,
 } from "@/lib/meta-normalize";
 
-export type MetaLeadUserPayload = {
+export type MetaConversionUserPayload = {
   email?: string;
   phone?: string;
   firstName?: string;
@@ -16,11 +16,29 @@ export type MetaLeadUserPayload = {
   fbc?: string | null;
 };
 
-export type SendMetaLeadEventParams = {
+export type MetaCustomData = {
+  content_name?: string;
+  status?: string;
+};
+
+export type SendMetaConversionEventParams = {
+  eventName: "CompleteRegistration" | "Lead";
   eventId: string;
   eventSourceUrl: string;
-  user: MetaLeadUserPayload;
+  user: MetaConversionUserPayload;
+  customData?: MetaCustomData;
   eventTime?: number;
+};
+
+/** @deprecated Prefer MetaConversionUserPayload */
+export type MetaLeadUserPayload = MetaConversionUserPayload;
+
+/** @deprecated Prefer SendMetaConversionEventParams */
+export type SendMetaLeadEventParams = Omit<
+  SendMetaConversionEventParams,
+  "eventName"
+> & {
+  eventName?: "CompleteRegistration" | "Lead";
 };
 
 function getMetaConfig() {
@@ -65,7 +83,7 @@ function maybeHashNormalized(
   return sha256Hash(normalized);
 }
 
-function buildUserData(user: MetaLeadUserPayload) {
+function buildUserData(user: MetaConversionUserPayload) {
   const userData: Record<string, string | string[]> = {};
 
   const emailHash = maybeHashNormalized(user.email, normalizeMetaEmail);
@@ -108,6 +126,24 @@ function buildUserData(user: MetaLeadUserPayload) {
   return userData;
 }
 
+function buildCustomData(customData?: MetaCustomData) {
+  if (!customData) {
+    return undefined;
+  }
+
+  const payload: Record<string, string> = {};
+
+  if (customData.content_name?.trim()) {
+    payload.content_name = customData.content_name.trim();
+  }
+
+  if (customData.status?.trim()) {
+    payload.status = customData.status.trim();
+  }
+
+  return Object.keys(payload).length > 0 ? payload : undefined;
+}
+
 function buildEventsUrl(config: ReturnType<typeof getMetaConfig>) {
   const { endpointBase, apiVersion, datasetId } = config;
 
@@ -127,7 +163,9 @@ function buildEventsUrl(config: ReturnType<typeof getMetaConfig>) {
   return `${endpointBase}/${apiVersion}/${datasetId}/events`;
 }
 
-export async function sendMetaLeadEvent(params: SendMetaLeadEventParams) {
+export async function sendMetaConversionEvent(
+  params: SendMetaConversionEventParams,
+) {
   const config = getMetaConfig();
 
   if (!config.datasetId || !config.accessToken) {
@@ -142,15 +180,18 @@ export async function sendMetaLeadEvent(params: SendMetaLeadEventParams) {
     };
   }
 
+  const customData = buildCustomData(params.customData);
+
   const payload = {
     data: [
       {
-        event_name: "Lead",
+        event_name: params.eventName,
         event_time: params.eventTime || Math.floor(Date.now() / 1000),
         event_id: params.eventId,
         event_source_url: params.eventSourceUrl,
         action_source: "website",
         user_data: buildUserData(params.user),
+        ...(customData ? { custom_data: customData } : {}),
       },
     ],
   };
@@ -211,4 +252,12 @@ export async function sendMetaLeadEvent(params: SendMetaLeadEventParams) {
           : "Unexpected Meta Conversions API error.",
     };
   }
+}
+
+/** @deprecated Prefer sendMetaConversionEvent */
+export async function sendMetaLeadEvent(params: SendMetaLeadEventParams) {
+  return sendMetaConversionEvent({
+    ...params,
+    eventName: params.eventName || "Lead",
+  });
 }
