@@ -28,6 +28,7 @@ export type SendMetaConversionEventParams = {
   user: MetaConversionUserPayload;
   customData?: MetaCustomData;
   eventTime?: number;
+  testEventCode?: string;
 };
 
 /** @deprecated Prefer MetaConversionUserPayload */
@@ -42,23 +43,28 @@ export type SendMetaLeadEventParams = Omit<
 };
 
 function getMetaConfig() {
-  const datasetId =
-    process.env.META_DATASET_ID?.trim() ||
-    process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() ||
-    "";
+  const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() || "";
+  const datasetId = process.env.META_DATASET_ID?.trim() || pixelId;
   const accessToken = process.env.META_CONVERSIONS_API_TOKEN?.trim() || "";
-  const apiVersion =
-    process.env.META_GRAPH_API_VERSION?.trim().replace(/^\/+|\/+$/g, "") ||
-    "v21.0";
+  const rawApiVersion = process.env.META_GRAPH_API_VERSION?.trim() || "v24.0";
+  const apiVersion = /^v\d+\.\d+$/.test(rawApiVersion)
+    ? rawApiVersion
+    : "v24.0";
   const endpointBase =
     process.env.META_GRAPH_API_ENDPOINT?.trim().replace(/\/+$/g, "") ||
     "https://graph.facebook.com";
+  const testEventCode =
+    process.env.META_TEST_EVENT_CODE?.trim() ||
+    process.env.META_CAPI_TEST_EVENT_CODE?.trim() ||
+    "";
 
   return {
+    pixelId,
     datasetId,
     accessToken,
     apiVersion,
     endpointBase,
+    testEventCode,
   };
 }
 
@@ -147,20 +153,26 @@ function buildCustomData(customData?: MetaCustomData) {
 function buildEventsUrl(config: ReturnType<typeof getMetaConfig>) {
   const { endpointBase, apiVersion, datasetId } = config;
 
+  // Full events endpoint already configured.
+  if (/\/events\/?$/.test(endpointBase)) {
+    return endpointBase;
+  }
+
+  // Base like https://graph.facebook.com/v24.0/<pixel_id>
   if (
     /\/v\d+\.\d+(\/|$)/.test(endpointBase) &&
     endpointBase.includes(datasetId)
   ) {
-    return endpointBase.endsWith("/events")
-      ? endpointBase
-      : `${endpointBase.replace(/\/+$/g, "")}/events`;
+    return `${endpointBase.replace(/\/+$/g, "")}/events`;
   }
 
+  // Base like https://graph.facebook.com/v24.0
   if (/\/v\d+\.\d+$/.test(endpointBase)) {
     return `${endpointBase}/${datasetId}/events`;
   }
 
-  return `${endpointBase}/${apiVersion}/${datasetId}/events`;
+  // Base like https://graph.facebook.com
+  return `${endpointBase.replace(/\/+$/g, "")}/${apiVersion}/${datasetId}/events`;
 }
 
 export async function sendMetaConversionEvent(
@@ -180,34 +192,43 @@ export async function sendMetaConversionEvent(
     };
   }
 
-  const customData = buildCustomData(params.customData);
+  if (config.pixelId && config.pixelId !== config.datasetId) {
+    console.warn(
+      `Meta Pixel/Dataset mismatch: NEXT_PUBLIC_META_PIXEL_ID=${config.pixelId} META_DATASET_ID=${config.datasetId}`,
+    );
+  }
 
-  const payload = {
-    data: [
-      {
-        event_name: params.eventName,
-        event_time: params.eventTime || Math.floor(Date.now() / 1000),
-        event_id: params.eventId,
-        event_source_url: params.eventSourceUrl,
-        action_source: "website",
-        user_data: buildUserData(params.user),
-        ...(customData ? { custom_data: customData } : {}),
-      },
-    ],
+  const customData = buildCustomData(params.customData);
+  const testEventCode = params.testEventCode?.trim() || config.testEventCode;
+
+  const eventPayload = {
+    event_name: params.eventName,
+    event_time: params.eventTime || Math.floor(Date.now() / 1000),
+    event_id: params.eventId,
+    event_source_url: params.eventSourceUrl,
+    action_source: "website" as const,
+    user_data: buildUserData(params.user),
+    ...(customData ? { custom_data: customData } : {}),
   };
 
-  const url = buildEventsUrl(config);
+  const body: Record<string, unknown> = {
+    data: [eventPayload],
+  };
+
+  if (testEventCode) {
+    body.test_event_code = testEventCode;
+  }
+
+  const url = new URL(buildEventsUrl(config));
+  url.searchParams.set("access_token", config.accessToken);
 
   try {
-    const response = await fetch(url, {
+    const response = await fetch(url.toString(), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ...payload,
-        access_token: config.accessToken,
-      }),
+      body: JSON.stringify(body),
       cache: "no-store",
     });
 
@@ -223,21 +244,46 @@ export async function sendMetaConversionEvent(
     }
 
     if (!response.ok) {
-      console.error("Meta Conversions API error:", response.status, data);
+      console.error("Meta Conversions API error:", {
+        status: response.status,
+        datasetId: config.datasetId,
+        pixelId: config.pixelId,
+        eventName: params.eventName,
+        eventId: params.eventId,
+        testEventCode: testEventCode || null,
+        data,
+      });
 
       return {
         success: false,
         skipped: false,
         status: response.status,
         error: "Meta Conversions API request failed.",
+        datasetId: config.datasetId,
+        pixelId: config.pixelId,
+        eventName: params.eventName,
+        eventId: params.eventId,
         data,
       };
     }
+
+    console.info("Meta Conversions API success:", {
+      datasetId: config.datasetId,
+      pixelId: config.pixelId,
+      eventName: params.eventName,
+      eventId: params.eventId,
+      testEventCode: testEventCode || null,
+      data,
+    });
 
     return {
       success: true,
       skipped: false,
       status: response.status,
+      datasetId: config.datasetId,
+      pixelId: config.pixelId,
+      eventName: params.eventName,
+      eventId: params.eventId,
       data,
     };
   } catch (error) {
@@ -250,6 +296,10 @@ export async function sendMetaConversionEvent(
         error instanceof Error
           ? error.message
           : "Unexpected Meta Conversions API error.",
+      datasetId: config.datasetId,
+      pixelId: config.pixelId,
+      eventName: params.eventName,
+      eventId: params.eventId,
     };
   }
 }

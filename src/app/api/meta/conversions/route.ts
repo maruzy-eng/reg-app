@@ -90,6 +90,7 @@ export async function POST(request: NextRequest) {
   const contentName =
     getStringValue(bodyRecord, "content_name") || CALCULATOR_META_CONTENT_NAME;
   const status = getStringValue(bodyRecord, "status") || "completed";
+  const testEventCode = getStringValue(bodyRecord, "test_event_code");
 
   try {
     const result = await sendMetaConversionEvent({
@@ -113,6 +114,7 @@ export async function POST(request: NextRequest) {
               status,
             }
           : undefined,
+      testEventCode: testEventCode || undefined,
     });
 
     // Never fail the registration flow because of Meta issues.
