@@ -22,6 +22,10 @@ type CampaignRegisterPayload = {
   sourceUrl: string;
 };
 
+type MetaConversionResult = Awaited<
+  ReturnType<typeof sendMetaConversionEvent>
+>;
+
 function getStringValue(body: Record<string, unknown>, key: string) {
   const value = body[key];
 
@@ -69,7 +73,8 @@ function getCookieValue(request: NextRequest, name: string) {
 
 function buildFbcFromFbclid(sourceUrl: string) {
   try {
-    const fbclid = new URL(sourceUrl).searchParams.get("fbclid")?.trim();
+    const parsedUrl = new URL(sourceUrl);
+    const fbclid = parsedUrl.searchParams.get("fbclid")?.trim();
 
     if (!fbclid) {
       return "";
@@ -81,6 +86,32 @@ function buildFbcFromFbclid(sourceUrl: string) {
   }
 }
 
+function normalizeSourceUrl(sourceUrl: string) {
+  try {
+    const parsedUrl = new URL(sourceUrl);
+
+    if (parsedUrl.hostname !== "checkmateproperty.com") {
+      return CALCULATOR_META_EVENT_SOURCE_URL;
+    }
+
+    if (parsedUrl.pathname === "/" || !parsedUrl.pathname) {
+      return CALCULATOR_META_EVENT_SOURCE_URL;
+    }
+
+    return parsedUrl.toString();
+  } catch {
+    return CALCULATOR_META_EVENT_SOURCE_URL;
+  }
+}
+
+function isValidEventId(eventId: string) {
+  if (!eventId || eventId.length > 128) {
+    return false;
+  }
+
+  return /^[a-zA-Z0-9_-]+$/.test(eventId);
+}
+
 async function sendCompleteRegistrationConversion(params: {
   request: NextRequest;
   name: string;
@@ -90,21 +121,25 @@ async function sendCompleteRegistrationConversion(params: {
   sourceUrl: string;
 }) {
   const { firstName, lastName } = splitFullName(params.name);
+
+  const sourceUrl = normalizeSourceUrl(params.sourceUrl);
+
   const fbc =
     getCookieValue(params.request, "_fbc") ||
-    buildFbcFromFbclid(params.sourceUrl);
+    buildFbcFromFbclid(sourceUrl);
 
   return sendMetaConversionEvent({
     eventName: "CompleteRegistration",
     eventId: params.eventId,
-    eventSourceUrl: params.sourceUrl || CALCULATOR_META_EVENT_SOURCE_URL,
+    eventSourceUrl: sourceUrl,
     user: {
       email: params.email,
       phone: params.phone,
       firstName,
       lastName,
       clientIpAddress: getClientIpFromHeaders(params.request.headers),
-      clientUserAgent: params.request.headers.get("user-agent"),
+      clientUserAgent:
+        params.request.headers.get("user-agent") || undefined,
       fbp: getCookieValue(params.request, "_fbp") || undefined,
       fbc: fbc || undefined,
     },
@@ -113,6 +148,40 @@ async function sendCompleteRegistrationConversion(params: {
       status: "completed",
     },
   });
+}
+
+async function sendMetaConversionSafely(params: {
+  request: NextRequest;
+  name: string;
+  email: string;
+  phone: string;
+  eventId: string;
+  sourceUrl: string;
+}): Promise<MetaConversionResult | null> {
+  try {
+    const result = await sendCompleteRegistrationConversion(params);
+
+    console.info("[Meta CAPI] CompleteRegistration processed.", {
+      eventName: "CompleteRegistration",
+      eventId: params.eventId,
+      sourceUrl: normalizeSourceUrl(params.sourceUrl),
+      result,
+    });
+
+    return result;
+  } catch (error) {
+    console.error("[Meta CAPI] CompleteRegistration failed.", {
+      eventName: "CompleteRegistration",
+      eventId: params.eventId,
+      sourceUrl: normalizeSourceUrl(params.sourceUrl),
+      error:
+        error instanceof Error
+          ? error.message
+          : "Unknown Meta Conversions API error.",
+    });
+
+    return null;
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -141,9 +210,12 @@ export async function POST(request: NextRequest) {
   }
 
   const bodyRecord = body as Record<string, unknown>;
+
   const payload: CampaignRegisterPayload = {
     name: getStringValue(bodyRecord, "name").trim(),
-    email: getStringValue(bodyRecord, "email").trim(),
+    email: getStringValue(bodyRecord, "email")
+      .trim()
+      .toLowerCase(),
     phone: getStringValue(bodyRecord, "phone").trim(),
     password: getStringValue(bodyRecord, "password"),
     eventId: getStringValue(bodyRecord, "eventId").trim(),
@@ -153,24 +225,40 @@ export async function POST(request: NextRequest) {
       CALCULATOR_META_EVENT_SOURCE_URL,
   };
 
-  const missingFields = Object.entries(payload)
-    .filter(([, value]) => !value)
-    .map(([key]) => key);
+  const requiredFields: Array<
+    keyof Omit<CampaignRegisterPayload, "sourceUrl">
+  > = ["name", "email", "phone", "password", "eventId"];
+
+  const missingFields = requiredFields.filter(
+    (field) => !payload[field],
+  );
 
   if (missingFields.length > 0) {
     return NextResponse.json(
       {
         success: false,
-        error: `Missing required field${missingFields.length > 1 ? "s" : ""}: ${missingFields.join(
-          ", ",
-        )}.`,
+        error: `Missing required field${
+          missingFields.length > 1 ? "s" : ""
+        }: ${missingFields.join(", ")}.`,
       },
       { status: 400 },
     );
   }
 
+  if (!isValidEventId(payload.eventId)) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Invalid Meta event ID.",
+      },
+      { status: 400 },
+    );
+  }
+
+  let campaignResponse: Response;
+
   try {
-    const response = await fetch(CAMPAIGN_REGISTER_ENDPOINT, {
+    campaignResponse = await fetch(CAMPAIGN_REGISTER_ENDPOINT, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -184,40 +272,15 @@ export async function POST(request: NextRequest) {
       }),
       cache: "no-store",
     });
-
-    const data = await parseJsonSafely(response);
-
-    if (!response.ok) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: getUsefulMessage(
-            data,
-            "Unable to create your campaign access.",
-          ),
-        },
-        { status: response.status },
-      );
-    }
-
-    const meta = await sendCompleteRegistrationConversion({
-      request,
-      name: payload.name,
-      email: payload.email,
-      phone: payload.phone,
+  } catch (error) {
+    console.error("[Campaign Register] External API request failed.", {
       eventId: payload.eventId,
-      sourceUrl: payload.sourceUrl,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Unknown campaign registration error.",
     });
 
-    const responseBody =
-      data && typeof data === "object" && !Array.isArray(data)
-        ? { ...data, meta }
-        : { success: true, meta };
-
-    return NextResponse.json(responseBody, {
-      status: response.status,
-    });
-  } catch {
     return NextResponse.json(
       {
         success: false,
@@ -226,4 +289,57 @@ export async function POST(request: NextRequest) {
       { status: 502 },
     );
   }
+
+  const campaignData = await parseJsonSafely(campaignResponse);
+
+  if (!campaignResponse.ok) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: getUsefulMessage(
+          campaignData,
+          "Unable to create your campaign access.",
+        ),
+      },
+      { status: campaignResponse.status },
+    );
+  }
+
+  /*
+   * Neste ponto, a conta foi criada com sucesso.
+   *
+   * O envio para a Meta é isolado para que uma indisponibilidade
+   * da CAPI não transforme um cadastro válido em erro para o usuário.
+   */
+  const meta = await sendMetaConversionSafely({
+    request,
+    name: payload.name,
+    email: payload.email,
+    phone: payload.phone,
+    eventId: payload.eventId,
+    sourceUrl: payload.sourceUrl,
+  });
+
+  const responseBody =
+    campaignData &&
+    typeof campaignData === "object" &&
+    !Array.isArray(campaignData)
+      ? {
+          ...campaignData,
+          metaTracking: {
+            attempted: true,
+            accepted: meta !== null,
+          },
+        }
+      : {
+          success: true,
+          metaTracking: {
+            attempted: true,
+            accepted: meta !== null,
+          },
+        };
+
+  return NextResponse.json(responseBody, {
+    status: campaignResponse.status,
+  });
 }
