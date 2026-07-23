@@ -7,12 +7,6 @@ type CalculatorFooterProps = {
   settings: Required<SiteSettingsValue>;
 };
 
-const legalLinks = [
-  { label: "Privacy Policy", href: "/privacy-policy" },
-  { label: "Terms of Use", href: "/terms-of-use" },
-  { label: "Data Policy", href: "/data-policy" },
-];
-
 export function CalculatorFooter({ settings }: CalculatorFooterProps) {
   const logoUrl = settings.logo_url;
   const siteName = settings.site_name || "Checkmate Property";
@@ -49,14 +43,6 @@ export function CalculatorFooter({ settings }: CalculatorFooterProps) {
               "Real estate intelligence to help investors analyze deals faster."}
           </p>
         </div>
-
-        <nav className="calc-footer-links" aria-label="Legal">
-          {legalLinks.map((item) => (
-            <Link key={item.href} href={item.href}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
 
         <div className="calc-footer-copy">
           <span>
