@@ -21,6 +21,20 @@ function getCookieValue(request: NextRequest, name: string) {
   return request.cookies.get(name)?.value?.trim() || "";
 }
 
+function buildFbcFromFbclid(sourceUrl: string) {
+  try {
+    const fbclid = new URL(sourceUrl).searchParams.get("fbclid")?.trim();
+
+    if (!fbclid) {
+      return "";
+    }
+
+    return `fb.1.${Date.now()}.${fbclid}`;
+  } catch {
+    return "";
+  }
+}
+
 export async function POST(request: NextRequest) {
   let body: unknown;
 
@@ -85,7 +99,9 @@ export async function POST(request: NextRequest) {
   const fbp =
     getStringValue(bodyRecord, "fbp") || getCookieValue(request, "_fbp");
   const fbc =
-    getStringValue(bodyRecord, "fbc") || getCookieValue(request, "_fbc");
+    getStringValue(bodyRecord, "fbc") ||
+    getCookieValue(request, "_fbc") ||
+    buildFbcFromFbclid(eventSourceUrl);
 
   const contentName =
     getStringValue(bodyRecord, "content_name") || CALCULATOR_META_CONTENT_NAME;

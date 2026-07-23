@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useRef } from "react";
 import type {
   DynamicFormSignInCredentials,
   DynamicFormSubmitOverrideContext,
@@ -8,11 +9,8 @@ import type {
 } from "@/components/forms/dynamic-form";
 import {
   createMetaEventId,
-  sendMetaCompleteRegistrationConversion,
   trackMetaCompleteRegistration,
-  CALCULATOR_META_EVENT_SOURCE_URL,
 } from "@/lib/meta-pixel";
-import { splitFullName } from "@/lib/meta-normalize";
 
 const DynamicFormComponent = dynamic(
   () =>
@@ -146,35 +144,6 @@ function buildCampaignRedirectUrl(
   return `${CAMPAIGN_ENTRY_URL}?${query.toString()}`;
 }
 
-async function reportMetaCompleteRegistration(params: {
-  name: string;
-  email: string;
-  phone: string;
-  sourceUrl?: string;
-}) {
-  const eventId = createMetaEventId();
-  const eventSourceUrl =
-    params.sourceUrl || CALCULATOR_META_EVENT_SOURCE_URL;
-  const { firstName, lastName } = splitFullName(params.name);
-
-  // Browser Pixel — only after successful registration.
-  trackMetaCompleteRegistration(eventId);
-
-  // Server Conversions API — failures must never block registration.
-  try {
-    await sendMetaCompleteRegistrationConversion({
-      eventId,
-      eventSourceUrl,
-      email: params.email,
-      phone: params.phone,
-      firstName,
-      lastName,
-    });
-  } catch (error) {
-    console.error("Meta CompleteRegistration conversion failed:", error);
-  }
-}
-
 export function CampaignSignupForm({
   searchForm,
   signupSource = "home_signup",
@@ -185,6 +154,9 @@ export function CampaignSignupForm({
   trackMetaLeadOnSuccess = false,
   successMessage = "Your account was created successfully. You can start using the Free Flip Calculator.",
 }: CampaignSignupFormProps) {
+  const currentMetaEventIdRef = useRef<string | null>(null);
+  const trackedMetaEventIdsRef = useRef(new Set<string>());
+
   async function handleCampaignSubmit(
     context: DynamicFormSubmitOverrideContext,
   ): Promise<DynamicFormSubmitOverrideResult> {
@@ -218,6 +190,9 @@ export function CampaignSignupForm({
       };
     }
 
+    const metaEventId = currentMetaEventIdRef.current || createMetaEventId();
+    currentMetaEventIdRef.current = metaEventId;
+
     const campaignResponse = await fetch(CAMPAIGN_REGISTER_ENDPOINT, {
       method: "POST",
       headers: {
@@ -228,6 +203,8 @@ export function CampaignSignupForm({
         email,
         phone,
         password,
+        eventId: metaEventId,
+        sourceUrl: context.sourceUrl,
       }),
     });
 
@@ -241,9 +218,20 @@ export function CampaignSignupForm({
       !tokens.idToken ||
       !tokens.expiresIn
     ) {
+      currentMetaEventIdRef.current = null;
+
       return {
         error: getCampaignErrorMessage(campaignResult),
       };
+    }
+
+    if (trackMetaLeadOnSuccess) {
+      const alreadyTracked = trackedMetaEventIdsRef.current.has(metaEventId);
+
+      if (!alreadyTracked) {
+        trackMetaCompleteRegistration(metaEventId);
+        trackedMetaEventIdsRef.current.add(metaEventId);
+      }
     }
 
     const formResponse = await fetch(`/api/forms/${context.form.slug}/submit`, {
@@ -270,14 +258,7 @@ export function CampaignSignupForm({
       };
     }
 
-    if (trackMetaLeadOnSuccess) {
-      await reportMetaCompleteRegistration({
-        name,
-        email,
-        phone,
-        sourceUrl: context.sourceUrl || CALCULATOR_META_EVENT_SOURCE_URL,
-      });
-    }
+    currentMetaEventIdRef.current = null;
 
     if (redirectOnSuccess) {
       window.location.assign(buildCampaignRedirectUrl(tokens));

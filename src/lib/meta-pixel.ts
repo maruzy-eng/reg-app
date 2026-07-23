@@ -91,6 +91,7 @@ export async function sendMetaCompleteRegistrationConversion(
     headers: {
       "Content-Type": "application/json",
     },
+    keepalive: true,
     body: JSON.stringify({
       event_name: "CompleteRegistration",
       event_id: payload.eventId,
@@ -107,14 +108,26 @@ export async function sendMetaCompleteRegistrationConversion(
     }),
   });
 
+  const result = await response.json().catch(() => null);
+
   if (!response.ok) {
-    const result = await response.json().catch(() => null);
     throw new Error(
       result?.error || "Unable to send Meta Conversions API event.",
     );
   }
 
-  return response.json();
+  if (result?.meta?.success === false && !result?.meta?.skipped) {
+    console.error("Meta CAPI reported failure:", result.meta);
+  } else {
+    console.info("Meta CAPI response:", {
+      event_name: "CompleteRegistration",
+      event_id: payload.eventId,
+      pixel_dataset: result?.meta?.datasetId || result?.meta?.pixelId,
+      meta: result?.meta,
+    });
+  }
+
+  return result;
 }
 
 /** @deprecated Prefer sendMetaCompleteRegistrationConversion */

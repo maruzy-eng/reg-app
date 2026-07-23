@@ -1,4 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getClientIpFromHeaders } from "@/lib/forms";
+import {
+  CALCULATOR_META_CONTENT_NAME,
+  CALCULATOR_META_EVENT_SOURCE_URL,
+} from "@/lib/meta-constants";
+import { sendMetaConversionEvent } from "@/lib/meta-conversions";
+import { splitFullName } from "@/lib/meta-normalize";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -11,6 +18,8 @@ type CampaignRegisterPayload = {
   email: string;
   phone: string;
   password: string;
+  eventId: string;
+  sourceUrl: string;
 };
 
 function getStringValue(body: Record<string, unknown>, key: string) {
@@ -54,6 +63,58 @@ function getUsefulMessage(data: unknown, fallback: string) {
   return fallback;
 }
 
+function getCookieValue(request: NextRequest, name: string) {
+  return request.cookies.get(name)?.value?.trim() || "";
+}
+
+function buildFbcFromFbclid(sourceUrl: string) {
+  try {
+    const fbclid = new URL(sourceUrl).searchParams.get("fbclid")?.trim();
+
+    if (!fbclid) {
+      return "";
+    }
+
+    return `fb.1.${Date.now()}.${fbclid}`;
+  } catch {
+    return "";
+  }
+}
+
+async function sendCompleteRegistrationConversion(params: {
+  request: NextRequest;
+  name: string;
+  email: string;
+  phone: string;
+  eventId: string;
+  sourceUrl: string;
+}) {
+  const { firstName, lastName } = splitFullName(params.name);
+  const fbc =
+    getCookieValue(params.request, "_fbc") ||
+    buildFbcFromFbclid(params.sourceUrl);
+
+  return sendMetaConversionEvent({
+    eventName: "CompleteRegistration",
+    eventId: params.eventId,
+    eventSourceUrl: params.sourceUrl || CALCULATOR_META_EVENT_SOURCE_URL,
+    user: {
+      email: params.email,
+      phone: params.phone,
+      firstName,
+      lastName,
+      clientIpAddress: getClientIpFromHeaders(params.request.headers),
+      clientUserAgent: params.request.headers.get("user-agent"),
+      fbp: getCookieValue(params.request, "_fbp") || undefined,
+      fbc: fbc || undefined,
+    },
+    customData: {
+      content_name: CALCULATOR_META_CONTENT_NAME,
+      status: "completed",
+    },
+  });
+}
+
 export async function POST(request: NextRequest) {
   let body: unknown;
 
@@ -85,6 +146,11 @@ export async function POST(request: NextRequest) {
     email: getStringValue(bodyRecord, "email").trim(),
     phone: getStringValue(bodyRecord, "phone").trim(),
     password: getStringValue(bodyRecord, "password"),
+    eventId: getStringValue(bodyRecord, "eventId").trim(),
+    sourceUrl:
+      getStringValue(bodyRecord, "sourceUrl").trim() ||
+      request.headers.get("referer") ||
+      CALCULATOR_META_EVENT_SOURCE_URL,
   };
 
   const missingFields = Object.entries(payload)
@@ -110,7 +176,12 @@ export async function POST(request: NextRequest) {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        name: payload.name,
+        email: payload.email,
+        phone: payload.phone,
+        password: payload.password,
+      }),
       cache: "no-store",
     });
 
@@ -129,7 +200,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json(data ?? { success: true }, {
+    const meta = await sendCompleteRegistrationConversion({
+      request,
+      name: payload.name,
+      email: payload.email,
+      phone: payload.phone,
+      eventId: payload.eventId,
+      sourceUrl: payload.sourceUrl,
+    });
+
+    const responseBody =
+      data && typeof data === "object" && !Array.isArray(data)
+        ? { ...data, meta }
+        : { success: true, meta };
+
+    return NextResponse.json(responseBody, {
       status: response.status,
     });
   } catch {

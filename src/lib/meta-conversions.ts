@@ -43,7 +43,10 @@ export type SendMetaLeadEventParams = Omit<
 };
 
 function getMetaConfig() {
-  const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() || "";
+  const pixelId =
+    process.env.META_PIXEL_ID?.trim() ||
+    process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() ||
+    "";
   const datasetId = process.env.META_DATASET_ID?.trim() || pixelId;
   const accessToken = process.env.META_CONVERSIONS_API_TOKEN?.trim() || "";
   const rawApiVersion = process.env.META_GRAPH_API_VERSION?.trim() || "v24.0";
@@ -213,17 +216,15 @@ export async function sendMetaConversionEvent(
 
   const body: Record<string, unknown> = {
     data: [eventPayload],
+    access_token: config.accessToken,
   };
 
   if (testEventCode) {
     body.test_event_code = testEventCode;
   }
 
-  const url = new URL(buildEventsUrl(config));
-  url.searchParams.set("access_token", config.accessToken);
-
   try {
-    const response = await fetch(url.toString(), {
+    const response = await fetch(buildEventsUrl(config), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
