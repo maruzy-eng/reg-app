@@ -23,7 +23,9 @@ export function SitePixels({ metaPixelId, googleTagId }: SitePixelsProps) {
     return null;
   }
 
-  const safeMetaPixelId = sanitizePixelId(metaPixelId);
+  const safeMetaPixelId = sanitizePixelId(
+    process.env.NEXT_PUBLIC_META_PIXEL_ID || metaPixelId,
+  );
   const safeGoogleTagId = sanitizePixelId(googleTagId);
   const isGtm = safeGoogleTagId.startsWith("GTM-");
 

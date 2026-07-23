@@ -6,6 +6,12 @@ import type {
   DynamicFormSubmitOverrideContext,
   DynamicFormSubmitOverrideResult,
 } from "@/components/forms/dynamic-form";
+import { splitFullName } from "@/lib/meta-normalize";
+import {
+  createMetaEventId,
+  sendMetaLeadConversion,
+  trackMetaLead,
+} from "@/lib/meta-pixel";
 
 const DynamicFormComponent = dynamic(
   () =>
@@ -49,6 +55,9 @@ type CampaignSignupFormProps = {
   className?: string;
   showSignInForm?: boolean;
   missingFormHint?: string;
+  redirectOnSuccess?: boolean;
+  trackMetaLeadOnSuccess?: boolean;
+  successMessage?: string;
 };
 
 const CAMPAIGN_REGISTER_ENDPOINT = "/api/campaign/register";
@@ -136,12 +145,45 @@ function buildCampaignRedirectUrl(
   return `${CAMPAIGN_ENTRY_URL}?${query.toString()}`;
 }
 
+async function reportMetaLeadConversion(params: {
+  name: string;
+  email: string;
+  phone: string;
+  sourceUrl?: string;
+}) {
+  const eventId = createMetaEventId();
+  const eventSourceUrl =
+    params.sourceUrl ||
+    (typeof window !== "undefined" ? window.location.href : "");
+  const { firstName, lastName } = splitFullName(params.name);
+
+  // Browser Pixel Lead — only after successful registration.
+  trackMetaLead(eventId);
+
+  // Server Conversions API — failures must never block the lead.
+  try {
+    await sendMetaLeadConversion({
+      eventId,
+      eventSourceUrl,
+      email: params.email,
+      phone: params.phone,
+      firstName,
+      lastName,
+    });
+  } catch (error) {
+    console.error("Meta Lead conversion failed:", error);
+  }
+}
+
 export function CampaignSignupForm({
   searchForm,
   signupSource = "home_signup",
   className,
   showSignInForm = true,
   missingFormHint = "Create and publish a dynamic form with slug search in the admin panel.",
+  redirectOnSuccess = true,
+  trackMetaLeadOnSuccess = false,
+  successMessage = "Your account was created successfully. You can start using the Free Flip Calculator.",
 }: CampaignSignupFormProps) {
   async function handleCampaignSubmit(
     context: DynamicFormSubmitOverrideContext,
@@ -228,10 +270,26 @@ export function CampaignSignupForm({
       };
     }
 
-    window.location.assign(buildCampaignRedirectUrl(tokens));
+    if (trackMetaLeadOnSuccess) {
+      await reportMetaLeadConversion({
+        name,
+        email,
+        phone,
+        sourceUrl: context.sourceUrl,
+      });
+    }
+
+    if (redirectOnSuccess) {
+      window.location.assign(buildCampaignRedirectUrl(tokens));
+
+      return {
+        redirecting: true,
+      };
+    }
 
     return {
-      redirecting: true,
+      success: true,
+      successMessage,
     };
   }
 

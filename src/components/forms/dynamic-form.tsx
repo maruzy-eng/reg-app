@@ -54,6 +54,7 @@ export type DynamicFormSubmitOverrideResult = {
   redirecting?: boolean;
   error?: string;
   fieldErrors?: Record<string, string>;
+  successMessage?: string;
 };
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
@@ -255,6 +256,7 @@ export function DynamicFormComponent({
 
   const [formData, setFormData] = useState<Record<string, unknown>>(initialData);
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [signInEmail, setSignInEmail] = useState("");
@@ -334,6 +336,7 @@ export function DynamicFormComponent({
 
     setSubmitState("submitting");
     setGeneralError(null);
+    setSuccessMessage(null);
     setFieldErrors({});
 
     const submitData = buildSubmitData({
@@ -366,6 +369,10 @@ export function DynamicFormComponent({
 
         if (result?.redirecting) {
           return;
+        }
+
+        if (result?.successMessage) {
+          setSuccessMessage(result.successMessage);
         }
 
         setSubmitState(result?.success === false ? "error" : "success");
@@ -673,13 +680,16 @@ export function DynamicFormComponent({
       {submitState === "success" ? (
         <div className="flex items-start gap-3 rounded-2xl border border-[#53bc76]/25 bg-[#53bc76]/10 px-4 py-3 text-sm font-semibold text-[#0c2933]">
           <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-[#53bc76]" />
-          <p>Form submitted successfully. Redirecting...</p>
+          <p>
+            {successMessage ||
+              "Form submitted successfully. Redirecting..."}
+          </p>
         </div>
       ) : null}
 
       <button
         type="submit"
-        disabled={submitState === "submitting"}
+        disabled={submitState === "submitting" || submitState === "success"}
         className="inline-flex min-h-[56px] w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(94deg,#53bc76_0%,#1f9f5f_100%)] px-6 text-sm font-extrabold text-white shadow-[0_18px_44px_rgba(83,188,118,0.24)] transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-70"
       >
         {submitState === "submitting" ? (

@@ -521,6 +521,7 @@ export default async function CalculatorLandingPage() {
               searchForm={calculatorForm}
               signupSource="calculator_page"
               showSignInForm={false}
+              trackMetaLeadOnSuccess
               missingFormHint="Connect a published form to the Flip Calculator page in Admin > Forms."
               className="calc-form-body"
             />

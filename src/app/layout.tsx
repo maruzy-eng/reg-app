@@ -160,7 +160,9 @@ export default async function RootLayout({
         {children}
 
         <SitePixels
-          metaPixelId={settings.meta_pixel_id}
+          metaPixelId={
+            process.env.NEXT_PUBLIC_META_PIXEL_ID || settings.meta_pixel_id
+          }
           googleTagId={settings.google_tag_id}
         />
 
