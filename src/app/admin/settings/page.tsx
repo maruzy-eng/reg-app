@@ -3,6 +3,7 @@ import {
   CheckCircle2,
   ImageIcon,
   LinkIcon,
+  Radio,
   Save,
   Settings,
 } from "lucide-react";
@@ -129,7 +130,7 @@ export default async function AdminSettingsPage({
 
         <p className="mt-3 max-w-3xl text-[#587469]">
           Manage the public website identity, logo, favicon, contact
-          information, default CTAs and social links.
+          information, tracking pixels, default CTAs and social links.
         </p>
       </div>
 
@@ -392,6 +393,52 @@ export default async function AdminSettingsPage({
               <Input
                 name="youtube_url"
                 defaultValue={settings.youtube_url}
+                disabled={!canUpdate}
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="admin-section p-6">
+          <div className="mb-6 flex items-center gap-3">
+            <div className="admin-icon-box h-11 w-11 rounded-2xl">
+              <Radio size={21} />
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-[#0e3541]">
+                Tracking Pixels
+              </h2>
+
+              <p className="text-sm text-[#64748b]">
+                Meta Pixel and Google Tag IDs are injected on all public pages.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            <div className="space-y-2">
+              <FieldLabel
+                title="Meta Pixel ID"
+                description="Example: 123456789012345"
+              />
+              <Input
+                name="meta_pixel_id"
+                defaultValue={settings.meta_pixel_id}
+                placeholder="123456789012345"
+                disabled={!canUpdate}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <FieldLabel
+                title="Google Tag ID"
+                description="Supports GA4 (G-XXXX) or Google Tag Manager (GTM-XXXX)."
+              />
+              <Input
+                name="google_tag_id"
+                defaultValue={settings.google_tag_id}
+                placeholder="G-XXXXXXXXXX or GTM-XXXXXXX"
                 disabled={!canUpdate}
               />
             </div>

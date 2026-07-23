@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
+import { SitePixels } from "@/components/public/site-pixels";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getAbsoluteSiteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 
@@ -146,15 +147,22 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSiteSettings();
+
   return (
     <html lang="en">
       <body>
         {children}
+
+        <SitePixels
+          metaPixelId={settings.meta_pixel_id}
+          googleTagId={settings.google_tag_id}
+        />
 
         <Script
           id="rd-station-loader"

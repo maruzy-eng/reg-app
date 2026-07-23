@@ -220,6 +220,8 @@ export async function updateSiteSettingsAction(formData: FormData) {
     instagram_url: getOptionalStringValue(formData, "instagram_url"),
     linkedin_url: getOptionalStringValue(formData, "linkedin_url"),
     youtube_url: getOptionalStringValue(formData, "youtube_url"),
+    meta_pixel_id: getOptionalStringValue(formData, "meta_pixel_id"),
+    google_tag_id: getOptionalStringValue(formData, "google_tag_id"),
   };
 
   try {
@@ -231,6 +233,7 @@ export async function updateSiteSettingsAction(formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/properties");
+  revalidatePath("/calculator");
   revalidatePath("/admin/settings");
   revalidatePath("/admin/dashboard");
 

@@ -18,6 +18,8 @@ export type SiteSettingsValue = {
   instagram_url?: string;
   linkedin_url?: string;
   youtube_url?: string;
+  meta_pixel_id?: string;
+  google_tag_id?: string;
 };
 
 export const DEFAULT_SITE_SETTINGS: Required<SiteSettingsValue> = {
@@ -40,6 +42,8 @@ export const DEFAULT_SITE_SETTINGS: Required<SiteSettingsValue> = {
   instagram_url: "",
   linkedin_url: "",
   youtube_url: "",
+  meta_pixel_id: "",
+  google_tag_id: "",
 };
 
 function isSiteSettingsObject(value: unknown): value is SiteSettingsValue {

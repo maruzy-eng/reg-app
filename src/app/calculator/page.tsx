@@ -19,9 +19,9 @@ import {
   WalletCards,
 } from "lucide-react";
 import { CampaignSignupForm } from "@/components/public/campaign-signup-form";
+import { CalculatorFooter } from "@/components/public/calculator-footer";
+import { CalculatorHeader } from "@/components/public/calculator-header";
 import { CalculatorPageReveal } from "@/components/public/calculator-page-reveal";
-import { PublicFooter } from "@/components/public/public-footer";
-import { PublicHeader } from "@/components/public/public-header";
 import { getPublishedFormByPageKey } from "@/lib/form-page-connections";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getCanonicalSiteUrl } from "@/lib/site-url";
@@ -237,7 +237,7 @@ export default async function CalculatorLandingPage() {
       />
 
       <CalculatorPageReveal />
-      <PublicHeader settings={settings} />
+      <CalculatorHeader settings={settings} />
 
       <section className="calc-hero">
         <Image
@@ -528,7 +528,7 @@ export default async function CalculatorLandingPage() {
         </div>
       </section>
 
-      <PublicFooter settings={settings} />
+      <CalculatorFooter settings={settings} />
     </main>
   );
 }
