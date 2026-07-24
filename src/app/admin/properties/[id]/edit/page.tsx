@@ -10,7 +10,6 @@ import {
   Camera,
   ChevronDown,
   ExternalLink,
-  Eye,
   FileText,
   Gift,
   Image as ImageIcon,
@@ -122,33 +121,18 @@ export default async function EditPropertyPage({
     (a, b) => a.position - b.position,
   );
 
-  const isPublicVisible =
-    property.visibility === "public" &&
-    property.status !== "draft" &&
-    property.status !== "archived";
-
   return (
     <div className="mx-auto max-w-7xl space-y-8">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <Link
           href="/admin/properties"
-          className="inline-flex items-center gap-2 text-sm font-bold text-[#587469] transition hover:text-[#0e3541]"
+          className="inline-flex items-center gap-2 text-sm font-bold text-[#587469] transition hover:text-[#171614]"
         >
           <ArrowLeft size={18} />
           Back to properties
         </Link>
 
         <div className="flex flex-col gap-3 sm:flex-row">
-          {isPublicVisible ? (
-            <Link
-              href={`/properties/${property.slug}`}
-              className="admin-secondary-button inline-flex items-center justify-center gap-2 px-5 py-3 text-sm transition hover:bg-[#f8fafc]"
-            >
-              <Eye size={18} />
-              View Public Page
-            </Link>
-          ) : null}
-
           <Link
             href="/admin/properties/new"
             className="admin-primary-button inline-flex items-center justify-center gap-2 px-5 py-3 text-sm transition hover:brightness-105"
@@ -159,11 +143,11 @@ export default async function EditPropertyPage({
         </div>
       </div>
 
-      <section className="overflow-hidden rounded-[2rem] border border-[#0e3541]/10 bg-white shadow-[0_24px_80px_rgba(14,53,65,0.08)]">
-        <div className="bg-[linear-gradient(135deg,#071f28_0%,#0e3541_100%)] p-6 text-white md:p-8">
+      <section className="overflow-hidden rounded-[2rem] border border-[#171614]/10 bg-white shadow-[0_24px_80px_rgba(23,22,20,0.08)]">
+        <div className="bg-[linear-gradient(135deg,#080808_0%,#171614_100%)] p-6 text-white md:p-8">
           <div className="flex flex-col justify-between gap-7 lg:flex-row lg:items-end">
             <div>
-              <p className="text-sm font-bold uppercase tracking-[0.25em] text-[#8df0a9]">
+              <p className="text-sm font-bold uppercase tracking-[0.25em] text-[#ebca84]">
                 Edit Property
               </p>
 
@@ -197,7 +181,7 @@ export default async function EditPropertyPage({
           </div>
         </div>
 
-        <div className="grid gap-4 bg-[#f8fafc] p-4 md:grid-cols-4 md:p-5">
+        <div className="grid gap-4 bg-[#f8f6f1] p-4 md:grid-cols-4 md:p-5">
           <MiniStat
             icon={<BedDouble size={17} />}
             label="Beds"
@@ -492,16 +476,16 @@ export default async function EditPropertyPage({
               description="When active, listed price, beds, baths, sqft and avg price are shown on the home property card."
             >
               <div className="space-y-5">
-                <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
+                <label className="flex items-start gap-3 rounded-2xl bg-[#f8f6f1] p-4">
                   <input
                     name="cond_active"
                     type="checkbox"
                     defaultChecked={property.cond_active}
-                    className="mt-1 h-4 w-4 accent-[#53bc76]"
+                    className="mt-1 h-4 w-4 accent-[#c79a4b]"
                   />
 
                   <span>
-                    <span className="block text-sm font-bold text-[#0e3541]">
+                    <span className="block text-sm font-bold text-[#171614]">
                       Active
                     </span>
 
@@ -572,16 +556,16 @@ export default async function EditPropertyPage({
               description="When active, the home card shows the old price crossed out, the new price, and a buyer credit highlight."
             >
               <div className="space-y-5">
-                <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
+                <label className="flex items-start gap-3 rounded-2xl bg-[#f8f6f1] p-4">
                   <input
                     name="credit_active"
                     type="checkbox"
                     defaultChecked={property.credit_active}
-                    className="mt-1 h-4 w-4 accent-[#53bc76]"
+                    className="mt-1 h-4 w-4 accent-[#c79a4b]"
                   />
 
                   <span>
-                    <span className="block text-sm font-bold text-[#0e3541]">
+                    <span className="block text-sm font-bold text-[#171614]">
                       Active
                     </span>
 
@@ -700,7 +684,7 @@ export default async function EditPropertyPage({
 
           <aside className="space-y-5">
             <section className="admin-card sticky top-24 p-6">
-              <h3 className="text-xl font-black tracking-[-0.04em] text-[#0e3541]">
+              <h3 className="text-xl font-black tracking-[-0.04em] text-[#171614]">
                 Publish & Save
               </h3>
 
@@ -709,16 +693,16 @@ export default async function EditPropertyPage({
               </p>
 
               <div className="mt-6 space-y-4">
-                <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
+                <label className="flex items-start gap-3 rounded-2xl bg-[#f8f6f1] p-4">
                   <input
                     name="is_featured"
                     type="checkbox"
                     defaultChecked={property.is_featured}
-                    className="mt-1 h-4 w-4 accent-[#53bc76]"
+                    className="mt-1 h-4 w-4 accent-[#c79a4b]"
                   />
 
                   <span>
-                    <span className="block text-sm font-bold text-[#0e3541]">
+                    <span className="block text-sm font-bold text-[#171614]">
                       Featured Property
                     </span>
 
@@ -728,16 +712,16 @@ export default async function EditPropertyPage({
                   </span>
                 </label>
 
-                <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
+                <label className="flex items-start gap-3 rounded-2xl bg-[#f8f6f1] p-4">
                   <input
                     name="publish_now"
                     type="checkbox"
                     defaultChecked={Boolean(property.published_at)}
-                    className="mt-1 h-4 w-4 accent-[#53bc76]"
+                    className="mt-1 h-4 w-4 accent-[#c79a4b]"
                   />
 
                   <span>
-                    <span className="block text-sm font-bold text-[#0e3541]">
+                    <span className="block text-sm font-bold text-[#171614]">
                       Published
                     </span>
 
@@ -748,7 +732,7 @@ export default async function EditPropertyPage({
                 </label>
               </div>
 
-              <div className="mt-6 grid gap-3 rounded-2xl bg-[#f8fafc] p-4 text-sm text-[#0e3541]">
+              <div className="mt-6 grid gap-3 rounded-2xl bg-[#f8f6f1] p-4 text-sm text-[#171614]">
                 <SidebarRow
                   label="Status"
                   value={getPropertyStatusLabel(property.status)}
@@ -777,14 +761,14 @@ export default async function EditPropertyPage({
       </form>
 
       <section className="space-y-6">
-        <div className="rounded-[2rem] border border-[#0e3541]/10 bg-white p-6 shadow-[0_18px_50px_rgba(14,53,65,0.06)] md:p-8">
+        <div className="rounded-[2rem] border border-[#171614]/10 bg-white p-6 shadow-[0_18px_50px_rgba(23,22,20,0.06)] md:p-8">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
-              <p className="text-sm font-bold uppercase tracking-[0.22em] text-[#53bc76]">
+              <p className="text-sm font-bold uppercase tracking-[0.22em] text-[#c79a4b]">
                 Media Library
               </p>
 
-              <h2 className="mt-2 text-3xl font-black tracking-[-0.05em] text-[#0e3541]">
+              <h2 className="mt-2 text-3xl font-black tracking-[-0.05em] text-[#171614]">
                 Images, appliances, videos and PDFs
               </h2>
 
@@ -794,7 +778,7 @@ export default async function EditPropertyPage({
               </p>
             </div>
 
-            <div className="grid grid-cols-4 gap-2 text-center text-xs font-bold text-[#0e3541]">
+            <div className="grid grid-cols-4 gap-2 text-center text-xs font-bold text-[#171614]">
               <MediaCounter label="Images" value={images.length} />
               <MediaCounter label="Appliances" value={appliances.length} />
               <MediaCounter label="Videos" value={videos.length} />
@@ -850,14 +834,14 @@ export default async function EditPropertyPage({
                 />
               </div>
 
-              <label className="flex items-center gap-3 rounded-2xl bg-[#f8fafc] p-4">
+              <label className="flex items-center gap-3 rounded-2xl bg-[#f8f6f1] p-4">
                 <input
                   name="is_cover"
                   type="checkbox"
-                  className="h-4 w-4 accent-[#53bc76]"
+                  className="h-4 w-4 accent-[#c79a4b]"
                 />
 
-                <span className="text-sm font-bold text-[#0e3541]">
+                <span className="text-sm font-bold text-[#171614]">
                   Set as cover image
                 </span>
               </label>
@@ -893,9 +877,9 @@ export default async function EditPropertyPage({
           description="Appliances and custom add-on blocks are now managed in one dedicated page."
           icon={<Sparkles size={22} />}
         >
-          <div className="flex flex-col justify-between gap-4 rounded-2xl border border-[#53bc76]/20 bg-[#f8fffb] p-5 md:flex-row md:items-center">
+          <div className="flex flex-col justify-between gap-4 rounded-2xl border border-[#c79a4b]/20 bg-[#fbfaf7] p-5 md:flex-row md:items-center">
             <div>
-              <p className="text-sm font-black text-[#0e3541]">
+              <p className="text-sm font-black text-[#171614]">
                 {appliances.length} appliance item
                 {appliances.length === 1 ? "" : "s"} currently registered.
               </p>
@@ -973,14 +957,14 @@ export default async function EditPropertyPage({
                 />
               </div>
 
-              <label className="flex items-center gap-3 rounded-2xl bg-[#f8fafc] p-4">
+              <label className="flex items-center gap-3 rounded-2xl bg-[#f8f6f1] p-4">
                 <input
                   name="is_featured"
                   type="checkbox"
-                  className="h-4 w-4 accent-[#53bc76]"
+                  className="h-4 w-4 accent-[#c79a4b]"
                 />
 
-                <span className="text-sm font-bold text-[#0e3541]">
+                <span className="text-sm font-bold text-[#171614]">
                   Featured video
                 </span>
               </label>
@@ -1076,15 +1060,15 @@ export default async function EditPropertyPage({
                 />
               </div>
 
-              <label className="flex items-center gap-3 rounded-2xl bg-[#f8fafc] p-4">
+              <label className="flex items-center gap-3 rounded-2xl bg-[#f8f6f1] p-4">
                 <input
                   name="is_public"
                   type="checkbox"
                   defaultChecked
-                  className="h-4 w-4 accent-[#53bc76]"
+                  className="h-4 w-4 accent-[#c79a4b]"
                 />
 
-                <span className="text-sm font-bold text-[#0e3541]">
+                <span className="text-sm font-bold text-[#171614]">
                   Public document
                 </span>
               </label>
@@ -1150,14 +1134,14 @@ export default async function EditPropertyPage({
               defaultValue={features.length + 1}
             />
 
-            <label className="flex items-center gap-3 rounded-2xl bg-[#f8fafc] p-4 md:col-span-2">
+            <label className="flex items-center gap-3 rounded-2xl bg-[#f8f6f1] p-4 md:col-span-2">
               <input
                 name="is_highlight"
                 type="checkbox"
-                className="h-4 w-4 accent-[#53bc76]"
+                className="h-4 w-4 accent-[#c79a4b]"
               />
 
-              <span className="text-sm font-bold text-[#0e3541]">
+              <span className="text-sm font-bold text-[#171614]">
                 Highlight item
               </span>
             </label>
@@ -1172,11 +1156,11 @@ export default async function EditPropertyPage({
               features.map((feature) => (
                 <div
                   key={feature.id}
-                  className="rounded-[1.4rem] border border-[#0e3541]/10 bg-white p-5 shadow-sm"
+                  className="rounded-[1.4rem] border border-[#171614]/10 bg-white p-5 shadow-sm"
                 >
                   <div className="flex justify-between gap-4">
                     <div>
-                      <p className="font-bold text-[#0e3541]">
+                      <p className="font-bold text-[#171614]">
                         {feature.label}
                       </p>
 
@@ -1242,7 +1226,7 @@ function MiniStat({
 }) {
   return (
     <div className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-sm">
-      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#53bc76]/10 text-[#0e3541]">
+      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#c79a4b]/10 text-[#171614]">
         {icon}
       </span>
 
@@ -1251,7 +1235,7 @@ function MiniStat({
           {label}
         </p>
 
-        <p className="text-sm font-black text-[#0e3541]">{value}</p>
+        <p className="text-sm font-black text-[#171614]">{value}</p>
       </div>
     </div>
   );
@@ -1264,15 +1248,15 @@ function SidebarRow({ label, value }: { label: string; value: string }) {
         {label}
       </span>
 
-      <strong className="text-right text-sm text-[#0e3541]">{value}</strong>
+      <strong className="text-right text-sm text-[#171614]">{value}</strong>
     </div>
   );
 }
 
 function MediaCounter({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-2xl border border-[#0e3541]/10 bg-[#f8fafc] px-4 py-3">
-      <p className="text-lg font-black leading-none text-[#0e3541]">{value}</p>
+    <div className="rounded-2xl border border-[#171614]/10 bg-[#f8f6f1] px-4 py-3">
+      <p className="text-lg font-black leading-none text-[#171614]">{value}</p>
 
       <p className="mt-1 text-[10px] uppercase tracking-[0.14em] text-[#64748b]">
         {label}
@@ -1297,7 +1281,7 @@ function AccordionSection({
   return (
     <details
       open={defaultOpen}
-      className="group rounded-[1.8rem] border border-[#0e3541]/10 bg-white shadow-[0_16px_44px_rgba(14,53,65,0.05)]"
+      className="group rounded-[1.8rem] border border-[#171614]/10 bg-white shadow-[0_16px_44px_rgba(23,22,20,0.05)]"
     >
       <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 md:p-6">
         <div className="flex items-center gap-3">
@@ -1306,7 +1290,7 @@ function AccordionSection({
           </span>
 
           <div>
-            <h3 className="text-xl font-black tracking-[-0.04em] text-[#0e3541]">
+            <h3 className="text-xl font-black tracking-[-0.04em] text-[#171614]">
               {title}
             </h3>
 
@@ -1316,12 +1300,12 @@ function AccordionSection({
           </div>
         </div>
 
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f8fafc] text-[#0e3541] transition group-open:rotate-180">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f8f6f1] text-[#171614] transition group-open:rotate-180">
           <ChevronDown size={18} />
         </span>
       </summary>
 
-      <div className="border-t border-[#0e3541]/10 p-5 md:p-6">{children}</div>
+      <div className="border-t border-[#171614]/10 p-5 md:p-6">{children}</div>
     </details>
   );
 }
@@ -1340,10 +1324,10 @@ function CompactMediaItem({
   deleteForm: ReactNode;
 }) {
   return (
-    <div className="rounded-[1.4rem] border border-[#0e3541]/10 bg-white p-5 shadow-sm">
+    <div className="rounded-[1.4rem] border border-[#171614]/10 bg-white p-5 shadow-sm">
       <div className="flex justify-between gap-4">
         <div className="min-w-0">
-          <p className="font-bold text-[#0e3541]">{title}</p>
+          <p className="font-bold text-[#171614]">{title}</p>
 
           <p className="mt-1 text-xs font-semibold text-[#94a3b8]">
             {subtitle}
@@ -1353,18 +1337,18 @@ function CompactMediaItem({
             <Link
               href={url}
               target="_blank"
-              className="inline-flex min-h-[36px] items-center justify-center gap-2 rounded-full border border-[#0e3541]/10 bg-[#f8fbfc] px-3 text-xs font-bold text-[#0e3541] no-underline transition hover:bg-white"
+              className="inline-flex min-h-[36px] items-center justify-center gap-2 rounded-full border border-[#171614]/10 bg-[#f8fbfc] px-3 text-xs font-bold text-[#171614] no-underline transition hover:bg-white"
             >
               <ExternalLink size={13} />
               {openLabel}
             </Link>
 
             <details>
-              <summary className="inline-flex min-h-[36px] cursor-pointer list-none items-center justify-center rounded-full border border-[#0e3541]/10 bg-[#f8fbfc] px-3 text-xs font-bold text-[#0e3541] transition hover:bg-white">
+              <summary className="inline-flex min-h-[36px] cursor-pointer list-none items-center justify-center rounded-full border border-[#171614]/10 bg-[#f8fbfc] px-3 text-xs font-bold text-[#171614] transition hover:bg-white">
                 URL
               </summary>
 
-              <div className="mt-3 rounded-2xl border border-[#0e3541]/10 bg-[#f8fbfc] p-3">
+              <div className="mt-3 rounded-2xl border border-[#171614]/10 bg-[#f8fbfc] p-3">
                 <p className="break-all text-xs leading-5 text-[#587469]">
                   {url}
                 </p>
@@ -1395,7 +1379,7 @@ function SectionHeader({
       </span>
 
       <div>
-        <h3 className="text-xl font-black tracking-[-0.04em] text-[#0e3541]">
+        <h3 className="text-xl font-black tracking-[-0.04em] text-[#171614]">
           {title}
         </h3>
 
@@ -1428,7 +1412,7 @@ function InputField({
 }) {
   return (
     <label className={`block ${wrapperClassName}`}>
-      <span className="text-sm font-bold text-[#0e3541]">{label}</span>
+      <span className="text-sm font-bold text-[#171614]">{label}</span>
 
       <input
         name={name}
@@ -1461,14 +1445,14 @@ function FileField({
   helpText: string;
 }) {
   return (
-    <label className="block rounded-2xl border border-dashed border-[#53bc76]/35 bg-[#f8fafc] p-4">
-      <span className="text-sm font-bold text-[#0e3541]">{label}</span>
+    <label className="block rounded-2xl border border-dashed border-[#c79a4b]/35 bg-[#f8f6f1] p-4">
+      <span className="text-sm font-bold text-[#171614]">{label}</span>
 
       <input
         name={name}
         type="file"
         accept={accept}
-        className="mt-3 block w-full text-sm text-[#587469] file:mr-4 file:rounded-full file:border-0 file:bg-[#53bc76] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white hover:file:bg-[#45a866]"
+        className="mt-3 block w-full text-sm text-[#587469] file:mr-4 file:rounded-full file:border-0 file:bg-[#c79a4b] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white hover:file:bg-[#45a866]"
       />
 
       <span className="mt-2 block text-xs leading-5 text-[#64748b]">
@@ -1491,7 +1475,7 @@ function TextareaField({
 }) {
   return (
     <label className="block">
-      <span className="text-sm font-bold text-[#0e3541]">{label}</span>
+      <span className="text-sm font-bold text-[#171614]">{label}</span>
 
       <textarea
         name={name}
@@ -1519,7 +1503,7 @@ function SelectField({
 }) {
   return (
     <label className="block">
-      <span className="text-sm font-bold text-[#0e3541]">{label}</span>
+      <span className="text-sm font-bold text-[#171614]">{label}</span>
 
       <select
         name={name}
@@ -1598,8 +1582,8 @@ function DeleteIconButton({ label }: { label: string }) {
 
 function EmptyMediaState({ label }: { label: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-[#0e3541]/10 bg-[#f8fafc] p-8 text-center">
-      <Pencil className="mx-auto text-[#53bc76]" size={28} />
+    <div className="rounded-2xl border border-dashed border-[#171614]/10 bg-[#f8f6f1] p-8 text-center">
+      <Pencil className="mx-auto text-[#c79a4b]" size={28} />
 
       <p className="mt-3 text-sm font-bold text-[#64748b]">{label}</p>
     </div>

@@ -48,7 +48,7 @@ export function CurrencyInputField({
 
   return (
     <label className={`block ${wrapperClassName}`} htmlFor={inputId}>
-      <span className="text-sm font-bold text-[#0e3541]">{label}</span>
+      <span className="text-sm font-bold text-[#171614]">{label}</span>
 
       <input
         id={inputId}

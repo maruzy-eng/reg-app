@@ -94,7 +94,7 @@ export function FormFieldsManager({
           action={createAction}
         />
       ) : (
-        <div className="rounded-2xl border border-[rgba(83,188,118,0.25)] bg-[rgba(83,188,118,0.06)] p-4 md:p-5">
+        <div className="rounded-2xl border border-[rgba(199,154,75,0.25)] bg-[rgba(199,154,75,0.06)] p-4 md:p-5">
           <div className="mb-4">
             <p className="admin-form-list-title font-bold">Editing field</p>
             <p className="admin-form-list-meta mt-1 text-xs">
@@ -129,7 +129,7 @@ export function FormFieldsManager({
               <div
                 key={field.id}
                 className={`admin-form-list-item overflow-hidden rounded-2xl p-4 ${
-                  isEditing ? "ring-2 ring-[#53bc76]/35" : ""
+                  isEditing ? "ring-2 ring-[#c79a4b]/35" : ""
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
@@ -151,7 +151,7 @@ export function FormFieldsManager({
                       onClick={() =>
                         setEditingFieldId(isEditing ? null : field.id)
                       }
-                      className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[rgba(12,41,51,0.06)] text-[#0c2933] transition hover:bg-[rgba(12,41,51,0.12)]"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[rgba(12,41,51,0.06)] text-[#171614] transition hover:bg-[rgba(12,41,51,0.12)]"
                       aria-label={isEditing ? "Close editor" : "Edit field"}
                     >
                       <Pencil size={16} />

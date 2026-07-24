@@ -2,7 +2,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   ClipboardList,
-  Eye,
   FileText,
   Link2,
   Plus,
@@ -176,7 +175,7 @@ export default async function AdminFormsPage() {
                                 >
                                   <Link2
                                     size={16}
-                                    className="shrink-0 text-[#53bc76]"
+                                    className="shrink-0 text-[#c79a4b]"
                                   />
                                   <span>
                                     {definition?.label || connection.page_key}
@@ -217,15 +216,6 @@ export default async function AdminFormsPage() {
                             <input type="hidden" name="id" value={form.id} />
                             <DuplicateFormButton />
                           </form>
-
-                          <Link
-                            href={`/forms/${form.slug}`}
-                            target="_blank"
-                            className="admin-secondary-button min-h-[40px] gap-2 px-4 text-xs no-underline"
-                          >
-                            <Eye size={15} />
-                            View
-                          </Link>
 
                           <Link
                             href={`/admin/forms/${form.id}`}

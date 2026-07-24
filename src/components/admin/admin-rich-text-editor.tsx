@@ -77,12 +77,12 @@ export function AdminRichTextEditor({
 
   return (
     <div className="block">
-      <span className="text-sm font-bold text-[#0e3541]">{label}</span>
+      <span className="text-sm font-bold text-[#171614]">{label}</span>
 
       <input type="hidden" name={name} value={value} readOnly />
 
-      <div className="mt-2 overflow-hidden rounded-[1.3rem] border border-[#0e3541]/10 bg-white shadow-sm">
-        <div className="flex flex-wrap gap-2 border-b border-[#0e3541]/10 bg-[#f8fafc] p-3">
+      <div className="mt-2 overflow-hidden rounded-[1.3rem] border border-[#171614]/10 bg-white shadow-sm">
+        <div className="flex flex-wrap gap-2 border-b border-[#171614]/10 bg-[#f8f6f1] p-3">
           <EditorButton
             label="Bold"
             onClick={() => runCommand("bold")}
@@ -144,7 +144,7 @@ export function AdminRichTextEditor({
           onMouseUp={syncValue}
           onPaste={handlePaste}
           onClick={focusEditor}
-          className="admin-rich-editor min-h-[280px] w-full cursor-text bg-white px-5 py-4 text-sm leading-7 text-[#0e3541] outline-none focus:ring-2 focus:ring-[#53bc76]/30"
+          className="admin-rich-editor min-h-[280px] w-full cursor-text bg-white px-5 py-4 text-sm leading-7 text-[#171614] outline-none focus:ring-2 focus:ring-[#c79a4b]/30"
         />
       </div>
 
@@ -175,7 +175,7 @@ function EditorButton({
       onClick={onClick}
       title={label}
       aria-label={label}
-      className="inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-[#0e3541]/10 bg-white px-3 text-[#0e3541] transition hover:border-[#53bc76]/40 hover:bg-[#53bc76]/10"
+      className="inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-[#171614]/10 bg-white px-3 text-[#171614] transition hover:border-[#c79a4b]/40 hover:bg-[#c79a4b]/10"
     >
       {icon}
     </button>

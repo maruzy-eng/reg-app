@@ -28,7 +28,7 @@ export default async function EditAdminUserPage({
       <div className="mb-6">
         <Link
           href="/admin/users"
-          className="inline-flex items-center gap-2 text-sm font-bold text-[#587469] transition hover:text-[#0e3541]"
+          className="inline-flex items-center gap-2 text-sm font-bold text-[#587469] transition hover:text-[#171614]"
         >
           <ArrowLeft size={18} />
           Back to users
@@ -42,11 +42,11 @@ export default async function EditAdminUserPage({
           </span>
 
           <div>
-            <p className="text-sm font-bold uppercase tracking-[0.25em] text-[#53bc76]">
+            <p className="text-sm font-bold uppercase tracking-[0.25em] text-[#c79a4b]">
               Edit User
             </p>
 
-            <h2 className="mt-1 text-3xl font-bold text-[#0e3541]">
+            <h2 className="mt-1 text-3xl font-bold text-[#171614]">
               {user.name}
             </h2>
           </div>
@@ -61,7 +61,7 @@ export default async function EditAdminUserPage({
           <input type="hidden" name="user_id" value={user.id} />
 
           <label className="block">
-            <span className="text-sm font-bold text-[#0e3541]">Name *</span>
+            <span className="text-sm font-bold text-[#171614]">Name *</span>
 
             <input
               name="name"
@@ -72,7 +72,7 @@ export default async function EditAdminUserPage({
           </label>
 
           <label className="block">
-            <span className="text-sm font-bold text-[#0e3541]">Email *</span>
+            <span className="text-sm font-bold text-[#171614]">Email *</span>
 
             <input
               name="email"
@@ -84,7 +84,7 @@ export default async function EditAdminUserPage({
           </label>
 
           <label className="block">
-            <span className="text-sm font-bold text-[#0e3541]">
+            <span className="text-sm font-bold text-[#171614]">
               New Password
             </span>
 
@@ -98,7 +98,7 @@ export default async function EditAdminUserPage({
 
           <div className="grid gap-5 md:grid-cols-2">
             <label className="block">
-              <span className="text-sm font-bold text-[#0e3541]">Role</span>
+              <span className="text-sm font-bold text-[#171614]">Role</span>
 
               <select
                 name="role"
@@ -112,7 +112,7 @@ export default async function EditAdminUserPage({
             </label>
 
             <label className="block">
-              <span className="text-sm font-bold text-[#0e3541]">Status</span>
+              <span className="text-sm font-bold text-[#171614]">Status</span>
 
               <select
                 name="status"
@@ -126,7 +126,7 @@ export default async function EditAdminUserPage({
           </div>
 
           <label className="block">
-            <span className="text-sm font-bold text-[#0e3541]">Avatar URL</span>
+            <span className="text-sm font-bold text-[#171614]">Avatar URL</span>
 
             <input
               name="avatar_url"
@@ -136,14 +136,14 @@ export default async function EditAdminUserPage({
             />
           </label>
 
-          <div className="rounded-2xl bg-[#f8fafc] p-4 text-sm text-[#64748b]">
+          <div className="rounded-2xl bg-[#f8f6f1] p-4 text-sm text-[#64748b]">
             <p>
-              <strong className="text-[#0e3541]">Created:</strong>{" "}
+              <strong className="text-[#171614]">Created:</strong>{" "}
               {new Date(user.created_at).toLocaleString("en-US")}
             </p>
 
             <p className="mt-1">
-              <strong className="text-[#0e3541]">Last update:</strong>{" "}
+              <strong className="text-[#171614]">Last update:</strong>{" "}
               {new Date(user.updated_at).toLocaleString("en-US")}
             </p>
           </div>
@@ -151,7 +151,7 @@ export default async function EditAdminUserPage({
           <div className="flex flex-col gap-3 pt-3 sm:flex-row">
             <Link
               href="/admin/users"
-              className="admin-secondary-button inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm transition hover:bg-[#f8fafc]"
+              className="admin-secondary-button inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm transition hover:bg-[#f8f6f1]"
             >
               Cancel
             </Link>

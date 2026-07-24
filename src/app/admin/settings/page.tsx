@@ -45,7 +45,7 @@ function FieldLabel({
 }) {
   return (
     <label className="block">
-      <span className="block text-sm font-bold text-[#0e3541]">{title}</span>
+      <span className="block text-sm font-bold text-[#171614]">{title}</span>
 
       {description ? (
         <span className="mt-1 block text-xs leading-5 text-[#587469]">
@@ -124,7 +124,7 @@ export default async function AdminSettingsPage({
           Site Settings
         </div>
 
-        <h1 className="mt-5 text-4xl font-bold tracking-tight text-[#0e3541]">
+        <h1 className="mt-5 text-4xl font-bold tracking-tight text-[#171614]">
           Settings
         </h1>
 
@@ -135,7 +135,7 @@ export default async function AdminSettingsPage({
       </div>
 
       {resolvedSearchParams.updated === "success" ? (
-        <div className="flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-bold text-emerald-700">
+        <div className="flex items-center gap-3 rounded-2xl border border-[#ebca84]/50 bg-[#f7efd9] px-5 py-4 text-sm font-bold text-[#aa7732]">
           <CheckCircle2 size={18} />
           Settings updated successfully.
         </div>
@@ -168,7 +168,7 @@ export default async function AdminSettingsPage({
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-[#0e3541]">
+              <h2 className="text-xl font-bold text-[#171614]">
                 Brand Identity
               </h2>
 
@@ -216,7 +216,7 @@ export default async function AdminSettingsPage({
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-[#0e3541]">
+              <h2 className="text-xl font-bold text-[#171614]">
                 Logo & Favicon
               </h2>
 
@@ -286,7 +286,7 @@ export default async function AdminSettingsPage({
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-[#0e3541]">
+              <h2 className="text-xl font-bold text-[#171614]">
                 Contact & Links
               </h2>
 
@@ -406,7 +406,7 @@ export default async function AdminSettingsPage({
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-[#0e3541]">
+              <h2 className="text-xl font-bold text-[#171614]">
                 Tracking Pixels
               </h2>
 

@@ -44,7 +44,7 @@ export default async function NewPropertyPage() {
       <div className="mb-6">
         <Link
           href="/admin/properties"
-          className="inline-flex items-center gap-2 text-sm font-bold text-[#587469] transition hover:text-[#0e3541]"
+          className="inline-flex items-center gap-2 text-sm font-bold text-[#587469] transition hover:text-[#171614]"
         >
           <ArrowLeft size={18} />
           Back to properties
@@ -52,7 +52,7 @@ export default async function NewPropertyPage() {
       </div>
 
       <div className="admin-dark-panel rounded-[2rem] p-6 text-white md:p-8">
-        <p className="text-sm font-bold uppercase tracking-[0.25em] text-[#8df0a9]">
+        <p className="text-sm font-bold uppercase tracking-[0.25em] text-[#ebca84]">
           New Property
         </p>
 
@@ -267,15 +267,15 @@ export default async function NewPropertyPage() {
               />
 
               <div className="mt-6 space-y-5">
-                <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
+                <label className="flex items-start gap-3 rounded-2xl bg-[#f8f6f1] p-4">
                   <input
                     name="cond_active"
                     type="checkbox"
-                    className="mt-1 h-4 w-4 accent-[#53bc76]"
+                    className="mt-1 h-4 w-4 accent-[#c79a4b]"
                   />
 
                   <span>
-                    <span className="block text-sm font-bold text-[#0c2933]">
+                    <span className="block text-sm font-bold text-[#171614]">
                       Active
                     </span>
 
@@ -341,15 +341,15 @@ export default async function NewPropertyPage() {
               />
 
               <div className="mt-6 space-y-5">
-                <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
+                <label className="flex items-start gap-3 rounded-2xl bg-[#f8f6f1] p-4">
                   <input
                     name="credit_active"
                     type="checkbox"
-                    className="mt-1 h-4 w-4 accent-[#53bc76]"
+                    className="mt-1 h-4 w-4 accent-[#c79a4b]"
                   />
 
                   <span>
-                    <span className="block text-sm font-bold text-[#0c2933]">
+                    <span className="block text-sm font-bold text-[#171614]">
                       Active
                     </span>
 
@@ -444,20 +444,20 @@ export default async function NewPropertyPage() {
 
           <aside className="space-y-6">
             <section className="admin-card sticky top-24 p-6">
-              <h3 className="text-xl font-bold text-[#0c2933]">
+              <h3 className="text-xl font-bold text-[#171614]">
                 Publishing Options
               </h3>
 
               <div className="mt-6 space-y-4">
-                <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
+                <label className="flex items-start gap-3 rounded-2xl bg-[#f8f6f1] p-4">
                   <input
                     name="is_featured"
                     type="checkbox"
-                    className="mt-1 h-4 w-4 accent-[#53bc76]"
+                    className="mt-1 h-4 w-4 accent-[#c79a4b]"
                   />
 
                   <span>
-                    <span className="block text-sm font-bold text-[#0c2933]">
+                    <span className="block text-sm font-bold text-[#171614]">
                       Featured Property
                     </span>
 
@@ -467,15 +467,15 @@ export default async function NewPropertyPage() {
                   </span>
                 </label>
 
-                <label className="flex items-start gap-3 rounded-2xl bg-[#f8fafc] p-4">
+                <label className="flex items-start gap-3 rounded-2xl bg-[#f8f6f1] p-4">
                   <input
                     name="publish_now"
                     type="checkbox"
-                    className="mt-1 h-4 w-4 accent-[#53bc76]"
+                    className="mt-1 h-4 w-4 accent-[#c79a4b]"
                   />
 
                   <span>
-                    <span className="block text-sm font-bold text-[#0c2933]">
+                    <span className="block text-sm font-bold text-[#171614]">
                       Published
                     </span>
 
@@ -496,7 +496,7 @@ export default async function NewPropertyPage() {
 
               <Link
                 href="/admin/properties"
-                className="admin-secondary-button mt-3 inline-flex w-full items-center justify-center px-5 py-3 text-sm transition hover:bg-[#f8fafc]"
+                className="admin-secondary-button mt-3 inline-flex w-full items-center justify-center px-5 py-3 text-sm transition hover:bg-[#f8f6f1]"
               >
                 Cancel
               </Link>
@@ -524,7 +524,7 @@ function SectionHeader({
       </span>
 
       <div>
-        <h3 className="text-xl font-bold text-[#0c2933]">{title}</h3>
+        <h3 className="text-xl font-bold text-[#171614]">{title}</h3>
         <p className="text-sm text-[#64748b]">{description}</p>
       </div>
     </div>
@@ -552,7 +552,7 @@ function InputField({
 }) {
   return (
     <label className={`block ${wrapperClassName}`}>
-      <span className="text-sm font-bold text-[#0c2933]">{label}</span>
+      <span className="text-sm font-bold text-[#171614]">{label}</span>
 
       <input
         name={name}
@@ -580,7 +580,7 @@ function TextareaField({
 }) {
   return (
     <label className="block">
-      <span className="text-sm font-bold text-[#0c2933]">{label}</span>
+      <span className="text-sm font-bold text-[#171614]">{label}</span>
 
       <textarea
         name={name}
@@ -608,7 +608,7 @@ function SelectField({
 }) {
   return (
     <label className="block">
-      <span className="text-sm font-bold text-[#0c2933]">{label}</span>
+      <span className="text-sm font-bold text-[#171614]">{label}</span>
 
       <select
         name={name}

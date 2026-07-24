@@ -145,7 +145,7 @@ export async function getAdminFormEmailsByFormId(formId: string) {
   const supabase = createAdminClient();
 
   const { data, error } = await supabase
-    .from("form_emails")
+    .from("reg_form_emails")
     .select("*")
     .eq("form_id", formId)
     .order("sort_order", { ascending: true })
@@ -171,12 +171,12 @@ export async function getAdminFormEmailEditDetails(params: {
 
   const [formResult, emailResult] = await Promise.all([
     supabase
-      .from("forms")
+      .from("reg_forms")
       .select("id, name, slug, title")
       .eq("id", params.formId)
       .single<AdminFormEmailEditDetails["form"]>(),
     supabase
-      .from("form_emails")
+      .from("reg_form_emails")
       .select("*")
       .eq("id", params.emailId)
       .eq("form_id", params.formId)
@@ -237,7 +237,7 @@ export async function createAdminFormEmailAction(formData: FormData) {
       recipients,
     });
 
-    const { error } = await supabase.from("form_emails").insert({
+    const { error } = await supabase.from("reg_form_emails").insert({
       form_id: formId,
       name,
       type,
@@ -304,7 +304,7 @@ export async function updateAdminFormEmailAction(formData: FormData) {
     });
 
     const { error } = await supabase
-      .from("form_emails")
+      .from("reg_form_emails")
       .update({
         name,
         type,
@@ -346,7 +346,7 @@ export async function toggleAdminFormEmailAction(formData: FormData) {
   }
 
   const { error } = await supabase
-    .from("form_emails")
+    .from("reg_form_emails")
     .update({
       enabled,
       updated_at: new Date().toISOString(),
@@ -373,7 +373,7 @@ export async function deleteAdminFormEmailAction(formData: FormData) {
   }
 
   const { error } = await supabase
-    .from("form_emails")
+    .from("reg_form_emails")
     .delete()
     .eq("id", emailId)
     .eq("form_id", formId);

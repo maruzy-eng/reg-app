@@ -42,6 +42,18 @@ const adminNavItems = [
     permission: "forms.read",
   },
   {
+    label: "News",
+    href: "/admin/news",
+    icon: "news",
+    permission: "news.read",
+  },
+  {
+    label: "Produtos",
+    href: "/admin/produtos",
+    icon: "products",
+    permission: "products.read",
+  },
+  {
     label: "Submissions",
     href: "/admin/submissions",
     icon: "submissions",
@@ -87,7 +99,7 @@ export default async function AdminLayout({
           </span>
 
           <div>
-            <p className="admin-sidebar-brand-title">Property Portal</p>
+            <p className="admin-sidebar-brand-title">Checkmate REG</p>
             <p className="admin-sidebar-brand-subtitle mt-0.5">Admin Panel</p>
           </div>
         </Link>
@@ -116,7 +128,7 @@ export default async function AdminLayout({
           ) : null}
 
           <Link
-            href="/"
+            href="/reg"
             className="admin-sidebar-view-site flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13px] font-medium transition"
           >
             <Home size={15} />
@@ -142,7 +154,7 @@ export default async function AdminLayout({
               <p className="admin-header-eyebrow">Admin</p>
 
               <h1 className="admin-header-title mt-0.5">
-                Property Management
+                REG Management
               </h1>
             </div>
 
@@ -156,7 +168,7 @@ export default async function AdminLayout({
               ) : null}
 
               <Link
-                href="/"
+                href="/reg"
                 className="admin-primary-button rounded-xl px-3.5 py-1.5 text-[12px] font-semibold no-underline"
               >
                 Public Site

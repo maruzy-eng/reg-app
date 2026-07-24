@@ -15,6 +15,14 @@ export type AdminPermission =
   | "forms.update"
   | "forms.delete"
   | "submissions.read"
+  | "news.read"
+  | "news.create"
+  | "news.update"
+  | "news.delete"
+  | "products.read"
+  | "products.create"
+  | "products.update"
+  | "products.delete"
   | "users.read"
   | "users.create"
   | "users.update"
@@ -33,6 +41,14 @@ const rolePermissions: Record<AdminRole, AdminPermission[]> = {
     "forms.update",
     "forms.delete",
     "submissions.read",
+    "news.read",
+    "news.create",
+    "news.update",
+    "news.delete",
+    "products.read",
+    "products.create",
+    "products.update",
+    "products.delete",
     "users.read",
     "users.create",
     "users.update",
@@ -49,6 +65,12 @@ const rolePermissions: Record<AdminRole, AdminPermission[]> = {
     "forms.read",
     "forms.update",
     "submissions.read",
+    "news.read",
+    "news.create",
+    "news.update",
+    "products.read",
+    "products.create",
+    "products.update",
     "settings.read",
   ],
 
@@ -57,6 +79,8 @@ const rolePermissions: Record<AdminRole, AdminPermission[]> = {
     "properties.read",
     "forms.read",
     "submissions.read",
+    "news.read",
+    "products.read",
     "settings.read",
   ],
 };

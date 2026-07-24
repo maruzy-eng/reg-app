@@ -1,5 +1,0 @@
-import { permanentRedirect } from "next/navigation";
-
-export default function LegacyTutorialHardmoneyPage() {
-  permanentRedirect("/en/academy-videos/hard-money");
-}

@@ -44,7 +44,7 @@ export default async function AdminComplementosPage() {
             <div>
               <p className="text-sm font-semibold text-slate-500">Properties</p>
 
-              <h2 className="mt-1 text-3xl font-bold tracking-[-0.05em] text-[#0c2933]">
+              <h2 className="mt-1 text-3xl font-bold tracking-[-0.05em] text-[#171614]">
                 Complementos
               </h2>
 
@@ -78,7 +78,7 @@ export default async function AdminComplementosPage() {
             </div>
 
             <div>
-              <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+              <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
                 Create block
               </h3>
 
@@ -103,7 +103,7 @@ export default async function AdminComplementosPage() {
             />
 
             <label className="grid gap-2">
-              <span className="text-sm font-bold text-[#0c2933]">
+              <span className="text-sm font-bold text-[#171614]">
                 Description
               </span>
               <textarea
@@ -126,10 +126,10 @@ export default async function AdminComplementosPage() {
                 name="is_active"
                 type="checkbox"
                 defaultChecked
-                className="mt-1 h-4 w-4 accent-[#53bc76]"
+                className="mt-1 h-4 w-4 accent-[#c79a4b]"
               />
               <span>
-                <span className="block text-sm font-bold text-[#0c2933]">
+                <span className="block text-sm font-bold text-[#171614]">
                   Active
                 </span>
                 <span className="text-xs leading-5 text-slate-500">
@@ -155,7 +155,7 @@ export default async function AdminComplementosPage() {
             </div>
 
             <div>
-              <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+              <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
                 Add item
               </h3>
 
@@ -169,7 +169,7 @@ export default async function AdminComplementosPage() {
           <form action={addComplementItemAction} className="grid gap-4">
             <div className="grid gap-4 md:grid-cols-2">
               <label className="grid gap-2">
-                <span className="text-sm font-bold text-[#0c2933]">
+                <span className="text-sm font-bold text-[#171614]">
                   Block
                 </span>
                 <select name="block_slug" required className="admin-input min-h-[46px] px-4">
@@ -182,7 +182,7 @@ export default async function AdminComplementosPage() {
               </label>
 
               <label className="grid gap-2">
-                <span className="text-sm font-bold text-[#0c2933]">
+                <span className="text-sm font-bold text-[#171614]">
                   Source property
                 </span>
                 <select name="property_id" required className="admin-input min-h-[46px] px-4">
@@ -196,7 +196,7 @@ export default async function AdminComplementosPage() {
             </div>
 
             <label className="grid gap-2">
-              <span className="text-sm font-bold text-[#0c2933]">
+              <span className="text-sm font-bold text-[#171614]">
                 Upload image
               </span>
               <input
@@ -219,7 +219,7 @@ export default async function AdminComplementosPage() {
             </div>
 
             <label className="grid gap-2">
-              <span className="text-sm font-bold text-[#0c2933]">
+              <span className="text-sm font-bold text-[#171614]">
                 Description
               </span>
               <textarea
@@ -243,16 +243,16 @@ export default async function AdminComplementosPage() {
       </section>
 
       {defaultBlock ? (
-        <section className="rounded-[28px] border border-[#53bc76]/25 bg-[#f8fffb] p-6 shadow-[0_18px_48px_rgba(83,188,118,0.08)] md:p-8">
+        <section className="rounded-[28px] border border-[#c79a4b]/25 bg-[#fbfaf7] p-6 shadow-[0_18px_48px_rgba(199,154,75,0.08)] md:p-8">
           <div className="flex items-start gap-4">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-[#53bc76] shadow-sm">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-[#c79a4b] shadow-sm">
               <CheckCircle2 size={22} />
             </span>
             <div>
-              <p className="text-sm font-black uppercase tracking-[0.14em] text-[#53bc76]">
+              <p className="text-sm font-black uppercase tracking-[0.14em] text-[#c79a4b]">
                 Default block
               </p>
-              <h3 className="mt-1 text-2xl font-bold tracking-[-0.04em] text-[#0c2933]">
+              <h3 className="mt-1 text-2xl font-bold tracking-[-0.04em] text-[#171614]">
                 Appliances is now managed here
               </h3>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
@@ -283,7 +283,7 @@ export default async function AdminComplementosPage() {
                     </span>
                   </div>
 
-                  <h3 className="mt-3 text-2xl font-bold tracking-[-0.04em] text-[#0c2933]">
+                  <h3 className="mt-3 text-2xl font-bold tracking-[-0.04em] text-[#171614]">
                     {block.title}
                   </h3>
 
@@ -292,8 +292,8 @@ export default async function AdminComplementosPage() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2 text-sm font-bold text-[#0c2933]">
-                  <Layers3 size={18} className="text-[#53bc76]" />
+                <div className="flex items-center gap-2 text-sm font-bold text-[#171614]">
+                  <Layers3 size={18} className="text-[#c79a4b]" />
                   Order {block.sort_order}
                 </div>
               </div>
@@ -307,8 +307,8 @@ export default async function AdminComplementosPage() {
                 <input type="hidden" name="block_id" value={block.id} />
 
                 <div className="mb-4 flex items-center gap-3">
-                  <Settings2 size={18} className="text-[#53bc76]" />
-                  <h4 className="text-base font-bold text-[#0c2933]">
+                  <Settings2 size={18} className="text-[#c79a4b]" />
+                  <h4 className="text-base font-bold text-[#171614]">
                     Show this block on
                   </h4>
                 </div>
@@ -317,17 +317,17 @@ export default async function AdminComplementosPage() {
                   {properties.map((property) => (
                     <label
                       key={property.id}
-                      className="flex cursor-pointer items-start gap-3 rounded-2xl border border-[rgba(12,41,51,0.08)] bg-white px-4 py-3 transition hover:border-[#53bc76]/40"
+                      className="flex cursor-pointer items-start gap-3 rounded-2xl border border-[rgba(12,41,51,0.08)] bg-white px-4 py-3 transition hover:border-[#c79a4b]/40"
                     >
                       <input
                         type="checkbox"
                         name="property_ids"
                         value={property.id}
                         defaultChecked={block.propertyIds.includes(property.id)}
-                        className="mt-1 h-4 w-4 accent-[#53bc76]"
+                        className="mt-1 h-4 w-4 accent-[#c79a4b]"
                       />
                       <span>
-                        <span className="block text-sm font-bold text-[#0c2933]">
+                        <span className="block text-sm font-bold text-[#171614]">
                           {property.title}
                         </span>
                         <span className="text-xs text-slate-500">
@@ -347,7 +347,7 @@ export default async function AdminComplementosPage() {
               </form>
 
               <div className="p-6 md:p-8">
-                <h4 className="mb-4 text-base font-bold text-[#0c2933]">
+                <h4 className="mb-4 text-base font-bold text-[#171614]">
                   Current items
                 </h4>
 
@@ -376,7 +376,7 @@ export default async function AdminComplementosPage() {
 
                           <div className="space-y-3 p-4">
                             <div>
-                              <p className="line-clamp-1 text-sm font-bold text-[#0c2933]">
+                              <p className="line-clamp-1 text-sm font-bold text-[#171614]">
                                 {item.title || "Untitled item"}
                               </p>
                               <p className="mt-1 text-xs text-slate-500">
@@ -406,7 +406,7 @@ export default async function AdminComplementosPage() {
                   </div>
                 ) : (
                   <div className="rounded-2xl border border-dashed border-[rgba(12,41,51,0.14)] bg-slate-50 p-8 text-center">
-                    <ImageIcon className="mx-auto text-[#53bc76]" size={28} />
+                    <ImageIcon className="mx-auto text-[#c79a4b]" size={28} />
                     <p className="mt-3 text-sm font-bold text-slate-500">
                       No items registered for this block yet.
                     </p>
@@ -425,7 +425,7 @@ function StatCard({ label, value }: { label: string; value: number }) {
   return (
     <div className="admin-kpi-card p-5">
       <p className="text-sm font-semibold text-slate-500">{label}</p>
-      <p className="mt-3 text-3xl font-bold text-[#0c2933]">{value}</p>
+      <p className="mt-3 text-3xl font-bold text-[#171614]">{value}</p>
     </div>
   );
 }
@@ -449,7 +449,7 @@ function AdminInput({
 }) {
   return (
     <label className="grid gap-2">
-      <span className="text-sm font-bold text-[#0c2933]">{label}</span>
+      <span className="text-sm font-bold text-[#171614]">{label}</span>
       <input
         name={name}
         type={type}

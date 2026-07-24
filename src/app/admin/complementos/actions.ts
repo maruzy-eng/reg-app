@@ -129,39 +129,10 @@ async function uploadComplementImage(params: {
   return data.publicUrl;
 }
 
-async function getPropertySlugsByIds(propertyIds: string[]) {
-  const uniquePropertyIds = Array.from(new Set(propertyIds.filter(Boolean)));
-
-  if (uniquePropertyIds.length === 0) {
-    return [];
-  }
-
-  const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from("properties")
-    .select("slug")
-    .in("id", uniquePropertyIds);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return (data || [])
-    .map((property) => property.slug)
-    .filter((slug): slug is string => typeof slug === "string" && slug !== "");
-}
-
-async function revalidateComplementPaths(propertyIds: string[] = []) {
+async function revalidateComplementPaths(_propertyIds: string[] = []) {
   revalidatePath("/admin/complementos");
   revalidatePath("/admin/properties");
-  revalidatePath("/properties");
-  revalidatePath("/");
-
-  const propertySlugs = await getPropertySlugsByIds(propertyIds);
-
-  for (const slug of propertySlugs) {
-    revalidatePath(`/properties/${slug}`);
-  }
+  revalidatePath("/reg");
 }
 
 export async function createComplementBlockAction(formData: FormData) {

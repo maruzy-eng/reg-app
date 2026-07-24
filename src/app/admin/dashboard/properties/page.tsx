@@ -3,7 +3,6 @@ import {
   Bath,
   BedDouble,
   Building2,
-  Eye,
   MapPin,
   Pencil,
   Plus,
@@ -24,11 +23,11 @@ export default async function AdminPropertiesPage() {
     <div className="mx-auto max-w-7xl space-y-6">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.25em] text-[#53bc76]">
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-[#c79a4b]">
             CRUD
           </p>
 
-          <h2 className="mt-2 text-3xl font-bold text-[#0e3541]">
+          <h2 className="mt-2 text-3xl font-bold text-[#171614]">
             Properties
           </h2>
 
@@ -50,14 +49,14 @@ export default async function AdminPropertiesPage() {
       <div className="mt-6 grid gap-4 md:grid-cols-5">
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-[#587469]">Total</p>
-          <p className="mt-2 text-3xl font-bold text-[#0e3541]">
+          <p className="mt-2 text-3xl font-bold text-[#171614]">
             {properties.length}
           </p>
         </div>
 
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-[#587469]">Available</p>
-          <p className="mt-2 text-3xl font-bold text-[#0e3541]">
+          <p className="mt-2 text-3xl font-bold text-[#171614]">
             {
               properties.filter((property) => property.status === "available")
                 .length
@@ -67,7 +66,7 @@ export default async function AdminPropertiesPage() {
 
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-[#587469]">In Progress</p>
-          <p className="mt-2 text-3xl font-bold text-[#0e3541]">
+          <p className="mt-2 text-3xl font-bold text-[#171614]">
             {
               properties.filter((property) => property.status === "in_progress")
                 .length
@@ -77,14 +76,14 @@ export default async function AdminPropertiesPage() {
 
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-[#587469]">Sold</p>
-          <p className="mt-2 text-3xl font-bold text-[#0e3541]">
+          <p className="mt-2 text-3xl font-bold text-[#171614]">
             {properties.filter((property) => property.status === "sold").length}
           </p>
         </div>
 
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-[#587469]">Rented</p>
-          <p className="mt-2 text-3xl font-bold text-[#0e3541]">
+          <p className="mt-2 text-3xl font-bold text-[#171614]">
             {
               properties.filter((property) => property.status === "rented")
                 .length
@@ -118,11 +117,11 @@ export default async function AdminPropertiesPage() {
                     {getPropertyStatusLabel(property.status)}
                   </span>
 
-                  <span className="admin-badge bg-[#ecf9f0] px-3 py-1 text-xs">
+                  <span className="admin-badge bg-[#f7efd9] px-3 py-1 text-xs">
                     {getPropertyTypeLabel(property.property_type)}
                   </span>
 
-                  <span className="admin-badge bg-[#ecf9f0] px-3 py-1 text-xs">
+                  <span className="admin-badge bg-[#f7efd9] px-3 py-1 text-xs">
                     {property.visibility}
                   </span>
 
@@ -133,7 +132,7 @@ export default async function AdminPropertiesPage() {
                   ) : null}
                 </div>
 
-                <h3 className="mt-3 text-2xl font-bold text-[#0e3541]">
+                <h3 className="mt-3 text-2xl font-bold text-[#171614]">
                   {property.title}
                 </h3>
 
@@ -150,17 +149,17 @@ export default async function AdminPropertiesPage() {
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-3 text-sm text-[#64748b]">
-                  <span className="admin-badge inline-flex items-center gap-2 bg-[#f8fafc] px-3 py-2">
+                  <span className="admin-badge inline-flex items-center gap-2 bg-[#f8f6f1] px-3 py-2">
                     <BedDouble size={16} />
                     {property.bedrooms || 0} beds
                   </span>
 
-                  <span className="admin-badge inline-flex items-center gap-2 bg-[#f8fafc] px-3 py-2">
+                  <span className="admin-badge inline-flex items-center gap-2 bg-[#f8f6f1] px-3 py-2">
                     <Bath size={16} />
                     {property.bathrooms || 0} baths
                   </span>
 
-                  <span className="admin-badge inline-flex items-center gap-2 bg-[#f8fafc] px-3 py-2">
+                  <span className="admin-badge inline-flex items-center gap-2 bg-[#f8f6f1] px-3 py-2">
                     <Ruler size={16} />
                     {formatNumber(property.sqft)} sqft
                   </span>
@@ -171,31 +170,19 @@ export default async function AdminPropertiesPage() {
                 <div className="md:text-right">
                   <p className="text-sm font-semibold text-[#587469]">Price</p>
 
-                  <p className="text-2xl font-bold text-[#0e3541]">
+                  <p className="text-2xl font-bold text-[#171614]">
                     {formatCurrency(property.price)}
                   </p>
 
                   <p className="mt-2 text-sm text-[#587469]">
                     ARV:{" "}
-                    <span className="font-bold text-[#0e3541]">
+                    <span className="font-bold text-[#171614]">
                       {formatCurrency(property.projected_arv)}
                     </span>
                   </p>
                 </div>
 
                 <div className="flex gap-2">
-                  {property.visibility === "public" &&
-                  property.status !== "draft" &&
-                  property.status !== "archived" ? (
-                    <Link
-                      href={`/properties/${property.slug}`}
-                    className="admin-secondary-button inline-flex items-center justify-center gap-2 px-4 py-2 text-sm transition hover:bg-[#f8fafc]"
-                    >
-                      <Eye size={16} />
-                      View
-                    </Link>
-                  ) : null}
-
                   <Link
                     href={`/admin/properties/${property.id}/edit`}
                     className="admin-primary-button inline-flex items-center justify-center gap-2 px-4 py-2 text-sm transition hover:brightness-105"
@@ -209,10 +196,10 @@ export default async function AdminPropertiesPage() {
           ))}
         </div>
       ) : (
-        <div className="admin-card mt-6 border-dashed border-[rgba(14,53,65,0.12)] p-10 text-center">
-          <Building2 className="mx-auto text-[#53bc76]" size={44} />
+        <div className="admin-card mt-6 border-dashed border-[rgba(23,22,20,0.12)] p-10 text-center">
+          <Building2 className="mx-auto text-[#c79a4b]" size={44} />
 
-          <h3 className="mt-4 text-2xl font-bold text-[#0e3541]">
+          <h3 className="mt-4 text-2xl font-bold text-[#171614]">
             No properties found
           </h3>
 

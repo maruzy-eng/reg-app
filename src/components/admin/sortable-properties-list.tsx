@@ -6,7 +6,6 @@ import {
   Bath,
   BedDouble,
   Building2,
-  Eye,
   GripVertical,
   MapPin,
   Pencil,
@@ -106,7 +105,7 @@ export function SortablePropertiesList({
     <div className="space-y-5">
       <div className="admin-card flex flex-col justify-between gap-3 p-4 md:flex-row md:items-center">
         <div>
-          <h2 className="text-lg font-bold text-[#0c2933]">
+          <h2 className="text-lg font-bold text-[#171614]">
             Property Display Order
           </h2>
 
@@ -116,7 +115,7 @@ export function SortablePropertiesList({
           </p>
 
           {savedMessage ? (
-            <p className="mt-2 text-sm font-bold text-emerald-700">
+            <p className="mt-2 text-sm font-bold text-[#aa7732]">
               {savedMessage}
             </p>
           ) : null}
@@ -137,12 +136,6 @@ export function SortablePropertiesList({
 
       <div className="space-y-4">
         {items.map((property, index) => {
-          const publicUrl =
-            property.visibility === "public" &&
-            !["draft", "archived"].includes(property.status)
-              ? `/properties/${property.slug}`
-              : null;
-
           return (
             <article
               key={property.id}
@@ -165,14 +158,14 @@ export function SortablePropertiesList({
               onDragEnd={() => setDraggedId(null)}
               className={`admin-card overflow-hidden transition ${
                 draggedId === property.id
-                  ? "border-[#53bc76] opacity-60"
-                  : "border-[rgba(14,53,65,0.1)]"
+                  ? "border-[#c79a4b] opacity-60"
+                  : "border-[rgba(23,22,20,0.1)]"
               }`}
             >
               <div className="grid gap-0 lg:grid-cols-[74px_260px_1fr]">
-                <div className="flex items-center justify-center border-b border-[rgba(14,53,65,0.1)] bg-[#f8fafc] p-4 lg:border-b-0 lg:border-r">
+                <div className="flex items-center justify-center border-b border-[rgba(23,22,20,0.1)] bg-[#f8f6f1] p-4 lg:border-b-0 lg:border-r">
                   <div className="flex flex-col items-center gap-2">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-bold text-[#0c2933] shadow-sm">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-bold text-[#171614] shadow-sm">
                       {index + 1}
                     </span>
 
@@ -184,7 +177,7 @@ export function SortablePropertiesList({
                   </div>
                 </div>
 
-                <div className="relative min-h-[210px] bg-[#f8fafc]">
+                <div className="relative min-h-[210px] bg-[#f8f6f1]">
                   {property.cover_image_url ? (
                     <img
                       src={property.cover_image_url}
@@ -192,7 +185,7 @@ export function SortablePropertiesList({
                       className="h-full min-h-[210px] w-full object-cover"
                     />
                   ) : (
-                    <div className="flex h-full min-h-[210px] items-center justify-center text-[#53bc76]">
+                    <div className="flex h-full min-h-[210px] items-center justify-center text-[#c79a4b]">
                       <Building2 size={48} />
                     </div>
                   )}
@@ -211,7 +204,7 @@ export function SortablePropertiesList({
                 <div className="p-5">
                   <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-start">
                     <div>
-                      <h3 className="text-2xl font-bold leading-tight text-[#0c2933]">
+                      <h3 className="text-2xl font-bold leading-tight text-[#171614]">
                         {property.title}
                       </h3>
 
@@ -229,7 +222,7 @@ export function SortablePropertiesList({
 
                   <div className="mt-5 grid gap-4 xl:grid-cols-[1fr_auto] xl:items-end">
                     <div>
-                      <p className="text-3xl font-bold text-[#0c2933]">
+                      <p className="text-3xl font-bold text-[#171614]">
                         {formatCurrency(property.price)}
                       </p>
 
@@ -267,22 +260,6 @@ export function SortablePropertiesList({
                           Edit
                         </Link>
                       ) : null}
-
-                      {publicUrl ? (
-                        <Link
-                          href={publicUrl}
-                          target="_blank"
-                          className="admin-secondary-button inline-flex items-center justify-center gap-2 px-4 py-2 text-sm transition hover:bg-[#f8fafc]"
-                        >
-                          <Eye size={15} />
-                          View
-                        </Link>
-                      ) : (
-                        <span className="admin-badge inline-flex items-center justify-center gap-2 px-4 py-2 text-sm text-[#94a3b8]">
-                          <Eye size={15} />
-                          Hidden
-                        </span>
-                      )}
 
                       {canDelete ? (
                         <DeletePropertyButton

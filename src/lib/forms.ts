@@ -552,7 +552,7 @@ export async function getPublishedFormBySlug(slug: string) {
   const supabase = getSupabaseAdmin();
 
   const { data: form, error: formError } = await supabase
-    .from("forms")
+    .from("reg_forms")
     .select("*")
     .eq("slug", slug)
     .eq("status", "published")
@@ -567,7 +567,7 @@ export async function getPublishedFormBySlug(slug: string) {
   }
 
   const { data: fields, error: fieldsError } = await supabase
-    .from("form_fields")
+    .from("reg_form_fields")
     .select("*")
     .eq("form_id", form.id)
     .order("sort_order", { ascending: true })
@@ -598,7 +598,7 @@ export async function createFormSubmission(params: {
   const supabase = getSupabaseAdmin();
 
   const { data: submission, error } = await supabase
-    .from("form_submissions")
+    .from("reg_form_submissions")
     .insert({
       form_id: params.form.id,
       form_slug: params.form.slug,
@@ -624,7 +624,7 @@ export async function getActiveWebhooksByFormId(formId: string) {
   const supabase = getSupabaseAdmin();
 
   const { data, error } = await supabase
-    .from("form_webhooks")
+    .from("reg_form_webhooks")
     .select("*")
     .eq("form_id", formId)
     .eq("enabled", true)
@@ -642,7 +642,7 @@ export async function getActiveFormEmailsByFormId(formId: string) {
   const supabase = getSupabaseAdmin();
 
   const { data, error } = await supabase
-    .from("form_emails")
+    .from("reg_form_emails")
     .select("*")
     .eq("form_id", formId)
     .eq("enabled", true)
@@ -797,7 +797,7 @@ export async function logWebhookResult(params: {
 }) {
   const supabase = getSupabaseAdmin();
 
-  await supabase.from("form_webhook_logs").insert({
+  await supabase.from("reg_form_webhook_logs").insert({
     submission_id: params.submissionId,
     webhook_id: params.webhookId,
     webhook_name: params.webhookName,
@@ -937,7 +937,7 @@ export async function updateSubmissionWebhookStatus(params: {
   }
 
   const { error } = await supabase
-    .from("form_submissions")
+    .from("reg_form_submissions")
     .update({
       webhook_status: webhookStatus,
       webhook_success_count: params.successCount,
@@ -966,7 +966,7 @@ export async function logFormEmailResult(params: {
 }) {
   const supabase = getSupabaseAdmin();
 
-  await supabase.from("form_email_logs").insert({
+  await supabase.from("reg_form_email_logs").insert({
     submission_id: params.submissionId,
     form_email_id: params.formEmailId,
     form_email_name: params.formEmailName,

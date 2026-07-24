@@ -8,6 +8,8 @@ import {
   Inbox,
   FileText,
   LayoutDashboard,
+  Newspaper,
+  Package,
   Settings,
   Users,
 } from "lucide-react";
@@ -21,6 +23,8 @@ type AdminSidebarNavItem = {
     | "complementos"
     | "users"
     | "forms"
+    | "news"
+    | "products"
     | "submissions"
     | "settings";
 };
@@ -35,6 +39,8 @@ const adminSidebarIcons = {
   complementos: Boxes,
   users: Users,
   forms: FileText,
+  news: Newspaper,
+  products: Package,
   submissions: Inbox,
   settings: Settings,
 } satisfies Record<AdminSidebarNavItem["icon"], typeof LayoutDashboard>;

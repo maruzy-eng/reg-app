@@ -33,11 +33,11 @@ export default async function AdminUsersPage() {
     <div className="mx-auto max-w-7xl space-y-6">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.25em] text-[#53bc76]">
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-[#c79a4b]">
             Access
           </p>
 
-          <h2 className="mt-2 text-3xl font-bold text-[#0c2933]">Users</h2>
+          <h2 className="mt-2 text-3xl font-bold text-[#171614]">Users</h2>
 
           <p className="mt-2 text-[#64748b]">
             Manage administrative users, roles and access status.
@@ -59,10 +59,10 @@ export default async function AdminUsersPage() {
         <div className="admin-kpi-card p-5">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-[#64748b]">Total Users</p>
-            <Users size={20} className="text-[#53bc76]" />
+            <Users size={20} className="text-[#c79a4b]" />
           </div>
 
-          <p className="mt-4 text-3xl font-bold text-[#0c2933]">
+          <p className="mt-4 text-3xl font-bold text-[#171614]">
             {totalUsers}
           </p>
         </div>
@@ -70,10 +70,10 @@ export default async function AdminUsersPage() {
         <div className="admin-kpi-card p-5">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-[#64748b]">Active</p>
-            <ShieldCheck size={20} className="text-[#53bc76]" />
+            <ShieldCheck size={20} className="text-[#c79a4b]" />
           </div>
 
-          <p className="mt-4 text-3xl font-bold text-[#0c2933]">
+          <p className="mt-4 text-3xl font-bold text-[#171614]">
             {activeUsers}
           </p>
         </div>
@@ -81,10 +81,10 @@ export default async function AdminUsersPage() {
         <div className="admin-kpi-card p-5">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-[#64748b]">Admins</p>
-            <User size={20} className="text-[#53bc76]" />
+            <User size={20} className="text-[#c79a4b]" />
           </div>
 
-          <p className="mt-4 text-3xl font-bold text-[#0c2933]">
+          <p className="mt-4 text-3xl font-bold text-[#171614]">
             {adminUsers}
           </p>
         </div>
@@ -92,10 +92,10 @@ export default async function AdminUsersPage() {
         <div className="admin-kpi-card p-5">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-[#64748b]">Editors</p>
-            <Pencil size={20} className="text-[#53bc76]" />
+            <Pencil size={20} className="text-[#c79a4b]" />
           </div>
 
-          <p className="mt-4 text-3xl font-bold text-[#0c2933]">
+          <p className="mt-4 text-3xl font-bold text-[#171614]">
             {editorUsers}
           </p>
         </div>
@@ -104,7 +104,7 @@ export default async function AdminUsersPage() {
       {users.length > 0 ? (
         <div className="admin-table mt-6">
           <table className="w-full border-collapse text-left text-sm">
-            <thead className="border-b border-[rgba(14,53,65,0.1)] bg-[#f8fafc] text-[#64748b]">
+            <thead className="border-b border-[rgba(23,22,20,0.1)] bg-[#f8f6f1] text-[#64748b]">
               <tr>
                 <th className="px-5 py-4">User</th>
                 <th className="px-5 py-4">Email</th>
@@ -134,7 +134,7 @@ export default async function AdminUsersPage() {
                       )}
 
                       <div>
-                        <p className="font-bold text-[#0c2933]">{user.name}</p>
+                        <p className="font-bold text-[#171614]">{user.name}</p>
                         <p className="text-xs text-[#94a3b8]">{user.id}</p>
                       </div>
                     </div>
@@ -142,7 +142,7 @@ export default async function AdminUsersPage() {
 
                   <td className="px-5 py-4 text-[#64748b]">
                     <div className="flex items-center gap-2">
-                      <Mail size={16} className="text-[#53bc76]" />
+                      <Mail size={16} className="text-[#c79a4b]" />
                       {user.email}
                     </div>
                   </td>
@@ -208,10 +208,10 @@ export default async function AdminUsersPage() {
           </table>
         </div>
       ) : (
-        <div className="mt-6 rounded-[2rem] border border-dashed border-[rgba(14,53,65,0.15)] bg-white p-10 text-center">
-          <Users className="mx-auto text-[#53bc76]" size={44} />
+        <div className="mt-6 rounded-[2rem] border border-dashed border-[rgba(23,22,20,0.15)] bg-white p-10 text-center">
+          <Users className="mx-auto text-[#c79a4b]" size={44} />
 
-          <h3 className="mt-4 text-2xl font-bold text-[#0c2933]">
+          <h3 className="mt-4 text-2xl font-bold text-[#171614]">
             No admin users found
           </h3>
 

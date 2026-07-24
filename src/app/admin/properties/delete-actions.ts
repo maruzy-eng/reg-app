@@ -109,9 +109,7 @@ export async function deletePropertyAction(formData: FormData) {
     redirect("/admin/properties?error=delete-failed");
   }
 
-  revalidatePath("/");
-  revalidatePath("/properties");
-  revalidatePath(`/properties/${property.slug}`);
+  revalidatePath("/reg");
   revalidatePath("/admin/dashboard");
   revalidatePath("/admin/properties");
 

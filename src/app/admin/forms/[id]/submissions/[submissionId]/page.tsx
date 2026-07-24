@@ -4,7 +4,6 @@ import {
   ArrowLeft,
   CheckCircle2,
   Clock,
-  ExternalLink,
   FileJson,
   Globe,
   Mail,
@@ -90,7 +89,7 @@ function getLogStatusClass(status: string) {
 
 function StatusIcon({ status }: { status: string }) {
   if (status === "success") {
-    return <CheckCircle2 size={18} className="text-[#53bc76]" />;
+    return <CheckCircle2 size={18} className="text-[#c79a4b]" />;
   }
 
   if (status === "error") {
@@ -110,7 +109,7 @@ function MiniCard({
   return (
     <div className="admin-kpi-card p-5">
       <p className="text-sm font-semibold text-slate-500">{title}</p>
-      <p className="mt-3 truncate text-base font-bold text-[#0c2933]">
+      <p className="mt-3 truncate text-base font-bold text-[#171614]">
         {value}
       </p>
     </div>
@@ -169,7 +168,7 @@ export default async function AdminSubmissionDetailsPage({
                   {form.name}
                 </p>
 
-                <h2 className="mt-1 text-3xl font-bold tracking-[-0.05em] text-[#0c2933]">
+                <h2 className="mt-1 text-3xl font-bold tracking-[-0.05em] text-[#171614]">
                   Submission details
                 </h2>
 
@@ -199,15 +198,6 @@ export default async function AdminSubmissionDetailsPage({
               </div>
             </div>
           </div>
-
-          <Link
-            href={`/forms/${form.slug}`}
-            target="_blank"
-            className="admin-primary-button min-h-[44px] gap-2 px-4 text-sm no-underline"
-          >
-            View Public Form
-            <ExternalLink size={15} />
-          </Link>
         </div>
       </section>
 
@@ -218,7 +208,7 @@ export default async function AdminSubmissionDetailsPage({
             Form
           </div>
 
-          <p className="mt-2 truncate text-lg font-bold text-[#0c2933]">
+          <p className="mt-2 truncate text-lg font-bold text-[#171614]">
             {form.name}
           </p>
         </div>
@@ -229,7 +219,7 @@ export default async function AdminSubmissionDetailsPage({
             Webhook logs
           </div>
 
-          <p className="mt-2 text-2xl font-bold text-[#0c2933]">
+          <p className="mt-2 text-2xl font-bold text-[#171614]">
             {logs.length}
           </p>
         </div>
@@ -240,7 +230,7 @@ export default async function AdminSubmissionDetailsPage({
             IP address
           </div>
 
-          <p className="mt-2 truncate text-lg font-bold text-[#0c2933]">
+          <p className="mt-2 truncate text-lg font-bold text-[#171614]">
             {submission.ip_address || "—"}
           </p>
         </div>
@@ -251,7 +241,7 @@ export default async function AdminSubmissionDetailsPage({
             Created
           </div>
 
-          <p className="mt-2 text-sm font-bold text-[#0c2933]">
+          <p className="mt-2 text-sm font-bold text-[#171614]">
             {formatDate(submission.created_at)}
           </p>
         </div>
@@ -269,7 +259,7 @@ export default async function AdminSubmissionDetailsPage({
       <section className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
         <div className="admin-section overflow-hidden">
           <div className="border-b border-[rgba(12,41,51,0.08)] px-6 py-5">
-            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
               Submitted data
             </h3>
 
@@ -287,7 +277,7 @@ export default async function AdminSubmissionDetailsPage({
 
         <div className="admin-section overflow-hidden">
           <div className="border-b border-[rgba(12,41,51,0.08)] px-6 py-5">
-            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
               Request metadata
             </h3>
 
@@ -333,7 +323,7 @@ export default async function AdminSubmissionDetailsPage({
       <section className="admin-section overflow-hidden">
         <div className="flex items-center justify-between border-b border-[rgba(12,41,51,0.08)] px-6 py-5">
           <div>
-            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
               Webhook logs
             </h3>
 
@@ -351,7 +341,7 @@ export default async function AdminSubmissionDetailsPage({
               <ServerCrash size={24} />
             </div>
 
-            <h3 className="mt-5 text-xl font-bold text-[#0c2933]">
+            <h3 className="mt-5 text-xl font-bold text-[#171614]">
               No webhook logs
             </h3>
 
@@ -370,7 +360,7 @@ export default async function AdminSubmissionDetailsPage({
                     <div className="flex flex-wrap items-center gap-2">
                       <StatusIcon status={log.status} />
 
-                      <p className="font-bold text-[#0c2933]">
+                      <p className="font-bold text-[#171614]">
                         {index + 1}. {log.webhook_name || "Webhook"}
                       </p>
 
@@ -449,7 +439,7 @@ export default async function AdminSubmissionDetailsPage({
       <section className="admin-section overflow-hidden">
         <div className="flex items-center justify-between border-b border-[rgba(12,41,51,0.08)] px-6 py-5">
           <div>
-                <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+                <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
                   Email logs
                 </h3>
 
@@ -467,7 +457,7 @@ export default async function AdminSubmissionDetailsPage({
               <Mail size={24} />
             </div>
 
-            <h3 className="mt-5 text-xl font-bold text-[#0c2933]">
+            <h3 className="mt-5 text-xl font-bold text-[#171614]">
               No email logs
             </h3>
 
@@ -487,12 +477,12 @@ export default async function AdminSubmissionDetailsPage({
                         size={18}
                         className={
                           log.status === "success"
-                            ? "text-[#53bc76]"
+                            ? "text-[#c79a4b]"
                             : "text-red-500"
                         }
                       />
 
-                      <p className="font-bold text-[#0c2933]">
+                      <p className="font-bold text-[#171614]">
                         {index + 1}. {log.form_email_name || "Email"}
                       </p>
 

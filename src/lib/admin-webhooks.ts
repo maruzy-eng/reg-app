@@ -148,7 +148,7 @@ export async function getAdminWebhookEditDetails(params: {
   const supabase = getSupabaseAdmin();
 
   const { data: form, error: formError } = await supabase
-    .from("forms")
+    .from("reg_forms")
     .select("id, name, slug, title")
     .eq("id", params.formId)
     .single<AdminWebhookForm>();
@@ -158,7 +158,7 @@ export async function getAdminWebhookEditDetails(params: {
   }
 
   const { data: webhook, error: webhookError } = await supabase
-    .from("form_webhooks")
+    .from("reg_form_webhooks")
     .select("*")
     .eq("id", params.webhookId)
     .eq("form_id", params.formId)
@@ -223,7 +223,7 @@ export async function updateAdminFormWebhookAction(formData: FormData) {
   );
 
   const { error } = await supabase
-    .from("form_webhooks")
+    .from("reg_form_webhooks")
     .update({
       name,
       url,

@@ -23,11 +23,10 @@ export type SiteSettingsValue = {
 };
 
 export const DEFAULT_SITE_SETTINGS: Required<SiteSettingsValue> = {
-  site_name: "Checkmate Property",
-  site_tagline:
-    "The real estate intelligence platform built to help investors search, analyze, and act faster.",
+  site_name: "Checkmate REG",
+  site_tagline: "Building lasting value through real estate.",
   site_description:
-    "Search, analyze, and manage real estate opportunities with data-driven confidence. Checkmate Property helps investors evaluate deals, review projects, explore property details, and make smarter real estate decisions.",
+    "Checkmate REG connects real estate strategy, development, construction, and professional execution to create sustainable long-term value.",
   logo_url: "",
   favicon_url: "",
   primary_phone: "+1 (978) 239-5226",
@@ -36,7 +35,7 @@ export const DEFAULT_SITE_SETTINGS: Required<SiteSettingsValue> = {
   address_line: "",
   default_cta_title: "Interested in this property?",
   default_cta_description:
-    "Connect with the Checkmate Property team to learn more about availability, pricing, project details, and next steps.",
+    "Connect with the Checkmate REG team to learn more about availability, pricing, project details, and next steps.",
   default_cta_button: "Contact Us",
   facebook_url: "",
   instagram_url: "",
@@ -54,7 +53,7 @@ export async function getSiteSettings(): Promise<Required<SiteSettingsValue>> {
   const supabase = createAdminClient();
 
   const { data, error } = await supabase
-    .from("site_settings")
+    .from("reg_site_settings")
     .select("value")
     .eq("key", "global")
     .maybeSingle();
@@ -86,7 +85,7 @@ export async function upsertSiteSettings(value: SiteSettingsValue) {
     updated_at: new Date().toISOString(),
   };
 
-  const { error } = await supabase.from("site_settings").upsert(payload, {
+  const { error } = await supabase.from("reg_site_settings").upsert(payload, {
     onConflict: "key",
   });
 

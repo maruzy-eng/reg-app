@@ -238,14 +238,14 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
 
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-3">
-                  <h3 className="text-2xl font-bold tracking-[-0.04em] text-[#0c2933]">
+                  <h3 className="text-2xl font-bold tracking-[-0.04em] text-[#171614]">
                     Submission {submission.id.slice(0, 8)}
                   </h3>
 
                   <span
                     className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] ${
                       status === "success"
-                        ? "bg-emerald-50 text-emerald-700"
+                        ? "bg-[#f7efd9] text-[#aa7732]"
                         : "bg-red-50 text-red-700"
                     }`}
                   >
@@ -270,7 +270,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                       {toLabel(key)}
                     </p>
 
-                    <p className="mt-2 break-words text-sm font-semibold leading-6 text-[#0c2933]">
+                    <p className="mt-2 break-words text-sm font-semibold leading-6 text-[#171614]">
                       {toDisplayValue(value)}
                     </p>
                   </div>
@@ -289,12 +289,12 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                 Result
               </p>
 
-              <p className="mt-2 text-sm font-bold text-[#0c2933]">
+              <p className="mt-2 text-sm font-bold text-[#171614]">
                 {successCount} success · {errorCount} errors
               </p>
             </div>
 
-            <div className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(94deg,#53bc76_0%,#39aff2_100%)] px-5 py-3 text-sm font-bold text-white shadow-[0_16px_34px_rgba(57,175,242,0.16)]">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(94deg,#c79a4b_0%,#39aff2_100%)] px-5 py-3 text-sm font-bold text-white shadow-[0_16px_34px_rgba(57,175,242,0.16)]">
               View Details
               <ChevronDown size={16} />
             </div>
@@ -305,7 +305,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
       <div className="border-t border-[rgba(12,41,51,0.08)] px-6 pb-6 pt-5">
         <div className="grid gap-6 xl:grid-cols-[1.5fr_0.9fr]">
           <div className="rounded-[24px] border border-[rgba(12,41,51,0.08)] bg-[#fbfcfd] p-5">
-            <h4 className="text-base font-bold text-[#0c2933]">
+            <h4 className="text-base font-bold text-[#171614]">
               Submitted data
             </h4>
 
@@ -320,7 +320,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                       {toLabel(key)}
                     </p>
 
-                    <p className="mt-2 break-words text-sm leading-6 text-[#0c2933]">
+                    <p className="mt-2 break-words text-sm leading-6 text-[#171614]">
                       {toDisplayValue(value)}
                     </p>
                   </div>
@@ -334,7 +334,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
           </div>
 
           <div className="rounded-[24px] border border-[rgba(12,41,51,0.08)] bg-[#fbfcfd] p-5">
-            <h4 className="text-base font-bold text-[#0c2933]">
+            <h4 className="text-base font-bold text-[#171614]">
               Submission info
             </h4>
 
@@ -343,7 +343,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7a8f98]">
                   Submission ID
                 </p>
-                <p className="mt-2 break-all text-sm leading-6 text-[#0c2933]">
+                <p className="mt-2 break-all text-sm leading-6 text-[#171614]">
                   {submission.id}
                 </p>
               </div>
@@ -352,7 +352,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7a8f98]">
                   Created at
                 </p>
-                <p className="mt-2 text-sm leading-6 text-[#0c2933]">
+                <p className="mt-2 text-sm leading-6 text-[#171614]">
                   {formatDate(submission.created_at)}
                 </p>
               </div>
@@ -367,7 +367,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                     href={submission.source_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-2 inline-flex items-center gap-2 break-all text-sm font-semibold text-[#0c2933] underline underline-offset-4"
+                    className="mt-2 inline-flex items-center gap-2 break-all text-sm font-semibold text-[#171614] underline underline-offset-4"
                   >
                     <Send size={14} />
                     {submission.source_url}
@@ -381,7 +381,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7a8f98]">
                   Execution result
                 </p>
-                <p className="mt-2 text-sm leading-6 text-[#0c2933]">
+                <p className="mt-2 text-sm leading-6 text-[#171614]">
                   {successCount} success · {errorCount} errors
                 </p>
               </div>

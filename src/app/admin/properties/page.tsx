@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Building2, Plus } from "lucide-react";
+import { Building2, Plus } from "lucide-react";
 import { getAdminProperties } from "@/lib/properties";
 import {
   currentAdminHasPermission,
@@ -90,7 +90,7 @@ export default async function AdminPropertiesPage({
             Property Management
           </div>
 
-          <h1 className="mt-5 text-4xl font-bold tracking-tight text-[#0e3541]">
+          <h1 className="mt-5 text-4xl font-bold tracking-tight text-[#171614]">
             Properties
           </h1>
 
@@ -113,7 +113,7 @@ export default async function AdminPropertiesPage({
       </div>
 
       {resolvedSearchParams.deleted === "success" ? (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-bold text-emerald-700">
+        <div className="rounded-2xl border border-[#ebca84]/50 bg-[#f7efd9] px-5 py-4 text-sm font-bold text-[#aa7732]">
           Property deleted successfully.
         </div>
       ) : null}
@@ -127,35 +127,35 @@ export default async function AdminPropertiesPage({
       <div className="grid gap-4 md:grid-cols-5">
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-[#64748b]">Total</p>
-          <p className="mt-2 text-3xl font-bold text-[#0e3541]">
+          <p className="mt-2 text-3xl font-bold text-[#171614]">
             {totalProperties}
           </p>
         </div>
 
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-[#64748b]">Public</p>
-          <p className="mt-2 text-3xl font-bold text-[#0e3541]">
+          <p className="mt-2 text-3xl font-bold text-[#171614]">
             {publicProperties}
           </p>
         </div>
 
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-[#64748b]">Drafts</p>
-          <p className="mt-2 text-3xl font-bold text-[#0e3541]">
+          <p className="mt-2 text-3xl font-bold text-[#171614]">
             {draftProperties}
           </p>
         </div>
 
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-[#64748b]">Sold</p>
-          <p className="mt-2 text-3xl font-bold text-[#0e3541]">
+          <p className="mt-2 text-3xl font-bold text-[#171614]">
             {soldProperties}
           </p>
         </div>
 
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-[#64748b]">Rented</p>
-          <p className="mt-2 text-3xl font-bold text-[#0e3541]">
+          <p className="mt-2 text-3xl font-bold text-[#171614]">
             {rentedProperties}
           </p>
         </div>
@@ -168,10 +168,10 @@ export default async function AdminPropertiesPage({
           canDelete={canDelete}
         />
       ) : (
-        <div className="admin-card border-dashed border-[rgba(14,53,65,0.12)] p-10 text-center">
-          <Building2 className="mx-auto text-[#53bc76]" size={52} />
+        <div className="admin-card border-dashed border-[rgba(23,22,20,0.12)] p-10 text-center">
+          <Building2 className="mx-auto text-[#c79a4b]" size={52} />
 
-          <h2 className="mt-5 text-2xl font-bold text-[#0e3541]">
+          <h2 className="mt-5 text-2xl font-bold text-[#171614]">
             No properties yet
           </h2>
 
@@ -190,29 +190,6 @@ export default async function AdminPropertiesPage({
           </RoleGuard>
         </div>
       )}
-
-      <div className="admin-dark-panel rounded-[2rem] p-6 text-white">
-        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-          <div>
-            <h3 className="text-xl font-bold">
-              Public portfolio page
-            </h3>
-            <p className="mt-2 text-sm text-white/60">
-              Review how your properties appear to visitors on the public
-              website.
-            </p>
-          </div>
-
-          <Link
-            href="/properties"
-            target="_blank"
-            className="admin-secondary-button inline-flex items-center justify-center gap-2 px-5 py-3 text-sm transition hover:bg-[#f8fafc]"
-          >
-            Open Public Page
-            <ArrowRight size={17} />
-          </Link>
-        </div>
-      </div>
     </div>
   );
 }

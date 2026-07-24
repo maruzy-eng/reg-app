@@ -88,7 +88,7 @@ export default async function AdminFormDetailsPage({
               <div>
                 <p className="text-sm font-semibold text-slate-500">Forms</p>
 
-                <h2 className="mt-1 text-3xl font-bold tracking-[-0.05em] text-[#0c2933]">
+                <h2 className="mt-1 text-3xl font-bold tracking-[-0.05em] text-[#171614]">
                   {form.name}
                 </h2>
 
@@ -111,15 +111,6 @@ export default async function AdminFormDetailsPage({
               <DuplicateFormButton className="admin-secondary-button min-h-[44px] gap-2 px-4 text-sm" />
             </form>
 
-            <Link
-              href={`/forms/${form.slug}`}
-              target="_blank"
-              className="admin-secondary-button min-h-[44px] gap-2 px-4 text-sm no-underline"
-            >
-              <Eye size={16} />
-              View Form
-            </Link>
-
             <form action={deleteAdminFormAction}>
               <input type="hidden" name="id" value={form.id} />
 
@@ -136,7 +127,7 @@ export default async function AdminFormDetailsPage({
       </section>
 
       {wasDuplicated ? (
-        <section className="rounded-[24px] border border-[#53bc76]/25 bg-[#53bc76]/10 px-5 py-4 text-sm font-semibold text-[#0c2933]">
+        <section className="rounded-[24px] border border-[#c79a4b]/25 bg-[#c79a4b]/10 px-5 py-4 text-sm font-semibold text-[#171614]">
           Form duplicated successfully. This copy is saved as a draft and can be
           edited before publishing.
         </section>
@@ -146,7 +137,7 @@ export default async function AdminFormDetailsPage({
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-slate-500">Status</p>
 
-          <p className="mt-2 text-2xl font-bold capitalize text-[#0c2933]">
+          <p className="mt-2 text-2xl font-bold capitalize text-[#171614]">
             {form.status}
           </p>
         </div>
@@ -154,7 +145,7 @@ export default async function AdminFormDetailsPage({
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-slate-500">Fields</p>
 
-          <p className="mt-2 text-2xl font-bold text-[#0c2933]">
+          <p className="mt-2 text-2xl font-bold text-[#171614]">
             {fields.length}
           </p>
         </div>
@@ -162,7 +153,7 @@ export default async function AdminFormDetailsPage({
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-slate-500">Webhooks</p>
 
-          <p className="mt-2 text-2xl font-bold text-[#0c2933]">
+          <p className="mt-2 text-2xl font-bold text-[#171614]">
             {webhooks.length}
           </p>
         </div>
@@ -170,7 +161,7 @@ export default async function AdminFormDetailsPage({
         <div className="admin-kpi-card p-5">
           <p className="text-sm font-semibold text-slate-500">Submissions</p>
 
-          <p className="mt-2 text-2xl font-bold text-[#0c2933]">
+          <p className="mt-2 text-2xl font-bold text-[#171614]">
             {submissions.length}
           </p>
         </div>
@@ -183,7 +174,7 @@ export default async function AdminFormDetailsPage({
           </div>
 
           <div>
-            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
               Page connections
             </h3>
 
@@ -201,10 +192,10 @@ export default async function AdminFormDetailsPage({
             return (
               <div
                 key={definition.key}
-                className="flex flex-col gap-4 rounded-2xl border border-[rgba(12,41,51,0.08)] bg-[#f8fafc] px-5 py-4 md:flex-row md:items-center md:justify-between"
+                className="flex flex-col gap-4 rounded-2xl border border-[rgba(12,41,51,0.08)] bg-[#f8f6f1] px-5 py-4 md:flex-row md:items-center md:justify-between"
               >
                 <div>
-                  <p className="text-sm font-bold text-[#0c2933]">
+                  <p className="text-sm font-bold text-[#171614]">
                     {definition.label}
                   </p>
                   <p className="mt-1 text-sm text-slate-500">
@@ -273,7 +264,7 @@ export default async function AdminFormDetailsPage({
           </div>
 
           <div>
-            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
               Settings
             </h3>
 
@@ -288,7 +279,7 @@ export default async function AdminFormDetailsPage({
 
           <div className="grid gap-5 md:grid-cols-2">
             <div>
-              <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+              <label className="mb-2 block text-sm font-bold text-[#171614]">
                 Internal name
               </label>
 
@@ -302,7 +293,7 @@ export default async function AdminFormDetailsPage({
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+              <label className="mb-2 block text-sm font-bold text-[#171614]">
                 Slug
               </label>
 
@@ -317,7 +308,7 @@ export default async function AdminFormDetailsPage({
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Public title
             </label>
 
@@ -331,7 +322,7 @@ export default async function AdminFormDetailsPage({
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Public description
             </label>
 
@@ -345,7 +336,7 @@ export default async function AdminFormDetailsPage({
 
           <div className="grid gap-5 md:grid-cols-3">
             <div>
-              <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+              <label className="mb-2 block text-sm font-bold text-[#171614]">
                 Status
               </label>
 
@@ -361,7 +352,7 @@ export default async function AdminFormDetailsPage({
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+              <label className="mb-2 block text-sm font-bold text-[#171614]">
                 Submit button
               </label>
 
@@ -374,7 +365,7 @@ export default async function AdminFormDetailsPage({
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+              <label className="mb-2 block text-sm font-bold text-[#171614]">
                 Thank you URL
               </label>
 
@@ -388,7 +379,7 @@ export default async function AdminFormDetailsPage({
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Acceptance message
             </label>
 
@@ -426,7 +417,7 @@ export default async function AdminFormDetailsPage({
             </div>
 
             <div>
-              <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+              <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
                 Fields
               </h3>
 
@@ -452,7 +443,7 @@ export default async function AdminFormDetailsPage({
             </div>
 
             <div>
-              <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+              <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
                 Webhooks
               </h3>
 
@@ -505,7 +496,7 @@ export default async function AdminFormDetailsPage({
                   name="enabled"
                   type="checkbox"
                   defaultChecked
-                  className="h-4 w-4 accent-[#53bc76]"
+                  className="h-4 w-4 accent-[#c79a4b]"
                 />
                 Enabled
               </label>
@@ -580,7 +571,7 @@ export default async function AdminFormDetailsPage({
                     <div className="flex shrink-0 gap-2">
                       <Link
                         href={`/admin/forms/${form.id}/webhooks/${webhook.id}`}
-                        className="inline-flex h-9 items-center justify-center rounded-xl bg-slate-100 px-3 text-xs font-bold text-[#0c2933] no-underline hover:bg-slate-200"
+                        className="inline-flex h-9 items-center justify-center rounded-xl bg-slate-100 px-3 text-xs font-bold text-[#171614] no-underline hover:bg-slate-200"
                       >
                         Edit
                       </Link>
@@ -602,7 +593,7 @@ export default async function AdminFormDetailsPage({
 
                         <button
                           type="submit"
-                          className="inline-flex h-9 items-center justify-center rounded-xl bg-slate-100 px-3 text-xs font-bold text-[#0c2933] hover:bg-slate-200"
+                          className="inline-flex h-9 items-center justify-center rounded-xl bg-slate-100 px-3 text-xs font-bold text-[#171614] hover:bg-slate-200"
                         >
                           {webhook.enabled ? "Disable" : "Enable"}
                         </button>
@@ -641,7 +632,7 @@ export default async function AdminFormDetailsPage({
           </div>
 
           <div>
-            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
               Emails
             </h3>
 
@@ -757,7 +748,6 @@ export default async function AdminFormDetailsPage({
 
       <SubmissionsList
         submissions={submissions}
-        testFormHref={`/forms/${form.slug}`}
       />
     </div>
   );

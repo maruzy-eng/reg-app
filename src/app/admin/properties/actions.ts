@@ -294,14 +294,11 @@ async function uploadPropertyMedia(params: {
 }
 
 function revalidatePropertyPaths(slug?: string | null) {
-  revalidatePath("/");
-  revalidatePath("/projects");
+  revalidatePath("/reg");
   revalidatePath("/admin/dashboard");
   revalidatePath("/admin/properties");
 
-  if (slug) {
-    revalidatePath(`/properties/${slug}`);
-  }
+  void slug;
 }
 
 export async function createPropertyAction(formData: FormData) {

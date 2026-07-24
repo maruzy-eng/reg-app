@@ -73,9 +73,9 @@ export function AdminFileField({
   }
 
   return (
-    <div className="block rounded-2xl border border-dashed border-[#53bc76]/35 bg-[#f8fafc] p-4">
+    <div className="block rounded-2xl border border-dashed border-[#c79a4b]/35 bg-[#f8f6f1] p-4">
       <label className="block">
-        <span className="text-sm font-bold text-[#0e3541]">{label}</span>
+        <span className="text-sm font-bold text-[#171614]">{label}</span>
 
         <input
           ref={inputRef}
@@ -83,20 +83,20 @@ export function AdminFileField({
           type="file"
           accept={accept}
           onChange={handleFileChange}
-          className="mt-3 block w-full text-sm text-[#587469] file:mr-4 file:rounded-full file:border-0 file:bg-[#53bc76] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white hover:file:bg-[#45a866]"
+          className="mt-3 block w-full text-sm text-[#587469] file:mr-4 file:rounded-full file:border-0 file:bg-[#c79a4b] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white hover:file:bg-[#45a866]"
         />
       </label>
 
       {selectedFileName ? (
-        <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[#53bc76]/20 bg-white px-3 py-2">
-          <p className="min-w-0 truncate text-xs font-bold text-[#0e3541]">
+        <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[#c79a4b]/20 bg-white px-3 py-2">
+          <p className="min-w-0 truncate text-xs font-bold text-[#171614]">
             {selectedFileName}
           </p>
 
           <button
             type="button"
             onClick={clearSelectedFile}
-            className="shrink-0 rounded-full bg-[#f8fafc] px-3 py-1 text-[11px] font-bold text-[#587469] transition hover:bg-red-50 hover:text-red-600"
+            className="shrink-0 rounded-full bg-[#f8f6f1] px-3 py-1 text-[11px] font-bold text-[#587469] transition hover:bg-red-50 hover:text-red-600"
           >
             Remove
           </button>

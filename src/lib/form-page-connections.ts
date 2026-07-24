@@ -5,7 +5,7 @@ import {
   type DynamicFormField,
 } from "@/lib/forms";
 
-export type FormPageConnectionKey = "calculator";
+export type FormPageConnectionKey = "calculator" | "blueprint";
 
 export type FormPageConnectionDefinition = {
   key: FormPageConnectionKey;
@@ -32,6 +32,14 @@ export const FORM_PAGE_CONNECTION_DEFINITIONS: FormPageConnectionDefinition[] =
       description:
         "Signup form shown on the public /calculator landing page.",
       fallbackSlug: "calculator",
+    },
+    {
+      key: "blueprint",
+      label: "Blueprint page",
+      path: "/blueprint",
+      description:
+        "Formulário “Fale com um analista” exibido na página pública /blueprint.",
+      fallbackSlug: "blueprint",
     },
   ];
 
@@ -79,7 +87,7 @@ export async function getFormPageConnectionsByFormId(formId: string) {
   const supabase = getSupabaseAdmin();
 
   const { data, error } = await supabase
-    .from("form_page_connections")
+    .from("reg_form_page_connections")
     .select("*")
     .eq("form_id", formId)
     .order("page_key", { ascending: true })
@@ -100,7 +108,7 @@ export async function getAllFormPageConnections() {
   const supabase = getSupabaseAdmin();
 
   const { data, error } = await supabase
-    .from("form_page_connections")
+    .from("reg_form_page_connections")
     .select("*")
     .order("page_key", { ascending: true })
     .returns<FormPageConnection[]>();
@@ -121,7 +129,7 @@ export async function getPublishedFormByPageKey(pageKey: FormPageConnectionKey) 
   const supabase = getSupabaseAdmin();
 
   const { data: connection, error } = await supabase
-    .from("form_page_connections")
+    .from("reg_form_page_connections")
     .select("form_id")
     .eq("page_key", pageKey)
     .maybeSingle<{ form_id: string }>();
@@ -138,7 +146,7 @@ export async function getPublishedFormByPageKey(pageKey: FormPageConnectionKey) 
 
   if (connection?.form_id) {
     const { data: form, error: formError } = await supabase
-      .from("forms")
+      .from("reg_forms")
       .select("*")
       .eq("id", connection.form_id)
       .eq("status", "published")
@@ -146,7 +154,7 @@ export async function getPublishedFormByPageKey(pageKey: FormPageConnectionKey) 
 
     if (!formError && form) {
       const { data: fields, error: fieldsError } = await supabase
-        .from("form_fields")
+        .from("reg_form_fields")
         .select("*")
         .eq("form_id", form.id)
         .order("sort_order", { ascending: true })
@@ -189,7 +197,7 @@ export async function setFormPageConnection(params: {
 
   if (!params.formId) {
     const { error } = await supabase
-      .from("form_page_connections")
+      .from("reg_form_page_connections")
       .delete()
       .eq("page_key", params.pageKey);
 
@@ -200,7 +208,7 @@ export async function setFormPageConnection(params: {
     return;
   }
 
-  const { error } = await supabase.from("form_page_connections").upsert(
+  const { error } = await supabase.from("reg_form_page_connections").upsert(
     {
       page_key: params.pageKey,
       form_id: params.formId,

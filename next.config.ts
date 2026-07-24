@@ -12,11 +12,6 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/lp-brasil",
-        destination: "/lp-br",
-        permanent: true,
-      },
-      {
         source: "/:path*",
         has: [
           {
@@ -27,6 +22,11 @@ const nextConfig: NextConfig = {
         destination: "https://checkmateproperty.com/:path*",
         permanent: true,
       },
+      {
+        source: "/terms",
+        destination: "/terms-of-use",
+        permanent: true,
+      },
     ];
   },
 
@@ -35,6 +35,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "xnkpqvfyafbcrmxmefsc.supabase.co",
+      },
+      {
+        protocol: "https",
+        hostname: "ylgweoncigybdpoqhwyk.supabase.co",
       },
       {
         protocol: "https",
@@ -55,6 +59,18 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "img.youtube.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "checkmaterealestategroup.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.checkmaterealestategroup.com",
       },
     ],
     formats: ["image/avif", "image/webp"],

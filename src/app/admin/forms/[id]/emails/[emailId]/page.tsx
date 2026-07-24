@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Eye, Mail, Save } from "lucide-react";
+import { ArrowLeft, Mail, Save } from "lucide-react";
 import { EmailBuilderForm } from "@/components/admin/forms/email-builder-form";
 import {
   deleteAdminFormEmailAction,
@@ -53,7 +53,7 @@ export default async function EditEmailPage({ params }: EditEmailPageProps) {
                   {form.name}
                 </p>
 
-                <h2 className="mt-1 text-3xl font-bold tracking-[-0.05em] text-[#0c2933]">
+                <h2 className="mt-1 text-3xl font-bold tracking-[-0.05em] text-[#171614]">
                   Edit Email
                 </h2>
 
@@ -82,15 +82,6 @@ export default async function EditEmailPage({ params }: EditEmailPageProps) {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <Link
-              href={`/forms/${form.slug}`}
-              target="_blank"
-              className="admin-primary-button min-h-[44px] gap-2 px-4 text-sm no-underline"
-            >
-              View Public Form
-              <Eye size={15} />
-            </Link>
-
             <form action={toggleAdminFormEmailAction}>
               <input type="hidden" name="form_id" value={form.id} />
               <input type="hidden" name="email_id" value={email.id} />
@@ -130,7 +121,7 @@ export default async function EditEmailPage({ params }: EditEmailPageProps) {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
               Email settings
             </h3>
 

@@ -42,9 +42,17 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${form.title} | Checkmate Property`,
+    title: form.title,
     description:
-      form.description || "Submit your information to Checkmate Property.",
+      form.description || "Submit your information to Checkmate REG.",
+    robots: {
+      index: false,
+      follow: false,
+      googleBot: {
+        index: false,
+        follow: false,
+      },
+    },
   };
 }
 

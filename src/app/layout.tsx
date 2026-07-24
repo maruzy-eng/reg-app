@@ -1,31 +1,37 @@
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { SitePixels } from "@/components/public/site-pixels";
+import { SitePixels } from "@/components/site-pixels";
+import { JsonLd } from "@/components/seo/json-ld";
+import {
+  SEO_DEFAULT_DESCRIPTION,
+  SEO_DEFAULT_KEYWORDS,
+  SEO_DEFAULT_OG_IMAGE,
+  SEO_SITE_NAME,
+  buildOrganizationJsonLd,
+  buildWebsiteJsonLd,
+} from "@/lib/seo";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getAbsoluteSiteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 
-const DEFAULT_SITE_NAME = "Checkmate Property";
-
-const DEFAULT_DESCRIPTION =
-  "Checkmate Property is a real estate intelligence platform built to help investors search, analyze, and evaluate property opportunities across the United States.";
-
-const DEFAULT_OG_IMAGE =
-  "https://checkmateproperty.com/checkmate-property-og.jpg";
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
 
   const siteUrl = getCanonicalSiteUrl();
-
-  const siteName = settings.site_name?.trim() || DEFAULT_SITE_NAME;
-
+  const siteName = settings.site_name?.trim() || SEO_SITE_NAME;
   const description =
-    settings.site_description?.trim() || DEFAULT_DESCRIPTION;
+    settings.site_description?.trim() || SEO_DEFAULT_DESCRIPTION;
 
-  const logoUrl = settings.logo_url
+  const ogImage = settings.logo_url
     ? getAbsoluteSiteUrl(settings.logo_url)
-    : DEFAULT_OG_IMAGE;
+    : SEO_DEFAULT_OG_IMAGE;
 
   const faviconUrl = settings.favicon_url
     ? getAbsoluteSiteUrl(settings.favicon_url)
@@ -35,15 +41,13 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(siteUrl),
 
     title: {
-      default: siteName,
+      default: `${siteName} | Real Estate Strategy and Development`,
       template: `%s | ${siteName}`,
     },
 
     description,
 
     applicationName: siteName,
-
-    generator: "Next.js",
 
     referrer: "origin-when-cross-origin",
 
@@ -53,27 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
     category: "Real Estate",
 
-    keywords: [
-      "Checkmate Property",
-      "real estate investment platform",
-      "property search",
-      "real estate opportunities",
-      "investment properties",
-      "real estate analysis",
-      "real estate projects",
-      "property investment USA",
-      "Massachusetts real estate",
-      "New England real estate",
-      "flip houses",
-      "new construction",
-      "ARV",
-      "ROI",
-      "real estate comps",
-    ],
-
-    alternates: {
-      canonical: "/",
-    },
+    keywords: [...SEO_DEFAULT_KEYWORDS],
 
     icons: faviconUrl
       ? {
@@ -88,27 +72,27 @@ export async function generateMetadata(): Promise<Metadata> {
         },
 
     openGraph: {
-      title: siteName,
+      title: `${siteName} | Real Estate Strategy and Development`,
       description,
-      url: siteUrl,
+      url: `${siteUrl}/reg`,
       siteName,
       type: "website",
       locale: "en_US",
       images: [
         {
-          url: logoUrl,
+          url: ogImage,
           width: 1200,
           height: 630,
-          alt: `${siteName} — Real Estate Intelligence Platform`,
+          alt: `${siteName} — Real Estate Strategy and Development`,
         },
       ],
     },
 
     twitter: {
       card: "summary_large_image",
-      title: siteName,
+      title: `${siteName} | Real Estate Strategy and Development`,
       description,
-      images: [logoUrl],
+      images: [ogImage],
     },
 
     robots: {
@@ -132,9 +116,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
 
     formatDetection: {
-      telephone: false,
-      address: false,
-      email: false,
+      telephone: true,
+      address: true,
+      email: true,
     },
   };
 }
@@ -143,7 +127,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#0E3541",
+  themeColor: "#070707",
   colorScheme: "light",
 };
 
@@ -154,9 +138,24 @@ export default async function RootLayout({
 }>) {
   const settings = await getSiteSettings();
 
+  const sameAs = [
+    settings.facebook_url,
+    settings.instagram_url,
+    settings.linkedin_url,
+    settings.youtube_url,
+  ]
+    .map((value) => value?.trim() || "")
+    .filter(Boolean);
+
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className={inter.variable}>
+      <body className={inter.className}>
+        <JsonLd
+          id="organization-schema"
+          data={buildOrganizationJsonLd(sameAs)}
+        />
+        <JsonLd id="website-schema" data={buildWebsiteJsonLd()} />
+
         {children}
 
         <SitePixels

@@ -1,128 +1,93 @@
 import type { MetadataRoute } from "next";
-import { getPublicProperties } from "@/lib/properties";
+
+import { getPublishedPosts } from "@/lib/news";
 import { getCanonicalSiteUrl } from "@/lib/site-url";
 
-function getLastModified(value?: string | Date | null) {
-  if (!value) {
-    return new Date();
-  }
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const siteUrl = getCanonicalSiteUrl();
+  const now = new Date();
 
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return new Date();
-  }
-
-  return date;
-}
-
-function getStaticRoutes(siteUrl: string): MetadataRoute.Sitemap {
-  const lastModified = new Date();
-
-  return [
+  const staticRoutes: MetadataRoute.Sitemap = [
     {
-      url: siteUrl,
-      lastModified,
+      url: `${siteUrl}/reg`,
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${siteUrl}/properties`,
-      lastModified,
-      changeFrequency: "daily",
+      url: `${siteUrl}/about`,
+      lastModified: now,
+      changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${siteUrl}/projects`,
-      lastModified,
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
-      url: `${siteUrl}/en/contact-us`,
-      lastModified,
+      url: `${siteUrl}/solutions`,
+      lastModified: now,
       changeFrequency: "monthly",
-      priority: 0.7,
+      priority: 0.85,
+    },
+    {
+      url: `${siteUrl}/blueprint`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${siteUrl}/news`,
+      lastModified: now,
+      changeFrequency: "daily",
+      priority: 0.85,
+    },
+    {
+      url: `${siteUrl}/produtos`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${siteUrl}/contact`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
+    {
+      url: `${siteUrl}/links`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.4,
     },
     {
       url: `${siteUrl}/privacy-policy`,
-      lastModified,
+      lastModified: now,
       changeFrequency: "yearly",
-      priority: 0.4,
+      priority: 0.2,
     },
     {
       url: `${siteUrl}/terms-of-use`,
-      lastModified,
+      lastModified: now,
       changeFrequency: "yearly",
-      priority: 0.4,
-    },
-    {
-      url: `${siteUrl}/data-policy`,
-      lastModified,
-      changeFrequency: "yearly",
-      priority: 0.4,
-    },
-    {
-      url: `${siteUrl}/lp`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${siteUrl}/lp-br`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${siteUrl}/tutorial`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url: `${siteUrl}/aprenda`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.5,
+      priority: 0.2,
     },
   ];
-}
 
-async function getPropertyRoutes(siteUrl: string): Promise<MetadataRoute.Sitemap> {
-  try {
-    const properties = await getPublicProperties();
-    const usedSlugs = new Set<string>();
+  const posts = await getPublishedPosts().catch(() => []);
 
-    return properties.flatMap((property) => {
-      const slug = property.slug?.trim();
+  const newsRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${siteUrl}/news/${post.slug}`,
+    lastModified: post.updated_at
+      ? new Date(post.updated_at)
+      : post.published_at
+        ? new Date(post.published_at)
+        : now,
+    changeFrequency: "weekly",
+    priority: 0.7,
+  }));
 
-      if (!slug || usedSlugs.has(slug)) {
-        return [];
-      }
-
-      usedSlugs.add(slug);
-
-      return [
-        {
-          url: `${siteUrl}/properties/${encodeURIComponent(slug)}`,
-          lastModified: getLastModified(property.updated_at),
-          changeFrequency: "weekly" as const,
-          priority: property.is_featured ? 0.9 : 0.7,
-        },
-      ];
-    });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("Error building property sitemap routes:", message);
-    return [];
-  }
-}
-
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = getCanonicalSiteUrl();
-  const staticRoutes = getStaticRoutes(siteUrl);
-  const propertyRoutes = await getPropertyRoutes(siteUrl);
-
-  return [...staticRoutes, ...propertyRoutes];
+  return [...staticRoutes, ...newsRoutes];
 }

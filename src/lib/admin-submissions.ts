@@ -344,7 +344,7 @@ async function getFormsList() {
   const supabase = createAdminClient();
 
   const { data, error } = await supabase
-    .from("forms")
+    .from("reg_forms")
     .select("id, name, slug, title")
     .order("name", { ascending: true });
 
@@ -366,7 +366,7 @@ async function getOverviewRows() {
   const supabase = createAdminClient();
 
   const { data, error } = await supabase
-    .from("admin_submission_overview")
+    .from("reg_admin_submission_overview")
     .select("*")
     .order("created_at", { ascending: false });
 
@@ -379,7 +379,7 @@ async function getOverviewRows() {
   }
 
   const { data: fallbackRows, error: fallbackError } = await supabase
-    .from("form_submissions")
+    .from("reg_form_submissions")
     .select(
       "id, form_id, form_slug, data, source_url, webhook_status, webhook_success_count, webhook_error_count, created_at",
     )
@@ -466,7 +466,7 @@ async function getSubmissionEmailLogs(submissionId: string) {
   const supabase = createAdminClient();
 
   const { data, error } = await supabase
-    .from("form_email_logs")
+    .from("reg_form_email_logs")
     .select("*")
     .eq("submission_id", submissionId)
     .order("created_at", { ascending: true });
@@ -479,7 +479,7 @@ async function getSubmissionEmailLogs(submissionId: string) {
     throw new Error(error.message);
   }
 
-  return ((data || []) as Array<Database["public"]["Tables"]["form_email_logs"]["Row"]>)
+  return ((data || []) as Array<Database["public"]["Tables"]["reg_form_email_logs"]["Row"]>)
     .map((row) => ({
       id: row.id,
       submission_id: row.submission_id,
@@ -502,7 +502,7 @@ async function getSubmissionWebhookLogs(submissionId: string) {
   const supabase = createAdminClient();
 
   const { data, error } = await supabase
-    .from("form_webhook_logs")
+    .from("reg_form_webhook_logs")
     .select("*")
     .eq("submission_id", submissionId)
     .order("created_at", { ascending: true });
@@ -527,7 +527,7 @@ export async function getAdminSubmissionDetails(params: {
   const [formResult, submissionResult, webhookLogs, emailLogs] =
     await Promise.all([
       supabase
-        .from("forms")
+        .from("reg_forms")
         .select("id, name, slug, title")
         .eq("id", params.formId)
         .maybeSingle<{
@@ -537,7 +537,7 @@ export async function getAdminSubmissionDetails(params: {
           title: string;
         }>(),
       supabase
-        .from("form_submissions")
+        .from("reg_form_submissions")
         .select(
           "id, form_id, form_slug, data, source_url, user_agent, ip_address, webhook_status, webhook_success_count, webhook_error_count, created_at",
         )

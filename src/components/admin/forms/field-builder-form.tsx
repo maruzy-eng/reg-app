@@ -320,7 +320,7 @@ export function FieldBuilderForm({
             type="checkbox"
             checked={required}
             onChange={(event) => setRequired(event.target.checked)}
-            className="h-4 w-4 accent-[#53bc76]"
+            className="h-4 w-4 accent-[#c79a4b]"
           />
           Required
         </label>
@@ -426,14 +426,14 @@ export function FieldBuilderForm({
       ) : null}
 
       {type === "state" ? (
-        <div className="rounded-2xl border border-[#53bc76]/20 bg-[#53bc76]/10 p-4 text-sm font-semibold text-[#0c2933]">
+        <div className="rounded-2xl border border-[#c79a4b]/20 bg-[#c79a4b]/10 p-4 text-sm font-semibold text-[#171614]">
           O tipo States US já carrega automaticamente todos os estados dos
           Estados Unidos. Não precisa cadastrar options.
         </div>
       ) : null}
 
       {selectedPreset ? (
-        <div className="rounded-2xl border border-[#53bc76]/20 bg-[#53bc76]/10 p-4 text-sm font-semibold text-[#0c2933]">
+        <div className="rounded-2xl border border-[#c79a4b]/20 bg-[#c79a4b]/10 p-4 text-sm font-semibold text-[#171614]">
           Este preset preenche label, name, placeholder, help text e options
           automaticamente. Qualquer valor digitado manualmente acima será
           respeitado.

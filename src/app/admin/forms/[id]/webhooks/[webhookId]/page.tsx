@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Eye, RadioTower, Save } from "lucide-react";
+import { ArrowLeft, RadioTower, Save } from "lucide-react";
 import {
   getAdminWebhookEditDetails,
   updateAdminFormWebhookAction,
@@ -54,7 +54,7 @@ export default async function EditWebhookPage({ params }: EditWebhookPageProps) 
                   {form.name}
                 </p>
 
-                <h2 className="mt-1 text-3xl font-bold tracking-[-0.05em] text-[#0c2933]">
+                <h2 className="mt-1 text-3xl font-bold tracking-[-0.05em] text-[#171614]">
                   Edit Webhook
                 </h2>
 
@@ -65,15 +65,6 @@ export default async function EditWebhookPage({ params }: EditWebhookPageProps) 
               </div>
             </div>
           </div>
-
-          <Link
-            href={`/forms/${form.slug}`}
-            target="_blank"
-            className="admin-primary-button min-h-[44px] gap-2 px-4 text-sm no-underline"
-          >
-            <Eye size={16} />
-            View Public Form
-          </Link>
         </div>
       </section>
 
@@ -86,7 +77,7 @@ export default async function EditWebhookPage({ params }: EditWebhookPageProps) 
 
         <div className="grid gap-6">
           <div>
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Webhook name
             </label>
 
@@ -101,7 +92,7 @@ export default async function EditWebhookPage({ params }: EditWebhookPageProps) 
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Webhook URL
             </label>
 
@@ -117,7 +108,7 @@ export default async function EditWebhookPage({ params }: EditWebhookPageProps) 
 
           <div className="grid gap-5 md:grid-cols-3">
             <div>
-              <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+              <label className="mb-2 block text-sm font-bold text-[#171614]">
                 Method
               </label>
 
@@ -133,7 +124,7 @@ export default async function EditWebhookPage({ params }: EditWebhookPageProps) 
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+              <label className="mb-2 block text-sm font-bold text-[#171614]">
                 Order
               </label>
 
@@ -146,7 +137,7 @@ export default async function EditWebhookPage({ params }: EditWebhookPageProps) 
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+              <label className="mb-2 block text-sm font-bold text-[#171614]">
                 Status
               </label>
 
@@ -155,7 +146,7 @@ export default async function EditWebhookPage({ params }: EditWebhookPageProps) 
                   name="enabled"
                   type="checkbox"
                   defaultChecked={webhook.enabled}
-                  className="h-4 w-4 accent-[#53bc76]"
+                  className="h-4 w-4 accent-[#c79a4b]"
                 />
                 Enabled
               </label>
@@ -163,7 +154,7 @@ export default async function EditWebhookPage({ params }: EditWebhookPageProps) 
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Headers JSON
             </label>
 
@@ -188,7 +179,7 @@ export default async function EditWebhookPage({ params }: EditWebhookPageProps) 
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Payload template JSON
             </label>
 

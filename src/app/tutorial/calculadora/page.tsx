@@ -1,5 +1,0 @@
-import { permanentRedirect } from "next/navigation";
-
-export default function LegacyTutorialCalculadoraPage() {
-  permanentRedirect("/en/academy-videos/calculator");
-}

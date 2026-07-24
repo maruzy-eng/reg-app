@@ -151,8 +151,8 @@ export function PropertyImageSortableGallery({
 
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#0e3541]/10 bg-[#f8fafc] p-8 text-center">
-        <ImageIcon className="mx-auto text-[#53bc76]" size={28} />
+      <div className="rounded-2xl border border-dashed border-[#171614]/10 bg-[#f8f6f1] p-8 text-center">
+        <ImageIcon className="mx-auto text-[#c79a4b]" size={28} />
 
         <p className="mt-3 text-sm font-bold text-[#64748b]">
           No gallery images registered yet.
@@ -163,9 +163,9 @@ export function PropertyImageSortableGallery({
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-col justify-between gap-3 rounded-[1.4rem] border border-[#0e3541]/10 bg-[#f8fafc] p-4 md:flex-row md:items-center">
+      <div className="flex flex-col justify-between gap-3 rounded-[1.4rem] border border-[#171614]/10 bg-[#f8f6f1] p-4 md:flex-row md:items-center">
         <div>
-          <p className="text-sm font-black text-[#0e3541]">
+          <p className="text-sm font-black text-[#171614]">
             Drag and drop to reorder gallery images
           </p>
 
@@ -179,7 +179,7 @@ export function PropertyImageSortableGallery({
           type="button"
           onClick={saveOrder}
           disabled={isPending}
-          className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-full bg-[linear-gradient(94deg,#53bc76_0%,#22a75a_100%)] px-5 text-sm font-black text-white shadow-[0_14px_30px_rgba(83,188,118,0.22)] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-full bg-[linear-gradient(94deg,#c79a4b_0%,#22a75a_100%)] px-5 text-sm font-black text-white shadow-[0_14px_30px_rgba(199,154,75,0.22)] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <Save size={16} />
           {isPending ? "Saving..." : "Save Order"}
@@ -204,16 +204,16 @@ export function PropertyImageSortableGallery({
                 "group overflow-hidden rounded-[1.6rem] border bg-white shadow-[0_14px_34px_rgba(12,41,51,0.06)] transition",
                 "hover:-translate-y-0.5 hover:shadow-[0_22px_50px_rgba(12,41,51,0.10)]",
                 isDragging
-                  ? "scale-[0.98] border-[#53bc76] opacity-60"
-                  : "border-[#0e3541]/10",
-                isDragOver ? "ring-2 ring-[#53bc76]" : "",
+                  ? "scale-[0.98] border-[#c79a4b] opacity-60"
+                  : "border-[#171614]/10",
+                isDragOver ? "ring-2 ring-[#c79a4b]" : "",
               ].join(" ")}
             >
-              <div className="flex items-center justify-between gap-3 border-b border-[#0e3541]/10 bg-[#f8fafc] px-4 py-3">
+              <div className="flex items-center justify-between gap-3 border-b border-[#171614]/10 bg-[#f8f6f1] px-4 py-3">
                 <div className="flex items-center gap-3">
                   <button
                     type="button"
-                    className="inline-flex h-9 w-9 cursor-grab items-center justify-center rounded-full bg-white text-[#0e3541] shadow-sm active:cursor-grabbing"
+                    className="inline-flex h-9 w-9 cursor-grab items-center justify-center rounded-full bg-white text-[#171614] shadow-sm active:cursor-grabbing"
                     aria-label="Drag image"
                     title="Drag image"
                   >
@@ -221,11 +221,11 @@ export function PropertyImageSortableGallery({
                   </button>
 
                   <div>
-                    <p className="text-xs font-black uppercase tracking-[0.14em] text-[#53bc76]">
+                    <p className="text-xs font-black uppercase tracking-[0.14em] text-[#c79a4b]">
                       Position #{index + 1}
                     </p>
 
-                    <p className="mt-0.5 line-clamp-1 text-sm font-black text-[#0e3541]">
+                    <p className="mt-0.5 line-clamp-1 text-sm font-black text-[#171614]">
                       {title}
                     </p>
                   </div>
@@ -236,7 +236,7 @@ export function PropertyImageSortableGallery({
                     type="button"
                     onClick={() => moveImage(image.id, "up")}
                     disabled={index === 0}
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#0e3541] shadow-sm transition hover:bg-[#ecfdf5] disabled:cursor-not-allowed disabled:opacity-35"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#171614] shadow-sm transition hover:bg-[#ecfdf5] disabled:cursor-not-allowed disabled:opacity-35"
                     aria-label="Move image up"
                     title="Move image up"
                   >
@@ -247,7 +247,7 @@ export function PropertyImageSortableGallery({
                     type="button"
                     onClick={() => moveImage(image.id, "down")}
                     disabled={index === items.length - 1}
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#0e3541] shadow-sm transition hover:bg-[#ecfdf5] disabled:cursor-not-allowed disabled:opacity-35"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#171614] shadow-sm transition hover:bg-[#ecfdf5] disabled:cursor-not-allowed disabled:opacity-35"
                     aria-label="Move image down"
                     title="Move image down"
                   >
@@ -264,19 +264,19 @@ export function PropertyImageSortableGallery({
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-[#53bc76]">
+                  <div className="flex h-full w-full items-center justify-center text-[#c79a4b]">
                     <ImageIcon size={42} />
                   </div>
                 )}
 
                 <div className="absolute left-3 top-3 flex flex-wrap gap-2">
                   {image.is_cover ? (
-                    <span className="rounded-full bg-[linear-gradient(94deg,#53bc76_0%,#39aff2_100%)] px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-white shadow-lg">
+                    <span className="rounded-full bg-[linear-gradient(94deg,#c79a4b_0%,#39aff2_100%)] px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-white shadow-lg">
                       Cover
                     </span>
                   ) : null}
 
-                  <span className="rounded-full bg-white/90 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#0e3541] shadow-sm backdrop-blur">
+                  <span className="rounded-full bg-white/90 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#171614] shadow-sm backdrop-blur">
                     #{index + 1}
                   </span>
                 </div>
@@ -285,7 +285,7 @@ export function PropertyImageSortableGallery({
               <div className="space-y-4 p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
-                    <h4 className="line-clamp-2 text-base font-black leading-tight tracking-[-0.04em] text-[#0e3541]">
+                    <h4 className="line-clamp-2 text-base font-black leading-tight tracking-[-0.04em] text-[#171614]">
                       {title}
                     </h4>
 
@@ -326,18 +326,18 @@ export function PropertyImageSortableGallery({
                   <Link
                     href={image.image_url}
                     target="_blank"
-                    className="inline-flex min-h-[36px] items-center justify-center gap-2 rounded-full border border-[#0e3541]/10 bg-[#f8fbfc] px-3 text-xs font-bold text-[#0e3541] no-underline transition hover:bg-white hover:shadow-sm"
+                    className="inline-flex min-h-[36px] items-center justify-center gap-2 rounded-full border border-[#171614]/10 bg-[#f8fbfc] px-3 text-xs font-bold text-[#171614] no-underline transition hover:bg-white hover:shadow-sm"
                   >
                     <ExternalLink size={13} />
                     Open
                   </Link>
 
                   <details>
-                    <summary className="inline-flex min-h-[36px] cursor-pointer list-none items-center justify-center rounded-full border border-[#0e3541]/10 bg-[#f8fbfc] px-3 text-xs font-bold text-[#0e3541] transition hover:bg-white hover:shadow-sm">
+                    <summary className="inline-flex min-h-[36px] cursor-pointer list-none items-center justify-center rounded-full border border-[#171614]/10 bg-[#f8fbfc] px-3 text-xs font-bold text-[#171614] transition hover:bg-white hover:shadow-sm">
                       URL
                     </summary>
 
-                    <div className="mt-3 max-w-full rounded-2xl border border-[#0e3541]/10 bg-[#f8fbfc] p-3">
+                    <div className="mt-3 max-w-full rounded-2xl border border-[#171614]/10 bg-[#f8fbfc] p-3">
                       <p className="break-all text-xs leading-5 text-[#587469]">
                         {image.image_url}
                       </p>

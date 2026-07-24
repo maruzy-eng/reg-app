@@ -336,11 +336,7 @@ function isMissingAcceptanceMessageColumnError(
 function revalidateFormPaths(formId: string, slug?: string | null) {
   revalidatePath("/admin/forms");
   revalidatePath(`/admin/forms/${formId}`);
-  revalidatePath("/calculator");
-
-  if (slug) {
-    revalidatePath(`/forms/${slug}`);
-  }
+  void slug;
 
   for (const definition of FORM_PAGE_CONNECTION_DEFINITIONS) {
     revalidatePath(definition.path);
@@ -357,7 +353,7 @@ async function generateUniqueFormSlug(
     const candidate = index === 1 ? baseSlug : `${baseSlug}-${index}`;
 
     const { data, error } = await supabase
-      .from("forms")
+      .from("reg_forms")
       .select("id")
       .eq("slug", candidate)
       .maybeSingle<{ id: string }>();
@@ -386,7 +382,7 @@ async function generateUniqueFormFieldName(
     const candidate = index === 1 ? baseName : `${baseName}_${index}`;
 
     const { data, error } = await supabase
-      .from("form_fields")
+      .from("reg_form_fields")
       .select("id")
       .eq("form_id", formId)
       .eq("name", candidate)
@@ -425,7 +421,7 @@ async function cleanupDuplicatedForm(
     return;
   }
 
-  const { error } = await supabase.from("forms").delete().eq("id", formId);
+  const { error } = await supabase.from("reg_forms").delete().eq("id", formId);
 
   if (error) {
     console.error("Unable to clean up duplicated form:", error.message);
@@ -440,7 +436,7 @@ export async function getAdminForms() {
   const supabase = getSupabaseAdmin();
 
   const { data: forms, error } = await supabase
-    .from("forms")
+    .from("reg_forms")
     .select("*")
     .order("created_at", { ascending: false })
     .returns<AdminForm[]>();
@@ -459,9 +455,9 @@ export async function getAdminForms() {
 
   const [fieldsResult, webhooksResult, submissionsResult, pageConnections] =
     await Promise.all([
-      supabase.from("form_fields").select("form_id").in("form_id", formIds),
-      supabase.from("form_webhooks").select("form_id").in("form_id", formIds),
-      supabase.from("form_submissions").select("form_id").in("form_id", formIds),
+      supabase.from("reg_form_fields").select("form_id").in("form_id", formIds),
+      supabase.from("reg_form_webhooks").select("form_id").in("form_id", formIds),
+      supabase.from("reg_form_submissions").select("form_id").in("form_id", formIds),
       getAllFormPageConnections(),
     ]);
 
@@ -503,7 +499,7 @@ export async function getAdminFormById(id: string) {
   const supabase = getSupabaseAdmin();
 
   const { data, error } = await supabase
-    .from("forms")
+    .from("reg_forms")
     .select("*")
     .eq("id", id)
     .single<AdminForm>();
@@ -527,7 +523,7 @@ export async function getAdminFormDetails(id: string) {
   const [fieldsResult, emails, webhooksResult, submissionsResult, pageConnections] =
     await Promise.all([
       supabase
-        .from("form_fields")
+        .from("reg_form_fields")
         .select("*")
         .eq("form_id", id)
         .order("sort_order", { ascending: true })
@@ -536,14 +532,14 @@ export async function getAdminFormDetails(id: string) {
       getAdminFormEmailsByFormId(id),
 
       supabase
-        .from("form_webhooks")
+        .from("reg_form_webhooks")
         .select("*")
         .eq("form_id", id)
         .order("sort_order", { ascending: true })
         .returns<AdminFormWebhook[]>(),
 
       supabase
-        .from("form_submissions")
+        .from("reg_form_submissions")
         .select("*")
         .eq("form_id", id)
         .order("created_at", { ascending: false })
@@ -588,7 +584,7 @@ export async function getAdminSubmissionDetails(params: {
   }
 
   const { data: submission, error: submissionError } = await supabase
-    .from("form_submissions")
+    .from("reg_form_submissions")
     .select("*")
     .eq("id", params.submissionId)
     .eq("form_id", params.formId)
@@ -599,14 +595,14 @@ export async function getAdminSubmissionDetails(params: {
   }
 
   const { data: logs, error: logsError } = await supabase
-    .from("form_webhook_logs")
+    .from("reg_form_webhook_logs")
     .select("*")
     .eq("submission_id", params.submissionId)
     .order("created_at", { ascending: true })
     .returns<AdminFormWebhookLog[]>();
 
   const { data: emailLogs, error: emailLogsError } = await supabase
-    .from("form_email_logs")
+    .from("reg_form_email_logs")
     .select("*")
     .eq("submission_id", params.submissionId)
     .order("created_at", { ascending: true })
@@ -680,7 +676,7 @@ export async function createAdminFormAction(formData: FormData) {
   };
 
   const { data, error } = await supabase
-    .from("forms")
+    .from("reg_forms")
     .insert({
       ...basePayload,
       acceptance_message: acceptanceMessage || null,
@@ -690,7 +686,7 @@ export async function createAdminFormAction(formData: FormData) {
 
   if (isMissingAcceptanceMessageColumnError(error)) {
     const { data: fallbackData, error: fallbackError } = await supabase
-      .from("forms")
+      .from("reg_forms")
       .insert(basePayload)
       .select("id")
       .single<{ id: string }>();
@@ -761,7 +757,7 @@ export async function updateAdminFormAction(formData: FormData) {
   };
 
   const { error } = await supabase
-    .from("forms")
+    .from("reg_forms")
     .update({
       ...basePayload,
       acceptance_message: acceptanceMessage || null,
@@ -770,7 +766,7 @@ export async function updateAdminFormAction(formData: FormData) {
 
   if (isMissingAcceptanceMessageColumnError(error)) {
     const { error: fallbackError } = await supabase
-      .from("forms")
+      .from("reg_forms")
       .update(basePayload)
       .eq("id", id);
 
@@ -824,7 +820,7 @@ export async function deleteAdminFormAction(formData: FormData) {
     throw new Error("Missing form id.");
   }
 
-  const { error } = await supabase.from("forms").delete().eq("id", id);
+  const { error } = await supabase.from("reg_forms").delete().eq("id", id);
 
   if (error) {
     throw new Error(error.message);
@@ -846,7 +842,7 @@ export async function duplicateAdminFormAction(formData: FormData) {
   }
 
   const { data: form, error: formError } = await supabase
-    .from("forms")
+    .from("reg_forms")
     .select("*")
     .eq("id", id)
     .single<AdminForm>();
@@ -857,21 +853,21 @@ export async function duplicateAdminFormAction(formData: FormData) {
 
   const [fieldsResult, webhooksResult, emailsResult] = await Promise.all([
     supabase
-      .from("form_fields")
+      .from("reg_form_fields")
       .select("*")
       .eq("form_id", id)
       .order("sort_order", { ascending: true })
       .returns<AdminFormField[]>(),
 
     supabase
-      .from("form_webhooks")
+      .from("reg_form_webhooks")
       .select("*")
       .eq("form_id", id)
       .order("sort_order", { ascending: true })
       .returns<AdminFormWebhook[]>(),
 
     supabase
-      .from("form_emails")
+      .from("reg_form_emails")
       .select("*")
       .eq("form_id", id)
       .order("sort_order", { ascending: true })
@@ -907,7 +903,7 @@ export async function duplicateAdminFormAction(formData: FormData) {
     };
 
     const { data: duplicatedForm, error: createError } = await supabase
-      .from("forms")
+      .from("reg_forms")
       .insert({
         ...duplicateBasePayload,
         acceptance_message: form.acceptance_message,
@@ -918,7 +914,7 @@ export async function duplicateAdminFormAction(formData: FormData) {
     if (isMissingAcceptanceMessageColumnError(createError)) {
       const { data: fallbackDuplicatedForm, error: fallbackCreateError } =
         await supabase
-          .from("forms")
+          .from("reg_forms")
           .insert(duplicateBasePayload)
           .select("id")
           .single<{ id: string }>();
@@ -952,7 +948,7 @@ export async function duplicateAdminFormAction(formData: FormData) {
     }));
 
     if (fieldRows.length > 0) {
-      const { error } = await supabase.from("form_fields").insert(fieldRows);
+      const { error } = await supabase.from("reg_form_fields").insert(fieldRows);
 
       if (error) {
         throw new Error(error.message);
@@ -971,7 +967,7 @@ export async function duplicateAdminFormAction(formData: FormData) {
     }));
 
     if (webhookRows.length > 0) {
-      const { error } = await supabase.from("form_webhooks").insert(webhookRows);
+      const { error } = await supabase.from("reg_form_webhooks").insert(webhookRows);
 
       if (error) {
         throw new Error(error.message);
@@ -993,7 +989,7 @@ export async function duplicateAdminFormAction(formData: FormData) {
     }));
 
     if (emailRows.length > 0) {
-      const { error } = await supabase.from("form_emails").insert(emailRows);
+      const { error } = await supabase.from("reg_form_emails").insert(emailRows);
 
       if (error) {
         throw new Error(error.message);
@@ -1061,7 +1057,7 @@ export async function createAdminFormFieldAction(formData: FormData) {
     requestedName,
   );
 
-  const { error } = await supabase.from("form_fields").insert({
+  const { error } = await supabase.from("reg_form_fields").insert({
     form_id: formId,
     label: finalLabel,
     name: finalName,
@@ -1129,7 +1125,7 @@ export async function updateAdminFormFieldAction(formData: FormData) {
   }
 
   const { data: existingField, error: existingError } = await supabase
-    .from("form_fields")
+    .from("reg_form_fields")
     .select("id, name")
     .eq("id", fieldId)
     .eq("form_id", formId)
@@ -1154,7 +1150,7 @@ export async function updateAdminFormFieldAction(formData: FormData) {
         );
 
   const { error } = await supabase
-    .from("form_fields")
+    .from("reg_form_fields")
     .update({
       label: finalLabel,
       name: finalName,
@@ -1194,7 +1190,7 @@ export async function deleteAdminFormFieldAction(formData: FormData) {
   }
 
   const { error } = await supabase
-    .from("form_fields")
+    .from("reg_form_fields")
     .delete()
     .eq("id", fieldId)
     .eq("form_id", formId);
@@ -1241,7 +1237,7 @@ export async function createAdminFormWebhookAction(formData: FormData) {
     throw new Error("Invalid webhook method.");
   }
 
-  const { error } = await supabase.from("form_webhooks").insert({
+  const { error } = await supabase.from("reg_form_webhooks").insert({
     form_id: formId,
     name,
     url,
@@ -1271,7 +1267,7 @@ export async function toggleAdminFormWebhookAction(formData: FormData) {
   }
 
   const { error } = await supabase
-    .from("form_webhooks")
+    .from("reg_form_webhooks")
     .update({
       enabled,
     })
@@ -1296,7 +1292,7 @@ export async function deleteAdminFormWebhookAction(formData: FormData) {
   }
 
   const { error } = await supabase
-    .from("form_webhooks")
+    .from("reg_form_webhooks")
     .delete()
     .eq("id", webhookId)
     .eq("form_id", formId);

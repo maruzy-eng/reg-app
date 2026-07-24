@@ -25,7 +25,7 @@ type DashboardCountTable =
   | "admin_users"
   | "analytics_events"
   | "leads"
-  | "form_submissions";
+  | "reg_form_submissions";
 
 async function getTableCount(tableName: DashboardCountTable) {
   try {
@@ -65,7 +65,7 @@ export default async function AdminDashboardPage() {
     getAdminProperties(),
     getTableCount("admin_users"),
     getTableCount("leads"),
-    getTableCount("form_submissions"),
+    getTableCount("reg_form_submissions"),
     getTableCount("analytics_events"),
   ]);
 
@@ -104,11 +104,11 @@ export default async function AdminDashboardPage() {
     <div className="admin-dashboard-page flex w-full flex-col">
       <section className="admin-dark-panel relative overflow-hidden rounded-[22px] p-5 md:p-6">
         <div className="admin-glow-orb absolute right-[-70px] top-[-80px] h-[200px] w-[200px] rounded-full bg-white/10 blur-3xl" />
-        <div className="admin-glow-orb absolute bottom-[-100px] left-[28%] h-[180px] w-[180px] rounded-full bg-[#53bc76]/14 blur-3xl" />
+        <div className="admin-glow-orb absolute bottom-[-100px] left-[28%] h-[180px] w-[180px] rounded-full bg-[#c79a4b]/14 blur-3xl" />
 
         <div className="relative z-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div>
-            <p className="admin-eyebrow text-[#8df0a9]">Dashboard KPIs</p>
+            <p className="admin-eyebrow text-[#ebca84]">Dashboard KPIs</p>
 
             <h2 className="admin-title-lg mt-2 text-white">Admin overview.</h2>
 
@@ -156,7 +156,7 @@ export default async function AdminDashboardPage() {
         <DashboardKpiCard
           title="Formulários Enviados"
           value={formSubmissionsCount}
-          description="Registros em form_submissions"
+          description="Registros em reg_form_submissions"
           icon={<ClipboardCheck size={16} />}
           delay={4}
         />
@@ -198,7 +198,7 @@ export default async function AdminDashboardPage() {
         <div className="admin-card overflow-hidden rounded-[20px]">
           <div className="admin-panel-header flex flex-col justify-between gap-3 px-4 py-3.5 md:flex-row md:items-center md:px-5">
             <div>
-              <p className="admin-eyebrow text-[#53bc76]">Portfolio</p>
+              <p className="admin-eyebrow text-[#c79a4b]">Portfolio</p>
 
               <h2 className="admin-list-title admin-title-md mt-1">
                 Recent Properties
@@ -217,7 +217,7 @@ export default async function AdminDashboardPage() {
             </Link>
           </div>
 
-          <div className="divide-y divide-[rgba(14,53,65,0.08)]">
+          <div className="divide-y divide-[rgba(23,22,20,0.08)]">
             {recentProperties.map((property) => {
               const card = mapPropertyToCard(property);
 
@@ -227,7 +227,7 @@ export default async function AdminDashboardPage() {
                   href={`/admin/properties/${property.id}`}
                   className="admin-list-row flex items-center gap-3 px-4 py-3 md:px-5"
                 >
-                  <div className="h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-[#f8fafc] ring-1 ring-[rgba(14,53,65,0.08)]">
+                  <div className="h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-[#f8f6f1] ring-1 ring-[rgba(23,22,20,0.08)]">
                     {card.imageUrl ? (
                       <img
                         src={card.imageUrl}
@@ -268,7 +268,7 @@ export default async function AdminDashboardPage() {
 
         <div className="space-y-4">
           <div className="admin-card rounded-[20px] p-4 md:p-5">
-            <p className="admin-eyebrow text-[#53bc76]">Visibility</p>
+            <p className="admin-eyebrow text-[#c79a4b]">Visibility</p>
 
             <h2 className="admin-list-title admin-title-md mt-1">
               Public Pages Status
@@ -294,7 +294,7 @@ export default async function AdminDashboardPage() {
           </div>
 
           <div className="admin-dark-panel rounded-[20px] p-4 md:p-5">
-            <p className="admin-eyebrow relative z-10 text-[#8df0a9]">System</p>
+            <p className="admin-eyebrow relative z-10 text-[#ebca84]">System</p>
 
             <h2 className="admin-title-md relative z-10 mt-1 text-white">
               Database Health
@@ -349,7 +349,7 @@ function DashboardKpiCard({
     <div
       className={`admin-kpi-card admin-reveal admin-reveal-delay-${delay} group relative overflow-hidden rounded-[18px] p-4`}
     >
-      <div className="absolute right-[-40px] top-[-40px] h-28 w-28 rounded-full bg-[#53bc76]/8 blur-xl transition group-hover:bg-[#53bc76]/14" />
+      <div className="absolute right-[-40px] top-[-40px] h-28 w-28 rounded-full bg-[#c79a4b]/8 blur-xl transition group-hover:bg-[#c79a4b]/14" />
       <div className="absolute bottom-[-60px] left-[-50px] h-28 w-28 rounded-full bg-slate-900/5 blur-xl" />
 
       <div className="relative z-10 flex items-start justify-between gap-3">
@@ -367,7 +367,7 @@ function DashboardKpiCard({
           </p>
         </div>
 
-        <span className="admin-kpi-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition duration-200 group-hover:scale-105 group-hover:bg-[#53bc76] group-hover:text-white">
+        <span className="admin-kpi-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition duration-200 group-hover:scale-105 group-hover:bg-[#c79a4b] group-hover:text-white">
           {icon}
         </span>
       </div>
@@ -421,7 +421,7 @@ function HealthItem({
 }) {
   return (
     <div className="flex items-center gap-3 rounded-[14px] border border-[rgba(255,255,255,0.1)] bg-white/[0.07] px-3 py-2.5 transition duration-200 hover:bg-white/[0.11]">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#53bc76]/15 text-[#53bc76]">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#c79a4b]/15 text-[#c79a4b]">
         {icon}
       </span>
 

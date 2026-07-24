@@ -9,13 +9,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-[linear-gradient(135deg,#53bc76_0%,#1f9f5f_100%)] text-white hover:brightness-105",
+        default: "bg-[linear-gradient(135deg,#c79a4b_0%,#aa7732_100%)] text-white hover:brightness-105",
         outline:
-          "border-[rgba(83,188,118,0.2)] bg-white text-[#0e3541] hover:bg-[#f5fbf7] aria-expanded:bg-[#ecf9f0] aria-expanded:text-[#0e3541]",
+          "border-[rgba(199,154,75,0.2)] bg-white text-[#171614] hover:bg-[#f8f6f1] aria-expanded:bg-[#f7efd9] aria-expanded:text-[#171614]",
         secondary:
-          "bg-[#ecf9f0] text-[#0e3541] hover:bg-[#dff4e6] aria-expanded:bg-[#ecf9f0] aria-expanded:text-[#0e3541]",
+          "bg-[#f7efd9] text-[#171614] hover:bg-[#dff4e6] aria-expanded:bg-[#f7efd9] aria-expanded:text-[#171614]",
         ghost:
-          "hover:bg-[rgba(83,188,118,0.08)] hover:text-[#0e3541] aria-expanded:bg-[rgba(83,188,118,0.08)] aria-expanded:text-[#0e3541]",
+          "hover:bg-[rgba(199,154,75,0.08)] hover:text-[#171614] aria-expanded:bg-[rgba(199,154,75,0.08)] aria-expanded:text-[#171614]",
         destructive:
           "bg-red-50 text-red-700 hover:bg-red-100 focus-visible:border-red-300 focus-visible:ring-red-200",
         link: "text-primary underline-offset-4 hover:underline",

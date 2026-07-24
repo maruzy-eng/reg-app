@@ -122,7 +122,7 @@ export default async function AdminSubmissionsPage({
               <div>
                 <p className="text-sm font-semibold text-slate-500">Admin</p>
 
-                <h2 className="mt-1 text-3xl font-bold tracking-[-0.05em] text-[#0c2933]">
+                <h2 className="mt-1 text-3xl font-bold tracking-[-0.05em] text-[#171614]">
                   Submissions
                 </h2>
 
@@ -158,7 +158,7 @@ export default async function AdminSubmissionsPage({
           </div>
 
           <div>
-            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
               Filters
             </h3>
 
@@ -177,7 +177,7 @@ export default async function AdminSubmissionsPage({
           <input type="hidden" name="page" value="1" />
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Submission status
             </label>
 
@@ -195,7 +195,7 @@ export default async function AdminSubmissionsPage({
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Form
             </label>
 
@@ -214,7 +214,7 @@ export default async function AdminSubmissionsPage({
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Email status
             </label>
 
@@ -230,7 +230,7 @@ export default async function AdminSubmissionsPage({
           </div>
 
           <div className="xl:col-span-2">
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Search
             </label>
 
@@ -244,7 +244,7 @@ export default async function AdminSubmissionsPage({
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Date from
             </label>
 
@@ -257,7 +257,7 @@ export default async function AdminSubmissionsPage({
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-[#0c2933]">
+            <label className="mb-2 block text-sm font-bold text-[#171614]">
               Date to
             </label>
 
@@ -290,7 +290,7 @@ export default async function AdminSubmissionsPage({
       <section className="admin-table">
         <div className="flex flex-col gap-3 border-b border-[rgba(12,41,51,0.08)] px-6 py-5 md:flex-row md:items-center md:justify-between">
           <div>
-            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#0c2933]">
+            <h3 className="text-xl font-bold tracking-[-0.04em] text-[#171614]">
               All submissions
             </h3>
 
@@ -311,7 +311,7 @@ export default async function AdminSubmissionsPage({
           <div className="admin-empty-state flex flex-col items-center justify-center px-6 py-16 text-center">
             <Inbox size={28} />
 
-            <h3 className="mt-5 text-xl font-bold text-[#0c2933]">
+            <h3 className="mt-5 text-xl font-bold text-[#171614]">
               No submissions found
             </h3>
 
@@ -366,7 +366,7 @@ export default async function AdminSubmissionsPage({
                       key={item.id}
                       className="border-b border-[rgba(12,41,51,0.06)] last:border-b-0"
                     >
-                      <td className="px-6 py-5 align-top text-sm text-[#0c2933]">
+                      <td className="px-6 py-5 align-top text-sm text-[#171614]">
                         <div className="font-bold">{formatDate(item.created_at)}</div>
                         <div className="mt-1 text-xs text-slate-500">
                           {item.id.slice(0, 8)}
@@ -375,7 +375,7 @@ export default async function AdminSubmissionsPage({
 
                       <td className="px-6 py-5 align-top">
                         <div className="max-w-[240px]">
-                          <p className="font-bold text-[#0c2933]">
+                          <p className="font-bold text-[#171614]">
                             {item.form_name || "Unknown form"}
                           </p>
 
@@ -387,7 +387,7 @@ export default async function AdminSubmissionsPage({
 
                       <td className="px-6 py-5 align-top">
                         <div className="max-w-[280px]">
-                          <p className="font-bold text-[#0c2933]">
+                          <p className="font-bold text-[#171614]">
                             {lead.name}
                           </p>
 
@@ -430,7 +430,7 @@ export default async function AdminSubmissionsPage({
                       </td>
 
                       <td className="px-6 py-5 align-top">
-                        <div className="space-y-1 text-sm font-bold text-[#0c2933]">
+                        <div className="space-y-1 text-sm font-bold text-[#171614]">
                           <p>{item.webhook_success_count} success</p>
                           <p className="text-xs text-slate-500">
                             {item.webhook_error_count} errors
@@ -439,7 +439,7 @@ export default async function AdminSubmissionsPage({
                       </td>
 
                       <td className="px-6 py-5 align-top">
-                        <div className="space-y-1 text-sm font-bold text-[#0c2933]">
+                        <div className="space-y-1 text-sm font-bold text-[#171614]">
                           <p>{item.email_success_count} sent</p>
                           <p className="text-xs text-slate-500">
                             {item.email_error_count} errors
@@ -539,7 +539,7 @@ function StatCard({
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-sm font-semibold text-slate-500">{title}</p>
-          <p className="mt-3 text-3xl font-bold text-[#0c2933]">{value}</p>
+          <p className="mt-3 text-3xl font-bold text-[#171614]">{value}</p>
         </div>
 
         <span className="admin-icon-box h-11 w-11">{icon}</span>

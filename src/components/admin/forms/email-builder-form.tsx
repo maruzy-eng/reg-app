@@ -28,7 +28,7 @@ type EmailBuilderFormProps = {
 };
 
 const defaultTemplate = `<html>
-  <body style="font-family: Arial, sans-serif; color: #0c2933;">
+  <body style="font-family: Arial, sans-serif; color: #171614;">
     <h1>New lead from {{form_name}}</h1>
     <p><strong>Name:</strong> {{name}}</p>
     <p><strong>Email:</strong> {{email}}</p>
@@ -185,7 +185,7 @@ export function EmailBuilderForm({
             name="enabled"
             type="checkbox"
             defaultChecked={initialValues?.enabled ?? true}
-            className="h-4 w-4 accent-[#53bc76]"
+            className="h-4 w-4 accent-[#c79a4b]"
           />
           Enabled
         </label>
@@ -309,7 +309,7 @@ export function EmailBuilderForm({
 
         <pre className="admin-code-block mt-3 overflow-x-auto rounded-2xl p-4 text-xs leading-5">
 {`<html>
-  <body style="font-family: Arial, sans-serif; color: #0c2933;">
+  <body style="font-family: Arial, sans-serif; color: #171614;">
     <h1>New lead from {{form_name}}</h1>
     <p><strong>Name:</strong> {{name}}</p>
     <p><strong>Email:</strong> {{email}}</p>

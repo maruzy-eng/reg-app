@@ -38,7 +38,7 @@ export function AssetUploadField({
   return (
     <div className="admin-card rounded-[1.5rem] p-5">
       <div className="flex items-start gap-4">
-        <div className="flex min-h-20 min-w-20 items-center justify-center rounded-2xl border border-[rgba(14,53,65,0.1)] bg-white p-3 shadow-[0_14px_30px_rgba(14,53,65,0.06)]">
+        <div className="flex min-h-20 min-w-20 items-center justify-center rounded-2xl border border-[rgba(23,22,20,0.1)] bg-white p-3 shadow-[0_14px_30px_rgba(23,22,20,0.06)]">
           {visiblePreviewUrl ? (
             <img
               src={visiblePreviewUrl}
@@ -51,7 +51,7 @@ export function AssetUploadField({
         </div>
 
         <div className="flex-1">
-          <h3 className="font-bold text-[#0e3541]">{title}</h3>
+          <h3 className="font-bold text-[#171614]">{title}</h3>
 
           <p className="mt-1 text-sm leading-6 text-[#64748b]">
             {description}
@@ -62,7 +62,7 @@ export function AssetUploadField({
               Selected: {selectedFileName}
             </p>
           ) : currentUrl ? (
-              <p className="admin-badge mt-2 px-3 py-1 text-xs text-[#0c2933]">
+              <p className="admin-badge mt-2 px-3 py-1 text-xs text-[#171614]">
                 Current file loaded
               </p>
           ) : (
@@ -73,10 +73,10 @@ export function AssetUploadField({
         </div>
       </div>
 
-      <label className="mt-5 flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[rgba(14,53,65,0.1)] bg-white px-4 py-6 text-center transition hover:bg-[#f8fafc]">
-        <Upload className="text-[#53bc76]" size={24} />
+      <label className="mt-5 flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[rgba(23,22,20,0.1)] bg-white px-4 py-6 text-center transition hover:bg-[#f8f6f1]">
+        <Upload className="text-[#c79a4b]" size={24} />
 
-        <span className="mt-2 text-sm font-bold text-[#0c2933]">
+        <span className="mt-2 text-sm font-bold text-[#171614]">
           Upload {title}
         </span>
 
