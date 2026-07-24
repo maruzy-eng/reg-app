@@ -480,13 +480,16 @@ async function getSubmissionEmailLogs(submissionId: string) {
   }
 
   return ((data || []) as Array<Database["public"]["Tables"]["reg_form_email_logs"]["Row"]>)
-    .map((row) => ({
+    .map((row): AdminEmailLog => ({
       id: row.id,
       submission_id: row.submission_id,
       form_email_id: row.form_email_id,
       form_email_name: row.form_email_name,
-      status: row.status,
-      email_type: row.email_type,
+      status: row.status === "error" ? "error" : "success",
+      email_type:
+        row.email_type === "user" || row.email_type === "admin"
+          ? row.email_type
+          : null,
       recipients: Array.isArray(row.recipients)
         ? row.recipients.filter((item): item is string => typeof item === "string")
         : [],

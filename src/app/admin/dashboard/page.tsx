@@ -21,11 +21,7 @@ import { formatNumber, mapPropertyToCard } from "@/types/property";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-type DashboardCountTable =
-  | "admin_users"
-  | "analytics_events"
-  | "leads"
-  | "reg_form_submissions";
+type DashboardCountTable = "admin_users" | "leads" | "reg_form_submissions";
 
 async function getTableCount(tableName: DashboardCountTable) {
   try {
@@ -35,6 +31,27 @@ async function getTableCount(tableName: DashboardCountTable) {
       count: "exact",
       head: true,
     });
+
+    if (error) {
+      return 0;
+    }
+
+    return count || 0;
+  } catch {
+    return 0;
+  }
+}
+
+/** Optional/legacy tables may be absent from the generated Database types. */
+async function getOptionalTableCount(tableName: string) {
+  try {
+    const supabase = createAdminClient();
+    const { count, error } = await supabase
+      .from(tableName as DashboardCountTable)
+      .select("*", {
+        count: "exact",
+        head: true,
+      });
 
     if (error) {
       return 0;
@@ -66,7 +83,7 @@ export default async function AdminDashboardPage() {
     getTableCount("admin_users"),
     getTableCount("leads"),
     getTableCount("reg_form_submissions"),
-    getTableCount("analytics_events"),
+    getOptionalTableCount("analytics_events"),
   ]);
 
   const publicPagesRegistered = properties.length;
