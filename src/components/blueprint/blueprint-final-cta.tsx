@@ -37,13 +37,15 @@ export function BlueprintFinalCta() {
         className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#c9a24d]/[0.06]"
       />
 
-      {/* Linhas superiores */}
+      {/* Linha superior */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(228,194,110,0.55),transparent)]"
       />
 
-      <div className={`relative mx-auto px-5 sm:px-6 lg:px-8 ${blueprintContainer}`}>
+      <div
+        className={`relative mx-auto px-5 sm:px-6 lg:px-8 ${blueprintContainer}`}
+      >
         <div
           className={[
             "relative mx-auto max-w-[860px]",
@@ -117,6 +119,12 @@ export function BlueprintFinalCta() {
             </p>
           </div>
         </div>
+
+        <footer className="relative z-10 mt-10 border-t border-white/[0.06] pt-6">
+          <p className="text-[0.68rem] font-medium uppercase tracking-[0.18em] text-white/30">
+            © 2026 Checkmate Real Estate Group. Todos os direitos reservados.
+          </p>
+        </footer>
       </div>
 
       <div
