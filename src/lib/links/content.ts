@@ -16,12 +16,28 @@ export const LINKS_LOGO =
   "https://checkmaterealestategroup.com/wp-content/uploads/2025/09/logock.webp";
 
 export const linksCards: LinksCard[] = [
+
+  {
+    id: "property",
+    href: "https://checkmateproperty.com/",
+    ariaLabel: "Acessar Checkmate Property",
+    image:
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/ChatGPT%20Image%2025%20de%20jul.%20de%202026,%2012_15_00.png",
+    imageAlt: "Checkmate Property",
+    kicker: "Plataforma",
+    title: "Checkmate Property",
+    description:
+      "Tudo o que você precisa para operar com Flip Houses e New Construction em uma única plataforma.",
+    cta: "Acesso imediato",
+    icon: "home",
+    external: true,
+  },
   {
     id: "blueprint",
     href: "/blueprint",
     ariaLabel: "Acessar Programa BluePrint",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/ChatGPT-Image-26-de-jun.-de-2026-10_51_45-1.png",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/91f316eb-a497-470f-83f4-21e3489afe08.png",
     imageAlt: "Programa BluePrint Checkmate",
     kicker: "Educação e Operação",
     title: "Programa BluePrint",
@@ -33,10 +49,10 @@ export const linksCards: LinksCard[] = [
   },
   {
     id: "projects",
-    href: "https://checkmaterealestategroup.com/project/",
+    href: "https://checkmateproperty.com/projects",
     ariaLabel: "Acessar Portal da Transparência",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/ChatGPT-Image-26-de-jun.-de-2026-10_54_26-1.png",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/ChatGPT%20Image%2025%20de%20jul.%20de%202026,%2012_08_52.png",
     imageAlt: "Portal da Transparência Checkmate",
     kicker: "Projetos",
     title: "Portal da Transparência",
@@ -51,7 +67,7 @@ export const linksCards: LinksCard[] = [
     href: "/",
     ariaLabel: "Acessar o site da Checkmate",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/ChatGPT-Image-26-de-jun.-de-2026-10_28_52-1.png",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/laptop-reg.png",
     imageAlt: "Nosso site Checkmate",
     kicker: "Institucional",
     title: "Nosso site",
@@ -61,27 +77,13 @@ export const linksCards: LinksCard[] = [
     icon: "site",
     external: false,
   },
-  {
-    id: "property",
-    href: "https://checkmateproperty.com/",
-    ariaLabel: "Acessar Checkmate Property",
-    image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/ChatGPT-Image-26-de-jun.-de-2026-10_33_33-1.png",
-    imageAlt: "Checkmate Property",
-    kicker: "Plataforma",
-    title: "Checkmate Property",
-    description:
-      "Tudo o que você precisa para operar com Flip Houses e New Construction em uma única plataforma.",
-    cta: "Acesso imediato",
-    icon: "home",
-    external: true,
-  },
+  
   {
     id: "contact",
     href: "https://wa.me/19782395226",
     ariaLabel: "Falar com a Checkmate",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/ChatGPT-Image-26-de-jun.-de-2026-10_20_29-1.png",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/legacy1.webp",
     imageAlt: "Fale conosco Checkmate",
     kicker: "Atendimento",
     title: "Fale conosco",
@@ -96,7 +98,7 @@ export const linksCards: LinksCard[] = [
     href: "https://thainunes.com/",
     ariaLabel: "Aplicação para financiamento",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/ChatGPT-Image-26-de-jun.-de-2026-10_40_05-1.png",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/legacy2.webp",
     imageAlt: "Conquiste sua casa própria nos EUA",
     kicker: "Financiamento",
     title: "Conquiste sua casa própria nos EUA",
