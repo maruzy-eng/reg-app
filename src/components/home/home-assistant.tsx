@@ -314,9 +314,9 @@ export function HomeAssistant() {
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
         className={[
-          "group relative inline-flex items-center gap-2 overflow-hidden rounded-full",
-          "border border-[#e4c26e]/40 bg-[#12100e] px-3.5 py-2.5",
-          "text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-[#f0d9a0]",
+          "group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full sm:gap-2",
+          "border border-[#e4c26e]/40 bg-[#12100e] px-3 py-2 sm:px-3.5 sm:py-2.5",
+          "text-[0.48rem] font-semibold uppercase tracking-[0.12em] text-[#f0d9a0] sm:text-[0.58rem] sm:tracking-[0.16em]",
           "shadow-[0_12px_32px_rgba(0,0,0,0.35),0_0_0_1px_rgba(231,194,110,0.08),inset_0_1px_0_rgba(255,255,255,0.08)]",
           "transition duration-300 ease-out",
           "hover:-translate-y-0.5 hover:border-[#ebca84]/70 hover:text-white",
@@ -329,7 +329,7 @@ export function HomeAssistant() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(232,194,110,0.16)_0%,rgba(255,255,255,0.03)_42%,transparent_70%)]"
         />
-        <span className="relative grid h-6 w-6 place-items-center rounded-full bg-[linear-gradient(145deg,#e8c56e_0%,#c9a24d_48%,#8f6a1f_100%)] text-[#17110a] shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_4px_10px_rgba(159,118,37,0.35)]">
+        <span className="relative grid h-5 w-5 place-items-center rounded-full bg-[linear-gradient(145deg,#e8c56e_0%,#c9a24d_48%,#8f6a1f_100%)] text-[#17110a] shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_4px_10px_rgba(159,118,37,0.35)] sm:h-6 sm:w-6">
           {open ? <X size={12} strokeWidth={2.25} /> : <MessageCircle size={12} strokeWidth={2.25} />}
         </span>
         <span className="relative">{open ? "Close" : "Chat"}</span>
