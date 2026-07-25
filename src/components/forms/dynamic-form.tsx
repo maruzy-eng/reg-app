@@ -294,6 +294,17 @@ export function DynamicFormComponent({
     );
   }
 
+  function updateMaskedNumberField(field: DynamicFormField, value: string) {
+    const mask = getOptionsMask(field.options);
+
+    if (!mask) {
+      updateField(field.name, value);
+      return;
+    }
+
+    updateField(field.name, applyDigitMask(value, mask));
+  }
+
   async function handleSignIn() {
     if (!onSignIn) {
       return;
@@ -536,6 +547,9 @@ export function DynamicFormComponent({
 
   function renderInputField(field: DynamicFormField, value: unknown) {
     const Icon = getFieldIcon(field);
+    const numberMask =
+      field.type === "number" ? getOptionsMask(field.options) : null;
+    const isMaskedNumber = Boolean(numberMask);
 
     return (
       <div className="relative">
@@ -548,7 +562,7 @@ export function DynamicFormComponent({
           id={field.name}
           name={field.name}
           type={
-            field.type === "phone"
+            field.type === "phone" || isMaskedNumber
               ? "tel"
               : field.type === "number"
                 ? "number"
@@ -558,7 +572,13 @@ export function DynamicFormComponent({
                     ? "password"
                     : "text"
           }
-          inputMode={field.type === "phone" ? "tel" : undefined}
+          inputMode={
+            field.type === "phone" || isMaskedNumber
+              ? "tel"
+              : field.type === "number"
+                ? "numeric"
+                : undefined
+          }
           autoComplete={
             field.type === "password"
               ? "new-password"
@@ -572,7 +592,9 @@ export function DynamicFormComponent({
           placeholder={
             field.type === "phone"
               ? field.placeholder || "(555) 000-0000"
-              : field.placeholder || undefined
+              : isMaskedNumber
+                ? field.placeholder || numberMask || undefined
+                : field.placeholder || undefined
           }
           value={
             typeof value === "string" || typeof value === "number" ? value : ""
@@ -580,6 +602,11 @@ export function DynamicFormComponent({
           onChange={(event) => {
             if (field.type === "phone") {
               updatePhoneField(field, event.target.value);
+              return;
+            }
+
+            if (isMaskedNumber) {
+              updateMaskedNumberField(field, event.target.value);
               return;
             }
 

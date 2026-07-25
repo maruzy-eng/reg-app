@@ -141,6 +141,36 @@ function parseOptionRows(options: unknown): OptionRow[] {
   return rows.length > 0 ? rows : [createOptionRow(), createOptionRow()];
 }
 
+function getOptionsMask(options: unknown) {
+  if (!options || typeof options !== "object" || Array.isArray(options)) {
+    return "";
+  }
+
+  const mask = (options as { mask?: unknown }).mask;
+  return typeof mask === "string" ? mask : "";
+}
+
+const NUMBER_MASK_PRESETS = [
+  { label: "Sem máscara", value: "" },
+  { label: "Telefone US — (999) 999-9999", value: "(999) 999-9999" },
+  { label: "Telefone BR — (99) 99999-9999", value: "(99) 99999-9999" },
+  { label: "CPF — 999.999.999-99", value: "999.999.999-99" },
+  { label: "CNPJ — 99.999.999/9999-99", value: "99.999.999/9999-99" },
+  { label: "CEP — 99999-999", value: "99999-999" },
+  { label: "ZIP US — 99999", value: "99999" },
+  { label: "ZIP US+4 — 99999-9999", value: "99999-9999" },
+  { label: "Personalizada", value: "__custom__" },
+] as const;
+
+function resolveNumberMaskPreset(mask: string) {
+  if (!mask) {
+    return "";
+  }
+
+  const preset = NUMBER_MASK_PRESETS.find((item) => item.value === mask);
+  return preset ? preset.value : "__custom__";
+}
+
 const presetDefaults: Partial<
   Record<
     FieldType,
@@ -189,6 +219,15 @@ export function FieldBuilderForm({
   const [options, setOptions] = useState<OptionRow[]>(() =>
     parseOptionRows(field?.options),
   );
+  const initialNumberMask = getOptionsMask(field?.options);
+  const [numberMaskPreset, setNumberMaskPreset] = useState(() =>
+    field?.type === "number" ? resolveNumberMaskPreset(initialNumberMask) : "",
+  );
+  const [numberMaskCustom, setNumberMaskCustom] = useState(() =>
+    field?.type === "number" && resolveNumberMaskPreset(initialNumberMask) === "__custom__"
+      ? initialNumberMask
+      : "",
+  );
 
   const shouldShowOptions = type === "radio" || type === "select";
   const selectedPreset = presetDefaults[type];
@@ -203,6 +242,16 @@ export function FieldBuilderForm({
         .filter((option) => option.label && option.value),
     );
   }, [options]);
+
+  const numberMaskValue =
+    numberMaskPreset === "__custom__"
+      ? numberMaskCustom.trim()
+      : numberMaskPreset;
+  const optionsPayload = shouldShowOptions
+    ? optionsJson
+    : type === "number" && numberMaskValue
+      ? JSON.stringify({ mask: numberMaskValue })
+      : "[]";
 
   function updateOption(id: string, key: "label" | "value", value: string) {
     setOptions((current) =>
@@ -252,17 +301,18 @@ export function FieldBuilderForm({
     if (preset) {
       setRequired(preset.required);
     }
+
+    if (value !== "number") {
+      setNumberMaskPreset("");
+      setNumberMaskCustom("");
+    }
   }
 
   return (
     <form action={action} className="grid gap-4">
       <input type="hidden" name="form_id" value={formId} />
       {field ? <input type="hidden" name="field_id" value={field.id} /> : null}
-      <input
-        type="hidden"
-        name="options"
-        value={shouldShowOptions ? optionsJson : "[]"}
-      />
+      <input type="hidden" name="options" value={optionsPayload} />
 
       <div className="grid gap-4 md:grid-cols-2">
         <input
@@ -422,6 +472,52 @@ export function FieldBuilderForm({
           <p className="admin-form-list-meta mt-4 text-xs">
             O sistema salva essas opções como JSON automaticamente.
           </p>
+        </div>
+      ) : null}
+
+      {type === "number" ? (
+        <div className="admin-form-list-item rounded-2xl p-4">
+          <div className="mb-3">
+            <p className="admin-form-list-title font-bold">Máscara numérica</p>
+            <p className="admin-form-list-meta mt-1 text-xs">
+              Use <span className="font-semibold">9</span> para cada dígito.
+              Ex.: <span className="font-semibold">(99) 99999-9999</span>
+            </p>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            <select
+              value={numberMaskPreset}
+              onChange={(event) => {
+                const next = event.target.value;
+                setNumberMaskPreset(next);
+                if (next !== "__custom__") {
+                  setNumberMaskCustom("");
+                }
+              }}
+              className="admin-input min-h-[46px] px-4"
+            >
+              {NUMBER_MASK_PRESETS.map((preset) => (
+                <option key={preset.label} value={preset.value}>
+                  {preset.label}
+                </option>
+              ))}
+            </select>
+
+            {numberMaskPreset === "__custom__" ? (
+              <input
+                type="text"
+                value={numberMaskCustom}
+                onChange={(event) => setNumberMaskCustom(event.target.value)}
+                placeholder="Ex.: 999.999.999-99"
+                className="admin-input min-h-[46px] px-4 font-mono text-sm"
+              />
+            ) : (
+              <div className="flex min-h-[46px] items-center rounded-2xl border border-[rgba(12,41,51,0.08)] bg-white/60 px-4 font-mono text-sm text-[#64748b]">
+                {numberMaskValue || "Sem máscara"}
+              </div>
+            )}
+          </div>
         </div>
       ) : null}
 

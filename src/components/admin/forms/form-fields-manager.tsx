@@ -142,6 +142,14 @@ export function FormFieldsManager({
                       {field.name} · {getFieldTypeLabel(field.type)} · order{" "}
                       {field.sort_order}
                       {field.required ? " · required" : ""}
+                      {field.type === "number" &&
+                      field.options &&
+                      typeof field.options === "object" &&
+                      !Array.isArray(field.options) &&
+                      typeof (field.options as { mask?: unknown }).mask ===
+                        "string"
+                        ? ` · mask ${(field.options as { mask: string }).mask}`
+                        : ""}
                     </p>
                   </div>
 

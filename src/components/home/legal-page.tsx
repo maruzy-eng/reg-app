@@ -9,6 +9,7 @@ type LegalSection = {
   title: string;
   paragraphs: string[];
   bullets?: string[];
+  closingParagraphs?: string[];
 };
 
 type LegalPageProps = {
@@ -66,6 +67,10 @@ export function LegalPage({
                         ))}
                       </ul>
                     ) : null}
+
+                    {section.closingParagraphs?.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
                   </div>
                 </section>
               ))}

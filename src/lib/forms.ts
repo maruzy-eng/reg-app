@@ -469,6 +469,53 @@ export function validatePhoneFields(
   return fieldErrors;
 }
 
+export function validateNumberFields(
+  fields: DynamicFormField[],
+  data: Record<string, unknown>,
+) {
+  const fieldErrors: Record<string, string> = {};
+
+  for (const field of fields) {
+    if (field.type !== "number") {
+      continue;
+    }
+
+    const value = data[field.name];
+
+    if (!value) {
+      continue;
+    }
+
+    const mask = getFieldOptionsMask(field);
+
+    if (!mask) {
+      if (typeof value === "number") {
+        continue;
+      }
+
+      if (typeof value !== "string" || value.trim() === "" || Number.isNaN(Number(value))) {
+        fieldErrors[field.name] = `${field.label} must be a valid number.`;
+      }
+
+      continue;
+    }
+
+    if (typeof value !== "string" && typeof value !== "number") {
+      fieldErrors[field.name] = `${field.label} must match ${mask}.`;
+      continue;
+    }
+
+    const expectedDigits = countMaskDigits(mask);
+    const digits = onlyPhoneDigits(value);
+
+    if (expectedDigits > 0 && digits.length !== expectedDigits) {
+      fieldErrors[field.name] = `${field.label} must match ${mask}.`;
+    }
+  }
+
+  return fieldErrors;
+}
+
 export function validateStateFields(
   fields: DynamicFormField[],
   data: Record<string, unknown>,
@@ -1113,12 +1160,14 @@ export async function submitDynamicForm(params: {
   const requiredErrors = validateRequiredFields(fields, normalizedData);
   const emailErrors = validateEmailFields(fields, normalizedData);
   const phoneErrors = validatePhoneFields(fields, normalizedData);
+  const numberErrors = validateNumberFields(fields, normalizedData);
   const stateErrors = validateStateFields(fields, normalizedData);
 
   const fieldErrors = {
     ...requiredErrors,
     ...emailErrors,
     ...phoneErrors,
+    ...numberErrors,
     ...stateErrors,
   };
 

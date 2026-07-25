@@ -5,7 +5,10 @@ import {
   type DynamicFormField,
 } from "@/lib/forms";
 
-export type FormPageConnectionKey = "calculator" | "blueprint";
+export type FormPageConnectionKey =
+  | "calculator"
+  | "blueprint"
+  | "blueprint-parcelada";
 
 export type FormPageConnectionDefinition = {
   key: FormPageConnectionKey;
@@ -40,6 +43,14 @@ export const FORM_PAGE_CONNECTION_DEFINITIONS: FormPageConnectionDefinition[] =
       description:
         "Formulário “Fale com um analista” exibido na página pública /blueprint.",
       fallbackSlug: "blueprint",
+    },
+    {
+      key: "blueprint-parcelada",
+      label: "Blueprint — Compra parcelada",
+      path: "/compra-parcelada",
+      description:
+        "Formulário de compra parcelada do Blueprint exibido em /compra-parcelada.",
+      fallbackSlug: "parcelada",
     },
   ];
 

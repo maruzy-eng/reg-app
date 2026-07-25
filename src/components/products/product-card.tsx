@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import {
   formatProductPrice,
@@ -42,21 +43,30 @@ export function ProductCard({ product }: ProductCardProps) {
           </p>
         ) : null}
 
-        <div className="mt-auto flex items-end gap-3 pt-6">
-          {hasDiscount ? (
-            <>
+        <div className="mt-auto pt-6">
+          <div className="flex items-end gap-3">
+            {hasDiscount ? (
+              <>
+                <span className="text-[1.35rem] font-bold tracking-[-0.03em] text-[#171614]">
+                  {formatProductPrice(product.discountPrice)}
+                </span>
+                <span className="pb-0.5 text-[0.92rem] text-[#9a948a] line-through">
+                  {formatProductPrice(product.price)}
+                </span>
+              </>
+            ) : (
               <span className="text-[1.35rem] font-bold tracking-[-0.03em] text-[#171614]">
-                {formatProductPrice(product.discountPrice)}
-              </span>
-              <span className="pb-0.5 text-[0.92rem] text-[#9a948a] line-through">
                 {formatProductPrice(product.price)}
               </span>
-            </>
-          ) : (
-            <span className="text-[1.35rem] font-bold tracking-[-0.03em] text-[#171614]">
-              {formatProductPrice(product.price)}
-            </span>
-          )}
+            )}
+          </div>
+
+          <Link
+            href={`/checkout/${product.slug}`}
+            className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-[linear-gradient(135deg,#ebca84_0%,#c9a24d_100%)] px-5 text-[0.72rem] font-bold uppercase tracking-[0.12em] text-[#17110a] no-underline shadow-[0_14px_34px_rgba(199,154,75,0.2)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_rgba(199,154,75,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a24d]/45 focus-visible:ring-offset-2"
+          >
+            Comprar agora
+          </Link>
         </div>
       </div>
     </article>
