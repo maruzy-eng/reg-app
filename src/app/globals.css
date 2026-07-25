@@ -1494,6 +1494,12 @@ main button:hover {
   text-decoration: none !important;
 }
 
+/* Dark pill buttons keep white label on hover */
+main a[class*="rounded-full"][class*="hover:text-white"]:hover {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
 /* Cards de imóveis: remove mudança azul e usa underline nos textos clicáveis */
 main article a:hover,
 main article a:hover span,
