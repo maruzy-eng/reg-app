@@ -13,7 +13,7 @@ export type LinksCard = {
 };
 
 export const LINKS_LOGO =
-  "https://checkmaterealestategroup.com/wp-content/uploads/2025/09/logock.webp";
+  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2025/09/logock.webp";
 
 export const linksCards: LinksCard[] = [
 

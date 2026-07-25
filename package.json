@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "migrate:wp-images": "node scripts/migrate-wordpress-images-to-reg.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

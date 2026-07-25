@@ -5,7 +5,7 @@ export const blueprintBenefits = [
     number: "01",
     tag: "Estrutura",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/05/img-1.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/05/img-1.jpg",
     alt: "Abertura de empresa nos EUA",
     title:
       "Abra sua empresa nos EUA e prepare-se para investir com estrutura profissional",
@@ -16,7 +16,7 @@ export const blueprintBenefits = [
     number: "02",
     tag: "Educação",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/1.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/1.jpg",
     alt: "Educação avançada em Flip Houses e New Construction",
     title:
       "Educação avançada sobre investimentos em Flip Houses e New Construction",
@@ -27,7 +27,7 @@ export const blueprintBenefits = [
     number: "03",
     tag: "Mentoria",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/4.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/4.jpg",
     alt: "Mentoria individual com especialistas",
     title: "Mentoria individual com especialistas",
     description:
@@ -37,7 +37,7 @@ export const blueprintBenefits = [
     number: "04",
     tag: "Tecnologia",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/2.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/2.jpg",
     alt: "Tecnologia de análise e gestão de imóveis",
     title: "Checkmate Property - Tecnologia de análise e gestão de imóveis",
     description:
@@ -47,7 +47,7 @@ export const blueprintBenefits = [
     number: "05",
     tag: "Projetos reais",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/05/img5.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/05/img5.jpg",
     alt: "Parceria formal em projetos reais",
     title: "Parceria formal em projetos reais",
     description:
@@ -57,7 +57,7 @@ export const blueprintBenefits = [
     number: "06",
     tag: "Marketing",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/05/img6.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/05/img6.jpg",
     alt: "Marketing e posicionamento digital",
     title: "Estrutura de marketing e posicionamento digital para o seu negócio",
     description:
@@ -67,7 +67,7 @@ export const blueprintBenefits = [
     number: "07",
     tag: "Obras",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/05/img7.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/05/img7.jpg",
     alt: "Gestão de obras com Checkmate Builder",
     title: "Gestão de obras sob controle com a Checkmate Builder",
     description:
@@ -77,7 +77,7 @@ export const blueprintBenefits = [
     number: "08",
     tag: "Capital",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/05/img8.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/05/img8.jpg",
     alt: "Acesso a crédito, capital e suporte jurídico",
     title: "Acesso a crédito, capital e suporte jurídico",
     description:
@@ -87,7 +87,7 @@ export const blueprintBenefits = [
     number: "09",
     tag: "Suporte",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/05/img9.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/05/img9.jpg",
     alt: "Atendimento direto com o time Checkmate",
     title: "Atendimento direto com nosso time de segunda a sábado",
     description:
@@ -100,86 +100,87 @@ export const blueprintProjects = [
     number: "01",
     address: "59 Summer St, Medway, MA 02053",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/img-at-10.29.50.jpeg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/img-at-10.29.50.jpeg",
   },
   {
     number: "02",
     address: "20 Upland Rd, Marlborough, MA 01752",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/img-at-10.30.47.jpeg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/img-at-10.30.47.jpeg",
   },
   {
     number: "03",
     address: "576-578 School St, Webster, MA 01570",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/img-at-10.31.51.jpeg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/img-at-10.31.51.jpeg",
   },
   {
     number: "05",
     address: "34 Stoughton Ave, Webster, MA 01570",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/img-at-10.33.20.jpeg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/img-at-10.33.20.jpeg",
   },
   {
     number: "06",
     address: "457 Ellis Ave, Lawnside, NJ 08045",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/img-at-10.33.44.jpeg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/img-at-10.33.44.jpeg",
   },
 ] as const;
 
 export const blueprintGallery = [
-  "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-19-at-10.39.23.jpeg",
-  "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-19-at-10.39.32.jpeg",
-  "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-19-at-10.40.16.jpeg",
-  "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-19-at-10.40.37.jpeg",
-  "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-19-at-10.40.48.jpeg",
-  "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-19-at-10.54.52.jpeg",
+  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-19-at-10.39.23.jpeg",
+  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-19-at-10.39.32.jpeg",
+  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-19-at-10.40.48.jpeg",
+  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-19-at-10.54.52.jpeg",
 ] as const;
 
 export const blueprintMedia = [
+
+  {
+    number: "07",
+    label: "Checkmate · Destaque",
+    image:
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/e1c174dc-1b43-49d0-bdda-42ff1b143cc7.jpg",
+  },
+
   {
     number: "01",
     label: "Press · Checkmate",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/image_42.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/image_42.jpg",
   },
   {
     number: "02",
     label: "Media · Destaque",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/image_44.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/image_44.jpg",
   },
   {
     number: "03",
     label: "Press · Mercado",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/image_43.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/image_43.jpg",
   },
   {
     number: "04",
     label: "Mídia · Negócios",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/image_45.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/image_45.jpg",
   },
   {
     number: "05",
     label: "Press · Real Estate",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/image_46.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/image_46.jpg",
   },
   {
     number: "06",
     label: "Mídia · Autoridade",
     image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/image_47.jpg",
+      "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/image_47.jpg",
   },
-  {
-    number: "07",
-    label: "Checkmate · Destaque",
-    image:
-      "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/e1c174dc-1b43-49d0-bdda-42ff1b143cc7.jpg",
-  },
+  
 ] as const;
 
 export const blueprintTimeline = [
@@ -280,9 +281,9 @@ export const blueprintFormPoints = [
 export const BLUEPRINT_ASSETS = {
   heroImage: HOME_HERO_IMAGE,
   logo:
-    "https://checkmaterealestategroup.com/wp-content/uploads/2023/01/logo-1-1.png",
+    "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2023/01/logo-1-1.png",
   logoLight:
-    "https://checkmaterealestategroup.com/wp-content/uploads/2025/09/logock.webp",
+    "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2025/09/logock.webp",
   approvalImage:
-    "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-20-at-17.41.05.jpeg",
+    "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-20-at-17.41.05.jpeg",
 } as const;
