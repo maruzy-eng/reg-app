@@ -279,6 +279,7 @@ async function uploadPropertyMedia(params: {
     .from(PROPERTY_MEDIA_BUCKET)
     .upload(filePath, buffer, {
       contentType: getStorageContentType(params.file, fallbackContentType),
+      cacheControl: "31536000",
       upsert: false,
     });
 

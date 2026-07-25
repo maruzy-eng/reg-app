@@ -20,8 +20,8 @@ import {
   homeSectionTitleDark,
   homeTitleGradient,
 } from "@/components/home/home-ui";
+import { HomeHeroBackground } from "@/components/home/home-hero-background";
 import type { HomePageSettings } from "@/lib/home/types";
-import { HOME_HERO_IMAGE } from "@/lib/home/branding";
 import type { PropertyCard } from "@/types/property";
 
 type HomePageProps = {
@@ -224,11 +224,7 @@ export function HomePage({ settings, properties }: HomePageProps) {
           id="home"
           className="hero relative isolate overflow-hidden bg-[#050505] text-white"
         >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 -z-40 scale-[1.035] bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url('${HOME_HERO_IMAGE}')` }}
-          />
+          <HomeHeroBackground priority />
 
           <div
             aria-hidden="true"
@@ -407,7 +403,8 @@ export function HomePage({ settings, properties }: HomePageProps) {
                   className={[
                     "flex min-h-[106px] flex-col justify-center py-6",
                     "px-5 sm:px-7 lg:min-h-[116px] lg:px-8",
-                    index === 0 ? "pl-0 sm:pl-0 lg:pl-0" : "",
+                    index === 0 ? "lg:pl-0" : "",
+                    index === heroMetrics.length - 1 ? "lg:pr-0" : "",
                     index % 2 !== 0 ? "border-l border-white/[0.09]" : "",
                     index >= 2
                       ? "border-t border-white/[0.09] lg:border-t-0"

@@ -115,6 +115,7 @@ async function uploadComplementImage(params: {
     .from(PROPERTY_MEDIA_BUCKET)
     .upload(filePath, buffer, {
       contentType: params.file.type || "image/jpeg",
+      cacheControl: "31536000",
       upsert: false,
     });
 

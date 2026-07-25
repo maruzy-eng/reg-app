@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HomeHeroBackground } from "@/components/home/home-hero-background";
 import {
   HomeContainer,
   cx,
@@ -7,7 +8,6 @@ import {
   homeReveal,
   homeTitleGradient,
 } from "@/components/home/home-ui";
-import { HOME_HERO_IMAGE } from "@/lib/home/branding";
 
 type PageHeroProps = {
   eyebrow: string;
@@ -28,11 +28,7 @@ export function PageHero({
 }: PageHeroProps) {
   return (
     <section className="relative isolate overflow-hidden bg-[#050505] text-white">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-40 scale-[1.035] bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url('${HOME_HERO_IMAGE}')` }}
-      />
+      <HomeHeroBackground priority />
 
       <div
         aria-hidden="true"

@@ -88,7 +88,6 @@ export function HomeHeader({ siteName }: HomeHeaderProps) {
               width={188}
               height={44}
               className="h-auto max-h-11 w-auto object-contain"
-              priority
             />
           </Link>
 

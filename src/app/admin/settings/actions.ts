@@ -126,6 +126,7 @@ async function uploadSiteAsset(file: File | null, assetType: "logo" | "favicon")
     .from(SITE_ASSETS_BUCKET)
     .upload(filePath, buffer, {
       contentType: file.type || getContentTypeFromExtension(extension),
+      cacheControl: "31536000",
       upsert: true,
     });
 
