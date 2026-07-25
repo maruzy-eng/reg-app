@@ -32,11 +32,11 @@ export default async function NewsPage() {
     <SiteShell settings={settings}>
       <PageHero
         eyebrow="News"
-        title="Insights e atualizações"
-        titleAccent="do ecossistema."
-        description="Conteúdos sobre Flip Houses, New Construction, estrutura e operação no mercado imobiliário americano."
+        title="Insights and updates"
+        titleAccent="from the ecosystem."
+        description="Content on Flip Houses, New Construction, structure, and operations in the U.S. real estate market."
         ctaHref="/blueprint"
-        ctaLabel="Conhecer o Blueprint"
+        ctaLabel="Explore Blueprint"
       />
 
       <section className="bg-[#f8f6f1] py-16 sm:py-20 lg:py-24">
@@ -58,7 +58,7 @@ export default async function NewsPage() {
           {cards.length === 0 ? (
             <div className="rounded-[28px] border border-dashed border-black/15 bg-white px-6 py-16 text-center">
               <p className="text-[0.95rem] text-[#68635b]">
-                Em breve publicaremos os primeiros artigos da Checkmate News.
+                The first Checkmate News articles will be published soon.
               </p>
             </div>
           ) : null}

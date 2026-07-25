@@ -60,9 +60,9 @@ export function formatPostDate(value: string | null | undefined) {
     return "";
   }
 
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
+  return new Intl.DateTimeFormat("en-US", {
     month: "long",
+    day: "numeric",
     year: "numeric",
   }).format(new Date(value));
 }

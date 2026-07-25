@@ -313,11 +313,32 @@ export function HomeAssistant() {
         aria-label={open ? "Close chat" : "Open chat"}
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
-        className="inline-flex min-h-12 items-center gap-2 rounded-full border border-[#C79A4B]/35 bg-[#171614] px-4 py-3 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#EBCA84] shadow-[0_18px_40px_rgba(0,0,0,0.28)] transition hover:-translate-y-0.5 hover:border-[#EBCA84] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A4B]/50"
+        className={[
+          "group relative inline-flex items-center gap-2 overflow-hidden rounded-full",
+          "border border-[#e4c26e]/40 bg-[#12100e] px-3.5 py-2.5",
+          "text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-[#f0d9a0]",
+          "shadow-[0_12px_32px_rgba(0,0,0,0.35),0_0_0_1px_rgba(231,194,110,0.08),inset_0_1px_0_rgba(255,255,255,0.08)]",
+          "transition duration-300 ease-out",
+          "hover:-translate-y-0.5 hover:border-[#ebca84]/70 hover:text-white",
+          "hover:shadow-[0_16px_40px_rgba(0,0,0,0.4),0_0_24px_rgba(201,162,77,0.18),inset_0_1px_0_rgba(255,255,255,0.12)]",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a24d]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]",
+          "active:translate-y-0",
+        ].join(" ")}
       >
-        {open ? <X size={15} /> : <MessageCircle size={15} />}
-        <span className="h-2 w-2 rounded-full bg-[#EBCA84]" />
-        {open ? "Close" : "Chat"}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(232,194,110,0.16)_0%,rgba(255,255,255,0.03)_42%,transparent_70%)]"
+        />
+        <span className="relative grid h-6 w-6 place-items-center rounded-full bg-[linear-gradient(145deg,#e8c56e_0%,#c9a24d_48%,#8f6a1f_100%)] text-[#17110a] shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_4px_10px_rgba(159,118,37,0.35)]">
+          {open ? <X size={12} strokeWidth={2.25} /> : <MessageCircle size={12} strokeWidth={2.25} />}
+        </span>
+        <span className="relative">{open ? "Close" : "Chat"}</span>
+        {!open ? (
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ebca84]/55 opacity-70" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ebca84]" />
+          </span>
+        ) : null}
       </button>
     </div>
   );

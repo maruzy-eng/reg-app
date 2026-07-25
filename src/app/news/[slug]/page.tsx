@@ -50,7 +50,7 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Artigo não encontrado",
+      title: "Article not found",
       robots: {
         index: false,
         follow: false,
@@ -62,7 +62,7 @@ export async function generateMetadata({
   const description =
     post.meta_description ||
     post.excerpt ||
-    "Insights do Checkmate REG sobre o mercado imobiliário americano.";
+    "Checkmate REG insights on the U.S. real estate market.";
 
   return buildPageMetadata({
     title,
@@ -75,7 +75,7 @@ export async function generateMetadata({
     keywords: [
       post.category || "real estate",
       "Checkmate News",
-      "mercado imobiliário EUA",
+      "U.S. real estate market",
       ...normalizePostTags(post.tags),
     ],
   });
@@ -105,7 +105,7 @@ export default async function NewsArticlePage({
   const description =
     post.meta_description ||
     post.excerpt ||
-    "Insights do Checkmate REG sobre o mercado imobiliário americano.";
+    "Checkmate REG insights on the U.S. real estate market.";
 
   return (
     <SiteShell settings={settings}>
@@ -151,7 +151,7 @@ export default async function NewsArticlePage({
               href="/news"
               className="inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-[0.14em] text-[#e4c26e] no-underline transition hover:text-white"
             >
-              ← Voltar para News
+              ← Back to News
             </Link>
 
             <div className="mt-8 max-w-[820px]">
@@ -178,7 +178,7 @@ export default async function NewsArticlePage({
               ) : null}
 
               <p className="mt-6 text-[0.85rem] text-white/45">
-                Por {post.author_name}
+                By {post.author_name}
               </p>
             </div>
           </HomeContainer>
@@ -218,15 +218,15 @@ export default async function NewsArticlePage({
 
               <div className="mt-12 rounded-[28px] border border-black/[0.07] bg-[#f8f6f1] p-7 sm:p-8">
                 <h2 className="text-[1.35rem] font-semibold tracking-[-0.03em] text-[#171614]">
-                  Quer operar com método no mercado americano?
+                  Ready to operate with a clear method in the U.S. market?
                 </h2>
                 <p className="mt-3 max-w-[520px] text-[0.95rem] leading-[1.7] text-[#68635b]">
-                  Conheça o Checkmate Blueprint e veja se esse é o próximo passo
-                  certo para a sua jornada.
+                  Explore Checkmate Blueprint and see if it is the right next
+                  step for your journey.
                 </p>
                 <div className="mt-6">
                   <Link href="/blueprint" className={homeBtnPrimaryGold}>
-                    Conhecer o Blueprint
+                    Explore Blueprint
                   </Link>
                 </div>
               </div>
@@ -240,17 +240,17 @@ export default async function NewsArticlePage({
               <div className="mb-8 flex items-end justify-between gap-4">
                 <div>
                   <p className="text-[0.68rem] font-bold uppercase tracking-[0.14em] text-[#8b6721]">
-                    Continue lendo
+                    Keep reading
                   </p>
                   <h2 className="mt-3 text-[1.8rem] font-semibold tracking-[-0.035em] text-[#171614]">
-                    Artigos relacionados
+                    Related articles
                   </h2>
                 </div>
                 <Link
                   href="/news"
                   className="hidden text-[0.72rem] font-bold uppercase tracking-[0.12em] text-[#8b6721] no-underline sm:inline-flex"
                 >
-                  Ver todos
+                  View all
                 </Link>
               </div>
 

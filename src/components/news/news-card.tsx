@@ -99,7 +99,7 @@ export function NewsCard({ post, featured = false }: NewsCardProps) {
             href={`/news/${post.slug}`}
             className="inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-[0.12em] text-[#8b6721] no-underline transition hover:text-[#171614]"
           >
-            Ler artigo
+            Read article
             <span aria-hidden="true">→</span>
           </Link>
         </div>
