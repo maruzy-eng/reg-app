@@ -162,12 +162,19 @@ const NUMBER_MASK_PRESETS = [
   { label: "Personalizada", value: "__custom__" },
 ] as const;
 
-function resolveNumberMaskPreset(mask: string) {
+type NumberMaskPresetValue = (typeof NUMBER_MASK_PRESETS)[number]["value"];
+
+function resolveNumberMaskPreset(mask: string): NumberMaskPresetValue {
   if (!mask) {
     return "";
   }
 
   const preset = NUMBER_MASK_PRESETS.find((item) => item.value === mask);
+  return preset ? preset.value : "__custom__";
+}
+
+function toNumberMaskPresetValue(value: string): NumberMaskPresetValue {
+  const preset = NUMBER_MASK_PRESETS.find((item) => item.value === value);
   return preset ? preset.value : "__custom__";
 }
 
@@ -489,7 +496,7 @@ export function FieldBuilderForm({
             <select
               value={numberMaskPreset}
               onChange={(event) => {
-                const next = event.target.value;
+                const next = toNumberMaskPresetValue(event.target.value);
                 setNumberMaskPreset(next);
                 if (next !== "__custom__") {
                   setNumberMaskCustom("");
