@@ -1,5 +1,5 @@
 export const SITE_NAV_LINKS = [
-  { label: "Home", href: "/reg" },
+  { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   { label: "Projects", href: "/projects" },
   { label: "Solutions", href: "/solutions" },

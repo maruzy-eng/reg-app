@@ -231,7 +231,7 @@ export async function updateSiteSettingsAction(formData: FormData) {
     redirect("/admin/settings?error=update-failed");
   }
 
-  revalidatePath("/reg");
+  revalidatePath("/");
   revalidatePath("/admin/settings");
   revalidatePath("/admin/dashboard");
 

@@ -128,7 +128,7 @@ export default async function AdminLayout({
           ) : null}
 
           <Link
-            href="/reg"
+            href="/"
             className="admin-sidebar-view-site flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13px] font-medium transition"
           >
             <Home size={15} />
@@ -168,7 +168,7 @@ export default async function AdminLayout({
               ) : null}
 
               <Link
-                href="/reg"
+                href="/"
                 className="admin-primary-button rounded-xl px-3.5 py-1.5 text-[12px] font-semibold no-underline"
               >
                 Public Site

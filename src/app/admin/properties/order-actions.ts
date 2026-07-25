@@ -36,7 +36,7 @@ export async function updatePropertyOrderAction(propertyIds: string[]) {
     }
   }
 
-  revalidatePath("/reg");
+  revalidatePath("/");
   revalidatePath("/admin/properties");
   revalidatePath("/admin/dashboard");
 

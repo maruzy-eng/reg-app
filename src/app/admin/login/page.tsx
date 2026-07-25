@@ -42,7 +42,7 @@ export default async function AdminLoginPage({
       <section className="relative z-10 grid w-full max-w-5xl items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="hidden lg:block">
           <Link
-            href="/reg"
+            href="/"
             className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.07] px-4 py-2 text-sm font-semibold text-white/80 backdrop-blur-xl transition hover:bg-white/[0.11] hover:text-white"
           >
             <ArrowLeft size={16} />
@@ -97,7 +97,7 @@ export default async function AdminLoginPage({
 
         <div className="mx-auto w-full max-w-md">
           <div className="mb-6 text-center lg:hidden">
-            <Link href="/reg" className="inline-flex items-center gap-3">
+            <Link href="/" className="inline-flex items-center gap-3">
               <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#C79A4B_0%,#B4853C_100%)] text-[#111111] shadow-[0_18px_40px_rgba(199,154,75,0.24)]">
                 <Building2 size={24} />
               </span>
@@ -193,7 +193,7 @@ export default async function AdminLoginPage({
               </form>
 
               <Link
-                href="/reg"
+                href="/"
                 className="mt-6 flex items-center justify-center gap-2 text-center text-sm font-semibold text-[#171614] transition hover:text-[#C79A4B]"
               >
                 <ArrowLeft size={16} />

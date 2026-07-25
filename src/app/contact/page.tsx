@@ -69,7 +69,7 @@ export default async function ContactPage() {
       <JsonLd
         id="contact-breadcrumb-schema"
         data={buildBreadcrumbJsonLd([
-          { name: "Home", path: "/reg" },
+          { name: "Home", path: "/" },
           { name: "Contact", path: "/contact" },
         ])}
       />

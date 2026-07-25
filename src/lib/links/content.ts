@@ -48,7 +48,7 @@ export const linksCards: LinksCard[] = [
   },
   {
     id: "site",
-    href: "/reg",
+    href: "/",
     ariaLabel: "Acessar o site da Checkmate",
     image:
       "https://checkmaterealestategroup.com/wp-content/uploads/2026/06/ChatGPT-Image-26-de-jun.-de-2026-10_28_52-1.png",

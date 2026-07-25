@@ -17,7 +17,7 @@ export default function NotFoundPage() {
         </p>
 
         <Link
-          href="/reg"
+          href="/"
           className="mt-6 inline-flex rounded-full bg-[linear-gradient(135deg,#C79A4B_0%,#B4853C_100%)] px-5 py-3 text-sm font-semibold text-[#111111] transition hover:-translate-y-0.5"
         >
           Back to Home

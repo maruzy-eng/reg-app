@@ -132,7 +132,7 @@ async function uploadComplementImage(params: {
 async function revalidateComplementPaths(_propertyIds: string[] = []) {
   revalidatePath("/admin/complementos");
   revalidatePath("/admin/properties");
-  revalidatePath("/reg");
+  revalidatePath("/");
 }
 
 export async function createComplementBlockAction(formData: FormData) {

@@ -125,7 +125,7 @@ export default async function NewsArticlePage({
       <JsonLd
         id="breadcrumb-schema"
         data={buildBreadcrumbJsonLd([
-          { name: "Home", path: "/reg" },
+          { name: "Home", path: "/" },
           { name: "News", path: "/news" },
           { name: post.title, path: `/news/${post.slug}` },
         ])}

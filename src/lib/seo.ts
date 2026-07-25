@@ -124,7 +124,7 @@ export function buildOrganizationJsonLd(sameAs: string[] = []) {
     "@id": `${siteUrl}/#organization`,
     name: SEO_ORG_NAME,
     alternateName: [SEO_SITE_NAME, "Checkmate Property"],
-    url: `${siteUrl}/reg`,
+    url: siteUrl,
     logo: SEO_LOGO,
     image: SEO_DEFAULT_OG_IMAGE,
     description: SEO_DEFAULT_DESCRIPTION,

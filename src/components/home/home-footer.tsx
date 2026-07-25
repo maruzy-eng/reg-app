@@ -213,7 +213,7 @@ export function HomeFooter({
         <div className="grid grid-cols-1 gap-12 py-14 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.2fr)_0.55fr_0.55fr_1fr] lg:gap-12 lg:py-16">
           <div>
             <Link
-              href="/reg"
+              href="/"
               className="inline-flex no-underline"
               aria-label={siteName}
             >

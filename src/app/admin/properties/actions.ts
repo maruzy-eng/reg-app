@@ -294,7 +294,7 @@ async function uploadPropertyMedia(params: {
 }
 
 function revalidatePropertyPaths(slug?: string | null) {
-  revalidatePath("/reg");
+  revalidatePath("/");
   revalidatePath("/admin/dashboard");
   revalidatePath("/admin/properties");
 

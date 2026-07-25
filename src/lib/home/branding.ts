@@ -1,5 +1,5 @@
 /**
- * Brand assets for the public home (/reg).
+ * Brand assets for the public home (/).
  * Update these URLs directly when logos change.
  */
 export const HOME_LOGO_COLOR =

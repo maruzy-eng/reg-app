@@ -69,7 +69,7 @@ export function HomeHeader({ siteName }: HomeHeaderProps) {
           ].join(" ")}
         >
           <Link
-            href="/reg"
+            href="/"
             onClick={closeMenu}
             aria-label={siteName + " home"}
             className={[

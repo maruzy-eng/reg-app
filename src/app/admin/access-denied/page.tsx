@@ -47,7 +47,7 @@ export default async function AdminAccessDeniedPage() {
           </Link>
 
           <Link
-            href="/reg"
+            href="/"
             className="admin-secondary-button inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm transition hover:bg-[#f8f6f1]"
           >
             Public Site
