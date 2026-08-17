@@ -40,10 +40,18 @@ export async function sendTransactionalEmail(params: {
       replyTo: params.replyTo || undefined,
     });
 
+    if (response.error) {
+      return {
+        success: false,
+        providerMessageId: null,
+        errorMessage: response.error.message || "Unknown email error.",
+      };
+    }
+
     return {
-      success: true,
+      success: Boolean(response.data?.id),
       providerMessageId: response.data?.id || null,
-      errorMessage: null,
+      errorMessage: response.data?.id ? null : "Email provider did not return a message id.",
     };
   } catch (error) {
     return {

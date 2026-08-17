@@ -92,19 +92,22 @@ export function BlueprintSectionHeading({
 export function BlueprintGoldButton({
   href,
   children,
+  className,
 }: {
   href: string;
   children: ReactNode;
+  className?: string;
 }) {
   return (
     <a
       href={href}
       className={[
-        "group inline-flex min-h-[52px] items-center justify-center gap-2.5 rounded-full px-6",
+        "group inline-flex min-h-[64px] items-center justify-center gap-2.5 rounded-full px-10",
         "bg-[linear-gradient(135deg,#d8b55e_0%,#c9a24d_50%,#9f7625_100%)]",
-        "text-[0.8125rem] font-semibold text-white shadow-[0_16px_40px_rgba(201,162,77,0.28)]",
+        "text-[0.9375rem] font-semibold text-white shadow-[0_16px_40px_rgba(201,162,77,0.28)]",
         "transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_22px_52px_rgba(201,162,77,0.38)]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a24d] focus-visible:ring-offset-4",
+        className,
       ].join(" ")}
     >
       <span>{children}</span>

@@ -210,7 +210,7 @@ export const blueprintTimeline = [
 export const blueprintStats = [
   {
     label: "Projetos ativos",
-    value: "+20M",
+    value: "+43M",
     text: "em projetos em andamento no mercado imobiliário.",
   },
   {
