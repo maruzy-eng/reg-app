@@ -225,8 +225,8 @@ export default async function CashOfferPage() {
 
         <HomeContainer className="pb-14 pt-24 sm:pb-20 sm:pt-32 lg:pb-20 lg:pt-28">
           <div className="grid gap-8 lg:min-h-[760px] lg:grid-cols-[minmax(0,0.9fr)_minmax(430px,1.1fr)] lg:items-center lg:gap-12">
-            <div className="max-w-[780px]">
-              <span data-reveal className={cx(homeReveal(), homeEyebrowDark, "flex-wrap")}>
+            <div className="mx-auto max-w-[780px] text-center lg:mx-0 lg:text-left">
+              <span data-reveal className={cx(homeReveal(), homeEyebrowDark, "justify-center flex-wrap lg:justify-start")}>
                 <span className="h-px w-9 bg-[#ebca84]/70" />
                 FILL OUT THE SURVEY TO
               </span>
@@ -258,7 +258,7 @@ export default async function CashOfferPage() {
                 data-reveal
                 className={cx(
                   homeReveal(3),
-                  "mt-7 flex flex-col items-start gap-3 sm:mt-9",
+                  "mt-7 flex flex-col items-center gap-2 sm:mt-9 lg:items-start lg:gap-3",
                 )}
               >
                 <Link
@@ -267,7 +267,7 @@ export default async function CashOfferPage() {
                 >
                   <span className="relative z-[2]">Get My Fair Cash Offer!</span>
                 </Link>
-                <p className="max-w-[320px] text-[0.76rem] font-bold uppercase tracking-[0.14em] text-white/48">
+                <p className="max-w-[280px] text-center text-[0.62rem] font-bold uppercase leading-5 tracking-[0.1em] text-white/48 sm:max-w-[320px] sm:text-[0.76rem] sm:tracking-[0.14em] lg:text-left">
                   Get A ZERO Obligation Instant Cash Offer
                 </p>
               </div>
@@ -284,7 +284,7 @@ export default async function CashOfferPage() {
                 id="cash"
                 className="rounded-[8px] border border-[#ebca84]/18 bg-[#fbfaf7] p-4 text-[#171614] sm:p-6"
               >
-                <div className="mb-5 border-b border-black/[0.08] pb-5">
+                <div className="mb-5 border-b border-black/[0.08] pb-5 text-center sm:text-left">
                   <p className="text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#8f672b]">
                     We buy houses for cash
                   </p>
@@ -344,8 +344,8 @@ export default async function CashOfferPage() {
       <HomeSection>
         <HomeContainer>
           <div className="grid gap-10">
-            <div data-reveal className={homeReveal()}>
-              <span className={cx(homeEyebrowLight, "flex-wrap")}>
+            <div data-reveal className={cx(homeReveal(), "text-center lg:text-left")}>
+              <span className={cx(homeEyebrowLight, "justify-center flex-wrap lg:justify-start")}>
                 <span className="h-px w-9 bg-[#8f672b]/70" />
                 Your 3 Step Process Is Simple
               </span>
@@ -369,20 +369,20 @@ export default async function CashOfferPage() {
                     data-reveal
                     className={cx(
                       homeReveal(index + 1),
-                      "relative z-[1] rounded-[8px] border border-black/[0.07] bg-white p-6 text-left shadow-[0_18px_50px_rgba(15,15,15,0.05)] sm:p-8",
+                      "relative z-[1] rounded-[8px] border border-black/[0.07] bg-white p-6 text-center shadow-[0_18px_50px_rgba(15,15,15,0.05)] sm:p-8 lg:text-left",
                     )}
                   >
-                    <div className="grid h-14 w-14 place-items-center rounded-[8px] bg-[#171614] text-[#ebca84] shadow-[0_14px_35px_rgba(23,22,20,0.16)] sm:h-16 sm:w-16">
+                    <div className="mx-auto grid h-14 w-14 place-items-center rounded-[8px] bg-[#171614] text-[#ebca84] shadow-[0_14px_35px_rgba(23,22,20,0.16)] sm:h-16 sm:w-16 lg:mx-0">
                       <Icon size={24} strokeWidth={1.8} />
                     </div>
                     <div className="mt-7">
                       <p className="text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#8f672b]">
                         Step {index + 1}
                       </p>
-                      <h3 className="mt-4 max-w-[300px] text-[1.22rem] font-semibold leading-tight tracking-[-0.03em] text-[#171614] sm:text-[1.35rem]">
+                      <h3 className="mx-auto mt-4 max-w-[300px] text-[1.22rem] font-semibold leading-tight tracking-[-0.03em] text-[#171614] sm:text-[1.35rem] lg:mx-0">
                         {step.title}
                       </h3>
-                      <p className={cx("mt-5 max-w-[320px]", homeBody)}>
+                      <p className={cx("mx-auto mt-5 max-w-[320px] lg:mx-0", homeBody)}>
                         {step.description}
                       </p>
                     </div>
@@ -427,12 +427,12 @@ export default async function CashOfferPage() {
                   {group.map((reason) => (
                     <div
                       key={reason}
-                      className="flex min-h-[60px] items-center gap-3 rounded-[8px] border border-black/[0.055] bg-white px-4 py-3"
+                      className="flex min-h-[60px] flex-col items-center justify-center gap-3 rounded-[8px] border border-black/[0.055] bg-white px-4 py-4 text-center sm:flex-row sm:justify-start sm:py-3 sm:text-left"
                     >
                       <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#ebca84] text-[#171614]">
                         <Check size={15} strokeWidth={2.4} />
                       </span>
-                      <p className="text-left text-[0.92rem] font-extrabold leading-5 text-[#171614]">
+                      <p className="text-center text-[0.92rem] font-extrabold leading-5 text-[#171614] sm:text-left">
                         {reason}
                       </p>
                     </div>
@@ -453,15 +453,15 @@ export default async function CashOfferPage() {
       <HomeSection tone="dark">
         <HomeContainer>
           <div className="grid gap-10">
-            <div data-reveal className={homeReveal()}>
-              <span className={cx(homeEyebrowDark, "flex-wrap")}>
+            <div data-reveal className={cx(homeReveal(), "text-center lg:text-left")}>
+              <span className={cx(homeEyebrowDark, "justify-center flex-wrap lg:justify-start")}>
                 <span className="h-px w-9 bg-[#ebca84]/70" />
                 Cash buyer advantage
               </span>
               <h2 className={cx("mt-5", homeSectionTitleDark)}>
                 Why Choose A Cash Buyer Over A Realtor?
               </h2>
-              <p className="mt-5 max-w-[560px] text-[0.98rem] leading-[1.75] text-white/58">
+              <p className="mx-auto mt-5 max-w-[560px] text-[0.98rem] leading-[1.75] text-white/58 lg:mx-0">
                 Working with us has some distinct advantages over selling
                 through a real estate agent. We are not real estate agents; we
                 are investors who buy houses for cash fast.
@@ -481,10 +481,10 @@ export default async function CashOfferPage() {
                     data-reveal
                     className={cx(
                       homeReveal(index + 1),
-                      "rounded-[8px] border border-white/10 bg-white/[0.045] p-6",
+                      "rounded-[8px] border border-white/10 bg-white/[0.045] p-6 text-center lg:text-left",
                     )}
                   >
-                    <div className="grid h-12 w-12 place-items-center rounded-[8px] bg-[#ebca84] text-[#171614]">
+                    <div className="mx-auto grid h-12 w-12 place-items-center rounded-[8px] bg-[#ebca84] text-[#171614] lg:mx-0">
                       <Icon size={22} strokeWidth={1.9} />
                     </div>
                     <h3 className="mt-5 text-[1.2rem] font-semibold tracking-[-0.025em] text-white">
@@ -510,8 +510,8 @@ export default async function CashOfferPage() {
       <HomeSection>
         <HomeContainer>
           <div className="grid gap-10">
-            <div data-reveal className={homeReveal()}>
-              <span className={cx(homeEyebrowLight, "flex-wrap")}>
+            <div data-reveal className={cx(homeReveal(), "text-center lg:text-left")}>
+              <span className={cx(homeEyebrowLight, "justify-center flex-wrap lg:justify-start")}>
                 <span className="h-px w-9 bg-[#8f672b]/70" />
                 Frequently Asked Questions
               </span>
@@ -527,7 +527,7 @@ export default async function CashOfferPage() {
                   data-reveal
                   className={cx(
                     homeReveal(index % 4),
-                    "rounded-[8px] border border-black/[0.07] bg-[#fbfaf7] p-6",
+                    "rounded-[8px] border border-black/[0.07] bg-[#fbfaf7] p-6 text-center sm:text-left",
                   )}
                 >
                   <h3 className="text-[1.1rem] font-semibold tracking-[-0.025em] text-[#171614]">
