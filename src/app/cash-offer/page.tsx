@@ -13,7 +13,7 @@ import {
 
 import { CashOfferForm } from "@/components/cash-offer/cash-offer-form";
 import { HomeHeroBackground } from "@/components/home/home-hero-background";
-import { SiteShell } from "@/components/home/site-shell";
+import { HomeInteractions } from "@/components/home/home-interactions";
 import {
   HomeContainer,
   HomeSection,
@@ -61,6 +61,13 @@ const reasons = [
   "Buying Another Property",
   "Behind On Payments",
   "Reducing Your Risk Of Overexposure",
+] as const;
+
+const reasonGroups = [
+  reasons.slice(0, 3),
+  reasons.slice(3, 6),
+  reasons.slice(6, 9),
+  reasons.slice(9, 12),
 ] as const;
 
 const steps = [
@@ -147,9 +154,10 @@ export default async function CashOfferPage() {
 
   const settings = mapHomeSettings(rawSettings);
   const { form } = cashOfferForm;
+  const siteName = settings.site_name || "Checkmate REG";
 
   return (
-    <SiteShell settings={settings}>
+    <div className="checkmate-home min-h-screen overflow-x-hidden bg-white text-[#171614] antialiased selection:bg-[#ebca84] selection:text-[#171614]">
       <JsonLd
         id="cash-offer-breadcrumb-schema"
         data={buildBreadcrumbJsonLd([
@@ -157,6 +165,35 @@ export default async function CashOfferPage() {
           { name: "Cash Offer", path: "/cash-offer" },
         ])}
       />
+
+      <header className="absolute inset-x-0 top-0 z-30 border-b border-white/10 bg-[#050505]/72 backdrop-blur-md">
+        <HomeContainer className="flex min-h-[76px] items-center justify-between gap-5">
+          <Link
+            href="/cash-offer"
+            className="flex items-center gap-3 text-white"
+            aria-label={`${siteName} Cash Offer`}
+          >
+            <span className="grid h-10 w-10 place-items-center rounded-[8px] bg-[#ebca84] text-[0.72rem] font-extrabold tracking-[0.08em] text-[#171614]">
+              REG
+            </span>
+            <span className="grid leading-none">
+              <span className="text-[0.95rem] font-semibold tracking-[-0.02em]">
+                {siteName}
+              </span>
+              <span className="mt-1 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-[#ebca84]">
+                Cash Offer
+              </span>
+            </span>
+          </Link>
+
+          <Link
+            href="#cash"
+            className="inline-flex min-h-[42px] items-center justify-center rounded-[8px] border border-[#ebca84]/35 bg-[#ebca84] px-4 text-[0.68rem] font-extrabold uppercase tracking-[0.1em] text-[#171614] transition hover:bg-[#f1d79d]"
+          >
+            Start Survey
+          </Link>
+        </HomeContainer>
+      </header>
 
       <section className="relative isolate overflow-hidden bg-[#050505] text-white">
         <HomeHeroBackground priority />
@@ -174,8 +211,8 @@ export default async function CashOfferPage() {
           className="pointer-events-none absolute inset-0 -z-10 opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:84px_84px] [mask-image:linear-gradient(to_bottom,black,transparent_92%)]"
         />
 
-        <HomeContainer className="pb-16 pt-28 sm:pb-20 sm:pt-32 lg:pb-24 lg:pt-36">
-          <div className="grid gap-12 lg:min-h-[710px] lg:grid-cols-[minmax(0,1.08fr)_minmax(340px,0.92fr)] lg:items-center lg:gap-16">
+        <HomeContainer className="pb-16 pt-28 sm:pb-20 sm:pt-32 lg:pb-20 lg:pt-28">
+          <div className="grid gap-10 lg:min-h-[760px] lg:grid-cols-[minmax(0,0.9fr)_minmax(430px,1.1fr)] lg:items-center lg:gap-12">
             <div className="max-w-[780px]">
               <span data-reveal className={cx(homeReveal(), homeEyebrowDark)}>
                 <span className="h-px w-9 bg-[#ebca84]/70" />
@@ -224,26 +261,23 @@ export default async function CashOfferPage() {
               data-reveal
               className={cx(
                 homeReveal(2),
-                "rounded-[8px] border border-white/12 bg-white/[0.06] p-5 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur-md sm:p-6",
+                "rounded-[8px] border border-white/12 bg-white/[0.08] p-4 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur-md sm:p-5",
               )}
             >
-              <div className="rounded-[8px] border border-[#ebca84]/18 bg-[#11100e]/88 p-6">
-                <p className="text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#ebca84]">
-                  We are looking to buy houses in your area
-                </p>
-                <p className="mt-4 text-[clamp(2.1rem,5vw,4rem)] font-semibold leading-none tracking-[-0.05em] text-white">
-                  Any condition.
-                </p>
-                <p className="mt-5 text-[0.98rem] leading-7 text-white/58">
-                  Complete the short survey and we will call you. We buy houses
-                  for cash. Top price guaranteed.
-                </p>
-                <Link
-                  href="#cash"
-                  className={cx(homeBtnPrimaryGold, "mt-8 w-full")}
-                >
-                  <span className="relative z-[2]">Start the survey</span>
-                </Link>
+              <div
+                id="cash"
+                className="rounded-[8px] border border-[#ebca84]/18 bg-[#fbfaf7] p-5 text-[#171614] sm:p-6"
+              >
+                <div className="mb-5 border-b border-black/[0.08] pb-5">
+                  <p className="text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#8f672b]">
+                    We buy houses for cash
+                  </p>
+                  <h2 className="mt-2 text-[clamp(1.45rem,2.3vw,2.05rem)] font-semibold leading-tight tracking-[-0.04em] text-[#171614]">
+                    Answer a few simple questions to get an instant offer.
+                  </h2>
+                </div>
+
+                <CashOfferForm formSlug={form?.slug || "cash-offer"} />
               </div>
             </div>
           </div>
@@ -252,7 +286,7 @@ export default async function CashOfferPage() {
 
       <HomeSection tone="cream">
         <HomeContainer>
-          <div className="grid gap-10 lg:grid-cols-[0.88fr_1.12fr] lg:items-start lg:gap-16">
+          <div className="grid gap-10">
             <div data-reveal className={homeReveal()}>
               <span className={homeEyebrowLight}>
                 <span className="h-px w-9 bg-[#8f672b]/70" />
@@ -270,7 +304,12 @@ export default async function CashOfferPage() {
               </Link>
             </div>
 
-            <div className="grid gap-4">
+            <div className="relative grid gap-4 lg:grid-cols-3">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-[16.66%] right-[16.66%] top-7 hidden h-px bg-[#c79a4b]/28 lg:block"
+              />
+
               {steps.map((step, index) => {
                 const Icon = step.icon;
 
@@ -280,7 +319,7 @@ export default async function CashOfferPage() {
                     data-reveal
                     className={cx(
                       homeReveal(index + 1),
-                      "grid gap-5 rounded-[8px] border border-black/[0.07] bg-white p-6 shadow-[0_18px_50px_rgba(15,15,15,0.05)] sm:grid-cols-[56px_1fr] sm:p-7",
+                      "relative z-[1] rounded-[8px] border border-black/[0.07] bg-white p-6 shadow-[0_18px_50px_rgba(15,15,15,0.05)] sm:p-7",
                     )}
                   >
                     <div className="grid h-14 w-14 place-items-center rounded-[8px] bg-[#171614] text-[#ebca84]">
@@ -317,22 +356,32 @@ export default async function CashOfferPage() {
             </h2>
           </div>
 
-          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {reasons.map((reason, index) => (
+          <div className="mt-10 grid gap-4 lg:grid-cols-4">
+            {reasonGroups.map((group, index) => (
               <div
-                key={reason}
+                key={group.join("-")}
                 data-reveal
                 className={cx(
-                  homeReveal(index % 4),
-                  "flex min-h-[74px] items-center gap-3 rounded-[8px] border border-black/[0.07] bg-[#fbfaf7] px-5 py-4",
+                  homeReveal(index + 1),
+                  "rounded-[8px] border border-black/[0.07] bg-[#fbfaf7] p-5",
                 )}
               >
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#ebca84] text-[#171614]">
-                  <Check size={16} strokeWidth={2.4} />
-                </span>
-                <p className="text-[0.95rem] font-semibold leading-6 text-[#171614]">
-                  {reason}
+                <p className="text-[0.72rem] font-bold uppercase tracking-[0.16em] text-[#8f672b]">
+                  Situation {index + 1}
                 </p>
+
+                <div className="mt-5 grid gap-4">
+                  {group.map((reason) => (
+                    <div key={reason} className="flex items-start gap-3">
+                      <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#ebca84] text-[#171614]">
+                        <Check size={15} strokeWidth={2.4} />
+                      </span>
+                      <p className="text-[0.94rem] font-semibold leading-6 text-[#171614]">
+                        {reason}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
@@ -341,7 +390,7 @@ export default async function CashOfferPage() {
 
       <HomeSection tone="dark">
         <HomeContainer>
-          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-16">
+          <div className="grid gap-10">
             <div data-reveal className={homeReveal()}>
               <span className={homeEyebrowDark}>
                 <span className="h-px w-9 bg-[#ebca84]/70" />
@@ -357,7 +406,7 @@ export default async function CashOfferPage() {
               </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 lg:grid-cols-4">
               {benefits.map((benefit, index) => {
                 const Icon = benefit.icon;
 
@@ -387,49 +436,9 @@ export default async function CashOfferPage() {
         </HomeContainer>
       </HomeSection>
 
-      <HomeSection tone="cream" id="cash">
-        <HomeContainer>
-          <div className="mx-auto max-w-[820px]">
-            <div data-reveal className={cx(homeReveal(), "text-center")}>
-              <span className={cx(homeEyebrowLight, "justify-center")}>
-                <span className="h-px w-9 bg-[#8f672b]/70" />
-                Questions? Complete the short survey
-              </span>
-              <h2 className={cx("mt-5", homeSectionTitle)}>
-                Answer a few simple questions to get an instant offer.
-              </h2>
-              <p className={cx("mx-auto mt-4 max-w-[590px]", homeBody)}>
-                We will call you, review the property, and let you know what we
-                can pay for your home.
-              </p>
-            </div>
-
-            <div
-              data-reveal
-              className={cx(
-                homeReveal(1),
-                "mt-10 rounded-[8px] border border-black/[0.07] bg-white px-5 py-7 shadow-[0_24px_70px_rgba(15,15,15,0.06)] sm:px-8 sm:py-9",
-              )}
-            >
-              {form ? (
-                <CashOfferForm form={form} />
-              ) : (
-                <div className="rounded-[8px] border border-dashed border-black/15 bg-[#f8f6f1] px-6 py-12 text-center">
-                  <p className="text-[0.95rem] leading-7 text-[#68635b]">
-                    The cash offer form is not published yet. Connect a
-                    published form to “Cash Offer page” in the Forms admin area,
-                    or publish a form with the slug “cash-offer”.
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </HomeContainer>
-      </HomeSection>
-
       <HomeSection>
         <HomeContainer>
-          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-16">
+          <div className="grid gap-10">
             <div data-reveal className={homeReveal()}>
               <span className={homeEyebrowLight}>
                 <span className="h-px w-9 bg-[#8f672b]/70" />
@@ -460,6 +469,7 @@ export default async function CashOfferPage() {
           </div>
         </HomeContainer>
       </HomeSection>
-    </SiteShell>
+      <HomeInteractions />
+    </div>
   );
 }

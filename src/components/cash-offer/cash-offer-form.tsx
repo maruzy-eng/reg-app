@@ -10,10 +10,8 @@ import {
   Loader2,
 } from "lucide-react";
 
-import type { DynamicForm } from "@/lib/forms";
-
 type CashOfferFormProps = {
-  form: DynamicForm | null;
+  formSlug?: string;
 };
 
 type BaseQuestion = {
@@ -164,7 +162,7 @@ function isAnswered(question: Question, value: string) {
   return !question.required || value.trim().length > 0;
 }
 
-export function CashOfferForm({ form }: CashOfferFormProps) {
+export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>(
@@ -211,12 +209,6 @@ export function CashOfferForm({ form }: CashOfferFormProps) {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!form) {
-      setSubmitState("error");
-      setError("The cash offer form is not published yet.");
-      return;
-    }
-
     if (!isAnswered(currentQuestion, currentValue)) {
       setError("Please answer this question to continue.");
       return;
@@ -236,7 +228,7 @@ export function CashOfferForm({ form }: CashOfferFormProps) {
     setError(null);
 
     try {
-      const response = await fetch(`/api/forms/${form.slug}/submit`, {
+      const response = await fetch(`/api/forms/${formSlug}/submit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
