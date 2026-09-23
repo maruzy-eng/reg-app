@@ -8,7 +8,8 @@ import {
 export type FormPageConnectionKey =
   | "calculator"
   | "blueprint"
-  | "blueprint-parcelada";
+  | "blueprint-parcelada"
+  | "cash-offer";
 
 export type FormPageConnectionDefinition = {
   key: FormPageConnectionKey;
@@ -51,6 +52,14 @@ export const FORM_PAGE_CONNECTION_DEFINITIONS: FormPageConnectionDefinition[] =
       description:
         "Formulário de compra parcelada do Blueprint exibido em /compra-parcelada.",
       fallbackSlug: "parcelada",
+    },
+    {
+      key: "cash-offer",
+      label: "Cash Offer page",
+      path: "/cash-offer",
+      description:
+        "Cash offer lead form shown on the public /cash-offer landing page.",
+      fallbackSlug: "cash-offer",
     },
   ];
 
