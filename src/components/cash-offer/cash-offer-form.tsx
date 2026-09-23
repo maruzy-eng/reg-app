@@ -191,6 +191,17 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
     setError(null);
   }
 
+  function updateRadioAnswer(value: string) {
+    updateAnswer(value);
+
+    if (!isLastQuestion) {
+      window.setTimeout(() => {
+        setCurrentIndex((index) => Math.min(index + 1, questions.length - 1));
+        setError(null);
+      }, 180);
+    }
+  }
+
   function goNext() {
     if (!isAnswered(currentQuestion, currentValue)) {
       setError("Please answer this question to continue.");
@@ -264,10 +275,10 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-7">
+    <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-7">
       <div>
-        <div className="flex items-center justify-between gap-4">
-          <p className="text-[0.72rem] font-bold uppercase tracking-[0.16em] text-[#8f672b]">
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-[0.66rem] font-bold uppercase tracking-[0.13em] text-[#8f672b] sm:text-[0.72rem] sm:tracking-[0.16em]">
             Question {currentIndex + 1} of {questions.length}
           </p>
           <p className="text-sm font-extrabold text-[#171614]">{progress}%</p>
@@ -288,32 +299,32 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
         </div>
       </div>
 
-      <div className="min-h-[310px]">
-        <p className="text-[1.55rem] font-semibold leading-tight tracking-[-0.035em] text-[#171614]">
+      <div className="min-h-[260px] sm:min-h-[310px]">
+        <p className="text-[1.32rem] font-semibold leading-tight tracking-[-0.035em] text-[#171614] sm:text-[1.55rem]">
           {currentIndex >= 9 ? "Where Should We Send Your Offer?" : currentQuestion.label}
         </p>
 
         {currentIndex >= 9 ? (
-          <p className="mt-3 text-[1.05rem] font-semibold text-[#8f672b]">
+          <p className="mt-3 text-[0.98rem] font-semibold text-[#8f672b] sm:text-[1.05rem]">
             {currentQuestion.label}
             {currentQuestion.required ? "*" : ""}
           </p>
         ) : (
-          <p className="mt-3 text-sm font-bold uppercase tracking-[0.12em] text-[#8f672b]">
+          <p className="mt-3 text-[0.62rem] font-bold uppercase tracking-[0.12em] text-[#8f672b] sm:text-[0.68rem]">
             {currentQuestion.required ? "Required" : "Optional"}
           </p>
         )}
 
-        <div className="mt-7">
+        <div className="mt-6 sm:mt-7">
           {currentQuestion.type === "radio" ? (
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-3 md:grid-cols-2">
               {currentQuestion.options.map((option) => {
                 const isSelected = currentValue === option;
 
                 return (
                   <label
                     key={option}
-                    className={`flex min-h-[58px] cursor-pointer items-center gap-3 rounded-[8px] border px-4 py-3 text-sm font-extrabold leading-5 transition ${
+                    className={`flex min-h-[56px] cursor-pointer items-center gap-3 rounded-[8px] border px-4 py-3 text-[0.88rem] font-extrabold leading-5 transition sm:text-sm ${
                       isSelected
                         ? "border-[#c79a4b] bg-[#f7efd9] text-[#171614] ring-4 ring-[#c79a4b]/15"
                         : "border-black/[0.08] bg-white text-[#171614] hover:border-[#c79a4b]/50"
@@ -325,7 +336,7 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
                       value={option}
                       checked={isSelected}
                       required={currentQuestion.required}
-                      onChange={(event) => updateAnswer(event.target.value)}
+                      onChange={(event) => updateRadioAnswer(event.target.value)}
                       className="h-4 w-4 accent-[#c79a4b]"
                     />
                     <span>{option}</span>
@@ -343,7 +354,7 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
               autoComplete={currentQuestion.autoComplete}
               value={currentValue}
               onChange={(event) => updateAnswer(event.target.value)}
-              className="min-h-[58px] w-full rounded-[8px] border border-black/[0.1] bg-white px-5 text-[1rem] font-semibold text-[#171614] outline-none transition placeholder:text-[#9b9488] focus:border-[#c79a4b] focus:ring-4 focus:ring-[#c79a4b]/15"
+              className="min-h-[56px] w-full rounded-[8px] border border-black/[0.1] bg-white px-4 text-[1rem] font-semibold text-[#171614] outline-none transition placeholder:text-[#9b9488] focus:border-[#c79a4b] focus:ring-4 focus:ring-[#c79a4b]/15 sm:min-h-[58px] sm:px-5"
             />
           )}
         </div>
@@ -368,7 +379,7 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
           type="button"
           onClick={goBack}
           disabled={currentIndex === 0 || submitState === "submitting"}
-          className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-[8px] border border-black/[0.1] bg-white px-5 text-sm font-extrabold text-[#171614] transition hover:border-[#c79a4b]/50 disabled:pointer-events-none disabled:opacity-45"
+          className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-[8px] border border-black/[0.1] bg-white px-5 text-sm font-extrabold text-[#171614] transition hover:border-[#c79a4b]/50 disabled:pointer-events-none disabled:opacity-45 sm:w-auto"
         >
           <ArrowLeft size={18} />
           Back
@@ -378,7 +389,7 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
           <button
             type="submit"
             disabled={submitState === "submitting" || submitState === "success"}
-            className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-[8px] bg-[#171614] px-6 text-sm font-extrabold text-white transition hover:bg-black disabled:pointer-events-none disabled:opacity-70"
+            className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-[8px] bg-[#171614] px-6 text-sm font-extrabold text-white transition hover:bg-black disabled:pointer-events-none disabled:opacity-70 sm:w-auto"
           >
             {submitState === "submitting" ? (
               <>
@@ -396,7 +407,7 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
           <button
             type="button"
             onClick={goNext}
-            className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-[8px] bg-[#171614] px-6 text-sm font-extrabold text-white transition hover:bg-black"
+            className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-[8px] bg-[#171614] px-6 text-sm font-extrabold text-white transition hover:bg-black sm:w-auto"
           >
             Continue
             <ArrowRight size={18} />
