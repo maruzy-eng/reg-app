@@ -10,6 +10,8 @@ import {
   Loader2,
 } from "lucide-react";
 
+import { formatUSPhone } from "@/lib/phone";
+
 type CashOfferFormProps = {
   formSlug?: string;
 };
@@ -175,13 +177,16 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
 
   const currentQuestion = questions[currentIndex];
   const currentValue = answers[currentQuestion.key] || "";
+  const isContactStep = currentIndex === 9;
   const answeredCount = useMemo(() => {
     return questions.filter((question) => {
       return isAnswered(question, answers[question.key] || "");
     }).length;
   }, [answers]);
   const progress = Math.round((answeredCount / questions.length) * 100);
-  const isLastQuestion = currentIndex === questions.length - 1;
+  const isLastQuestion = isContactStep;
+
+  const contactQuestions = questions.slice(9) as TextQuestion[];
 
   function updateAnswer(value: string) {
     setAnswers((current) => ({
@@ -202,13 +207,57 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
     }
   }
 
-  function goNext() {
+  function updateTextAnswer(value: string) {
+    updateTextQuestionAnswer(currentQuestion.key, value);
+  }
+
+  function updateTextQuestionAnswer(key: string, value: string) {
+    const nextValue = key === "phone" ? formatUSPhone(value) : value;
+
+    setAnswers((current) => ({
+      ...current,
+      [key]: nextValue,
+    }));
+
+    setError(null);
+  }
+
+  function isContactStepComplete(nextAnswers = answers) {
+    return contactQuestions.every((question) => {
+      return isAnswered(question, nextAnswers[question.key] || "");
+    });
+  }
+
+  function validateCurrentStep() {
+    if (isContactStep) {
+      if (!isContactStepComplete()) {
+        setError("Please complete your contact information to continue.");
+        return false;
+      }
+
+      return true;
+    }
+
     if (!isAnswered(currentQuestion, currentValue)) {
       setError("Please answer this question to continue.");
+      return false;
+    }
+
+    return true;
+  }
+
+  function goNext() {
+    if (!validateCurrentStep()) {
       return;
     }
 
-    setCurrentIndex((index) => Math.min(index + 1, questions.length - 1));
+    if (currentIndex === 8) {
+      setCurrentIndex(9);
+      setError(null);
+      return;
+    }
+
+    setCurrentIndex((index) => Math.min(index + 1, 9));
     setError(null);
   }
 
@@ -220,8 +269,7 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!isAnswered(currentQuestion, currentValue)) {
-      setError("Please answer this question to continue.");
+    if (!validateCurrentStep()) {
       return;
     }
 
@@ -301,13 +349,12 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
 
       <div className="min-h-[260px] sm:min-h-[310px]">
         <p className="text-[1.32rem] font-semibold leading-tight tracking-[-0.035em] text-[#171614] sm:text-[1.55rem]">
-          {currentIndex >= 9 ? "Where Should We Send Your Offer?" : currentQuestion.label}
+          {isContactStep ? "Where Should We Send Your Offer?" : currentQuestion.label}
         </p>
 
-        {currentIndex >= 9 ? (
+        {isContactStep ? (
           <p className="mt-3 text-[0.98rem] font-semibold text-[#8f672b] sm:text-[1.05rem]">
-            {currentQuestion.label}
-            {currentQuestion.required ? "*" : ""}
+            Name, Last name, Email and Phone Number*
           </p>
         ) : (
           <p className="mt-3 text-[0.62rem] font-bold uppercase tracking-[0.12em] text-[#8f672b] sm:text-[0.68rem]">
@@ -316,7 +363,36 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
         )}
 
         <div className="mt-6 sm:mt-7">
-          {currentQuestion.type === "radio" ? (
+          {isContactStep ? (
+            <div className="grid gap-3 sm:grid-cols-2">
+              {contactQuestions.map((question) => (
+                <input
+                  key={question.key}
+                  name={question.key}
+                  type={question.type}
+                  inputMode={
+                    question.type === "number"
+                      ? "numeric"
+                      : question.type === "tel"
+                        ? "tel"
+                        : undefined
+                  }
+                  required={question.required}
+                  placeholder={
+                    question.key === "phone"
+                      ? "(555) 000-0000"
+                      : question.placeholder
+                  }
+                  autoComplete={question.autoComplete}
+                  value={answers[question.key] || ""}
+                  onChange={(event) =>
+                    updateTextQuestionAnswer(question.key, event.target.value)
+                  }
+                  className="min-h-[56px] w-full rounded-[8px] border border-black/[0.1] bg-white px-4 text-[1rem] font-semibold text-[#171614] outline-none transition placeholder:text-[#9b9488] focus:border-[#c79a4b] focus:ring-4 focus:ring-[#c79a4b]/15 sm:min-h-[58px] sm:px-5"
+                />
+              ))}
+            </div>
+          ) : currentQuestion.type === "radio" ? (
             <div className="grid gap-3 md:grid-cols-2">
               {currentQuestion.options.map((option) => {
                 const isSelected = currentValue === option;
@@ -350,10 +426,14 @@ export function CashOfferForm({ formSlug = "cash-offer" }: CashOfferFormProps) {
               type={currentQuestion.type}
               inputMode={currentQuestion.type === "number" ? "numeric" : undefined}
               required={currentQuestion.required}
-              placeholder={currentQuestion.placeholder}
+              placeholder={
+                currentQuestion.key === "phone"
+                  ? "(555) 000-0000"
+                  : currentQuestion.placeholder
+              }
               autoComplete={currentQuestion.autoComplete}
               value={currentValue}
-              onChange={(event) => updateAnswer(event.target.value)}
+              onChange={(event) => updateTextAnswer(event.target.value)}
               className="min-h-[56px] w-full rounded-[8px] border border-black/[0.1] bg-white px-4 text-[1rem] font-semibold text-[#171614] outline-none transition placeholder:text-[#9b9488] focus:border-[#c79a4b] focus:ring-4 focus:ring-[#c79a4b]/15 sm:min-h-[58px] sm:px-5"
             />
           )}

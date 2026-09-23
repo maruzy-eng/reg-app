@@ -223,4 +223,76 @@ begin
   set
     form_id = excluded.form_id,
     updated_at = timezone('utc', now());
+
+  delete from public.reg_form_emails
+  where form_id = cash_offer_form_id
+    and name in ('Cash Offer', 'Cash Offer Lead Notification');
+
+  insert into public.reg_form_emails (
+    form_id,
+    name,
+    type,
+    enabled,
+    recipient_field,
+    recipients,
+    subject_template,
+    body_html_template,
+    from_name,
+    reply_to_field,
+    sort_order
+  )
+  values (
+    cash_offer_form_id,
+    'Cash Offer Lead Notification',
+    'admin',
+    true,
+    null,
+    '["diego.maruzy@gmail.com"]'::jsonb,
+    'New Cash Offer Lead - {{first_name}} {{last_name}}',
+    '<html>
+  <body style="margin:0; padding:0; background:#f8f6f1; font-family:Arial, sans-serif; color:#171614;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f8f6f1; padding:32px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:680px; background:#ffffff; border:1px solid rgba(23,22,20,0.10); border-radius:8px; overflow:hidden;">
+            <tr>
+              <td style="padding:28px 28px 18px; background:#050505; color:#ffffff;">
+                <p style="margin:0 0 10px; color:#ebca84; font-size:12px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase;">Cash Offer Lead</p>
+                <h1 style="margin:0; font-size:28px; line-height:1.15; font-weight:700;">New submission from {{form_name}}</h1>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:28px;">
+                <h2 style="margin:0 0 16px; font-size:18px; line-height:1.3;">Property Details</h2>
+                <p><strong>What Type Of Property Is It?</strong><br>{{property_type}}</p>
+                <p><strong>Is The Property Currently Occupied?</strong><br>{{occupancy}}</p>
+                <p><strong>What Is The Condition Of The Property?</strong><br>{{property_condition}}</p>
+                <p><strong>How Long Have You Owned The Property?</strong><br>{{ownership_length}}</p>
+                <p><strong>Is The Property Listed With A Realtor?</strong><br>{{listed_with_realtor}}</p>
+                <p><strong>How Soon Are You Looking To Sell?</strong><br>{{sell_timeline}}</p>
+                <p><strong>Do You Have An Asking Price In Mind?</strong><br>{{asking_price}}</p>
+                <p><strong>Why Are You Looking To Sell Your Property?</strong><br>{{selling_reason}}</p>
+                <p><strong>What Is The Address Of The Property?</strong><br>{{property_address}}</p>
+
+                <h2 style="margin:28px 0 16px; font-size:18px; line-height:1.3;">Contact Details</h2>
+                <p><strong>Name</strong><br>{{first_name}}</p>
+                <p><strong>Last name</strong><br>{{last_name}}</p>
+                <p><strong>Email</strong><br>{{email}}</p>
+                <p><strong>Phone Number</strong><br>{{phone}}</p>
+
+                <h2 style="margin:28px 0 16px; font-size:18px; line-height:1.3;">Tracking</h2>
+                <p><strong>Source URL</strong><br>{{source_url}}</p>
+                <p><strong>Submission ID</strong><br>{{submission_id}}</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>',
+    'Checkmate Real Estate Group',
+    'email',
+    10
+  );
 end $$;
