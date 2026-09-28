@@ -8,6 +8,7 @@ import {
 export type FormPageConnectionKey =
   | "calculator"
   | "blueprint"
+  | "blueprint-vsl"
   | "blueprint-parcelada"
   | "cash-offer";
 
@@ -17,6 +18,12 @@ export type FormPageConnectionDefinition = {
   path: string;
   description: string;
   fallbackSlug: string;
+  /**
+   * Conexão usada quando esta página ainda não tem um formulário próprio
+   * conectado no admin. Permite que /blueprint-vsl herde o formulário do
+   * /blueprint sem duplicar cadastro.
+   */
+  fallbackPageKey?: FormPageConnectionKey;
 };
 
 export type FormPageConnection = {
@@ -44,6 +51,15 @@ export const FORM_PAGE_CONNECTION_DEFINITIONS: FormPageConnectionDefinition[] =
       description:
         "Formulário “Fale com um analista” exibido na página pública /blueprint.",
       fallbackSlug: "blueprint",
+    },
+    {
+      key: "blueprint-vsl",
+      label: "Blueprint VSL page",
+      path: "/blueprint-vsl",
+      description:
+        "Formulário exibido na VSL pública /blueprint-vsl, liberado após o vídeo. Sem conexão própria, herda o formulário do /blueprint.",
+      fallbackSlug: "blueprint",
+      fallbackPageKey: "blueprint",
     },
     {
       key: "blueprint-parcelada",
@@ -144,9 +160,65 @@ export async function getAllFormPageConnections() {
   return data || [];
 }
 
-export async function getPublishedFormByPageKey(pageKey: FormPageConnectionKey) {
+export type PageFormResolution = {
+  form: DynamicForm | null;
+  fields: DynamicFormField[];
+  error: string | null;
+  pageKey: FormPageConnectionKey;
+  connectionFormId: string | null;
+  inheritedFromPageKey: FormPageConnectionKey | null;
+};
+
+async function loadPublishedFormById(
+  supabase: ReturnType<typeof getSupabaseAdmin>,
+  formId: string,
+) {
+  const { data: form, error: formError } = await supabase
+    .from("reg_forms")
+    .select("*")
+    .eq("id", formId)
+    .eq("status", "published")
+    .single<DynamicForm>();
+
+  if (formError || !form) {
+    return {
+      form: null as DynamicForm | null,
+      fields: [] as DynamicFormField[],
+      error: (formError?.message ||
+        "Form not found or not published.") as string | null,
+    };
+  }
+
+  const { data: fields, error: fieldsError } = await supabase
+    .from("reg_form_fields")
+    .select("*")
+    .eq("form_id", form.id)
+    .order("sort_order", { ascending: true })
+    .returns<DynamicFormField[]>();
+
+  if (fieldsError) {
+    return {
+      form: null as DynamicForm | null,
+      fields: [] as DynamicFormField[],
+      error: fieldsError.message as string | null,
+    };
+  }
+
+  return {
+    form,
+    fields: fields || [],
+    error: null as string | null,
+  };
+}
+
+export async function getPublishedFormByPageKey(
+  pageKey: FormPageConnectionKey,
+  options: { visited?: Set<FormPageConnectionKey> } = {},
+): Promise<PageFormResolution> {
   const definition = getFormPageConnectionDefinition(pageKey);
   const supabase = getSupabaseAdmin();
+  const visited = options.visited || new Set<FormPageConnectionKey>();
+  visited.add(pageKey);
 
   const { data: connection, error } = await supabase
     .from("reg_form_page_connections")
@@ -156,39 +228,48 @@ export async function getPublishedFormByPageKey(pageKey: FormPageConnectionKey) 
 
   if (error && !isMissingTableError(error)) {
     return {
-      form: null as DynamicForm | null,
-      fields: [] as DynamicFormField[],
+      form: null,
+      fields: [],
       error: error.message,
       pageKey,
-      connectionFormId: null as string | null,
+      connectionFormId: null,
+      inheritedFromPageKey: null,
     };
   }
 
   if (connection?.form_id) {
-    const { data: form, error: formError } = await supabase
-      .from("reg_forms")
-      .select("*")
-      .eq("id", connection.form_id)
-      .eq("status", "published")
-      .single<DynamicForm>();
+    const connected = await loadPublishedFormById(
+      supabase,
+      connection.form_id,
+    );
 
-    if (!formError && form) {
-      const { data: fields, error: fieldsError } = await supabase
-        .from("reg_form_fields")
-        .select("*")
-        .eq("form_id", form.id)
-        .order("sort_order", { ascending: true })
-        .returns<DynamicFormField[]>();
+    if (connected.form) {
+      return {
+        ...connected,
+        error: null,
+        pageKey,
+        connectionFormId: connected.form.id,
+        inheritedFromPageKey: null,
+      };
+    }
+  }
 
-      if (!fieldsError) {
-        return {
-          form,
-          fields: fields || [],
-          error: null,
-          pageKey,
-          connectionFormId: form.id,
-        };
-      }
+  const inheritedPageKey = definition?.fallbackPageKey;
+
+  if (inheritedPageKey && !visited.has(inheritedPageKey)) {
+    const inherited = await getPublishedFormByPageKey(inheritedPageKey, {
+      visited,
+    });
+
+    if (inherited.form) {
+      return {
+        form: inherited.form,
+        fields: inherited.fields,
+        error: null,
+        pageKey,
+        connectionFormId: inherited.connectionFormId,
+        inheritedFromPageKey: inheritedPageKey,
+      };
     }
   }
 
@@ -200,6 +281,7 @@ export async function getPublishedFormByPageKey(pageKey: FormPageConnectionKey) 
     ...fallback,
     pageKey,
     connectionFormId: fallback.form?.id || null,
+    inheritedFromPageKey: null,
   };
 }
 

@@ -1,16 +1,34 @@
-import { BlueprintApproval } from "@/components/blueprint/blueprint-approval";
-import { BlueprintBenefits } from "@/components/blueprint/blueprint-benefits";
-import { BlueprintEcosystem } from "@/components/blueprint/blueprint-ecosystem";
-import { BlueprintFinalCta } from "@/components/blueprint/blueprint-final-cta";
-import { BlueprintForm } from "@/components/blueprint/blueprint-form";
-import { BlueprintGallery } from "@/components/blueprint/blueprint-gallery";
-import { BlueprintHero } from "@/components/blueprint/blueprint-hero";
-import { BlueprintMedia } from "@/components/blueprint/blueprint-media";
-import { BlueprintMidCta } from "@/components/blueprint/blueprint-mid-cta";
-import { BlueprintProjects } from "@/components/blueprint/blueprint-projects";
-import { BlueprintProperties } from "@/components/blueprint/blueprint-properties";
-import { BlueprintStats } from "@/components/blueprint/blueprint-stats";
-import { BlueprintTestimonials } from "@/components/blueprint/blueprint-testimonials";
+import { BlueprintHeader } from "./experience/header";
+import { BlueprintMotion } from "./experience/motion";
+import {
+  BlueprintHero,
+  BlueprintProblem,
+  BlueprintDifferential,
+  BlueprintProfessional,
+  BlueprintHowItWorks,
+  BlueprintOperations,
+} from "./experience/story";
+import {
+  BlueprintProjects,
+  BlueprintExperiences,
+  BlueprintTestimonials,
+} from "./experience/proof";
+import {
+  BlueprintStats,
+  BlueprintNetwork,
+  BlueprintFinancing,
+  BlueprintAudience,
+  BlueprintDeliverables,
+} from "./experience/ecosystem";
+import {
+  BlueprintOffer,
+  BlueprintFAQ,
+  BlueprintFinalCTA,
+  BlueprintFooter,
+} from "./experience/conversion";
+import { selectBlueprintCases } from "@/lib/blueprint/experience";
+import type { SiteSettingsValue } from "@/lib/site-settings";
+import "./experience/blueprint.css";
 import type { DynamicForm, DynamicFormField } from "@/lib/forms";
 import type { PropertyCard } from "@/types/property";
 
@@ -18,28 +36,42 @@ type BlueprintPageProps = {
   properties: PropertyCard[];
   form: DynamicForm | null;
   fields: DynamicFormField[];
+  settings?: SiteSettingsValue;
 };
 
 export function BlueprintPage({
   properties,
   form,
   fields,
+  settings = {},
 }: BlueprintPageProps) {
   return (
-    <main className="overflow-x-hidden bg-white font-sans text-[#222] antialiased selection:bg-[#c9a24d] selection:text-white">
-      <BlueprintHero />
-      <BlueprintStats />
-      <BlueprintEcosystem />
-      <BlueprintBenefits />
-      <BlueprintMidCta />
-      <BlueprintProjects />
-      <BlueprintProperties properties={properties} />
-      <BlueprintApproval />
-      <BlueprintTestimonials />
-      <BlueprintGallery />
-      <BlueprintMedia />
-      <BlueprintForm form={form} fields={fields} />
-      <BlueprintFinalCta />
-    </main>
+    <div className="bp-experience" lang="pt-BR">
+      <a href="#blueprint" className="bp-skip">
+        Ir para o conteúdo
+      </a>
+      <BlueprintHeader />
+      <main>
+        <BlueprintHero />
+        <BlueprintProblem />
+        <BlueprintDifferential />
+        <BlueprintProfessional />
+        <BlueprintHowItWorks />
+        <BlueprintOperations />
+        <BlueprintProjects projects={selectBlueprintCases(properties)} />
+        <BlueprintStats properties={properties} />
+        <BlueprintNetwork />
+        <BlueprintFinancing />
+        <BlueprintAudience />
+        <BlueprintDeliverables />
+        <BlueprintExperiences />
+        <BlueprintTestimonials />
+        <BlueprintOffer form={form} fields={fields} />
+        <BlueprintFAQ />
+        <BlueprintFinalCTA />
+      </main>
+      <BlueprintFooter settings={settings} />
+      <BlueprintMotion />
+    </div>
   );
 }

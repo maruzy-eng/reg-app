@@ -1678,6 +1678,114 @@ aside a[href="/"] span[class*="bg-[#2680d8]"] svg {
   box-shadow: 0 0 0 4px rgba(201, 162, 77, 0.12);
 }
 
+/* Blueprint VSL (/blueprint-vsl) — dark theme overrides for DynamicFormComponent.
+   The VSL form is rendered inside a dark card, so the shared light styles are
+   remapped here instead of forking the component. */
+.blueprint-vsl-form label {
+  color: rgba(255, 255, 255, 0.68) !important;
+}
+
+.blueprint-vsl-form input:not([type="checkbox"]):not([type="radio"]),
+.blueprint-vsl-form select,
+.blueprint-vsl-form textarea {
+  background: #08090d !important;
+  border-color: rgba(255, 255, 255, 0.09) !important;
+  color: #ffffff !important;
+}
+
+.blueprint-vsl-form input::placeholder,
+.blueprint-vsl-form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.24) !important;
+}
+
+.blueprint-vsl-form input:focus,
+.blueprint-vsl-form select:focus,
+.blueprint-vsl-form textarea:focus {
+  background: #0b0c10 !important;
+  border-color: rgba(198, 161, 91, 0.6) !important;
+  box-shadow: 0 0 0 4px rgba(198, 161, 91, 0.15) !important;
+}
+
+.blueprint-vsl-form select {
+  background-image: none !important;
+  appearance: none !important;
+}
+
+.blueprint-vsl-form select option {
+  background: #08090d;
+  color: #ffffff;
+}
+
+/* Icons inside the fields and the select caret */
+.blueprint-vsl-form svg[class*="text-[#64748b]"],
+.blueprint-vsl-form span[class*="text-[#64748b]"] {
+  color: rgba(198, 161, 91, 0.55) !important;
+}
+
+/* Help text */
+.blueprint-vsl-form p[class*="text-[#64748b]"] {
+  color: rgba(255, 255, 255, 0.38) !important;
+}
+
+/* Radio, checkbox and acceptance cards */
+.blueprint-vsl-form label:has(input[type="radio"]),
+.blueprint-vsl-form label:has(input[type="checkbox"]) {
+  background: rgba(255, 255, 255, 0.025) !important;
+  border-color: rgba(255, 255, 255, 0.09) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.blueprint-vsl-form label:has(input[type="radio"]:hover),
+.blueprint-vsl-form label:has(input[type="checkbox"]:hover) {
+  border-color: rgba(198, 161, 91, 0.4) !important;
+}
+
+.blueprint-vsl-form label:has(input[type="radio"]:checked),
+.blueprint-vsl-form label:has(input[type="checkbox"]:checked) {
+  border-color: rgba(198, 161, 91, 0.65) !important;
+  box-shadow: 0 0 0 4px rgba(198, 161, 91, 0.12);
+  color: #ffffff !important;
+}
+
+.blueprint-vsl-form input[type="checkbox"],
+.blueprint-vsl-form input[type="radio"] {
+  accent-color: #c6a15b;
+}
+
+/* General and field error messages */
+.blueprint-vsl-form div[class*="border-red-200"] {
+  background: rgba(220, 38, 38, 0.12) !important;
+  border-color: rgba(220, 38, 38, 0.35) !important;
+  color: #fca5a5 !important;
+}
+
+.blueprint-vsl-form p[class*="text-red-600"] {
+  color: #fca5a5 !important;
+}
+
+/* Submit */
+.blueprint-vsl-form button[type="submit"] {
+  background: linear-gradient(
+    90deg,
+    #8b6a2e 0%,
+    #c6a15b 50%,
+    #dcc178 100%
+  ) !important;
+  border: 1px solid rgba(220, 193, 120, 0.25) !important;
+  border-radius: 11px !important;
+  box-shadow: 0 14px 50px rgba(198, 161, 91, 0.15) !important;
+  color: #080808 !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  min-height: 58px !important;
+  text-transform: uppercase !important;
+}
+
+.blueprint-vsl-form button[type="submit"]:hover {
+  box-shadow: 0 16px 60px rgba(198, 161, 91, 0.28) !important;
+}
+
 /* =========================================================
    RESPONSIVE
 ========================================================= */

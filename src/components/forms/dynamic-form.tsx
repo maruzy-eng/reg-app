@@ -643,7 +643,7 @@ export function DynamicFormComponent({
           htmlFor={field.name}
           className="block text-sm font-extrabold text-[#0c2933]"
         >
-          {isState ? "States US" : field.label}
+          {isState ? field.label || "States US" : field.label}
           {field.required ? <span className="text-[#1f9f5f]"> *</span> : null}
         </label>
 

@@ -14,6 +14,11 @@ type HomeHeaderProps = {
 
 export function HomeHeader({ siteName }: HomeHeaderProps) {
   const pathname = usePathname();
+
+  return <HomeHeaderContent key={pathname} siteName={siteName} pathname={pathname} />;
+}
+
+function HomeHeaderContent({ siteName, pathname }: HomeHeaderProps & { pathname: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -45,10 +50,6 @@ export function HomeHeader({ siteName }: HomeHeaderProps) {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
 
   function closeMenu() {
     setIsOpen(false);
