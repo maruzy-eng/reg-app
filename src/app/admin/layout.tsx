@@ -18,6 +18,12 @@ const adminNavItems = [
     permission: "dashboard.read",
   },
   {
+    label: "Dashboard VSL",
+    href: "/admin/dashboard-vsl",
+    icon: "dashboard",
+    permission: "dashboard.read",
+  },
+  {
     label: "Properties",
     href: "/admin/properties",
     icon: "properties",

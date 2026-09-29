@@ -13,6 +13,8 @@ type VSLPlayerProps = {
   videoId: string;
   unlockAt?: number;
   onUnlock?: () => void;
+  onSoundEnabled?: () => void;
+  onVideoComplete?: (data: { duration: number; seconds: number }) => void;
 };
 
 const PROGRESS_STORAGE_KEY = "blueprint_vsl_video_progress";
@@ -35,6 +37,8 @@ export default function VSLPlayer({
   videoId,
   unlockAt = 300,
   onUnlock,
+  onSoundEnabled,
+  onVideoComplete,
 }: VSLPlayerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
@@ -47,6 +51,8 @@ export default function VSLPlayer({
   const unlockTriggeredRef = useRef(false);
   const restoredProgressRef = useRef(false);
   const lastSavedSecondRef = useRef(-1);
+  const durationRef = useRef(0);
+  const currentTimeRef = useRef(0);
 
   const [ready, setReady] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -113,6 +119,7 @@ export default function VSLPlayer({
       try {
         const videoDuration = await player.getDuration();
 
+        durationRef.current = videoDuration;
         setDuration(videoDuration);
         setReady(true);
         setBuffering(false);
@@ -152,6 +159,7 @@ export default function VSLPlayer({
             ) {
               await player.setCurrentTime(savedProgress);
 
+              currentTimeRef.current = savedProgress;
               setCurrentTime(savedProgress);
             }
           } catch {
@@ -230,6 +238,11 @@ export default function VSLPlayer({
       setPlaying(false);
       setControlsVisible(true);
 
+      onVideoComplete?.({
+        duration: durationRef.current,
+        seconds: currentTimeRef.current,
+      });
+
       try {
         localStorage.removeItem(PROGRESS_STORAGE_KEY);
       } catch {
@@ -250,6 +263,7 @@ export default function VSLPlayer({
     }) {
       const seconds = data.seconds || 0;
 
+      currentTimeRef.current = seconds;
       setCurrentTime(seconds);
 
       /*
@@ -386,7 +400,7 @@ export default function VSLPlayer({
 
       playerRef.current = null;
     };
-  }, [onUnlock, unlockAt]);
+  }, [onUnlock, onVideoComplete, unlockAt]);
 
   /*
    * ---------------------------------------------------------
@@ -422,16 +436,26 @@ export default function VSLPlayer({
 
   useEffect(() => {
     if (!playing) {
-      setControlsVisible(true);
+      const frame = window.requestAnimationFrame(() => {
+        setControlsVisible(true);
+      });
 
       if (hideControlsTimerRef.current) {
         clearTimeout(hideControlsTimerRef.current);
       }
 
-      return;
+      return () => {
+        window.cancelAnimationFrame(frame);
+      };
     }
 
-    showControls();
+    const frame = window.requestAnimationFrame(() => {
+      showControls();
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
   }, [playing, showControls]);
 
   /*
@@ -479,6 +503,7 @@ export default function VSLPlayer({
         await player.setVolume(volume);
 
         setMuted(false);
+        onSoundEnabled?.();
       } else {
         await player.setVolume(0);
 
@@ -513,7 +538,7 @@ export default function VSLPlayer({
       setSpeedAvailable(true);
 
       showControls();
-    } catch (error) {
+    } catch {
       /*
        * Se o Vimeo não permitir velocidade
        * para este vídeo/conta, removemos
