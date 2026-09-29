@@ -1,17 +1,33 @@
+import { verifiedBlueprintMetrics } from "@/lib/blueprint/experience";
+import type { PropertyCard } from "@/types/property";
 import { blueprintContainer } from "./shared";
 
-const metrics = [
-  {
-    value: "US$ 45M+",
-    label: "investidos em real estate nos Estados Unidos",
-  },
-  {
-    value: "11",
-    label: "propriedades no portfólio público",
-  },
-] as const;
+type Blueprint003StatsProps = {
+  properties: PropertyCard[];
+};
 
-export function Blueprint003Stats() {
+export function Blueprint003Stats({ properties }: Blueprint003StatsProps) {
+  const metrics = verifiedBlueprintMetrics.length
+    ? verifiedBlueprintMetrics
+    : [
+        {
+          value: properties.length,
+          suffix: "",
+          label: "propriedades no portfólio público",
+          source: "Inventário público da Checkmate",
+        },
+        {
+          value: new Set(
+            properties.map((property) => property.state).filter(Boolean),
+          ).size,
+          suffix: "",
+          label: "estados com propriedades publicadas",
+          source: "Localização dos imóveis publicados",
+        },
+      ].filter((metric) => metric.value > 0);
+
+  if (!metrics.length) return null;
+
   return (
     <section
       aria-label="Números da Checkmate"
@@ -179,6 +195,7 @@ export function Blueprint003Stats() {
                   "
                 >
                   {metric.value}
+                  {metric.suffix}
                 </strong>
 
                 <div
@@ -244,7 +261,7 @@ export function Blueprint003Stats() {
               text-[#716A60]
             "
           >
-            Números referentes a 2026.
+            Dados do portfólio público exibido no site.
           </p>
 
           <p
