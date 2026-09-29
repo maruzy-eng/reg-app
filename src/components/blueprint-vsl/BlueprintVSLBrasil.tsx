@@ -203,10 +203,18 @@ export default function BlueprintVSLBrasil({
           };
         }
 
+        const thankYouPageUrl =
+          typeof result?.thankYouPageUrl === "string" &&
+          result.thankYouPageUrl
+            ? result.thankYouPageUrl
+            : "/obrigado-vsl-br";
+
         setSubmitted(true);
+        window.location.assign(thankYouPageUrl);
 
         return {
           success: true,
+          redirecting: true,
         };
       } catch {
         return {
