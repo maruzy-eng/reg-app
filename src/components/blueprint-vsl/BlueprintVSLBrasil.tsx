@@ -12,7 +12,7 @@ import { SITE_CONTACT } from "@/lib/home/contact";
 
 import VSLPlayer from "./VSLPlayer";
 
-const VIMEO_VIDEO_ID = "1191378522";
+const VIMEO_VIDEO_ID = "1231476819";
 const FORM_UNLOCK_TIME_SECONDS = 300;
 const STORAGE_KEY = "blueprint_vsl_brasil_form_unlocked";
 const ANALYTICS_SESSION_KEY = "blueprint_vsl_brasil_analytics_session_id";
