@@ -1,37 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import {
-  BlueprintGoldButton,
-  BlueprintKicker,
-  blueprintBodyClass,
-  blueprintContainer,
-  blueprintHeadingClass,
-} from "@/components/blueprint/blueprint-ui";
 import { BLUEPRINT_ASSETS } from "@/lib/blueprint/content";
-import { HOME_HERO_IMAGE } from "@/lib/home/branding";
 import { buildPageMetadata } from "@/lib/seo";
 
-const nextSteps = [
-  {
-    number: "01",
-    title: "Análise da aplicação",
-    description:
-      "Nosso time revisa suas informações para compreender seu momento atual, perfil e objetivos.",
-  },
-  {
-    number: "02",
-    title: "Validação do perfil",
-    description:
-      "A equipe avalia se o Blueprint está alinhado com sua fase e com seus planos no mercado imobiliário.",
-  },
-  {
-    number: "03",
-    title: "Orientação para avançar",
-    description:
-      "Caso exista alinhamento, você receberá uma orientação clara sobre os próximos passos.",
-  },
-] as const;
+/* =========================================================
+   METADATA
+========================================================= */
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Aplicação recebida",
@@ -41,42 +16,86 @@ export const metadata: Metadata = buildPageMetadata({
   noIndex: true,
 });
 
-function CheckIcon() {
+/* =========================================================
+   ICONS
+========================================================= */
+
+function SuccessIcon() {
+  return (
+    <svg
+      viewBox="0 0 80 80"
+      fill="none"
+      aria-hidden="true"
+      className="h-full w-full"
+    >
+      {/* Outer circle */}
+      <circle
+        cx="40"
+        cy="40"
+        r="36"
+        stroke="currentColor"
+        strokeWidth="1"
+        opacity="0.22"
+      />
+
+      {/* Inner circle */}
+      <circle
+        cx="40"
+        cy="40"
+        r="27"
+        stroke="currentColor"
+        strokeWidth="1"
+        opacity="0.48"
+      />
+
+      {/* Top accent */}
+      <path
+        d="M40 4V10"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+
+      {/* Bottom accent */}
+      <path
+        d="M40 70V76"
+        stroke="currentColor"
+        strokeWidth="1"
+        strokeLinecap="round"
+        opacity="0.3"
+      />
+
+      {/* Check */}
+      <path
+        d="M27.5 40.5L35.5 48.5L52.5 31"
+        stroke="currentColor"
+        strokeWidth="2.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function WhatsAppIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.8"
+      strokeWidth="1.7"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
-      className="h-7 w-7"
+      className="h-5 w-5"
     >
-      <path d="m5 12 4 4L19 6" />
+      <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.3 9.3 0 0 1-3.8-.8L3 21l1.8-5a8.8 8.8 0 1 1 16.2-4.5Z" />
+      <path d="M8.4 8.2c.3 2.4 2.1 4.3 4.6 4.8" />
     </svg>
   );
 }
 
-function ChannelIcon({ type }: { type: "whatsapp" | "email" }) {
-  if (type === "whatsapp") {
-    return (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-        className="h-5 w-5"
-      >
-        <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.3 9.3 0 0 1-3.8-.8L3 21l1.8-5a8.8 8.8 0 1 1 16.2-4.5Z" />
-        <path d="M8.4 8.2c.3 2.4 2.1 4.3 4.6 4.8" />
-      </svg>
-    );
-  }
-
+function MailIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -94,260 +113,766 @@ function ChannelIcon({ type }: { type: "whatsapp" | "email" }) {
   );
 }
 
+function ArrowIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+    >
+      <path d="M5 12h14" />
+      <path d="m13 6 6 6-6 6" />
+    </svg>
+  );
+}
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const nextSteps = [
+  {
+    number: "01",
+    title: "Analisamos sua aplicação",
+    description:
+      "Nossa equipe revisa as informações que você enviou para entender seu momento e seus objetivos.",
+  },
+  {
+    number: "02",
+    title: "Avaliamos o alinhamento",
+    description:
+      "Verificamos se o Blueprint faz sentido para o estágio em que você está hoje.",
+  },
+  {
+    number: "03",
+    title: "Entramos em contato",
+    description:
+      "Se houver alinhamento, um especialista da Checkmate falará com você sobre os próximos passos.",
+  },
+] as const;
+
+/* =========================================================
+   PAGE
+========================================================= */
+
 export default function BlueprintObrigadoPage() {
   return (
-    <main className="overflow-x-hidden bg-[#f7f4ed] font-sans text-[#171614] antialiased selection:bg-[#c9a24d] selection:text-white">
-      <section className="relative isolate overflow-hidden bg-[#080808] text-white">
-        <div
-          className="absolute inset-0 -z-40 bg-cover bg-[center_36%] opacity-38"
-          style={{
-            backgroundImage: `url(${HOME_HERO_IMAGE})`,
-          }}
-        />
+    <main
+      className="
+        min-h-screen
+        overflow-x-hidden
+        bg-[#F3EFE6]
+        font-sans
+        text-[#171614]
+        antialiased
+        selection:bg-[#C5A258]
+        selection:text-[#090909]
+      "
+    >
+      {/* =====================================================
+          HERO
+      ====================================================== */}
 
-        <div className="absolute inset-0 -z-30 bg-[linear-gradient(90deg,rgba(0,0,0,0.98)_0%,rgba(0,0,0,0.91)_52%,rgba(0,0,0,0.82)_100%)]" />
-
-        <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(0,0,0,0.18)_0%,rgba(0,0,0,0.72)_100%)]" />
-
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_70%_20%,rgba(201,162,77,0.17),transparent_30%),radial-gradient(circle_at_18%_82%,rgba(201,162,77,0.07),transparent_24%)]" />
-
+      <section
+        className="
+          relative isolate
+          overflow-hidden
+          bg-[#070707]
+          text-white
+        "
+      >
+        {/* Subtle gold atmosphere */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(239,217,146,0.7),transparent)]"
+          className="
+            pointer-events-none
+            absolute inset-0 -z-30
+            bg-[radial-gradient(circle_at_50%_10%,rgba(197,162,88,0.10),transparent_30%)]
+          "
+        />
+
+        {/* Top gold line */}
+        <div
+          aria-hidden="true"
+          className="
+            pointer-events-none
+            absolute inset-x-0 top-0 -z-20
+            h-px
+            bg-gradient-to-r
+            from-transparent
+            via-[#C5A258]/60
+            to-transparent
+          "
         />
 
         <div
-          className={[
-            blueprintContainer,
-            "relative px-5 pb-18 pt-9",
-            "sm:px-6 sm:pb-22 sm:pt-11",
-            "lg:px-8 lg:pb-24",
-          ].join(" ")}
+          className="
+            mx-auto
+            w-full
+            max-w-[1240px]
+            px-5
+            pb-14
+            pt-7
+            sm:px-8
+            sm:pb-20
+            sm:pt-9
+            lg:px-12
+            lg:pb-24
+            lg:pt-10
+          "
         >
-          <Link
-            href="/blueprint"
-            aria-label="Voltar para o Checkmate Blueprint"
-            className="inline-flex items-center transition-opacity duration-300 hover:opacity-80"
-          >
-            <img
-              src={BLUEPRINT_ASSETS.logoLight}
-              alt="Checkmate Real Estate Group"
-              className="h-auto w-[142px] object-contain sm:w-[158px]"
-            />
-          </Link>
+          {/* =================================================
+              HEADER / LOGO
+          ================================================== */}
 
-          <div className="mx-auto mt-14 max-w-[900px] text-center sm:mt-16 lg:mt-20">
-            <div className="mx-auto grid h-20 w-20 place-items-center rounded-full border border-[#e4c26e]/35 bg-[#c9a24d]/12 text-[#e4c26e] shadow-[0_0_0_12px_rgba(201,162,77,0.06),0_22px_60px_rgba(0,0,0,0.35)] backdrop-blur-md">
-              <CheckIcon />
-            </div>
-
-            <div className="mt-8 flex justify-center">
-              <BlueprintKicker dark>Checkmate Blueprint</BlueprintKicker>
-            </div>
-
-            <h1
-              className={[
-                "mx-auto mt-5 max-w-[860px]",
-                blueprintHeadingClass,
-                "text-balance text-white",
-                "lg:text-[clamp(3.2rem,5vw,5.25rem)]",
-              ].join(" ")}
+          <div className="flex items-center justify-center">
+            <Link
+              href="/blueprint"
+              aria-label="Voltar para o Checkmate Blueprint"
+              className="
+                inline-flex
+                transition-opacity
+                duration-300
+                hover:opacity-80
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-[#C5A258]
+                focus-visible:ring-offset-4
+                focus-visible:ring-offset-[#070707]
+              "
             >
-              Aplicação recebida{" "}
-              <span className="bg-[linear-gradient(105deg,#fff7dc_0%,#efd992_35%,#d4ad55_70%,#a77d28_100%)] bg-clip-text text-transparent">
-                com sucesso
+              <img
+                src={BLUEPRINT_ASSETS.logoLight}
+                alt="Checkmate Real Estate Group"
+                className="
+                  h-auto
+                  w-[142px]
+                  object-contain
+                  sm:w-[158px]
+                  lg:w-[166px]
+                "
+              />
+            </Link>
+          </div>
+
+          {/* =================================================
+              HERO CONTENT
+          ================================================== */}
+
+          <div
+            className="
+              mx-auto
+              max-w-[800px]
+              pb-2
+              pt-12
+              text-center
+              sm:pt-16
+              lg:pb-7
+              lg:pt-20
+            "
+          >
+            {/* Modern success icon */}
+            <div
+              className="
+                relative
+                mx-auto
+                h-[82px]
+                w-[82px]
+                text-[#D3B264]
+                sm:h-[90px]
+                sm:w-[90px]
+              "
+            >
+              <div
+                aria-hidden="true"
+                className="
+                  absolute
+                  left-1/2 top-1/2
+                  h-14 w-14
+                  -translate-x-1/2
+                  -translate-y-1/2
+                  rounded-full
+                  bg-[#C5A258]/10
+                  blur-2xl
+                "
+              />
+
+              <div className="relative h-full w-full">
+                <SuccessIcon />
+              </div>
+            </div>
+
+            {/* Kicker */}
+            <p
+              className="
+                mt-6
+                text-[0.56rem]
+                font-bold
+                uppercase
+                tracking-[0.22em]
+                text-[#D3B264]
+                sm:mt-7
+              "
+            >
+              Aplicação enviada
+            </p>
+
+            {/* Main headline */}
+            <h1
+              className="
+                mx-auto
+                mt-5
+                max-w-[780px]
+                text-balance
+                text-[clamp(2.55rem,10vw,5.3rem)]
+                font-medium
+                leading-[0.94]
+                tracking-[-0.06em]
+                text-[#F5F3EE]
+              "
+            >
+              Recebemos seus dados.
+
+              <span
+                className="
+                  mt-2
+                  block
+                  text-[#D3B264]
+                "
+              >
+                Agora é com a gente.
               </span>
             </h1>
 
+            {/* Supporting copy */}
             <p
-              className={[
-                blueprintBodyClass,
-                "mx-auto mt-6 max-w-[700px]",
-                "text-pretty text-center text-white/62",
-              ].join(" ")}
+              className="
+                mx-auto
+                mt-6
+                max-w-[610px]
+                text-pretty
+                text-[0.92rem]
+                leading-[1.75]
+                text-white/65
+                sm:mt-7
+                sm:text-[1.04rem]
+              "
             >
-              Obrigado por aplicar para o Checkmate Blueprint. Agora nossa
-              equipe vai analisar suas informações e verificar se este é o
-              próximo passo certo para a sua jornada no mercado imobiliário
-              americano.
+              Nossa equipe vai analisar sua aplicação e entender se o{" "}
+              <strong className="font-medium text-white/90">
+                Checkmate Blueprint
+              </strong>{" "}
+              faz sentido para o seu momento.
             </p>
 
-            <div className="mx-auto mt-9 grid max-w-[720px] gap-3 sm:grid-cols-2">
-              <div className="flex items-center gap-4 rounded-[20px] border border-white/10 bg-white/[0.045] px-5 py-4 text-left backdrop-blur-xl">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#c9a24d]/12 text-[#e4c26e]">
-                  <ChannelIcon type="whatsapp" />
+            {/* Contact notice */}
+            <div
+              className="
+                mx-auto
+                mt-8
+                max-w-[570px]
+                border-y
+                border-white/10
+                py-5
+                sm:mt-10
+              "
+            >
+              <p
+                className="
+                  text-[0.76rem]
+                  leading-[1.7]
+                  text-white/55
+                  sm:text-[0.8rem]
+                "
+              >
+                Fique atento ao{" "}
+                <strong className="font-medium text-white/85">
+                  WhatsApp
+                </strong>{" "}
+                e ao{" "}
+                <strong className="font-medium text-white/85">
+                  e-mail
+                </strong>{" "}
+                informados no cadastro.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom transition */}
+        <div
+          aria-hidden="true"
+          className="
+            pointer-events-none
+            absolute inset-x-0 bottom-0
+            h-px
+            bg-white/5
+          "
+        />
+      </section>
+
+      {/* =====================================================
+          NEXT STEPS
+      ====================================================== */}
+
+      <section
+        className="
+          bg-[#F3EFE6]
+          py-16
+          sm:py-20
+          lg:py-24
+        "
+      >
+        <div
+          className="
+            mx-auto
+            w-full
+            max-w-[1120px]
+            px-5
+            sm:px-8
+            lg:px-12
+          "
+        >
+          {/* Section heading */}
+          <div
+            className="
+              grid
+              gap-7
+              border-b
+              border-black/10
+              pb-10
+              lg:grid-cols-[0.7fr_1.3fr]
+              lg:items-end
+              lg:gap-20
+              lg:pb-12
+            "
+          >
+            <div>
+              <div className="flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="h-px w-7 bg-[#9A7938]"
+                />
+
+                <p
+                  className="
+                    text-[0.56rem]
+                    font-bold
+                    uppercase
+                    tracking-[0.2em]
+                    text-[#8B6A2E]
+                  "
+                >
+                  Próximos passos
+                </p>
+              </div>
+
+              <h2
+                className="
+                  mt-5
+                  text-[clamp(2.25rem,7vw,4rem)]
+                  font-medium
+                  leading-[0.98]
+                  tracking-[-0.055em]
+                  text-[#171614]
+                "
+              >
+                O que acontece
+
+                <span className="block text-[#9A7938]">
+                  agora?
+                </span>
+              </h2>
+            </div>
+
+            <p
+              className="
+                max-w-[520px]
+                text-[0.92rem]
+                leading-[1.8]
+                text-[#5F5951]
+                lg:justify-self-end
+                lg:text-[0.96rem]
+              "
+            >
+              Você não precisa preencher nada novamente. A partir daqui,
+              nossa equipe segue com a análise da sua aplicação.
+            </p>
+          </div>
+
+          {/* Steps */}
+          <ol className="border-b border-black/10">
+            {nextSteps.map((step) => (
+              <li
+                key={step.number}
+                className="
+                  grid
+                  gap-3
+                  border-b
+                  border-black/10
+                  py-7
+                  last:border-b-0
+                  sm:grid-cols-[64px_0.75fr_1.25fr]
+                  sm:items-baseline
+                  sm:gap-7
+                  lg:py-9
+                "
+              >
+                <span
+                  className="
+                    text-[0.56rem]
+                    font-bold
+                    tracking-[0.08em]
+                    text-[#9A7938]
+                  "
+                >
+                  {step.number}
                 </span>
 
-                <div>
-                  <span className="block text-[0.58rem] font-bold uppercase tracking-[0.15em] text-[#e4c26e]">
-                    WhatsApp
+                <h3
+                  className="
+                    text-[1.1rem]
+                    font-medium
+                    tracking-[-0.025em]
+                    text-[#211F1B]
+                    sm:text-[1.2rem]
+                  "
+                >
+                  {step.title}
+                </h3>
+
+                <p
+                  className="
+                    max-w-[500px]
+                    text-[0.86rem]
+                    leading-[1.75]
+                    text-[#625C54]
+                    sm:text-[0.9rem]
+                  "
+                >
+                  {step.description}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* =====================================================
+          CONTACT REMINDER
+      ====================================================== */}
+
+      <section className="bg-[#EAE4D8]">
+        <div
+          className="
+            mx-auto
+            w-full
+            max-w-[1120px]
+            px-5
+            py-14
+            sm:px-8
+            sm:py-16
+            lg:px-12
+            lg:py-20
+          "
+        >
+          <div
+            className="
+              grid
+              gap-10
+              lg:grid-cols-[0.8fr_1.2fr]
+              lg:items-center
+              lg:gap-20
+            "
+          >
+            {/* Copy */}
+            <div>
+              <p
+                className="
+                  text-[0.56rem]
+                  font-bold
+                  uppercase
+                  tracking-[0.2em]
+                  text-[#8B6A2E]
+                "
+              >
+                Enquanto isso
+              </p>
+
+              <h2
+                className="
+                  mt-4
+                  max-w-[430px]
+                  text-[clamp(2rem,7vw,3.25rem)]
+                  font-medium
+                  leading-[1]
+                  tracking-[-0.05em]
+                  text-[#171614]
+                "
+              >
+                Mantenha seus canais de contato disponíveis.
+              </h2>
+            </div>
+
+            {/* Channels */}
+            <div
+              className="
+                grid
+                border-t
+                border-black/10
+                sm:grid-cols-2
+                lg:border-t-0
+              "
+            >
+              {/* WhatsApp */}
+              <div
+                className="
+                  border-b
+                  border-black/10
+                  py-6
+                  sm:border-b-0
+                  sm:border-r
+                  sm:pr-8
+                  lg:py-2
+                "
+              >
+                <div className="flex items-start gap-4">
+                  <span
+                    className="
+                      grid
+                      h-11 w-11
+                      shrink-0
+                      place-items-center
+                      border
+                      border-[#9A7938]/25
+                      text-[#9A7938]
+                    "
+                  >
+                    <WhatsAppIcon />
                   </span>
-                  <p className="mt-1 text-[0.78rem] leading-[1.5] text-white/52">
-                    Fique atento a uma possível mensagem da equipe.
-                  </p>
+
+                  <div>
+                    <strong
+                      className="
+                        block
+                        text-[0.66rem]
+                        font-bold
+                        uppercase
+                        tracking-[0.14em]
+                        text-[#292620]
+                      "
+                    >
+                      WhatsApp
+                    </strong>
+
+                    <p
+                      className="
+                        mt-2
+                        max-w-[260px]
+                        text-[0.81rem]
+                        leading-[1.65]
+                        text-[#686158]
+                      "
+                    >
+                      Um especialista poderá entrar em contato pelo número
+                      informado no formulário.
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 rounded-[20px] border border-white/10 bg-white/[0.045] px-5 py-4 text-left backdrop-blur-xl">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#c9a24d]/12 text-[#e4c26e]">
-                  <ChannelIcon type="email" />
-                </span>
-
-                <div>
-                  <span className="block text-[0.58rem] font-bold uppercase tracking-[0.15em] text-[#e4c26e]">
-                    E-mail
+              {/* Email */}
+              <div
+                className="
+                  py-6
+                  sm:pl-8
+                  lg:py-2
+                "
+              >
+                <div className="flex items-start gap-4">
+                  <span
+                    className="
+                      grid
+                      h-11 w-11
+                      shrink-0
+                      place-items-center
+                      border
+                      border-[#9A7938]/25
+                      text-[#9A7938]
+                    "
+                  >
+                    <MailIcon />
                   </span>
-                  <p className="mt-1 text-[0.78rem] leading-[1.5] text-white/52">
-                    Verifique também sua caixa de entrada e o spam.
-                  </p>
+
+                  <div>
+                    <strong
+                      className="
+                        block
+                        text-[0.66rem]
+                        font-bold
+                        uppercase
+                        tracking-[0.14em]
+                        text-[#292620]
+                      "
+                    >
+                      E-mail
+                    </strong>
+
+                    <p
+                      className="
+                        mt-2
+                        max-w-[260px]
+                        text-[0.81rem]
+                        leading-[1.65]
+                        text-[#686158]
+                      "
+                    >
+                      Confira também sua caixa de entrada, promoções e spam.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(180deg,transparent,#f7f4ed)]"
-        />
       </section>
 
-      <section className="relative overflow-hidden py-18 sm:py-22 lg:py-24">
+      {/* =====================================================
+          FINAL
+      ====================================================== */}
+
+      <section className="bg-[#070707] text-white">
         <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-42 [background-image:linear-gradient(rgba(201,162,77,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(201,162,77,0.06)_1px,transparent_1px)] [background-size:52px_52px]"
-        />
-
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute left-[-160px] top-[-100px] h-[380px] w-[380px] rounded-full bg-[#c9a24d]/10 blur-[120px]"
-        />
-
-        <div className={`relative z-[1] ${blueprintContainer}`}>
-          <div className="grid gap-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
-            <article className="relative overflow-hidden rounded-[30px] border border-black/[0.07] bg-white p-7 shadow-[0_24px_72px_rgba(15,15,15,0.07)] sm:p-9">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#c9a24d]/10 blur-[75px]"
-              />
-
-              <BlueprintKicker>Status da aplicação</BlueprintKicker>
-
-              <h2 className="mt-5 text-[clamp(1.65rem,2.5vw,2.1rem)] font-semibold leading-[1.08] tracking-[-0.045em] text-[#171614]">
-                Sua aplicação já está em análise.
-              </h2>
-
-              <p className="mt-4 max-w-[470px] text-[0.95rem] leading-[1.72] text-[#68635b]">
-                A equipe irá revisar seus dados e avaliar o melhor
-                direcionamento para o seu momento atual.
-              </p>
-
-              <div className="mt-8 flex items-center gap-3 border-t border-black/[0.07] pt-6">
-                <span className="h-2 w-2 rounded-full bg-[#c9a24d] shadow-[0_0_0_6px_rgba(201,162,77,0.12)]" />
-                <span className="text-[0.62rem] font-bold uppercase tracking-[0.15em] text-[#8d7751]">
-                  Status: recebida
-                </span>
-              </div>
-            </article>
-
-            <article className="relative overflow-hidden rounded-[30px] border border-[#c9a24d]/20 bg-[#171614] p-7 text-white shadow-[0_28px_80px_rgba(15,15,15,0.14)] sm:p-9">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-[#c9a24d]/14 blur-[90px]"
-              />
-
-              <BlueprintKicker dark>Informação importante</BlueprintKicker>
-
-              <h2 className="mt-5 text-[clamp(1.65rem,2.5vw,2.1rem)] font-semibold leading-[1.08] tracking-[-0.045em] text-white">
-                Mantenha seus canais de contato disponíveis.
-              </h2>
-
-              <p className="mt-4 max-w-[600px] text-[0.95rem] leading-[1.72] text-white/58">
-                Caso sua aplicação avance, um especialista da Checkmate poderá
-                entrar em contato pelo telefone ou e-mail informados no
-                formulário.
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                <span className="rounded-full border border-white/10 bg-white/[0.045] px-4 py-2 text-[0.6rem] font-bold uppercase tracking-[0.13em] text-white/55">
-                  WhatsApp
-                </span>
-                <span className="rounded-full border border-white/10 bg-white/[0.045] px-4 py-2 text-[0.6rem] font-bold uppercase tracking-[0.13em] text-white/55">
-                  E-mail
-                </span>
-              </div>
-            </article>
-          </div>
-
-          <div className="mt-16 border-t border-black/[0.08] pt-12 sm:mt-20 sm:pt-14">
-            <BlueprintKicker>Próximos passos</BlueprintKicker>
-
-            <h2
-              className={[
-                "mt-4 max-w-[680px] text-[#171614]",
-                blueprintHeadingClass,
-              ].join(" ")}
-            >
-              O que acontece agora?
-            </h2>
-
-            <div className="relative mt-10">
-              <div
-                aria-hidden="true"
-                className="absolute left-[16.5%] right-[16.5%] top-6 hidden h-px bg-[linear-gradient(90deg,transparent,#c9a24d,transparent)] md:block"
-              />
-
-              <div className="grid gap-5 md:grid-cols-3">
-                {nextSteps.map((step) => (
-                  <article key={step.number} className="group relative md:pt-14">
-                    <div className="absolute left-1/2 top-0 z-10 hidden h-5 w-5 -translate-x-1/2 rounded-full border-2 border-[#c9a24d] bg-[#f7f4ed] shadow-[0_0_0_7px_rgba(201,162,77,0.12)] md:block">
-                      <span className="absolute inset-[5px] rounded-full bg-[#c9a24d]" />
-                    </div>
-
-                    <div className="h-full rounded-[27px] border border-black/[0.07] bg-white p-7 shadow-[0_18px_55px_rgba(15,15,15,0.055)] transition-[transform,border-color,box-shadow] duration-400 group-hover:-translate-y-1.5 group-hover:border-[#c9a24d]/35 group-hover:shadow-[0_28px_72px_rgba(15,15,15,0.1)]">
-                      <div className="flex items-start justify-between gap-4">
-                        <span className="grid h-11 w-11 place-items-center rounded-full border border-[#c9a24d]/25 bg-[#f7efd9] text-[0.7rem] font-bold text-[#a77d28]">
-                          {step.number}
-                        </span>
-
-                        <span className="text-[0.56rem] font-bold uppercase tracking-[0.15em] text-[#a77d28]/42">
-                          Etapa
-                        </span>
-                      </div>
-
-                      <h3 className="mt-8 text-[1.22rem] font-semibold leading-[1.18] tracking-[-0.035em] text-[#171614]">
-                        {step.title}
-                      </h3>
-
-                      <p className="mt-4 text-[0.9rem] leading-[1.7] text-[#68635b]">
-                        {step.description}
-                      </p>
-
-                      <span className="mt-7 block h-px w-10 bg-[#a77d28]/40 transition-all duration-400 group-hover:w-16 group-hover:bg-[#a77d28]" />
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-14 flex flex-col gap-6 rounded-[28px] border border-black/[0.07] bg-white px-7 py-8 shadow-[0_20px_60px_rgba(15,15,15,0.06)] sm:flex-row sm:items-center sm:justify-between sm:px-9">
+          className="
+            mx-auto
+            w-full
+            max-w-[1120px]
+            px-5
+            py-14
+            sm:px-8
+            sm:py-16
+            lg:px-12
+            lg:py-20
+          "
+        >
+          <div
+            className="
+              grid
+              gap-8
+              lg:grid-cols-[1fr_auto]
+              lg:items-center
+              lg:gap-16
+            "
+          >
             <div>
-              <span className="text-[0.6rem] font-bold uppercase tracking-[0.15em] text-[#a77d28]">
-                Continue conhecendo o método
-              </span>
+              <div className="flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="h-px w-7 bg-[#C5A258]"
+                />
 
-              <p className="mt-2 max-w-[560px] text-[0.9rem] leading-[1.65] text-[#716b62]">
-                Volte à página do Blueprint para explorar novamente a proposta,
-                os projetos e o ecossistema Checkmate.
+                <p
+                  className="
+                    text-[0.56rem]
+                    font-bold
+                    uppercase
+                    tracking-[0.2em]
+                    text-[#C5A258]
+                  "
+                >
+                  Checkmate Blueprint
+                </p>
+              </div>
+
+              <h2
+                className="
+                  mt-5
+                  max-w-[630px]
+                  text-[clamp(1.85rem,6vw,3rem)]
+                  font-medium
+                  leading-[1.05]
+                  tracking-[-0.045em]
+                  text-[#F5F3EE]
+                "
+              >
+                Sua aplicação foi recebida.
+
+                <span className="mt-1 block text-white/55">
+                  Nossa equipe assume daqui.
+                </span>
+              </h2>
+
+              <p
+                className="
+                  mt-5
+                  max-w-[520px]
+                  text-[0.84rem]
+                  leading-[1.75]
+                  text-white/50
+                "
+              >
+                Não é necessário realizar uma nova aplicação ou enviar
+                seus dados novamente.
               </p>
             </div>
 
-            <div className="shrink-0">
-              <BlueprintGoldButton href="/blueprint">
-                Voltar ao Blueprint
-              </BlueprintGoldButton>
-            </div>
+            <Link
+              href="/blueprint"
+              className="
+                group
+                inline-flex
+                min-h-[52px]
+                w-full
+                items-center
+                justify-center
+                gap-3
+                border
+                border-white/15
+                px-6
+                text-[0.62rem]
+                font-bold
+                uppercase
+                tracking-[0.14em]
+                text-white/75
+                transition-colors
+                duration-300
+                hover:border-[#C5A258]
+                hover:text-[#D3B264]
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-[#C5A258]
+                sm:w-auto
+              "
+            >
+              Voltar ao Blueprint
+
+              <ArrowIcon />
+            </Link>
+          </div>
+
+          {/* Footer */}
+          <div
+            className="
+              mt-12
+              border-t
+              border-white/10
+              pt-6
+            "
+          >
+            <p
+              className="
+                text-[0.6rem]
+                leading-6
+                text-white/35
+              "
+            >
+              © {new Date().getFullYear()} Checkmate Real Estate Group
+            </p>
           </div>
         </div>
       </section>
