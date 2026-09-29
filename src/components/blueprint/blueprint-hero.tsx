@@ -1,7 +1,6 @@
 import { BLUEPRINT_ASSETS } from "@/lib/blueprint/content";
 import {
   BlueprintGoldButton,
-  BlueprintKicker,
   blueprintBodyClass,
   blueprintContainer,
 } from "@/components/blueprint/blueprint-ui";
@@ -10,166 +9,367 @@ export function BlueprintHero() {
   return (
     <section
       id="checkmate-blueprint"
-      className="relative isolate min-h-[720px] overflow-hidden bg-[#030303] text-white"
+      className="relative isolate min-h-[760px] overflow-hidden bg-[#050505] text-white lg:min-h-[100svh]"
     >
-      {/* Imagem da casa */}
+      {/* =====================================================
+          BACKGROUND IMAGE
+      ====================================================== */}
+
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-50 bg-cover bg-center opacity-[0.2]"
+        className="
+          absolute inset-0 -z-50
+          scale-[1.015]
+          bg-cover
+          bg-[position:64%_center]
+          opacity-[0.52]
+          lg:bg-[position:72%_center]
+          lg:opacity-[0.7]
+        "
         style={{
           backgroundImage: `url(${BLUEPRINT_ASSETS.heroImage})`,
         }}
       />
 
-      {/* Escurecimento horizontal */}
+      {/* =====================================================
+          IMAGE TREATMENT
+      ====================================================== */}
+
+      {/* Mobile: escurece toda a imagem */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-40 bg-[linear-gradient(90deg,rgba(0,0,0,0.96)_0%,rgba(0,0,0,0.76)_50%,rgba(0,0,0,0.94)_100%)]"
+        className="
+          absolute inset-0 -z-40
+          bg-[linear-gradient(180deg,rgba(5,5,5,0.76)_0%,rgba(5,5,5,0.68)_42%,rgba(5,5,5,0.94)_100%)]
+          lg:hidden
+        "
       />
 
-      {/* Escurecimento vertical */}
+      {/* Desktop: conteúdo escuro à esquerda / arquitetura visível à direita */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-30 bg-[linear-gradient(180deg,rgba(0,0,0,0.35)_0%,rgba(0,0,0,0.32)_48%,rgba(0,0,0,0.9)_100%)]"
+        className="
+          absolute inset-0 -z-40 hidden
+          bg-[linear-gradient(90deg,#050505_0%,rgba(5,5,5,0.97)_18%,rgba(5,5,5,0.88)_38%,rgba(5,5,5,0.48)_62%,rgba(5,5,5,0.14)_82%,rgba(5,5,5,0.32)_100%)]
+          lg:block
+        "
       />
 
-      {/* Vinheta */}
+      {/* Fade inferior */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.18)_48%,rgba(0,0,0,0.84)_100%)]"
+        className="
+          absolute inset-x-0 bottom-0 -z-30 h-[42%]
+          bg-[linear-gradient(180deg,transparent_0%,rgba(5,5,5,0.42)_48%,#050505_100%)]
+        "
       />
 
-      {/* Brilho dourado central */}
+      {/* Luz quente muito discreta */}
       <div
         aria-hidden="true"
-        className="absolute left-1/2 top-[48%] -z-10 h-[380px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#c9a24d]/[0.04] blur-[100px]"
-      />
-
-      {/* Arco grande central */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[58%] -z-10 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d9b65d]/15"
-      />
-
-      {/* Arco lateral */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-[-410px] top-[-330px] -z-10 h-[920px] w-[920px] rounded-full border border-[#d9b65d]/20"
+        className="
+          pointer-events-none absolute
+          -right-[12%] top-[20%] -z-20
+          hidden h-[520px] w-[520px]
+          rounded-full
+          bg-[#c5a258]/[0.06]
+          blur-[140px]
+          lg:block
+        "
       />
 
       {/* Linha superior */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(239,217,146,0.45),transparent)]"
+        className="
+          pointer-events-none absolute inset-x-0 top-0 z-10 h-px
+          bg-[linear-gradient(90deg,transparent_0%,rgba(197,162,88,0.5)_50%,transparent_100%)]
+        "
       />
+
+      {/* =====================================================
+          PAGE CONTAINER
+      ====================================================== */}
 
       <div
         className={[
           blueprintContainer,
-          "relative mx-auto flex min-h-[720px] flex-col px-5 pb-14 pt-7",
-          "sm:px-6 sm:pt-8",
-          "lg:px-8 lg:pb-16 lg:pt-8",
+          "relative mx-auto flex min-h-[760px] flex-col",
+          "px-5 pb-8 pt-7",
+          "sm:px-6 sm:pb-10 sm:pt-8",
+          "lg:min-h-[100svh] lg:px-8 lg:pb-9 lg:pt-8",
         ].join(" ")}
       >
-        {/* Logo */}
-        <header className="flex justify-center">
+        {/* ===================================================
+            HEADER
+        ==================================================== */}
+
+        <header className="flex items-center justify-between">
           <a
             href="#checkmate-blueprint"
             aria-label="Checkmate Real Estate Group"
-            className="inline-flex transition-opacity duration-300 hover:opacity-80"
+            className="
+              inline-flex
+              transition-opacity duration-300
+              hover:opacity-75
+              focus-visible:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-[#c5a258]
+              focus-visible:ring-offset-4
+              focus-visible:ring-offset-[#050505]
+            "
           >
             <img
               src={BLUEPRINT_ASSETS.logoLight}
               alt="Checkmate Real Estate Group"
-              className="h-auto w-[150px] object-contain sm:w-[165px] lg:w-[180px]"
+              className="
+                h-auto w-[138px] object-contain
+                sm:w-[150px]
+                lg:w-[164px]
+              "
             />
           </a>
+
+          <div className="hidden items-center gap-3 sm:flex">
+            <span className="h-px w-8 bg-[#c5a258]/60" />
+
+            <span className="text-[0.61rem] font-semibold uppercase tracking-[0.2em] text-white/45">
+              Blueprint · Real Estate USA
+            </span>
+          </div>
         </header>
 
-        {/* Conteúdo */}
-        <div className="flex flex-1 items-center justify-center py-12 sm:py-14 lg:py-16">
-          <div className="mx-auto w-full max-w-[980px] text-center">
-            <div className="flex justify-center">
-              <BlueprintKicker dark>
-                Flip House · New Construction
-              </BlueprintKicker>
+        {/* ===================================================
+            HERO CONTENT
+        ==================================================== */}
+
+        <div
+          className="
+            flex flex-1 items-center
+            py-16
+            sm:py-20
+            lg:py-16
+            xl:py-20
+          "
+        >
+          <div className="w-full max-w-[790px]">
+            {/* Eyebrow */}
+            <div className="mb-7 flex items-center gap-3 sm:mb-8">
+              <span className="h-px w-8 bg-[#c5a258] sm:w-10" />
+
+              <span
+                className="
+                  text-[0.64rem] font-bold uppercase
+                  tracking-[0.19em] text-[#d3b264]
+                  sm:text-[0.68rem]
+                "
+              >
+                Checkmate Blueprint
+              </span>
             </div>
 
+            {/* Headline */}
             <h1
-              className={[
-                "mx-auto mt-6 max-w-[940px]",
-                "text-balance font-semibold tracking-[-0.045em]",
-                "text-[clamp(2.35rem,4.4vw,4rem)]",
-                "leading-[1.05]",
-              ].join(" ")}
+              className="
+                max-w-[780px]
+                text-balance
+                text-[clamp(2.65rem,5vw,4.65rem)]
+                font-medium
+                leading-[0.98]
+                tracking-[-0.052em]
+                text-[#f5f3ee]
+              "
             >
-              <span className="text-white">
-                Aprenda a estruturar projetos de{" "}
-              </span>
-
-              <span className="bg-[linear-gradient(105deg,#fff8df_0%,#efd992_32%,#d5ae55_68%,#aa7d29_100%)] bg-clip-text text-transparent">
-                Flip Houses e New Construction
-              </span>
-
-              <span className="text-white">
-                {" "}
-                nos EUA com financiamento de até{" "}
-              </span>
-
-              <span className="bg-[linear-gradient(105deg,#fff8df_0%,#efd992_32%,#d5ae55_68%,#aa7d29_100%)] bg-clip-text text-transparent">
-                85% da aquisição e 100% da construção.
-              </span>
+              Aprenda a estruturar projetos de{" "}
+              <span className="text-[#d3b264]">
+                New Construction
+              </span>{" "}
+              e Flip Houses nos Estados Unidos.
             </h1>
 
-            {/* Divisor */}
-            <div className="mx-auto mt-7 flex max-w-[320px] items-center gap-4">
-              <span className="h-px flex-1 bg-[linear-gradient(90deg,transparent,rgba(201,162,77,0.65))]" />
-
-              <span className="h-1.5 w-1.5 rotate-45 border border-[#d9b65d] bg-[#080706]" />
-
-              <span className="h-px flex-1 bg-[linear-gradient(90deg,rgba(201,162,77,0.65),transparent)]" />
-            </div>
-
+            {/* Supporting copy */}
             <p
               className={[
                 blueprintBodyClass,
-                "mx-auto mt-7 max-w-[760px]",
-                "text-pretty text-center text-white/58",
-                "text-[0.95rem] leading-[1.75]",
-                "sm:text-[1rem]",
-                "lg:text-[1.05rem]",
+                "mt-7 max-w-[650px]",
+                "text-pretty",
+                "text-[0.96rem] leading-[1.8] text-white/62",
+                "sm:text-[1.02rem]",
+                "lg:mt-8 lg:text-[1.06rem]",
               ].join(" ")}
             >
-              Conheça o modelo utilizado pela{" "}
-              <strong className="font-medium text-[#e6c66f]">
+              Conheça o modelo aplicado pela{" "}
+              <strong className="font-semibold text-white/90">
                 Checkmate Real Estate Group
               </strong>{" "}
               em mais de{" "}
-              <strong className="font-medium text-[#e6c66f]">
+              <strong className="font-semibold text-[#d3b264]">
                 US$ 20 milhões em projetos
-              </strong>{" "}
-              e descubra como encontrar oportunidades, estruturar operações e
-              utilizar financiamento bancário.
+              </strong>
+              , e entenda como analisar oportunidades, estruturar operações e
+              acessar possibilidades de financiamento para projetos
+              imobiliários nos EUA.
             </p>
 
-            <div className="mt-8 flex justify-center">
+            {/* CTA */}
+            <div className="mt-8 flex flex-col items-start gap-4 sm:mt-9 sm:flex-row sm:items-center sm:gap-6">
               <BlueprintGoldButton href="#formb">
                 Quero fazer parte do Blueprint
               </BlueprintGoldButton>
-            </div>
 
-            <p className="mx-auto mt-5 max-w-[430px] text-[0.62rem] font-medium uppercase leading-[1.7] tracking-[0.14em] text-white/28">
-              Estrutura, estratégia e financiamento para desenvolver projetos
-              imobiliários nos Estados Unidos
-            </p>
+              <span
+                className="
+                  max-w-[260px]
+                  text-[0.68rem]
+                  font-medium
+                  leading-[1.6]
+                  tracking-[0.02em]
+                  text-white/35
+                "
+              >
+                Acompanhamento, estratégia e execução no mercado imobiliário
+                americano.
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(180deg,transparent,#030303)]"
-      />
+        {/* ===================================================
+            AUTHORITY / FINANCING
+        ==================================================== */}
+
+        <div
+          className="
+            border-t border-white/[0.12]
+            pt-6
+            sm:pt-7
+            lg:pt-6
+          "
+        >
+          <div
+            className="
+              grid grid-cols-1
+              gap-y-5
+              sm:grid-cols-3
+              sm:gap-y-0
+            "
+          >
+            {/* Metric 01 */}
+            <div
+              className="
+                flex items-baseline justify-between
+                border-b border-white/[0.08] pb-5
+                sm:block sm:border-b-0 sm:border-r sm:pb-0 sm:pr-8
+              "
+            >
+              <div
+                className="
+                  text-[1.65rem]
+                  font-medium
+                  tracking-[-0.045em]
+                  text-[#f5f3ee]
+                  lg:text-[1.9rem]
+                "
+              >
+                US$ 20M+
+              </div>
+
+              <div
+                className="
+                  mt-1
+                  text-right text-[0.62rem]
+                  font-semibold uppercase
+                  tracking-[0.14em]
+                  text-white/35
+                  sm:text-left
+                "
+              >
+                em projetos
+              </div>
+            </div>
+
+            {/* Metric 02 */}
+            <div
+              className="
+                flex items-baseline justify-between
+                border-b border-white/[0.08] pb-5
+                sm:block sm:border-b-0 sm:border-r sm:px-8 sm:pb-0
+              "
+            >
+              <div
+                className="
+                  text-[1.65rem]
+                  font-medium
+                  tracking-[-0.045em]
+                  text-[#d3b264]
+                  lg:text-[1.9rem]
+                "
+              >
+                até 85%
+              </div>
+
+              <div
+                className="
+                  mt-1
+                  text-right text-[0.62rem]
+                  font-semibold uppercase
+                  tracking-[0.14em]
+                  text-white/35
+                  sm:text-left
+                "
+              >
+                da aquisição*
+              </div>
+            </div>
+
+            {/* Metric 03 */}
+            <div
+              className="
+                flex items-baseline justify-between
+                sm:block sm:pl-8
+              "
+            >
+              <div
+                className="
+                  text-[1.65rem]
+                  font-medium
+                  tracking-[-0.045em]
+                  text-[#d3b264]
+                  lg:text-[1.9rem]
+                "
+              >
+                até 100%
+              </div>
+
+              <div
+                className="
+                  mt-1
+                  text-right text-[0.62rem]
+                  font-semibold uppercase
+                  tracking-[0.14em]
+                  text-white/35
+                  sm:text-left
+                "
+              >
+                da construção*
+              </div>
+            </div>
+          </div>
+
+          <p
+            className="
+              mt-5 max-w-[720px]
+              text-[0.58rem]
+              leading-[1.6]
+              tracking-[0.02em]
+              text-white/24
+            "
+          >
+            * As condições de financiamento dependem do projeto, perfil do
+            tomador, instituição financeira e respectiva análise de crédito.
+          </p>
+        </div>
+      </div>
     </section>
   );
 }

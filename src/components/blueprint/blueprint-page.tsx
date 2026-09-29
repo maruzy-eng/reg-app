@@ -4,8 +4,6 @@ import {
   BlueprintHero,
   BlueprintProblem,
   BlueprintDifferential,
-  BlueprintProfessional,
-  BlueprintHowItWorks,
   BlueprintOperations,
 } from "./experience/story";
 import {
@@ -13,13 +11,7 @@ import {
   BlueprintExperiences,
   BlueprintTestimonials,
 } from "./experience/proof";
-import {
-  BlueprintStats,
-  BlueprintNetwork,
-  BlueprintFinancing,
-  BlueprintAudience,
-  BlueprintDeliverables,
-} from "./experience/ecosystem";
+import { BlueprintStats } from "./experience/ecosystem";
 import {
   BlueprintOffer,
   BlueprintFAQ,
@@ -53,17 +45,11 @@ export function BlueprintPage({
       <BlueprintHeader />
       <main>
         <BlueprintHero />
+        <BlueprintStats properties={properties} />
+        <BlueprintProjects projects={selectBlueprintCases(properties)} />
         <BlueprintProblem />
         <BlueprintDifferential />
-        <BlueprintProfessional />
-        <BlueprintHowItWorks />
         <BlueprintOperations />
-        <BlueprintProjects projects={selectBlueprintCases(properties)} />
-        <BlueprintStats properties={properties} />
-        <BlueprintNetwork />
-        <BlueprintFinancing />
-        <BlueprintAudience />
-        <BlueprintDeliverables />
         <BlueprintExperiences />
         <BlueprintTestimonials />
         <BlueprintOffer form={form} fields={fields} />

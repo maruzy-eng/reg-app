@@ -22,16 +22,19 @@ export function Section({
   id,
   light = false,
   className = "",
+  ariaLabel,
 }: {
   children: ReactNode;
   id?: string;
   light?: boolean;
   className?: string;
+  ariaLabel?: string;
 }) {
   return (
     <section
       id={id}
       className={`bp-section ${light ? "bp-light" : ""} ${className}`}
+      aria-label={ariaLabel}
     >
       <div className="bp-container">{children}</div>
     </section>
@@ -51,7 +54,7 @@ export function SectionHeader({
 }) {
   return (
     <div className="bp-section-heading" data-reveal>
-      <p className="bp-eyebrow">{eyebrow}</p>
+      <p className="bp-eyebrow">{eyebrow.replace(/^\d+\s*\/\s*/, "")}</p>
       <h2>
         {title}
         {accent && (

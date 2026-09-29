@@ -50,13 +50,12 @@ function CaseDialog({ project }: { project: BlueprintCase }) {
                 ["Planejamento", project.planning],
                 ["Obra", project.construction],
                 ["Resultado", project.result],
-              ].map(([label, value]) => (
+              ]
+                .filter(([, value]) => value)
+                .map(([label, value]) => (
                 <div key={label}>
                   <dt>{label}</dt>
-                  <dd>
-                    {value ||
-                      "Detalhes não publicados. Converse com o time sobre este projeto."}
-                  </dd>
+                  <dd>{value}</dd>
                 </div>
               ))}
             </dl>
@@ -77,45 +76,62 @@ function CaseDialog({ project }: { project: BlueprintCase }) {
 }
 
 export function BlueprintProjects({ projects }: { projects: BlueprintCase[] }) {
+  const featured = projects.slice(0, 3);
+  const portfolio = useRef<HTMLDivElement>(null);
+  const moveProject = (direction: number) => {
+    const track = portfolio.current;
+    const slide = track?.querySelector("article");
+    if (!track || !slide) return;
+    track.scrollBy({
+      left: direction * (slide.getBoundingClientRect().width + 32),
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    });
+  };
   return (
-    <Section id="projetos" light>
-      <SectionHeader {...content.sections.projects} />
-      <div className="bp-case-list">
-        {projects.map((project, index) => (
-          <article className="bp-case" key={project.id} data-reveal>
+    <Section id="projetos" className="bp-projects">
+      <div className="bp-portfolio-heading">
+        <SectionHeader {...content.sections.projects} />
+        {featured.length > 1 && (
+          <div className="bp-slider-controls">
+            <button aria-label="Projeto anterior" title="Projeto anterior" onClick={() => moveProject(-1)}><ArrowLeft /></button>
+            <button aria-label="Próximo projeto" title="Próximo projeto" onClick={() => moveProject(1)}><ArrowRight /></button>
+          </div>
+        )}
+      </div>
+      <div className="bp-case-list" ref={portfolio} tabIndex={0} role="region" aria-label="Projetos do portfólio Checkmate">
+        {featured.map((project) => (
+          <article
+            className="bp-case"
+            key={project.id}
+          >
             <div className="bp-case-photo">
               {project.image ? (
                 <Image
                   src={project.image}
                   alt={project.title}
                   fill
-                  sizes="(max-width: 900px) 100vw, 60vw"
+                  sizes="(max-width: 760px) 90vw, 85vw"
                   className="bp-cover"
                 />
               ) : (
                 <span>Registro fotográfico em preparação</span>
               )}
-              <span className="bp-photo-label">{project.category}</span>
             </div>
             <div className="bp-case-copy">
-              <span className="bp-index">Projeto / 0{index + 1}</span>
-              <p className="bp-eyebrow">{project.location}</p>
+              <div>
+              <p className="bp-eyebrow">{project.category}</p>
               <h3>{project.title}</h3>
-              <p className="bp-case-status">
-                <span />
-                {project.status}
-              </p>
-              <p>
-                {project.category === "New Construction"
-                  ? "Do planejamento à construção: uma perspectiva sobre as etapas de um empreendimento residencial."
-                  : "Aquisição e transformação de imóveis como parte de uma estratégia imobiliária."}
-              </p>
+              <p className="bp-case-location">{project.location}</p>
+              </div>
+              <div className="bp-case-action">
+              <p className="bp-case-status">{project.status}</p>
               <CaseDialog project={project} />
+              </div>
             </div>
           </article>
         ))}
       </div>
-      {!projects.length && (
+      {!featured.length && (
         <p>Conheça com nosso time os projetos disponíveis para apresentação.</p>
       )}
       <div className="bp-section-end">
@@ -187,9 +203,9 @@ export function BlueprintExperiences() {
     });
   };
   return (
-    <Section id="experiencias">
+    <Section id="networking" className="bp-ecosystem">
       <div className="bp-heading-row">
-        <SectionHeader {...content.sections.experiences} />
+        <SectionHeader {...content.sections.network} />
         <div className="bp-slider-controls">
           <button
             title="Fotos anteriores"
@@ -232,6 +248,11 @@ export function BlueprintExperiences() {
           </figure>
         ))}
       </div>
+      <ul className="bp-ecosystem-roles" aria-label="Rede profissional Checkmate">
+        {content.network.map((partner) => (
+          <li key={partner}>{partner}</li>
+        ))}
+      </ul>
     </Section>
   );
 }
@@ -240,7 +261,7 @@ export function BlueprintTestimonials() {
   const [index, setIndex] = useState(0);
   const item = content.testimonials[index];
   return (
-    <Section id="depoimentos" light>
+    <Section id="depoimentos" className="bp-video-proof">
       <SectionHeader {...content.sections.testimonials} />
       <div className="bp-testimonial">
         <Dialog.Root>
@@ -285,9 +306,9 @@ export function BlueprintTestimonials() {
           </Dialog.Portal>
         </Dialog.Root>
         <div className="bp-testimonial-copy" aria-live="polite">
-          <p className="bp-eyebrow">Parceiro Checkmate / {item.number}</p>
+          <p className="bp-eyebrow">Relato em vídeo · {item.number}</p>
+          <p className="bp-testimonial-description">{item.description}</p>
           <h3>{item.title}</h3>
-          <p>{item.description}</p>
           <div className="bp-slider-controls">
             <button
               aria-label="Depoimento anterior"

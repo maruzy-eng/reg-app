@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Instrument_Serif, Mulish } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { SitePixels } from "@/components/site-pixels";
@@ -19,6 +19,22 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
+const mulish = Mulish({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-mulish",
+  weight: ["300", "400", "500", "600", "700", "800"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-instrument-serif",
+  weight: "400",
+  style: ["normal", "italic"],
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -148,7 +164,10 @@ export default async function RootLayout({
     .filter(Boolean);
 
   return (
-    <html lang="en" className={inter.variable}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${mulish.variable} ${instrumentSerif.variable}`}
+    >
       <body className={inter.className}>
         <JsonLd
           id="organization-schema"

@@ -6,25 +6,24 @@ import {
 import type { PropertyCard } from "@/types/property";
 
 export const blueprintExperience = {
-  cta: "Quero conhecer o Blueprint",
-  conversation: "Quero conversar com a Checkmate",
+  cta: "Conversar com um analista",
+  conversation: "Quero conversar com um analista",
   logo: "/images/cash-offer/logo-reg.webp",
   hero: {
     eyebrow: "Acompanhamento. Estratégia. Real estate USA.",
-    brand: "Checkmate",
-    product: "Blueprint.",
+    brand: "Você já sabe trabalhar duro nos Estados Unidos.",
+    product: "Amplie sua visão do negócio por trás da obra.",
     title: "Checkmate Blueprint",
-    headline: "Você não precisa construir o próximo nível sozinho.",
+    headline:
+      "Programa premium de acompanhamento em New Construction, conectado a projetos reais e ao ecossistema Checkmate.",
     description:
-      "Acompanhamento, estratégia e conexões para estruturar projetos de New Construction nos EUA. Ao seu lado, uma equipe que vive essa operação todos os dias.",
+      "New Construction · Investimentos · Flip Houses · Financiamento · Networking",
     image: BLUEPRINT_ASSETS.heroImage,
     imageAlt:
       "Projeto residencial Checkmate em 3 Weston St, Lexington, Massachusetts",
     pillars: [
       "New Construction",
-      "Investimentos",
-      "Flip Houses",
-      "Financiamento",
+      "Capital e financiamento",
       "Networking",
     ],
   },
@@ -33,53 +32,52 @@ export const blueprintExperience = {
       eyebrow: "01 / Uma nova perspectiva",
       title: "Você não precisa de mais informação.",
       accent: "Precisa saber o que fazer com ela.",
-      description:
-        "Na internet existem milhares de vídeos sobre imóveis, financiamento e construção. O desafio começa quando chega a hora de colocar dinheiro em uma operação real.",
+      description: "",
     },
     differential: {
-      eyebrow: "02 / Não é apenas um curso",
-      title: "Mais perto de quem",
-      accent: "já está fazendo.",
+      eyebrow: "O que é o Blueprint",
+      title: "Acompanhamento para decidir.",
+      accent: "Proximidade para executar.",
     },
     professional: {
       eyebrow: "03 / O outro lado da mesa",
       title: "Talvez você já saiba construir.",
-      accent: "Agora, enxergue o negócio.",
+      accent: "Amplie sua visão da operação.",
       description:
-        "Muitos brasileiros desenvolvem uma enorme experiência trabalhando na construção nos Estados Unidos. Alguns constroem suas próprias empresas, mas continuam participando dos projetos como prestadores de serviço.",
+        "Executar uma obra e estruturar uma operação imobiliária exigem olhares diferentes. Aquisição, capital, prazos e estratégia de saída também precisam fazer parte da decisão.",
     },
     journey: {
-      eyebrow: "04 / Sua jornada",
-      title: "Entrou para o Blueprint.",
-      accent: "E agora?",
+      eyebrow: "Como funciona o acompanhamento",
+      title: "Seu cenário na mesa.",
+      accent: "Decisões em discussão.",
       description:
-        "Uma visão mais clara de onde você está, das decisões à frente e das pessoas que podem caminhar com você.",
+        "O acompanhamento conecta seu momento às oportunidades que você está analisando e às decisões que precisa tomar. Com proximidade de quem participa da operação.",
     },
     operations: {
       eyebrow: "05 / A operação por dentro",
-      title: "Enxergue o projeto inteiro. Não apenas a sua etapa.",
+      title: "Da aquisição à execução.",
       description:
-        "Da aquisição à estratégia de saída, cada decisão se conecta à próxima. Acompanhe como uma empresa de real estate organiza esse processo.",
+        "New Construction no centro da operação. Terreno, viabilidade, capital e gestão da obra conectados à estratégia de saída.",
     },
     projects: {
       eyebrow: "06 / Projetos reais",
-      title: "O mercado acontece",
-      accent: "fora da sala de aula.",
+      title: "A operação, em perspectiva.",
+      accent: "",
       description:
-        "Uma seleção do portfólio público da Checkmate. New Construction em primeiro plano, junto à experiência em transformação de imóveis.",
+        "New Construction e transformação de imóveis. Projetos do portfólio público da Checkmate.",
     },
     network: {
-      eyebrow: "07 / Conexões que importam",
-      title: "Real estate não é um jogo",
-      accent: "para jogar sozinho.",
+      eyebrow: "Acesso ao ecossistema Checkmate",
+      title: "Proximidade com quem",
+      accent: "faz a operação acontecer.",
       description:
-        "Uma operação depende de uma rede. O Blueprint aproxima você de profissionais, instituições e parceiros do ecossistema Checkmate. Relações que levam tempo para construir.",
+        "Acesse um ambiente de troca com profissionais, investidores e parceiros que fazem parte do mercado americano.",
     },
     financing: {
-      eyebrow: "08 / Capital e financiamento",
-      title: "Entenda como o capital trabalha dentro de uma operação.",
+      eyebrow: "Capital e financiamento",
+      title: "Analise o capital antes de comprometer o projeto.",
       description:
-        "Conheça o papel do capital próprio, do crédito e do planejamento financeiro. Dentro do ecossistema Checkmate, você pode se aproximar de instituições e lenders utilizados no mercado.",
+        "Discuta capital próprio, crédito e planejamento financeiro no contexto da operação. A proximidade com o ecossistema Checkmate inclui instituições e lenders que atuam nesse mercado.",
     },
     audience: {
       eyebrow: "09 / Seu ponto de partida",
@@ -97,8 +95,7 @@ export const blueprintExperience = {
     experiences: {
       eyebrow: "10 / Experiências",
       title: "Existem coisas que você precisa ver acontecendo.",
-      description:
-        "Blueprint também é experiência. Pessoas, projetos e ambientes onde o mercado acontece.",
+      description: "",
     },
     testimonials: {
       eyebrow: "11 / Quem já vive essa experiência",
@@ -107,11 +104,11 @@ export const blueprintExperience = {
         "Experiências reais de parceiros Checkmate, contadas por eles mesmos.",
     },
     offer: {
-      eyebrow: "12 / Seu próximo passo",
-      title: "O próximo projeto não precisa começar",
-      accent: "com uma decisão no escuro.",
+      eyebrow: "Qualificação para o Blueprint",
+      title: "Seu próximo capítulo",
+      accent: "começa com uma conversa.",
       description:
-        "Conheça o Checkmate Blueprint. Preencha seus dados e converse com nosso time para entender se o programa faz sentido para o seu momento.",
+        "Converse com um analista da Checkmate e entenda se o Blueprint faz sentido para o seu momento.",
     },
     faq: {
       eyebrow: "Antes de dar o próximo passo",
@@ -119,24 +116,24 @@ export const blueprintExperience = {
     },
   },
   differentialIntro:
-    "Um ambiente que aproxima investidores, profissionais da construção e empresários brasileiros da operação da Checkmate nos Estados Unidos.",
+    "Um programa premium de acompanhamento em real estate nos EUA. Analise oportunidades, discuta decisões e aproxime-se de quem já executa.",
   differentialClosing:
-    "Conteúdo para entender. Pessoas para pensar junto. Operação para enxergar na prática.",
+    "Você não entra apenas para consumir conteúdo. Você entra para se aproximar de uma operação real.",
   professionalClosing:
-    "O Blueprint ajuda você a conectar o que já sabe à visão de uma operação completa.",
+    "A proposta é conectar sua experiência às decisões do negócio, com acompanhamento e referências de projetos reais.",
   careerIntro: "Seu conhecimento pode abrir um novo caminho",
   careerDescription:
-    "Você não precisa abandonar sua profissão para entrar no real estate. O próximo passo pode começar com a experiência, a empresa ou o capital que você já construiu, com mais estratégia e acompanhamento.",
+    "Seu ponto de partida pode ser a experiência na obra, a empresa que você construiu ou o capital que pretende direcionar. O acompanhamento considera esse contexto.",
   financingSteps: [
     [
       "01",
       "Aquisição",
-      "Entenda como avaliar o capital necessário para entrar no projeto.",
+      "Analise o capital necessário para a aquisição e os custos que precisam entrar na conta.",
     ],
     [
       "02",
       "Construção",
-      "Conheça estruturas de financiamento, liberações e etapas da obra.",
+      "Discuta estruturas de financiamento, liberações e sua relação com as etapas da obra.",
     ],
     [
       "03",
@@ -147,10 +144,9 @@ export const blueprintExperience = {
   financingDisclaimer:
     "Financiamentos estão sujeitos à análise, aprovação, experiência do investidor, características do projeto, critérios da instituição financeira e demais condições aplicáveis. A participação no Blueprint não garante crédito ou retorno financeiro.",
   offerItems: [
-    "Acompanhamento e estratégia",
-    "New Construction e projetos",
-    "Comunidade e conexões",
-    "Networking e experiências",
+    "Sua experiência e seu momento no mercado",
+    "Projetos e oportunidades que você está analisando",
+    "Objetivos e dúvidas sobre o acompanhamento",
   ],
   momentOptions: [
     "Trabalho na construção",
@@ -159,60 +155,61 @@ export const blueprintExperience = {
     "Quero começar",
   ],
   final: {
-    eyebrow: "Você não precisa construir sozinho",
-    title: "Você já trabalha duro nos Estados Unidos.",
+    eyebrow: "Seu próximo passo, acompanhado",
+    title: "Aproxime-se da operação. Discuta seu próximo passo.",
     subtitle:
-      "Talvez esteja na hora de fazer seu conhecimento trabalhar por você.",
+      "Projetos reais. Decisões com contexto.",
     description:
-      "Para brasileiros que querem deixar de apenas observar o mercado imobiliário americano e começar a entendê-lo por dentro.",
-    microcopy: "Converse com um especialista da Checkmate.",
+      "Leve seu cenário a um analista da Checkmate e avalie a proposta de acompanhamento antes de decidir participar.",
+    microcopy: "Conheça o formato, o escopo e as condições do programa.",
   },
   navigation: [
-    ["Blueprint", "blueprint"],
-    ["Como funciona", "como-funciona"],
     ["Projetos", "projetos"],
-    ["Experiências", "experiencias"],
+    ["Blueprint", "diferencial"],
+    ["Como funciona", "como-funciona"],
+    ["Operação", "operacao"],
+    ["Ecossistema", "networking"],
     ["Depoimentos", "depoimentos"],
     ["FAQ", "faq"],
   ],
   questions: [
-    "Qual propriedade comprar?",
+    "Qual imóvel comprar?",
     "Quanto pagar?",
     "Como financiar?",
     "Quanto custa construir?",
     "Onde está o risco?",
-    "Qual estratégia de saída?",
+    "Qual é a saída?",
   ],
   pillars: [
     {
-      title: "Estratégia",
-      text: "Entenda como analisar oportunidades e estruturar operações antes de tomar decisões.",
-      detail: "Clareza antes do próximo passo.",
-    },
-    {
       title: "Acompanhamento",
-      text: "Leve situações, dúvidas e projetos para pessoas que vivem essa operação todos os dias.",
-      detail: "Experiência para pensar com você.",
+      text: "Leve seu cenário, suas dúvidas e seus projetos para discutir com quem vive a operação.",
+      detail: "Proximidade para avaliar o próximo passo.",
     },
     {
-      title: "Conexões",
-      text: "Aproxime-se de profissionais, bancos, lenders, investidores e parceiros do mercado.",
-      detail: "Relações que fazem parte da operação.",
+      title: "Análise de oportunidades",
+      text: "Avalie premissas, custos, riscos e alternativas antes de avançar em uma oportunidade.",
+      detail: "Critérios para sustentar suas decisões.",
     },
     {
-      title: "Execução",
-      text: "Entenda como projetos saem do papel e como decisões são tomadas durante a operação.",
-      detail: "Do planejamento ao canteiro de obras.",
+      title: "Operação real",
+      text: "Acompanhe a lógica de projetos de New Construction, da aquisição à execução e à estratégia de saída.",
+      detail: "Projetos reais como referência de análise.",
+    },
+    {
+      title: "Ecossistema Checkmate",
+      text: "Acesse um ambiente de troca com profissionais, investidores e parceiros envolvidos no mercado americano.",
+      detail: "Networking próximo de quem executa.",
     },
   ],
   trades: [
-    "Framing",
-    "Roofing",
-    "Painting",
-    "Cleaning",
-    "Electrical",
-    "Plumbing",
-    "General Contracting",
+    "Aquisição",
+    "Financiamento",
+    "Projeto",
+    "Construção",
+    "Gestão",
+    "Venda",
+    "Resultado",
   ],
   projectJourney: [
     "Aquisição",
@@ -226,13 +223,13 @@ export const blueprintExperience = {
   careerJourney: ["Worker", "Contractor", "Business owner", "Investor"],
   steps: [
     {
-      title: "Diagnóstico",
-      text: "O ponto de partida é você. Entendemos sua experiência, seus objetivos e o momento em que está.",
+      title: "Situar seu momento",
+      text: "Discuta sua experiência, seus objetivos e as decisões à frente. Seu contexto orienta a conversa.",
       tags: ["Experiência", "Objetivos", "Capital", "Mercado"],
     },
     {
-      title: "Estruturação",
-      text: "Entenda os pilares necessários para operar com uma visão completa do negócio.",
+      title: "Analisar a oportunidade",
+      text: "Examine aquisição, viabilidade, custos e financiamento. Coloque premissas e riscos em discussão antes de avançar.",
       tags: [
         "Empresa",
         "Aquisição",
@@ -243,23 +240,13 @@ export const blueprintExperience = {
       ],
     },
     {
-      title: "Oportunidades",
-      text: "Aprenda a identificar e analisar oportunidades com critérios mais estruturados.",
+      title: "Discutir decisões",
+      text: "Leve dúvidas e cenários ao acompanhamento. Compare alternativas com referências de quem já estrutura e executa projetos.",
       tags: ["Viabilidade", "Risco", "Estratégia de saída"],
     },
     {
-      title: "Acompanhamento",
-      text: "Leve situações, dúvidas e projetos para o ambiente Blueprint. Discuta decisões com quem conhece a operação.",
-      tags: ["Proximidade", "Direção", "Troca de experiência"],
-    },
-    {
-      title: "Conexões",
-      text: "Aproxime-se de um ecossistema de profissionais que participa do mercado americano.",
-      tags: ["Lenders", "Bancos", "Contractors", "Investidores", "Realtors"],
-    },
-    {
-      title: "Execução",
-      text: "Conecte o que você aprende às decisões e aos projetos que fazem sentido para o seu momento.",
+      title: "Aplicar ao próximo passo",
+      text: "Conecte a análise ao planejamento e à execução. Reavalie seu cenário à medida que surgem novas decisões.",
       tags: ["Planejamento", "Projetos", "Próximos passos"],
     },
   ],
@@ -284,15 +271,15 @@ export const blueprintExperience = {
   audiences: [
     {
       title: "Profissional da construção",
-      text: "Você conhece a execução e quer começar a entender aquisição, financiamento e investimento.",
+      text: "Conecte sua experiência de execução à análise de aquisição, capital e viabilidade do projeto.",
     },
     {
       title: "Empresário",
-      text: "Você construiu uma empresa nos EUA e quer direcionar conhecimento, capital ou patrimônio para real estate.",
+      text: "Avalie como sua experiência empresarial e seus recursos se relacionam com uma operação imobiliária.",
     },
     {
       title: "Investidor",
-      text: "Você possui capital e quer entender como analisar e participar de operações imobiliárias de maneira mais estruturada.",
+      text: "Discuta oportunidades, riscos e estruturas de capital antes de decidir como participar do mercado.",
     },
   ],
   deliverables: [
@@ -311,10 +298,12 @@ export const blueprintExperience = {
     src,
     alt: `Encontro do ecossistema Checkmate, registro ${index + 1}`,
     caption: [
-      "Pessoas que constroem juntas.",
-      "Conversas que ampliam a visão.",
-      "Proximidade com a operação.",
-      "Experiência além do conteúdo.",
+      "Field Class",
+      "New Construction",
+      "Networking",
+      "Event",
+      "Project Visit",
+      "Blueprint Experience",
     ][index],
   })),
   testimonials: blueprintTestimonials.map((item) => ({

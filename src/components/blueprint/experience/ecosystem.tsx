@@ -13,25 +13,20 @@ export function BlueprintStats({ properties }: { properties: PropertyCard[] }) {
         {
           value: properties.length,
           suffix: "",
-          label: "Projetos no portfólio público",
+          label: "propriedades no portfólio público",
+          source: "Inventário público da Checkmate",
         },
         {
-          value: properties.filter(
-            (property) => property.propertyType === "new_construction",
-          ).length,
+          value: new Set(properties.map((property) => property.state).filter(Boolean)).size,
           suffix: "",
-          label: "Projetos de New Construction",
+          label: "estados com propriedades publicadas",
+          source: "Localização dos imóveis publicados",
         },
-        {
-          value: new Set(properties.map((property) => property.state)).size,
-          suffix: "",
-          label: "Estados representados no portfólio",
-        },
-      ];
-  if (!properties.length && !verifiedBlueprintMetrics.length) return null;
+      ].filter((metric) => metric.value > 0);
+  if (!metrics.length) return null;
   return (
-    <Section className="bp-stats">
-      <p className="bp-eyebrow">Uma operação que você pode conhecer</p>
+    <Section className="bp-stats" ariaLabel="Portfólio público">
+      <p className="bp-authority-label">Checkmate Real Estate Group<span>Uma operação real nos Estados Unidos.</span></p>
       <div>
         {metrics.map((metric) => (
           <article key={metric.label}>
@@ -43,16 +38,25 @@ export function BlueprintStats({ properties }: { properties: PropertyCard[] }) {
         ))}
       </div>
       <small>
-        Dados do portfólio público exibido no site. Não representam promessa de
-        resultado.
+        Dados do portfólio público exibido no site; o inventário pode variar.
       </small>
     </Section>
   );
 }
 
 export function BlueprintNetwork() {
+  const nodes = [
+    { name: "Banks", x: 300, y: 42 },
+    { name: "Lenders", x: 482, y: 92 },
+    { name: "Investors", x: 548, y: 238 },
+    { name: "Contractors", x: 430, y: 372 },
+    { name: "Realtors", x: 274, y: 398 },
+    { name: "Attorneys", x: 96, y: 330 },
+    { name: "CPA", x: 54, y: 176 },
+    { name: "Partners", x: 158, y: 72 },
+  ];
   return (
-    <Section id="networking">
+    <Section id="conexoes" className="bp-network-section">
       <div className="bp-split bp-align-center">
         <SectionHeader {...content.sections.network} />
         <div
@@ -62,36 +66,39 @@ export function BlueprintNetwork() {
           aria-label="Blueprint conectado a bancos, lenders, investidores, contractors, parceiros, contadores, advogados e realtors"
         >
           <svg viewBox="0 0 600 440" aria-hidden="true">
-            {content.network.map((_, index) => {
-              const angle = ((index * 45 - 90) * Math.PI) / 180;
-              return (
-                <line
-                  key={index}
-                  x1="300"
-                  y1="220"
-                  x2={300 + Math.cos(angle) * 230}
-                  y2={220 + Math.sin(angle) * 160}
+            {nodes.map((node, index) => (
+              <g key={node.name}>
+                <path
+                  d={`M300 220 C ${300 + (node.x - 300) * 0.3} ${220 + (node.y - 220) * 0.05}, ${300 + (node.x - 300) * 0.74} ${220 + (node.y - 220) * 0.9}, ${node.x} ${node.y}`}
                 />
-              );
-            })}
+                {index % 2 === 0 && (
+                  <circle r="3">
+                    <animateMotion
+                      dur={`${8 + index}s`}
+                      repeatCount="indefinite"
+                      path={`M300 220 C ${300 + (node.x - 300) * 0.3} ${220 + (node.y - 220) * 0.05}, ${300 + (node.x - 300) * 0.74} ${220 + (node.y - 220) * 0.9}, ${node.x} ${node.y}`}
+                    />
+                  </circle>
+                )}
+              </g>
+            ))}
           </svg>
           <div className="bp-network-center">
             <span>Checkmate</span>
             <strong>Blueprint</strong>
           </div>
-          {content.network.map((name, index) => {
-            const angle = ((index * 45 - 90) * Math.PI) / 180;
+          {nodes.map((node, index) => {
             return (
               <span
                 className="bp-network-node"
-                key={name}
+                key={node.name}
                 style={{
-                  left: `${50 + Math.cos(angle) * 38}%`,
-                  top: `${50 + Math.sin(angle) * 36}%`,
+                  left: `${(node.x / 600) * 100}%`,
+                  top: `${(node.y / 440) * 100}%`,
                   transitionDelay: `${index * 80}ms`,
                 }}
               >
-                {name}
+                {node.name}
               </span>
             );
           })}
@@ -103,9 +110,13 @@ export function BlueprintNetwork() {
 
 export function BlueprintFinancing() {
   return (
-    <Section className="bp-financing">
+    <div className="bp-financing">
       <div className="bp-split">
-        <SectionHeader {...content.sections.financing} />
+        <div className="bp-section-heading" data-reveal>
+          <p className="bp-eyebrow">{content.sections.financing.eyebrow}</p>
+          <h3>{content.sections.financing.title}</h3>
+          <p className="bp-lead">{content.sections.financing.description}</p>
+        </div>
         <div className="bp-capital-list">
           {content.financingSteps.map(([number, title, text]) => (
             <div key={number} data-reveal>
@@ -119,13 +130,13 @@ export function BlueprintFinancing() {
         </div>
       </div>
       <p className="bp-disclaimer">{content.financingDisclaimer}</p>
-    </Section>
+    </div>
   );
 }
 
 export function BlueprintAudience() {
   return (
-    <Section light>
+    <Section className="bp-audience">
       <SectionHeader {...content.sections.audience} />
       <div className="bp-audience-grid">
         {content.audiences.map((audience, index) => (
@@ -142,7 +153,7 @@ export function BlueprintAudience() {
 
 export function BlueprintDeliverables() {
   return (
-    <Section>
+    <Section className="bp-deliverables-section">
       <div className="bp-split">
         <SectionHeader {...content.sections.deliverables} />
         <ol className="bp-deliverables">

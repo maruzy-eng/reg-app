@@ -8,6 +8,24 @@ import type { SiteSettingsValue } from "@/lib/site-settings";
 import { SITE_CONTACT } from "@/lib/home/contact";
 import { GoldButton, Section, SectionHeader } from "./ui";
 
+export function BlueprintPreOffer() {
+  return (
+    <section className="bp-preoffer">
+      <div className="bp-container">
+        <h2>
+          Conhecimento você encontra na internet.
+          <span>Experiência, acesso e acompanhamento são outra coisa.</span>
+        </h2>
+        <p>
+          O Blueprint aproxima você de pessoas, projetos e decisões que fazem
+          parte da operação real.
+        </p>
+        <GoldButton />
+      </div>
+    </section>
+  );
+}
+
 export function BlueprintOffer({
   form,
   fields,
@@ -47,9 +65,9 @@ export function BlueprintOffer({
       updated_at: form.updated_at,
     });
   return (
-    <Section id="formb" className="bp-offer" light>
+    <Section id="formb" className="bp-offer">
       <div className="bp-split">
-        <div>
+        <div className="bp-application-intro">
           <SectionHeader {...content.sections.offer} />
           <ul className="bp-offer-list">
             {content.offerItems.map((item) => (
@@ -60,12 +78,12 @@ export function BlueprintOffer({
             ))}
           </ul>
           <p className="bp-form-note">
-            Uma conversa sobre seu momento, seus objetivos e os próximos passos.
+            Apresente seu cenário e esclareça o escopo, o formato e as condições de participação antes de decidir.
           </p>
         </div>
         <div className="bp-lead-form blueprint-dynamic-form">
-          <p className="bp-eyebrow">Converse com a Checkmate</p>
-          <h3>Vamos entender seu próximo passo.</h3>
+          <p className="bp-eyebrow">Checkmate Blueprint / Perfil de interesse</p>
+          <h3>Apresente seu perfil.</h3>
           {form ? (
             <DynamicFormComponent
               form={{ ...form, submit_button_label: content.conversation }}
@@ -92,7 +110,7 @@ export function BlueprintOffer({
 
 export function BlueprintFAQ() {
   return (
-    <Section id="faq">
+    <Section id="faq" className="bp-faq-section">
       <div className="bp-faq-layout">
         <SectionHeader {...content.sections.faq} />
         <div>
@@ -125,7 +143,7 @@ export function BlueprintFinalCTA() {
         src={content.hero.image}
         alt={content.hero.imageAlt}
         fill
-        loading="eager"
+        loading="lazy"
         sizes="100vw"
         className="bp-cover"
       />

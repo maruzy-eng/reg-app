@@ -30,6 +30,9 @@ const VIMEO_VIDEO_ID = "1124084915";
 
 const FORM_UNLOCK_TIME_SECONDS = 300;
 
+const HERO_BACKGROUND_IMAGE =
+  "https://xnkpqvfyafbcrmxmefsc.supabase.co/storage/v1/object/public/reg/fundo%20dourado.jpg";
+
 const STORAGE_KEY =
   "blueprint_vsl_form_unlocked";
 
@@ -197,8 +200,6 @@ export default function BlueprintVSL({
       =================================================== */}
 
       <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800&display=swap");
-
         html {
           scroll-behavior: smooth;
           background: #050505;
@@ -211,7 +212,14 @@ export default function BlueprintVSL({
 
         .blueprint-vsl-page,
         .blueprint-vsl-page * {
-          font-family: "Mulish", sans-serif;
+          font-family: var(--font-inter), Inter, Arial, sans-serif;
+        }
+
+        .blueprint-vsl-page h1,
+        .blueprint-vsl-page h2,
+        .blueprint-vsl-page h3 {
+          font-size: clamp(26px, 3vw, 36px) !important;
+          line-height: 1.15;
         }
 
         ::selection {
@@ -237,25 +245,14 @@ export default function BlueprintVSL({
           =============================================== */}
 
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            {/* luz superior */}
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: `url("${HERO_BACKGROUND_IMAGE}")`,
+              }}
+            />
 
-            <div className="absolute left-1/2 top-[-580px] h-[900px] w-[1200px] -translate-x-1/2 rounded-full bg-[#D4B15F]/[0.07] blur-[210px]" />
-
-            {/* luz atrás do vídeo */}
-
-            <div className="absolute left-1/2 top-[500px] h-[600px] w-[1050px] -translate-x-1/2 rounded-[50%] bg-[#C39A47]/[0.08] blur-[170px]" />
-
-            {/* detalhe lateral esquerdo */}
-
-            <div className="absolute left-[-450px] top-[150px] h-[800px] w-[650px] rounded-full bg-[#233047]/[0.07] blur-[200px]" />
-
-            {/* detalhe lateral direito */}
-
-            <div className="absolute right-[-500px] top-[150px] h-[800px] w-[700px] rounded-full bg-[#C29B4E]/[0.045] blur-[210px]" />
-
-            {/* vinheta */}
-
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,transparent_0%,rgba(0,0,0,0.15)_45%,rgba(0,0,0,0.78)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.86)_0%,rgba(5,5,5,0.62)_34%,rgba(5,5,5,0.72)_66%,rgba(5,5,5,0.97)_100%)]" />
 
             {/* grain visual muito sutil */}
 
@@ -298,8 +295,9 @@ export default function BlueprintVSL({
                   próximo passo
                 </span>{" "}
                 no mercado imobiliário,
-                assista a este vídeo até o
-                final.
+                <span className="underline decoration-[#D3B264] decoration-2 underline-offset-4">
+                  assista a este vídeo até o final.
+                </span>
               </h1>
             </div>
 
@@ -361,37 +359,31 @@ export default function BlueprintVSL({
             ============================================= */}
 
             <div className="relative mx-auto mt-7 max-w-[960px] sm:mt-8">
-              {/* halo dourado */}
+                {/* halo dourado */}
 
-              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[75%] w-[88%] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-[#C69D4B]/[0.105] blur-[105px]" />
+                <div className="pointer-events-none absolute left-1/2 top-1/2 h-[75%] w-[88%] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-[#C69D4B]/[0.105] blur-[105px]" />
 
-              {/* halo inferior */}
+                {/* halo inferior */}
 
-              <div className="pointer-events-none absolute bottom-[-55px] left-1/2 h-[100px] w-[65%] -translate-x-1/2 rounded-full bg-[#D0AA58]/[0.10] blur-[70px]" />
+                <div className="pointer-events-none absolute bottom-[-55px] left-1/2 h-[100px] w-[65%] -translate-x-1/2 rounded-full bg-[#D0AA58]/[0.10] blur-[70px]" />
 
-              {/* sombra */}
+                {/* sombra */}
 
-              <div className="pointer-events-none absolute inset-x-[10%] bottom-[-25px] h-[90px] rounded-full bg-black blur-[45px]" />
+                <div className="pointer-events-none absolute inset-x-[10%] bottom-[-25px] h-[90px] rounded-full bg-black blur-[45px]" />
 
-              {/* frame */}
+                {/* frame */}
 
-              <div className="relative rounded-[17px] bg-gradient-to-br from-[#E1C679]/60 via-[#8A692C]/30 to-[#D3AF5B]/25 p-px shadow-[0_35px_100px_rgba(0,0,0,0.85),0_0_55px_rgba(202,161,76,0.08)]">
-                <div className="rounded-[16px] bg-[#080808] p-[5px] sm:p-[6px]">
-                  <div className="overflow-hidden rounded-[12px] bg-black">
-                    <VSLPlayer
-                      videoId={
-                        VIMEO_VIDEO_ID
-                      }
-                      unlockAt={
-                        FORM_UNLOCK_TIME_SECONDS
-                      }
-                      onUnlock={
-                        unlockForm
-                      }
-                    />
+                <div className="relative rounded-[17px] bg-gradient-to-br from-[#E1C679]/60 via-[#8A692C]/30 to-[#D3AF5B]/25 p-px shadow-[0_35px_100px_rgba(0,0,0,0.85),0_0_55px_rgba(202,161,76,0.08)]">
+                  <div className="rounded-[16px] bg-[#080808] p-[5px] sm:p-[6px]">
+                    <div className="overflow-hidden rounded-[12px] bg-black">
+                      <VSLPlayer
+                        videoId={VIMEO_VIDEO_ID}
+                        unlockAt={FORM_UNLOCK_TIME_SECONDS}
+                        onUnlock={unlockForm}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
             </div>
 
             {/* =============================================
