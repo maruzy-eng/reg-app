@@ -1,70 +1,262 @@
-import { verifiedBlueprintMetrics } from "@/lib/blueprint/experience";
-import type { PropertyCard } from "@/types/property";
 import { blueprintContainer } from "./shared";
 
-export function Blueprint003Stats({
-  properties,
-}: {
-  properties: PropertyCard[];
-}) {
-  const metrics = verifiedBlueprintMetrics.length
-    ? verifiedBlueprintMetrics
-    : [
-        {
-          value: properties.length,
-          suffix: "",
-          label: "propriedades no portfólio público",
-          source: "Inventário público da Checkmate",
-        },
-        {
-          value: new Set(
-            properties.map((property) => property.state).filter(Boolean),
-          ).size,
-          suffix: "",
-          label: "estados com propriedades publicadas",
-          source: "Localização dos imóveis publicados",
-        },
-      ].filter((metric) => metric.value > 0);
+const metrics = [
+  {
+    value: "US$ 45M+",
+    label: "investidos em real estate nos Estados Unidos",
+  },
+  {
+    value: "11",
+    label: "propriedades no portfólio público",
+  },
+] as const;
 
-  if (!metrics.length) return null;
-
+export function Blueprint003Stats() {
   return (
-    <section className="border-y border-black/10 bg-[#EDE7DC] text-[#171614]">
-      <div className={`${blueprintContainer} py-10 lg:py-14`}>
-        <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-end lg:gap-20">
-          <div>
-            <p className="text-[0.58rem] font-bold uppercase tracking-[0.2em] text-[#8B6A2E]">
-              Checkmate Real Estate Group
-            </p>
-            <p className="mt-4 max-w-[390px] text-[1.25rem] font-medium leading-[1.4] tracking-[-0.025em] text-[#2B2824]">
-              Experiência construída dentro de uma operação real nos Estados
-              Unidos.
+    <section
+      aria-label="Números da Checkmate"
+      className="
+        relative
+        overflow-hidden
+        border-y
+        border-black/10
+        bg-[#EDE7DC]
+        text-[#171614]
+      "
+    >
+      {/* subtle background detail */}
+      <div
+        aria-hidden="true"
+        className="
+          pointer-events-none
+          absolute
+          inset-y-0
+          right-0
+          w-[42%]
+          bg-[linear-gradient(135deg,transparent_0%,rgba(154,121,56,0.035)_100%)]
+        "
+      />
+
+      <div
+        className={`
+          ${blueprintContainer}
+          relative
+          py-10
+          sm:py-12
+          lg:py-14
+        `}
+      >
+        {/* =================================================
+            TOP
+        ================================================== */}
+
+        <div
+          className="
+            flex
+            items-center
+            justify-between
+            gap-6
+            border-b
+            border-black/10
+            pb-4
+          "
+        >
+          <div className="flex items-center gap-3">
+            <span
+              aria-hidden="true"
+              className="
+                h-px
+                w-7
+                bg-[#9A7938]
+              "
+            />
+
+            <p
+              className="
+                text-[0.55rem]
+                font-bold
+                uppercase
+                tracking-[0.2em]
+                text-[#8B6A2E]
+              "
+            >
+              Checkmate em números
             </p>
           </div>
 
-          <div
-            className={[
-              "grid gap-8",
-              metrics.length > 1 ? "sm:grid-cols-2" : "",
-            ].join(" ")}
+          <p
+            className="
+              text-[0.54rem]
+              font-semibold
+              uppercase
+              tracking-[0.18em]
+              text-[#6A645B]
+            "
           >
-            {metrics.map((metric) => (
-              <div key={metric.label} className="border-l border-black/15 pl-6">
-                <strong className="block text-[clamp(2.7rem,4.5vw,4.5rem)] font-medium leading-none tracking-[-0.06em] text-[#171614]">
+            2026
+          </p>
+        </div>
+
+        {/* =================================================
+            CONTENT
+        ================================================== */}
+
+        <div
+          className="
+            grid
+            gap-9
+            pt-8
+            lg:grid-cols-[0.8fr_1.2fr]
+            lg:items-end
+            lg:gap-16
+            lg:pt-10
+          "
+        >
+          {/* LEFT COPY */}
+          <div>
+            <p
+              className="
+                max-w-[360px]
+                text-[clamp(1.35rem,2vw,1.85rem)]
+                font-medium
+                leading-[1.2]
+                tracking-[-0.035em]
+                text-[#24211D]
+              "
+            >
+              Experiência construída
+              <span className="block text-[#9A7938]">
+                dentro da operação.
+              </span>
+            </p>
+
+            <p
+              className="
+                mt-4
+                max-w-[350px]
+                text-[0.8rem]
+                leading-[1.7]
+                text-[#625C54]
+              "
+            >
+              Projetos, capital e decisões reais dentro do mercado imobiliário
+              americano.
+            </p>
+          </div>
+
+          {/* =================================================
+              METRICS
+          ================================================== */}
+
+          <div
+            className="
+              grid
+              border-t
+              border-black/15
+              sm:grid-cols-2
+              lg:border-t-0
+            "
+          >
+            {metrics.map((metric, index) => (
+              <article
+                key={metric.label}
+                className={[
+                  "py-7 sm:py-2",
+                  index === 0
+                    ? "border-b border-black/10 sm:border-b-0 sm:border-r sm:pr-8 lg:pr-10"
+                    : "sm:pl-8 lg:pl-10",
+                ].join(" ")}
+              >
+                <strong
+                  className="
+                    block
+                    whitespace-nowrap
+                    text-[clamp(2.45rem,4vw,3.7rem)]
+                    font-medium
+                    leading-[0.92]
+                    tracking-[-0.055em]
+                    text-[#171614]
+                  "
+                >
                   {metric.value}
-                  {metric.suffix}
                 </strong>
-                <p className="mt-4 max-w-[260px] text-[0.7rem] font-semibold uppercase leading-[1.55] tracking-[0.1em] text-[#514C44]">
-                  {metric.label}
-                </p>
-              </div>
+
+                <div
+                  className="
+                    mt-4
+                    flex
+                    items-start
+                    gap-3
+                  "
+                >
+                  <span
+                    aria-hidden="true"
+                    className="
+                      mt-[0.35rem]
+                      h-1.5
+                      w-1.5
+                      shrink-0
+                      bg-[#9A7938]
+                    "
+                  />
+
+                  <p
+                    className="
+                      max-w-[220px]
+                      text-[0.6rem]
+                      font-semibold
+                      uppercase
+                      leading-[1.55]
+                      tracking-[0.1em]
+                      text-[#514C44]
+                    "
+                  >
+                    {metric.label}
+                  </p>
+                </div>
+              </article>
             ))}
           </div>
         </div>
 
-        <p className="mt-8 text-[0.66rem] leading-6 text-[#6A645B]">
-          Dados do portfólio público exibido no site; o inventário pode variar.
-        </p>
+        {/* =================================================
+            FOOTNOTE
+        ================================================== */}
+
+        <div
+          className="
+            mt-9
+            flex
+            flex-col
+            gap-2
+            border-t
+            border-black/10
+            pt-4
+            sm:flex-row
+            sm:items-center
+            sm:justify-between
+          "
+        >
+          <p
+            className="
+              text-[0.6rem]
+              leading-[1.7]
+              text-[#716A60]
+            "
+          >
+            Números referentes a 2026.
+          </p>
+
+          <p
+            className="
+              text-[0.6rem]
+              leading-[1.7]
+              text-[#716A60]
+            "
+          >
+            O portfólio público pode variar ao longo do período.
+          </p>
+        </div>
       </div>
     </section>
   );
