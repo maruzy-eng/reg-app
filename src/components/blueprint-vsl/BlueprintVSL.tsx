@@ -92,7 +92,9 @@ export default function BlueprintVSL({
         localStorage.getItem(STORAGE_KEY);
 
       if (unlocked === "true") {
-        setFormUnlocked(true);
+        window.requestAnimationFrame(() => {
+          setFormUnlocked(true);
+        });
       }
     } catch {
       // Ignorar
@@ -215,11 +217,22 @@ export default function BlueprintVSL({
           font-family: var(--font-inter), Inter, Arial, sans-serif;
         }
 
-        .blueprint-vsl-page h1,
         .blueprint-vsl-page h2,
         .blueprint-vsl-page h3 {
-          font-size: clamp(26px, 3vw, 36px) !important;
+          font-size: 28px !important;
           line-height: 1.15;
+        }
+
+        .blueprint-vsl-page .blueprint-vsl-title {
+          font-size: 35px !important;
+          line-height: 1.04;
+        }
+
+        @media (min-width: 640px) {
+          .blueprint-vsl-page .blueprint-vsl-title {
+            font-size: clamp(30px, 3vw, 38px) !important;
+            line-height: 1.18;
+          }
         }
 
         ::selection {
@@ -246,13 +259,13 @@ export default function BlueprintVSL({
 
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
             <div
-              className="absolute inset-0 bg-cover bg-center"
+              className="absolute inset-0 bg-cover bg-[position:center_top] sm:bg-center"
               style={{
                 backgroundImage: `url("${HERO_BACKGROUND_IMAGE}")`,
               }}
             />
 
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.86)_0%,rgba(5,5,5,0.62)_34%,rgba(5,5,5,0.72)_66%,rgba(5,5,5,0.97)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.74)_0%,rgba(5,5,5,0.58)_34%,rgba(5,5,5,0.72)_66%,rgba(5,5,5,0.97)_100%)] sm:bg-[linear-gradient(180deg,rgba(5,5,5,0.86)_0%,rgba(5,5,5,0.62)_34%,rgba(5,5,5,0.72)_66%,rgba(5,5,5,0.97)_100%)]" />
 
             {/* grain visual muito sutil */}
 
@@ -286,8 +299,11 @@ export default function BlueprintVSL({
                 HEADLINE
             ============================================= */}
 
-            <div className="mx-auto mt-7 max-w-[900px] text-center md:mt-8">
-              <h1 className="text-[25px] font-normal leading-[1.22] tracking-[-0.03em] text-[#F5F3EE] sm:text-[30px] md:text-[35px] lg:text-[38px]">
+            <div className="mx-auto mt-7 max-w-[900px] px-1 text-center md:mt-8">
+              <h1
+                className="blueprint-vsl-title mx-auto max-w-[380px] font-bold tracking-[-0.04em] text-[#F5F3EE] sm:max-w-[760px] sm:tracking-[-0.03em]"
+                aria-label="Se você mora nos Estados Unidos e quer entender como dar o próximo passo no mercado imobiliário, assista a este vídeo até o final."
+              >
                 Se você mora nos Estados
                 Unidos e quer entender como
                 dar o{" "}
@@ -295,6 +311,7 @@ export default function BlueprintVSL({
                   próximo passo
                 </span>{" "}
                 no mercado imobiliário,
+                {" "}
                 <span className="underline decoration-[#D3B264] decoration-2 underline-offset-4">
                   assista a este vídeo até o final.
                 </span>
