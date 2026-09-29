@@ -119,18 +119,14 @@ function GoldButton({
 }) {
   return (
     <a
-      className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-[#c5a258] px-7 py-3.5 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-[#0a0a0a] transition-all duration-500 hover:bg-[#d4b56a] hover:shadow-[0_0_40px_-8px_rgba(197,162,88,0.45)]"
       href={href}
+      className="group inline-flex min-h-12 items-center gap-3 border border-[#c5a258] bg-[#c5a258] px-6 py-3.5 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[#0b0b0b] transition-colors duration-300 hover:bg-[#d3b264] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d3b264] focus-visible:ring-offset-4 focus-visible:ring-offset-[#070707]"
     >
-      <span className="relative z-10">{children}</span>
+      <span>{children}</span>
       <ArrowUpRight
-        size={16}
+        size={15}
         aria-hidden="true"
-        className="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-      />
-      <span
-        aria-hidden="true"
-        className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full"
+        className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
       />
     </a>
   );
@@ -172,9 +168,14 @@ function SectionHeader({
   accent?: string;
 }) {
   return (
-    <div className="bp-section-heading" data-reveal>
-      <p className="bp-eyebrow">{eyebrow.replace(/^\d+\s*\/\s*/, "")}</p>
-      <h2>
+    <div className="bp-section-heading max-w-[760px]" data-reveal>
+      <div className="mb-5 flex items-center gap-3">
+        <span className="h-px w-8 bg-[#c5a258]/75" aria-hidden="true" />
+        <p className="bp-eyebrow !m-0 !text-[0.58rem] !font-semibold !uppercase !tracking-[0.2em]">
+          {eyebrow.replace(/^\d+\s*\/\s*/, "")}
+        </p>
+      </div>
+      <h2 className="text-balance">
         {title}
         {accent && (
           <>
@@ -183,7 +184,9 @@ function SectionHeader({
           </>
         )}
       </h2>
-      {description && <p className="bp-lead">{description}</p>}
+      {description && (
+        <p className="bp-lead mt-6 max-w-[650px]">{description}</p>
+      )}
     </div>
   );
 }
@@ -199,7 +202,6 @@ function BlueprintHero() {
       tabIndex={-1}
       className="relative isolate min-h-[100svh] overflow-hidden bg-[#060606] text-white"
     >
-      {/* Background image */}
       <figure className="absolute inset-0 -z-30">
         <Image
           src={content.hero.image}
@@ -208,93 +210,77 @@ function BlueprintHero() {
           priority
           loading="eager"
           sizes="100vw"
-          className="object-cover object-[68%_center] scale-105 lg:object-[72%_center]"
+          className="object-cover object-[68%_center] lg:object-[72%_center]"
         />
-        {/* Mobile gradient */}
+
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,6,6,0.55)_0%,rgba(6,6,6,0.70)_40%,rgba(6,6,6,0.92)_75%,#060606_100%)] lg:hidden"
+          className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,6,6,0.58)_0%,rgba(6,6,6,0.72)_52%,#060606_100%)] lg:hidden"
         />
-        {/* Desktop cinematic gradient */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 hidden bg-[linear-gradient(105deg,#060606_0%,rgba(6,6,6,0.97)_22%,rgba(6,6,6,0.82)_42%,rgba(6,6,6,0.35)_62%,rgba(6,6,6,0.08)_82%,transparent_100%)] lg:block"
+          className="absolute inset-0 hidden bg-[linear-gradient(90deg,#060606_0%,rgba(6,6,6,0.98)_22%,rgba(6,6,6,0.86)_42%,rgba(6,6,6,0.38)_63%,rgba(6,6,6,0.08)_82%,rgba(6,6,6,0.02)_100%)] lg:block"
         />
-        {/* Bottom fade */}
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-[28%] bg-[linear-gradient(180deg,transparent,#060606)]"
+          className="absolute inset-x-0 bottom-0 h-[34%] bg-[linear-gradient(180deg,transparent,#060606)]"
         />
-        {/* Subtle grain overlay for texture */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 opacity-[0.035] mix-blend-overlay"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          }}
-        />
-        <figcaption className="absolute bottom-10 right-8 hidden border-l border-white/15 pl-5 text-right lg:block lg:right-12 xl:right-[5vw]">
-          <span className="block text-[0.52rem] font-medium uppercase tracking-[0.22em] text-white/30">
-            Do portfólio Checkmate
+
+        <figcaption className="absolute bottom-9 right-8 hidden border-l border-white/15 pl-5 text-right lg:block xl:right-[5vw]">
+          <span className="block text-[0.52rem] font-medium uppercase tracking-[0.2em] text-white/30">
+            Projeto do portfólio Checkmate
           </span>
-          <strong className="mt-1.5 block text-[0.85rem] font-medium tracking-[-0.01em] text-white/70">
+          <strong className="mt-1.5 block text-[0.84rem] font-medium text-white/72">
             3 Weston St
           </strong>
-          <span className="mt-0.5 block text-[0.62rem] text-white/30">
+          <span className="mt-0.5 block text-[0.62rem] text-white/32">
             Lexington, Massachusetts
           </span>
         </figcaption>
       </figure>
 
-      <div className="mx-auto flex min-h-[100svh] w-full max-w-[1440px] flex-col px-5 pb-8 pt-6 sm:px-8 lg:px-12 xl:px-16">
+      <div className="mx-auto flex min-h-[100svh] w-full max-w-[1440px] flex-col px-5 pb-8 pt-7 sm:px-8 lg:px-12 xl:px-16">
         <div className="flex flex-1 items-center py-24 lg:py-28">
-          <div className="max-w-[720px]">
-            {/* Eyebrow */}
-            <div data-reveal className="mb-8 flex items-center gap-3.5">
-              <span className="h-px w-10 bg-[#c5a258]/80" />
-              <p className="text-[0.6rem] font-semibold uppercase tracking-[0.24em] text-[#d3b264]/90">
-                Real estate nos Estados Unidos
+          <div className="w-full max-w-[820px]">
+            <div data-reveal className="mb-7 flex items-center gap-3.5">
+              <span className="h-px w-10 bg-[#c5a258]" />
+              <p className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[#d3b264]">
+                Programa de acompanhamento · Real estate nos EUA
               </p>
             </div>
 
-            {/* Title */}
+            <p
+              data-reveal
+              className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-white/45"
+            >
+              Checkmate Blueprint
+            </p>
+
             <h1
               data-reveal
-              className="max-w-[680px] text-[clamp(3.6rem,8vw,7.2rem)] font-medium leading-[0.84] tracking-[-0.07em] text-[#f7f5f0]"
+              className="mt-5 max-w-[790px] text-balance text-[clamp(3rem,6vw,6rem)] font-medium leading-[0.93] tracking-[-0.06em] text-[#f5f3ee]"
             >
-              Checkmate
-              <span className="mt-1 block bg-gradient-to-r from-[#c5a258] via-[#d4b56a] to-[#c5a258] bg-clip-text text-transparent">
-                Blueprint
+              Mais perto da operação.
+              <span className="mt-2 block text-[#d3b264]">
+                Mais clareza para decidir.
               </span>
             </h1>
 
-            {/* Tagline */}
             <p
               data-reveal
-              className="mt-8 max-w-[560px] text-balance text-[clamp(1.25rem,2vw,1.85rem)] font-medium leading-[1.25] tracking-[-0.03em] text-white/85"
-            >
-              Mais perto da operação.
-              <br className="hidden sm:block" />
-              <span className="text-white/55"> Mais clareza para decidir.</span>
-            </p>
-
-            {/* Body */}
-            <p
-              data-reveal
-              className="mt-7 max-w-[540px] text-[0.95rem] leading-[1.85] text-white/45 sm:text-[1rem]"
+              className="mt-7 max-w-[620px] text-[0.98rem] leading-[1.85] text-white/55 sm:text-[1.04rem]"
             >
               {content.hero.headline}
             </p>
 
-            {/* CTAs */}
             <div
               data-reveal
-              className="mt-10 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-8"
+              className="mt-9 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-7"
             >
               <GoldButton>Quero conhecer o Blueprint</GoldButton>
               <a
                 href="#projetos"
-                className="group inline-flex items-center gap-3 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-white/40 transition-colors duration-300 hover:text-white/80"
+                className="group inline-flex items-center gap-3 text-[0.64rem] font-semibold uppercase tracking-[0.15em] text-white/42 transition-colors duration-300 hover:text-white/75"
               >
                 Ver projetos reais
                 <ArrowDown
@@ -307,8 +293,7 @@ function BlueprintHero() {
           </div>
         </div>
 
-        {/* Bottom strip */}
-        <div className="grid gap-y-4 border-t border-white/[0.08] py-6 sm:grid-cols-3 lg:max-w-[780px]">
+        <div className="grid gap-y-4 border-t border-white/[0.1] py-6 sm:grid-cols-3 lg:max-w-[880px]">
           {[
             ["01", "Projetos reais"],
             ["02", "Acompanhamento"],
@@ -321,10 +306,10 @@ function BlueprintHero() {
                 index > 0 ? "sm:border-l sm:border-white/[0.08] sm:pl-7" : "",
               ].join(" ")}
             >
-              <span className="text-[0.55rem] font-semibold tracking-[0.16em] text-[#c5a258]/90">
+              <span className="text-[0.55rem] font-semibold text-[#c5a258]">
                 {number}
               </span>
-              <span className="text-[0.65rem] font-medium uppercase tracking-[0.12em] text-white/40">
+              <span className="text-[0.64rem] font-medium uppercase tracking-[0.12em] text-white/42">
                 {label}
               </span>
             </div>
@@ -362,26 +347,41 @@ function BlueprintStats({ properties }: { properties: PropertyCard[] }) {
   if (!metrics.length) return null;
 
   return (
-    <Section className="bp-stats" ariaLabel="Portfólio público">
-      <p className="bp-authority-label">
-        Checkmate Real Estate Group
-        <span>Uma operação real nos Estados Unidos.</span>
-      </p>
-      <div>
-        {metrics.map((metric) => (
-          <article key={metric.label}>
-            <strong>
-              {metric.value}
-              {metric.suffix}
-            </strong>
-            <p>{metric.label}</p>
-          </article>
-        ))}
+    <section className="border-y border-black/[0.08] bg-[#efe9df] text-[#171614]" aria-label="Portfólio público">
+      <div className="mx-auto w-full max-w-[1360px] px-5 py-10 sm:px-8 lg:px-12 lg:py-12 xl:px-16">
+        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:gap-16">
+          <div>
+            <p className="text-[0.58rem] font-semibold uppercase tracking-[0.2em] text-[#8b6a2e]">
+              Checkmate Real Estate Group
+            </p>
+            <p className="mt-3 max-w-[360px] text-[1.2rem] font-medium leading-[1.35] tracking-[-0.025em] text-[#2a2722]">
+              Uma operação real nos Estados Unidos.
+            </p>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            {metrics.map((metric) => (
+              <article
+                key={metric.label}
+                className="border-l border-black/[0.12] pl-5 sm:pl-6"
+              >
+                <strong className="block text-[clamp(2.4rem,4vw,4rem)] font-medium leading-none tracking-[-0.055em] text-[#171614]">
+                  {metric.value}
+                  {metric.suffix}
+                </strong>
+                <p className="mt-3 max-w-[250px] text-[0.7rem] font-medium uppercase leading-[1.55] tracking-[0.1em] text-[#625d54]">
+                  {metric.label}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <small className="mt-7 block text-[0.64rem] leading-[1.6] text-[#7c756a]">
+          Dados do portfólio público exibido no site; o inventário pode variar.
+        </small>
       </div>
-      <small>
-        Dados do portfólio público exibido no site; o inventário pode variar.
-      </small>
-    </Section>
+    </section>
   );
 }
 
@@ -752,43 +752,77 @@ function BlueprintOffer({
   }
 
   return (
-    <Section id="formb" className="bp-offer">
-      <div className="bp-split">
-        <div className="bp-application-intro">
+    <Section id="formb" className="bp-offer bg-[#efe9df] text-[#171614]">
+      <div className="grid gap-14 lg:grid-cols-[0.86fr_1.14fr] lg:gap-20">
+        <div className="bp-application-intro lg:pt-5">
+          <p className="mb-5 flex items-center gap-3 text-[0.58rem] font-semibold uppercase tracking-[0.2em] text-[#8b6a2e]">
+            <span className="h-px w-8 bg-[#9a7938]/70" />
+            Seu próximo passo
+          </p>
           <SectionHeader {...content.sections.offer} />
-          <ul className="bp-offer-list">
-            {content.offerItems.map((item) => (
-              <li key={item}>
-                <ArrowUpRight size={16} className="text-[#c5a258]" />
-                {item}
+
+          <p className="mt-7 max-w-[520px] text-[1rem] leading-[1.85] text-[#655f55]">
+            Converse com um analista da Checkmate e entenda se o Blueprint faz
+            sentido para o momento em que você está agora.
+          </p>
+
+          <ul className="mt-10 border-t border-black/[0.1]">
+            {content.offerItems.map((item, index) => (
+              <li
+                key={item}
+                className="grid grid-cols-[42px_1fr] items-start border-b border-black/[0.08] py-4"
+              >
+                <span className="text-[0.55rem] font-semibold text-[#9a7938]">
+                  0{index + 1}
+                </span>
+                <span className="text-[0.82rem] leading-[1.65] text-[#4e4941]">
+                  {item}
+                </span>
               </li>
             ))}
           </ul>
-          <p className="bp-form-note">
-            Apresente seu cenário e esclareça o escopo, o formato e as
-            condições de participação antes de decidir.
+
+          <p className="mt-7 max-w-[500px] text-[0.72rem] leading-[1.7] text-[#7b746a]">
+            Apresente seu cenário e esclareça o escopo, o formato e as condições
+            de participação antes de decidir.
           </p>
         </div>
-        <div className="bp-lead-form blueprint-dynamic-form">
-          <p className="bp-eyebrow">Checkmate Blueprint / Perfil de interesse</p>
-          <h3>Apresente seu perfil.</h3>
-          {form ? (
-            <DynamicFormComponent
-              form={{ ...form, submit_button_label: content.conversation }}
-              fields={displayFields}
-            />
-          ) : (
-            <div className="bp-form-fallback">
-              <p>Nosso time pode ajudar você a conhecer o Blueprint.</p>
-              <a className="bp-button" href={SITE_CONTACT.phoneHref}>
-                Falar com o time
-                <ArrowUpRight size={16} />
-              </a>
-            </div>
-          )}
-          <p className="bp-privacy">
+
+        <div className="border-t-2 border-[#c5a258] bg-[#f8f5ef] p-6 shadow-[0_30px_80px_rgba(38,31,19,0.08)] sm:p-8 lg:p-10">
+          <p className="text-[0.57rem] font-semibold uppercase tracking-[0.18em] text-[#8b6a2e]">
+            Checkmate Blueprint · Qualificação
+          </p>
+          <h3 className="mt-4 max-w-[480px] text-[clamp(1.8rem,3vw,2.7rem)] font-medium leading-[1.05] tracking-[-0.045em] text-[#1b1916]">
+            Conte um pouco sobre o seu momento.
+          </h3>
+          <p className="mt-4 max-w-[500px] text-[0.82rem] leading-[1.7] text-[#6c655c]">
+            Não é uma inscrição automática. A conversa serve para entender seu
+            perfil, seus objetivos e o tipo de próximo passo que faz sentido.
+          </p>
+
+          <div className="blueprint-dynamic-form mt-8">
+            {form ? (
+              <DynamicFormComponent
+                form={{ ...form, submit_button_label: content.conversation }}
+                fields={displayFields}
+              />
+            ) : (
+              <div className="bp-form-fallback">
+                <p>Nosso time pode ajudar você a conhecer o Blueprint.</p>
+                <a className="bp-button" href={SITE_CONTACT.phoneHref}>
+                  Falar com o time
+                  <ArrowUpRight size={16} />
+                </a>
+              </div>
+            )}
+          </div>
+
+          <p className="mt-5 text-[0.66rem] leading-[1.6] text-[#81796f]">
             Seus dados serão tratados conforme nossa{" "}
-            <a href="/privacy-policy">Política de Privacidade</a>.
+            <a href="/privacy-policy" className="underline underline-offset-2">
+              Política de Privacidade
+            </a>
+            .
           </p>
         </div>
       </div>
@@ -838,33 +872,45 @@ function BlueprintFAQ() {
 
 function BlueprintFinalCTA() {
   return (
-    <section className="bp-final relative isolate min-h-[70svh] overflow-hidden">
+    <section className="relative isolate min-h-[72svh] overflow-hidden bg-[#060606] text-white">
       <Image
         src={content.hero.image}
         alt={content.hero.imageAlt}
         fill
         loading="lazy"
         sizes="100vw"
-        className="bp-cover object-cover"
+        className="object-cover object-[68%_center]"
       />
-      <div className="bp-final-shade absolute inset-0 bg-[linear-gradient(180deg,rgba(6,6,6,0.75)_0%,rgba(6,6,6,0.88)_50%,#060606_100%)]" />
-      <div className="bp-container relative z-10 flex min-h-[70svh] flex-col items-center justify-center py-24 text-center">
-        <p className="bp-eyebrow mb-6 text-[#d3b264]">{content.final.eyebrow}</p>
-        <h2 className="max-w-[700px] text-balance text-[clamp(2.4rem,4.5vw,4.2rem)] font-medium leading-[1.05] tracking-[-0.04em] text-[#f5f3ee]">
-          {content.final.title}
-        </h2>
-        <p className="bp-final-subtitle mt-5 max-w-[480px] text-[1.15rem] font-medium tracking-[-0.02em] text-white/70">
-          {content.final.subtitle}
-        </p>
-        <p className="mt-5 max-w-[440px] text-[0.92rem] leading-[1.8] text-white/40">
-          {content.final.description}
-        </p>
-        <div className="mt-10">
-          <GoldButton />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,#060606_0%,rgba(6,6,6,0.94)_38%,rgba(6,6,6,0.56)_66%,rgba(6,6,6,0.30)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-[32%] bg-[linear-gradient(180deg,transparent,#060606)]" />
+
+      <div className="relative z-10 mx-auto flex min-h-[72svh] w-full max-w-[1360px] items-center px-5 py-24 sm:px-8 lg:px-12 xl:px-16">
+        <div className="max-w-[720px]">
+          <p className="mb-6 flex items-center gap-3 text-[0.58rem] font-semibold uppercase tracking-[0.2em] text-[#d3b264]">
+            <span className="h-px w-8 bg-[#c5a258]" />
+            {content.final.eyebrow}
+          </p>
+
+          <h2 className="max-w-[720px] text-balance text-[clamp(2.8rem,5vw,5rem)] font-medium leading-[0.96] tracking-[-0.055em] text-[#f5f3ee]">
+            {content.final.title}
+          </h2>
+
+          <p className="mt-6 max-w-[560px] text-[1.15rem] font-medium leading-[1.45] tracking-[-0.02em] text-white/72">
+            {content.final.subtitle}
+          </p>
+
+          <p className="mt-5 max-w-[520px] text-[0.92rem] leading-[1.8] text-white/42">
+            {content.final.description}
+          </p>
+
+          <div className="mt-9">
+            <GoldButton />
+          </div>
+
+          <small className="mt-6 block text-[0.68rem] text-white/26">
+            {content.final.microcopy}
+          </small>
         </div>
-        <small className="mt-6 text-[0.72rem] text-white/25">
-          {content.final.microcopy}
-        </small>
       </div>
     </section>
   );

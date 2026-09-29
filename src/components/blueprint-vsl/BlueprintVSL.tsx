@@ -224,7 +224,7 @@ export default function BlueprintVSL({
         }
 
         .blueprint-vsl-page .blueprint-vsl-title {
-          font-size: 35px !important;
+          font-size: 30px !important;
           line-height: 1.04;
         }
 
@@ -264,8 +264,6 @@ export default function BlueprintVSL({
                 backgroundImage: `url("${HERO_BACKGROUND_IMAGE}")`,
               }}
             />
-
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.74)_0%,rgba(5,5,5,0.58)_34%,rgba(5,5,5,0.72)_66%,rgba(5,5,5,0.97)_100%)] sm:bg-[linear-gradient(180deg,rgba(5,5,5,0.86)_0%,rgba(5,5,5,0.62)_34%,rgba(5,5,5,0.72)_66%,rgba(5,5,5,0.97)_100%)]" />
 
             {/* grain visual muito sutil */}
 
