@@ -53,6 +53,9 @@ export default function VSLPlayer({
   const lastSavedSecondRef = useRef(-1);
   const durationRef = useRef(0);
   const currentTimeRef = useRef(0);
+  const onUnlockRef = useRef(onUnlock);
+  const onSoundEnabledRef = useRef(onSoundEnabled);
+  const onVideoCompleteRef = useRef(onVideoComplete);
 
   const [ready, setReady] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -71,6 +74,18 @@ export default function VSLPlayer({
 
   const [controlsVisible, setControlsVisible] = useState(true);
   const [fullscreen, setFullscreen] = useState(false);
+
+  useEffect(() => {
+    onUnlockRef.current = onUnlock;
+  }, [onUnlock]);
+
+  useEffect(() => {
+    onSoundEnabledRef.current = onSoundEnabled;
+  }, [onSoundEnabled]);
+
+  useEffect(() => {
+    onVideoCompleteRef.current = onVideoComplete;
+  }, [onVideoComplete]);
 
   /*
    * ---------------------------------------------------------
@@ -238,7 +253,7 @@ export default function VSLPlayer({
       setPlaying(false);
       setControlsVisible(true);
 
-      onVideoComplete?.({
+      onVideoCompleteRef.current?.({
         duration: durationRef.current,
         seconds: currentTimeRef.current,
       });
@@ -309,7 +324,7 @@ export default function VSLPlayer({
           // Ignorar.
         }
 
-        onUnlock?.();
+        onUnlockRef.current?.();
       }
     }
 
@@ -400,7 +415,7 @@ export default function VSLPlayer({
 
       playerRef.current = null;
     };
-  }, [onUnlock, onVideoComplete, unlockAt]);
+  }, [unlockAt]);
 
   /*
    * ---------------------------------------------------------
@@ -503,7 +518,7 @@ export default function VSLPlayer({
         await player.setVolume(volume);
 
         setMuted(false);
-        onSoundEnabled?.();
+        onSoundEnabledRef.current?.();
       } else {
         await player.setVolume(0);
 
