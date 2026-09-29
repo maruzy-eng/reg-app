@@ -16,6 +16,7 @@ export default function robots(): MetadataRoute.Robots {
           "/api/",
           "/forms/",
           "/blueprint-obrigado",
+          "/obrigado-vsl-br",
           "/blueprint-thanls",
           "/processando-pagamento",
           "/_next/",

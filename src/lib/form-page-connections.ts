@@ -9,6 +9,7 @@ export type FormPageConnectionKey =
   | "calculator"
   | "blueprint"
   | "blueprint-vsl"
+  | "blueprint-vsl-brasil"
   | "blueprint-parcelada"
   | "cash-offer";
 
@@ -60,6 +61,14 @@ export const FORM_PAGE_CONNECTION_DEFINITIONS: FormPageConnectionDefinition[] =
         "Formulário exibido na VSL pública /blueprint-vsl, liberado após o vídeo. Sem conexão própria, herda o formulário do /blueprint.",
       fallbackSlug: "blueprint",
       fallbackPageKey: "blueprint",
+    },
+    {
+      key: "blueprint-vsl-brasil",
+      label: "Blueprint VSL Brasil page",
+      path: "/blueprint-vsl-brasil",
+      description:
+        "Formulário exibido na VSL Brasil /blueprint-vsl-brasil, liberado após o vídeo.",
+      fallbackSlug: "vsl-br",
     },
     {
       key: "blueprint-parcelada",
