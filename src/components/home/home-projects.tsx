@@ -20,12 +20,6 @@ type HomeProjectsProps = {
   properties: PropertyCard[];
 };
 
-function getPropertyAddress(property: PropertyCard) {
-  return [property.address, property.city, property.state]
-    .filter(Boolean)
-    .join(", ");
-}
-
 export function HomeProjects({ properties }: HomeProjectsProps) {
   return (
     <HomeSection id="projects" tone="cream">
@@ -67,7 +61,6 @@ export function HomeProjects({ properties }: HomeProjectsProps) {
         {properties.length > 0 ? (
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-7">
             {properties.map((property, index) => {
-              const address = getPropertyAddress(property);
               const beds =
                 property.condActive && property.condBedrooms != null
                   ? property.condBedrooms
@@ -137,12 +130,6 @@ export function HomeProjects({ properties }: HomeProjectsProps) {
                         <span>{formatNumber(sqft)} sqft</span>
                       ) : null}
                     </div>
-
-                    {address ? (
-                      <p className="text-[1.05rem] font-semibold tracking-[-0.03em] text-[#171614]">
-                        {address}
-                      </p>
-                    ) : null}
                   </div>
                 </article>
               );
