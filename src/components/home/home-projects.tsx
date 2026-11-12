@@ -11,7 +11,6 @@ import {
 } from "@/components/home/home-ui";
 import type { PropertyCard } from "@/types/property";
 import {
-  formatCurrency,
   formatNumber,
   getPropertyStatusLabel,
   getPropertyTypeLabel,
@@ -21,20 +20,10 @@ type HomeProjectsProps = {
   properties: PropertyCard[];
 };
 
-function getDisplayPrice(property: PropertyCard) {
-  if (property.creditActive && property.creditNewPrice != null) {
-    return formatCurrency(property.creditNewPrice);
-  }
-
-  if (property.condActive && property.condListedPrice) {
-    return property.condListedPrice;
-  }
-
-  if (property.price != null) {
-    return formatCurrency(property.price);
-  }
-
-  return null;
+function getPropertyAddress(property: PropertyCard) {
+  return [property.address, property.city, property.state]
+    .filter(Boolean)
+    .join(", ");
 }
 
 export function HomeProjects({ properties }: HomeProjectsProps) {
@@ -78,7 +67,7 @@ export function HomeProjects({ properties }: HomeProjectsProps) {
         {properties.length > 0 ? (
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-7">
             {properties.map((property, index) => {
-              const price = getDisplayPrice(property);
+              const address = getPropertyAddress(property);
               const beds =
                 property.condActive && property.condBedrooms != null
                   ? property.condBedrooms
@@ -134,9 +123,11 @@ export function HomeProjects({ properties }: HomeProjectsProps) {
                       <h3 className="mt-2 text-[1.15rem] font-semibold leading-[1.25] tracking-[-0.03em] text-[#171614]">
                         {property.title}
                       </h3>
-                      <p className="mt-2 line-clamp-2 text-[0.82rem] leading-[1.65] text-[#6a655e]">
-                        {property.description || property.address}
-                      </p>
+                      {property.description ? (
+                        <p className="mt-2 line-clamp-2 text-[0.82rem] leading-[1.65] text-[#6a655e]">
+                          {property.description}
+                        </p>
+                      ) : null}
                     </div>
 
                     <div className="flex flex-wrap gap-x-4 gap-y-2 border-t border-black/[0.06] pt-4 text-[0.74rem] text-[#746f67]">
@@ -147,9 +138,9 @@ export function HomeProjects({ properties }: HomeProjectsProps) {
                       ) : null}
                     </div>
 
-                    {price ? (
+                    {address ? (
                       <p className="text-[1.05rem] font-semibold tracking-[-0.03em] text-[#171614]">
-                        {price}
+                        {address}
                       </p>
                     ) : null}
                   </div>
