@@ -1174,7 +1174,7 @@ export async function submitDynamicForm(params: {
   if (Object.keys(fieldErrors).length > 0) {
     return {
       success: false,
-      error: "Validation error.",
+      error: Object.values(fieldErrors).join(" "),
       fieldErrors,
     };
   }
