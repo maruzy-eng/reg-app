@@ -18,6 +18,10 @@ import { mapHomeSettings } from "@/lib/home/settings";
 import { buildBreadcrumbJsonLd, buildPageMetadata } from "@/lib/seo";
 import { getSiteSettings } from "@/lib/site-settings";
 
+// Field names can change in the admin; keep the rendered form in sync with
+// the current schema used by the submission API.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = buildPageMetadata({
   title: "Blueprint — Compra parcelada",
   description:
